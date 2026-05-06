@@ -9,7 +9,8 @@
     "defaultRequire": 1
   },
   "mixins": [
+    "AvatarRendererMixin",
     "HumanoidModelMixin",
-    "LivingEntityRendererMixin",
+    "LivingEntityRendererMixin"
   ]
 }

@@ -1,5 +1,6 @@
 package joshxviii.plantz.entity.projectile
 
+import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazDamageTypes
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.hasSameOwner
@@ -22,6 +23,7 @@ import net.minecraft.world.entity.InsideBlockEffectApplier
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.OwnableEntity
 import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.entity.projectile.Projectile
 import net.minecraft.world.entity.projectile.ProjectileUtil
@@ -37,16 +39,16 @@ abstract class PazProjectile(
     val entityOwner: LivingEntity? = null,
     val spawnOffset: Vec2 = Vec2.ZERO,
     val damageType: ResourceKey<DamageType> = PazDamageTypes.PLANT,
-    var damage : Float = (entityOwner as? LivingEntity)?.attributes?.getValue(Attributes.ATTACK_DAMAGE)?.toFloat()?:1.0f,
-    var knockback : Double = (entityOwner as? LivingEntity)?.attributes?.getValue(Attributes.ATTACK_KNOCKBACK)?:0.0
+    var damage : Float = entityOwner?.attributes?.getValue(Attributes.ATTACK_DAMAGE)?.toFloat()?:1.0f,
+    var knockback : Double = entityOwner?.attributes?.getValue(Attributes.ATTACK_KNOCKBACK)?:0.0
 ) : Projectile(type, level) {
 
     protected var inGroundTime: Int = 0
     private var piercingIgnoreEntityIds = mutableSetOf<Int>()
 
     companion object {
-        val PIERCE_LEVEL: EntityDataAccessor<Byte> = SynchedEntityData.defineId<Byte>(PazProjectile::class.java, EntityDataSerializers.BYTE)
-        val IN_GROUND: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(PazProjectile::class.java, EntityDataSerializers.BOOLEAN)
+        val PIERCE_LEVEL: EntityDataAccessor<Byte> = SynchedEntityData.defineId(PazProjectile::class.java, EntityDataSerializers.BYTE)
+        val IN_GROUND: EntityDataAccessor<Boolean> = SynchedEntityData.defineId(PazProjectile::class.java, EntityDataSerializers.BOOLEAN)
     }
 
     init {
@@ -248,9 +250,10 @@ abstract class PazProjectile(
 
     override fun canHitEntity(entity: Entity): Boolean {
         val playerOwner = (entityOwner as? OwnableEntity)?.owner as? Player
+        if ((entity is Plant && entityOwner is Plant) || (entity is Enemy && entityOwner is Enemy)) return false
         return if (entity.hasSameOwner(entityOwner)) false
-        else if (playerOwner!= null && entity.`is`(playerOwner)) false
-        else entity !is Plant && entity !is Projectile && super.canHitEntity(entity) && !this.piercingIgnoreEntityIds.contains(entity.id)
+        else if (playerOwner != null && (entity.`is`(playerOwner) || (entity is Player && PazConfig.COOP_PLANTING))) false
+        else entity !is Projectile && super.canHitEntity(entity) && !this.piercingIgnoreEntityIds.contains(entity.id)
     }
 
     fun spawnParticle(

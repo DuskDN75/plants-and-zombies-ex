@@ -3,7 +3,8 @@
 - Added Gravestone Block
 	- Zombies will emerge from the ground near the gravestone during the night.
 - Added Ducky Tube
-	- Browncoats and Newspaper Zombies can spawn in lakes and oceans with the Ducky Tube.
+	- Browncoats and Newspaper Zombies can spawn in lakes and oceans with the Ducky Tube. 
+    - Zombies with Ducky Tubes spawn more often while it's raining.
 - Added Watering Can
 - Added Solar Battery
 	- Can store sun and will automatically use sun when planting or interacting with Plants.

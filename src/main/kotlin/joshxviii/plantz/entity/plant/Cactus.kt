@@ -46,7 +46,10 @@ class Cactus(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.CACT
             velocity = 1.5,
             cooldownTime = 40,
             actionDelay = 6))
-        this.targetSelector.addGoal(4, FurthestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
+        this.targetSelector.addGoal(4, FurthestAttackableTargetGoal(this, LivingEntity::class.java, 5,
+            mustSee = true,
+            mustReach = false
+        ) { target, level ->
             target !is Plant
                     && target !is Creeper
                     && (target is Zombie

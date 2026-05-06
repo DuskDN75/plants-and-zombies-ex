@@ -67,6 +67,10 @@ object PazParticles {
             NotifyParticle.Provider(spriteSet)
         }
 
+        it.register(PazServerParticles.PAINT_BALL) { spriteSet ->
+            PaintBallParticle.Provider(spriteSet)
+        }
+
         it.register(PazServerParticles.ZOMBIE_OMEN) { sprite ->
             SpellParticle.Provider(sprite)
         }

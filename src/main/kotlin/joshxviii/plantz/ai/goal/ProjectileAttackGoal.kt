@@ -29,12 +29,11 @@ class ProjectileAttackGoal(
     val projectileFactory: () -> Entity,
     val velocity : Double = 0.9,
     val inaccuracy: Float = 0.8f,
+    val attackRadius: Float = usingEntity.attributes.getValue(Attributes.FOLLOW_RANGE).toFloat(),
     val useHighArc: Boolean = false,
     val soundEvent: SoundEvent = PazSounds.PROJECTILE_FIRE,
 ) : ActionGoal(usingEntity, cooldownTime, actionDelay, actionStartEffect, actionEndEffect, actionPredicate) {
-
     var distanceSqr: Double = 0.0
-    var attackRadius : Float = 0.0f
 
     override fun canUse(): Boolean = (
         usingEntity.tickCount>cooldownTime
@@ -54,7 +53,7 @@ class ProjectileAttackGoal(
         if (!target.isAlive) return false
 
         distanceSqr = usingEntity.distanceToSqr(target)
-        attackRadius = usingEntity.attributes.getValue(Attributes.FOLLOW_RANGE).toFloat()
+
 
         usingEntity.lookControl.setLookAt(target, 30f, 30f)
         usingEntity.isAggressive = true
@@ -89,7 +88,7 @@ class ProjectileAttackGoal(
 
         val targetPosNow = Vec3(
             target.x - projectile.x,
-            target.boundingBox.minY + (target.bbHeight / 3.0) - projectile.y,
+            target.boundingBox.minY + (target.bbHeight * .5) - projectile.y,
             target.z - projectile.z
         )
         val distanceRatio = (targetPosNow.horizontalDistance() / attackRadius).coerceIn(0.0, 1.0)

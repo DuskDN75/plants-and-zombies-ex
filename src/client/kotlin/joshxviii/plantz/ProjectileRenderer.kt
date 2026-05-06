@@ -2,6 +2,7 @@ package joshxviii.plantz
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
+import joshxviii.plantz.entity.projectile.PaintBall
 import joshxviii.plantz.entity.projectile.PeaFire
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.renderer.RenderPipelines
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.projectile.Projectile
+import net.minecraft.world.item.DyeColor
 
 class ProjectileRenderer(
     val model: EntityModel<ProjectileRenderState>,
@@ -33,6 +35,7 @@ class ProjectileRenderer(
         poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot - 90.0f))
         poseStack.mulPose(Axis.ZP.rotationDegrees(state.xRot))
         poseStack.translate(0.0, -1.5, 0.0)
+        val tint = state.color?.textColor?: -1
         submitNodeCollector.submitModel(
             this.model,
             state,
@@ -47,6 +50,8 @@ class ProjectileRenderer(
             ),
             state.lightCoords,
             OverlayTexture.NO_OVERLAY,
+            tint,
+            null,
             state.outlineColor,
             null
         )
@@ -61,6 +66,7 @@ class ProjectileRenderer(
     override fun extractRenderState(entity: Projectile, state: ProjectileRenderState, partialTick: Float) {
         super.extractRenderState(entity, state, partialTick)
         if (entity is PeaFire) state.emissive = true
+        if (entity is PaintBall) state.color = entity.dyeColor
         state.xRot = entity.getXRot(partialTick)
         state.yRot = entity.getYRot(partialTick)
         state.texturePath = BuiltInRegistries.ENTITY_TYPE.getKey(entity.type).path
@@ -77,4 +83,5 @@ class ProjectileRenderState : EntityRenderState() {
     var yRot: Float = 0f
     var texturePath: String = "default"
     var emissive: Boolean = false
+    var color: DyeColor? = null
 }
