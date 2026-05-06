@@ -25,7 +25,7 @@ class CoffeeBean(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.
         ): Boolean {
             val blockBelow = level.getBlockState(pos.below())
             return checkValidSpawn(level, pos)
-                    && (blockBelow.`is`(PLANTABLE) || blockBelow.`is`(BlockTags.LEAVES))
+                    && (blockBelow.`is`(PLANTABLE) || !blockBelow.`is`(BlockTags.AIR))
         }
     }
 
@@ -51,6 +51,6 @@ class CoffeeBean(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.
     override fun attackGoals() {}
 
     override fun canSurviveOn(block: BlockState): Boolean {
-        return super.canSurviveOn(block) || block.`is`(BlockTags.LEAVES)
+        return super.canSurviveOn(block) || !block.`is`(BlockTags.AIR)
     }
 }

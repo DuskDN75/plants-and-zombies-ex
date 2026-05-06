@@ -48,7 +48,7 @@ object PazConfig {
             "plantz:fumeshroom"         to 6,
             "plantz:sunshroom"          to 4,
             "plantz:hypnoshroom"        to 7,
-            "plantz:doomshroom"         to 12,
+            "plantz:doomshroom"         to 20,
             "plantz:coffeebean"         to 3,
         ),
         var coffeeBuffDuration: Int = 60_000,

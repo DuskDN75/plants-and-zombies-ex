@@ -5,6 +5,7 @@ import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.item.component.SunCost
 import net.minecraft.ChatFormatting
 import net.minecraft.core.Direction
+import net.minecraft.core.component.DataComponentGetter
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
@@ -17,13 +18,17 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.TamableAnimal
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.item.component.TooltipProvider
 import net.minecraft.world.item.component.TypedEntityData
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.AABB
 import java.util.*
+import java.util.function.Consumer
 
 class SeedPacketItem(properties: Properties) : Item(properties) {
+
 
     override fun getName(itemStack: ItemStack): Component {
         val component = itemStack.get(DataComponents.ENTITY_DATA) ?: return super.getName(itemStack)

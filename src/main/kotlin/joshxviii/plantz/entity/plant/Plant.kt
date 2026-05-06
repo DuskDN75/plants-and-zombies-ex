@@ -132,9 +132,9 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         }
     }
 
-    open fun getMaxSwell() : Int = 30
+    open fun getMaxSwellTime() : Int = 30
     var oldSwell = 0; var swell = 0
-    fun getSwelling(a: Float): Float = Mth.lerp(a, oldSwell.toFloat(), swell.toFloat()) / (getMaxSwell() - 2).toFloat()
+    fun getSwelling(a: Float): Float = Mth.lerp(a, oldSwell.toFloat(), swell.toFloat()) / (getMaxSwellTime() - 2).toFloat()
 
     var swellDir: Int
         get() = this.entityData.get(SWELL_DIR)
@@ -274,7 +274,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
 
     fun calculateSwell() {
         oldSwell = swell
-        swell = (swell + swellDir).coerceIn(0, getMaxSwell())
+        swell = (swell + swellDir).coerceIn(0, getMaxSwellTime())
     }
 
     override fun getAmbientSound(): SoundEvent? = super.getAmbientSound()// TODO make custom sounds

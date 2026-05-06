@@ -34,8 +34,8 @@ object PazParticles {
             SporeParticle.Provider(spriteSet)
         }
 
-        it.register(PazServerParticles.SPORE_HIT) { spriteSet ->
-            CritParticle.Provider(spriteSet)
+        it.register(PazServerParticles.SPORE_HIT) {
+            spriteSet -> CritParticle.Provider(spriteSet)
         }
 
         it.register(PazServerParticles.FUME_BUBBLE) { spriteSet ->
@@ -65,6 +65,14 @@ object PazParticles {
         }
         it.register(PazServerParticles.NEEDS_TIME) { spriteSet ->
             NotifyParticle.Provider(spriteSet)
+        }
+
+        it.register(PazServerParticles.NUKE_WAVE) { spriteSet ->
+            NukeWaveParticle.Provider(spriteSet)
+        }
+
+        it.register(PazServerParticles.NUKE_BLAST) { spriteSet ->
+            NukeBlastParticle.Provider(spriteSet)
         }
 
         it.register(PazServerParticles.PAINT_BALL) { spriteSet ->

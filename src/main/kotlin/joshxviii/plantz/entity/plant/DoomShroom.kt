@@ -4,19 +4,13 @@ import joshxviii.plantz.*
 import joshxviii.plantz.PazTags.BlockTags.PLANTABLE
 import joshxviii.plantz.ai.goal.ExplodeGoal
 import net.minecraft.core.BlockPos
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.tags.BlockTags
 import net.minecraft.util.RandomSource
-import net.minecraft.world.damagesource.DamageSource
-import net.minecraft.world.effect.MobEffectInstance
-import net.minecraft.world.entity.AreaEffectCloud
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
-import net.minecraft.world.entity.monster.Creeper
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
@@ -42,11 +36,31 @@ class DoomShroom(type: EntityType<out Mushroom>, level: Level) : Mushroom(PazEnt
         }
     }
 
+    override fun getMaxSwellTime(): Int = 60
+
     override fun registerGoals() {
         super.registerGoals()
         this.goalSelector.addGoal(1, ExplodeGoal(
             plantEntity = this,
-            radius = 20f
+            explosionRadius = 7f,
+            activateRange = 4.5,
+            destroyBlocks = true,
+            actionEndEffect = {
+                addParticlesAroundSelf(
+                    particle = ParticleTypes.LARGE_SMOKE,
+                    amount = 58..60,
+                    speed = 0.15,
+                )
+                val level = level() as? ServerLevel ?: return@ExplodeGoal
+                level.sendParticles(
+                    NukeWaveParticleOptions(4f),
+                    x, y, z, 1, 0.0, 0.0, 0.0, 0.0
+                )
+                level.sendParticles(
+                    NukeBlastParticleOptions(2f),
+                    x, y, z, 1, 0.0, 0.0, 0.0, 0.0
+                )
+            }
         ))
         this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
             target !is Plant

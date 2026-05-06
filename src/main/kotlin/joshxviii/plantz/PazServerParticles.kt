@@ -34,6 +34,8 @@ object PazServerParticles {
     @JvmField val NEEDS_SUN: SimpleParticleType = registerSimple("needs_sun")
     @JvmField val NEEDS_TIME: SimpleParticleType = registerSimple("needs_time")
     @JvmField val ZOMBIE_OMEN: SimpleParticleType = registerSimple("zombie_omen")
+    @JvmField val NUKE_WAVE: ParticleType<NukeWaveParticleOptions> = register("nuke_wave", { NukeWaveParticleOptions.CODEC}, {NukeWaveParticleOptions.STREAM_CODEC})
+    @JvmField val NUKE_BLAST: ParticleType<NukeBlastParticleOptions> = register("nuke_blast", {NukeBlastParticleOptions.CODEC}, {NukeBlastParticleOptions.STREAM_CODEC})
     @JvmField val PAINT_BALL: ParticleType<PaintParticleOptions> = register("paint_ball", {PaintParticleOptions.CODEC}, {PaintParticleOptions.STREAM_CODEC})
 
     fun registerSimple(name: String): SimpleParticleType {
@@ -71,10 +73,30 @@ class PaintParticleOptions(private val color: Int, scale: Float = 1f) : Scalable
                     SCALE.fieldOf("scale").forGetter { it.scale }
                 ).apply(i, ::PaintParticleOptions) }
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, PaintParticleOptions> = StreamCodec.composite(
-                ByteBufCodecs.INT,
-                { it.color },
-                ByteBufCodecs.FLOAT,
-                { it.scale },
-                ::PaintParticleOptions)
+            ByteBufCodecs.INT, { it.color },
+            ByteBufCodecs.FLOAT, { it.scale },
+            ::PaintParticleOptions)
+    }
+}
+
+class NukeWaveParticleOptions(scale: Float = 1f) : ScalableParticleOptionsBase(scale) {
+    override fun getType(): ParticleType<NukeWaveParticleOptions> = PazServerParticles.NUKE_WAVE
+
+    companion object {
+        val CODEC: MapCodec<NukeWaveParticleOptions> = RecordCodecBuilder.mapCodec { i ->
+            i.group(SCALE.fieldOf("scale").forGetter { it.scale }).apply(i, ::NukeWaveParticleOptions) }
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, NukeWaveParticleOptions> = StreamCodec.composite(
+            ByteBufCodecs.FLOAT, { it.scale }, ::NukeWaveParticleOptions)
+    }
+}
+
+class NukeBlastParticleOptions(scale: Float = 1f) : ScalableParticleOptionsBase(scale) {
+    override fun getType(): ParticleType<NukeBlastParticleOptions> = PazServerParticles.NUKE_BLAST
+
+    companion object {
+        val CODEC: MapCodec<NukeBlastParticleOptions> = RecordCodecBuilder.mapCodec { i ->
+            i.group(SCALE.fieldOf("scale").forGetter { it.scale }).apply(i, ::NukeBlastParticleOptions) }
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, NukeBlastParticleOptions> = StreamCodec.composite(
+            ByteBufCodecs.FLOAT, { it.scale }, ::NukeBlastParticleOptions)
     }
 }

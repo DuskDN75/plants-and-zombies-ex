@@ -33,7 +33,7 @@ class PotatoMine(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.
         if (cooldown>0) coolDownAnimationState.startIfStopped(tickCount)
     }
 
-    override fun getMaxSwell() = 4
+    override fun getMaxSwellTime() = 4
     override fun doPush(entity: Entity) {
         if (isGrowingSeeds || cooldown > 0) return
         if (entity is Plant || (entity is Player && isTame) || this.hasSameRootOwner(entity)) return

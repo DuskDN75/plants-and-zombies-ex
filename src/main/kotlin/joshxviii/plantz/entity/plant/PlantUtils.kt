@@ -6,7 +6,8 @@ import joshxviii.plantz.PazDamageTypes
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazItems
 import joshxviii.plantz.PazSounds
-import joshxviii.plantz.entity.plant.PlantUtils.EXPLOSION_DAMAGE_CALCULATOR
+import joshxviii.plantz.entity.plant.PlantUtils.DESTRUCTIVE_EXPLOSION_CALCULATOR
+import joshxviii.plantz.entity.plant.PlantUtils.EXPLOSION_CALCULATOR
 import joshxviii.plantz.getTotalSun
 import joshxviii.plantz.removeSunFromStorageAndInventory
 import net.minecraft.ChatFormatting
@@ -34,13 +35,15 @@ import net.minecraft.world.level.SimpleExplosionDamageCalculator
 import java.util.Optional
 
 object PlantUtils {
-    val EXPLOSION_DAMAGE_CALCULATOR: ExplosionDamageCalculator = SimpleExplosionDamageCalculator(false, true, Optional.of<Float>(1f), Optional.ofNullable(null))
+    val EXPLOSION_CALCULATOR: ExplosionDamageCalculator = SimpleExplosionDamageCalculator(false, true, Optional.of<Float>(1f), Optional.ofNullable(null))
+    val DESTRUCTIVE_EXPLOSION_CALCULATOR: ExplosionDamageCalculator = SimpleExplosionDamageCalculator(true, false, Optional.of<Float>(1.5f), Optional.ofNullable(null))
 }
 
 fun Plant.explode(
     radius: Float = 4.0f,
     sound: Holder.Reference<SoundEvent> = PazSounds.PLANT_EXPLODE,
     damageType: ResourceKey<DamageType> = PazDamageTypes.PLANT_AOE,
+    destroyBlocks: Boolean = false,
 ) {
     val level = this.level()
     val source = this.damageSources().source(damageType, this,
@@ -48,7 +51,7 @@ fun Plant.explode(
     level.explode(
         this,
         source,
-        EXPLOSION_DAMAGE_CALCULATOR,
+        EXPLOSION_CALCULATOR,
         x, y, z,
         radius,
         false,
@@ -57,6 +60,19 @@ fun Plant.explode(
         ParticleTypes.EXPLOSION,
         WeightedList.of(),
         sound
+    )
+    if (destroyBlocks) level.explode(
+        this,
+        null,
+        DESTRUCTIVE_EXPLOSION_CALCULATOR,
+        x, y, z,
+        radius*.5f,
+        false,
+        Level.ExplosionInteraction.MOB,
+        ParticleTypes.SMOKE,
+        ParticleTypes.EXPLOSION,
+        WeightedList.of(),
+        SoundEvents.ITEM_BREAK
     )
     this.discard()
 }
