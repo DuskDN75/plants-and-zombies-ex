@@ -24,6 +24,7 @@ object PazConfig {
     private var data = Data()
 
     data class Data(
+        var coopPlanting: Boolean = true,
         var seedGrowTime: Int = 8100,
         var extraGrowTimePerSun: Int = 2100,
         var zenPotTimeReduction: Double = 0.75,
@@ -83,6 +84,9 @@ object PazConfig {
 
     val SHOW_DEBUG_INFO: Boolean
         get() = data.showDebugInfo
+
+    val COOP_PLANTING: Boolean
+        get() = data.coopPlanting
 
     fun getGrowTime(sunCost: Int, zenBuff: Boolean): Int {
         val time = data.seedGrowTime.coerceAtLeast(0) + (sunCost * data.extraGrowTimePerSun.coerceAtLeast(0))

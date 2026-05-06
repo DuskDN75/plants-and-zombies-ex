@@ -137,8 +137,7 @@ fun Int.tickTimeFormat(): String = "%02d:%02d".format(
 fun Entity.hasSameOwner(target: Entity?): Boolean {
     return if ((this is OwnableEntity && target is OwnableEntity))
         owner.let { it!=null && target.owner?.`is`(it) == true }
-    else
-        false
+    else false
 }
 
 fun Entity.applyImpulse(xd: Double, yd: Double, zd: Double, pow: Float, uncertainty: Float) {

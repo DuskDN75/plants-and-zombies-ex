@@ -132,7 +132,6 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         }
     }
 
-    var bounceMarker = false
     open fun getMaxSwell() : Int = 30
     var oldSwell = 0; var swell = 0
     fun getSwelling(a: Float): Float = Mth.lerp(a, oldSwell.toFloat(), swell.toFloat()) / (getMaxSwell() - 2).toFloat()
@@ -312,7 +311,10 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     override fun isFood(itemStack: ItemStack): Boolean = false
     override fun getLeashOffset(): Vec3 = Vec3.ZERO
     override fun getPickResult(): ItemStack = SeedPacketItem.stackFor(this.type)
-    override fun wantsToAttack(target: LivingEntity, owner: LivingEntity): Boolean = (target !is Plant && super.wantsToAttack(target, owner))
+    override fun wantsToAttack(target: LivingEntity, owner: LivingEntity): Boolean {
+        if (isTame && target is Player && PazConfig.COOP_PLANTING) return false
+        return (target !is Plant && super.wantsToAttack(target, owner))
+    }
     override fun canAttack(target: LivingEntity): Boolean = super.canAttack(target) && !target.hasSameOwner(this)
     override fun canUsePortal(ignorePassenger: Boolean): Boolean = super.canUsePortal(ignorePassenger) && !isAttached()
     fun isAttached(): Boolean = attachedEntity!=null
@@ -366,7 +368,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     }
 
     override fun getDefaultGravity(): Double = if (isAttached()) 0.0 else super.getDefaultGravity()
-    override fun doPush(entity: Entity) { }
+    override fun doPush(entity: Entity) {}
     override fun isAffectedByBlocks(): Boolean = if (isAttached()) !isRemoved else super.isAffectedByBlocks()
 
     override fun tick() {
@@ -569,9 +571,13 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
         state = PlantState.INIT
-        if (spawnReason == EntitySpawnReason.NATURAL) {}
+        if (spawnReason == EntitySpawnReason.NATURAL) checkDespawn()
 
         return groupData
+    }
+
+    override fun checkDespawn() {
+        super.checkDespawn()
     }
 
     override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
@@ -675,7 +681,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     }
 
     fun verifyOwner(player: Player): Boolean {
-        if (!isTame || player != owner) {
+        if (!isTame || (player != owner && !PazConfig.COOP_PLANTING)) {
             player.sendOverlayMessage(Component.translatable("message.plantz.not_yours", this.name).withStyle(ChatFormatting.RED))
             return false
         }
