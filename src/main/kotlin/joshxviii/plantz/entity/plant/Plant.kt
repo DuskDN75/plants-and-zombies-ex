@@ -509,7 +509,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     fun sunRequiredForSeeds(): Int {
         return Mth.floor(
             Mth.floor(PazConfig.getSunCost(type)*2f).coerceAtLeast(4) *
-            if (receivedWater > 1) 0.5f else 1f// receive a bonus for larger water sources that reduces the sun needed by half.
+            if (receivedWater > 1) PazConfig.HYDRATION_SUN_REDUCTION.toFloat() else 1f// receive a bonus for larger water sources that reduces the sun needed by half.
         )
     }
 

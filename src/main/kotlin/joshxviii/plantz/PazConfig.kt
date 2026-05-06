@@ -28,6 +28,7 @@ object PazConfig {
         var seedGrowTime: Int = 8100,
         var extraGrowTimePerSun: Int = 2100,
         var zenPotTimeReduction: Double = 0.75,
+        var hydrationSunReduction: Double = 0.5,
         var sunCosts: MutableMap<String, Int> = mutableMapOf(
             "plantz:sunflower"          to 5,
             "plantz:peashooter"         to 5,
@@ -50,7 +51,7 @@ object PazConfig {
             "plantz:doomshroom"         to 12,
             "plantz:coffeebean"         to 3,
         ),
-        var coffeeBuffDuration: Int = 72_000,
+        var coffeeBuffDuration: Int = 60_000,
         var sunBatteryMax: Int = 320,
         var showDebugInfo: Boolean = false,
     )
@@ -87,6 +88,9 @@ object PazConfig {
 
     val COOP_PLANTING: Boolean
         get() = data.coopPlanting
+
+    val HYDRATION_SUN_REDUCTION: Double
+        get() = data.hydrationSunReduction.coerceIn(0.0, 1.0)
 
     fun getGrowTime(sunCost: Int, zenBuff: Boolean): Int {
         val time = data.seedGrowTime.coerceAtLeast(0) + (sunCost * data.extraGrowTimePerSun.coerceAtLeast(0))

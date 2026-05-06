@@ -1,27 +1,41 @@
-# Changelog 1.4
-- Added Doom-Shroom
-- Added Gravestone Block
-	- Zombies will emerge from the ground near the gravestone during the night.
-- Added Ducky Tube
-	- Browncoats and Newspaper Zombies can spawn in lakes and oceans with the Ducky Tube. 
-    - Zombies with Ducky Tubes spawn more often while it's raining.
-- Added Watering Can
+# Changelog 1.5
+- Added Solider Zombie
+- Added Dye Blaster
 - Added Solar Battery
 	- Can store sun and will automatically use sun when planting or interacting with Plants.
-- Plants now required water before sleeping
+- Added Gravestone Block
+	- Zombies will emerge from the ground near the gravestone during the night.
+### Technical Changes
+
+
+# Changelog 1.4
+- Added Doom-Shroom
+- Added Ducky Tube
+	- Makes the user float in water while equipped.
+    - Browncoats and Newspaper Zombies can spawn in lakes and oceans with the Ducky Tube. 
+    - Zombies with Ducky Tubes spawn more often while it's raining.
+- Added Watering Can
+- Plants now required water to grow.
 	- Plants can be watered with Rain, Water Bottles, Water Buckets or Watering Cans.
-	- Water Buckets and the Watering Can Reduce the amount of sun needed when the Plant wakes up by half.
+	- Water Buckets and the Watering Can will reduce the amount of sun needed when the Plant wakes up.
 - Adjusted projectile firing logic for Plants and Zombies.
-- Wild plants will only attack zombies by default.
+- Wild plants will only be aggro'd towards zombies by default, not other enemies.
 - Wild Scaredy Shrooms now hide from the player.
 - Adjusted spawn rates.
 ### Technical Changes
-- Added a configuration file.
+- Leader Zombies can no longer spawn leaders as reinforcements.
+- Added configuration options.
+    - `coopPlanting` – toggle for co-op planting.
+    - `coffeeBuffDuration` – How many ticks the coffee buff lasts.
+    - `sunCost` – A list of entity ids paired with an integer amount.
+	- `seedGrowTime` – The base time for growing seeds.
+    - `extraGrowTimePerSun` – Extra time per sunCost that is added to the base time.
+    - `zenPotTimeReduction` – This value is multiplied by the final growth time when plants are zen potted.
+    - `hydrationSunReduction` – When the plant has received water from a watering can or water bucket, this value will reduce the amount of sun needed to receive seeds when a plant wakes up.
 - Removed SeedPacket Component.
 - Added StoredSun item component.
 - Added StoredWater item component.
 - Added SunCost item component.
-- Leader Zombies can no longer spawn leaders as reinforcements.
 
 # Changelog 1.3
 - Bug fixes.
