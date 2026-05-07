@@ -27,7 +27,7 @@ object PazSpawnPlacements {
         registerSpawnPlacement(PazEntities.CACTUS, Cactus::checkCactusSpawnRules)
 
         addBiomeSpawn(PazTags.Biomes.HAS_CHERRYBOMB, PazEntities.CHERRY_BOMB,
-            weight = 4, minGroupSize = 1, maxGroupSize = 1)
+            weight = 20, minGroupSize = 1, maxGroupSize = 1)
         registerSpawnPlacement(PazEntities.CHERRY_BOMB, CherryBomb::checkCherryBombSpawnRules)
 
         addBiomeSpawn(PazTags.Biomes.HAS_CHOMPER, PazEntities.CHOMPER,
@@ -47,7 +47,7 @@ object PazSpawnPlacements {
         registerSpawnPlacement(PazEntities.HYPNOSHROOM, Plant::checkPlantSpawnRules)
 
         addBiomeSpawn(PazTags.Biomes.HAS_DOOM_SHROOM, PazEntities.DOOM_SHROOM,
-            weight = 1, minGroupSize = 1, maxGroupSize = 1)
+            weight = 40, minGroupSize = 1, maxGroupSize = 1)
         registerSpawnPlacement(PazEntities.DOOM_SHROOM, DoomShroom::checkDoomShroomSpawnRules)
 
         addBiomeSpawn(PazTags.Biomes.HAS_ICE_PEASHOOTER, PazEntities.ICE_PEA_SHOOTER,

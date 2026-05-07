@@ -32,7 +32,7 @@ class DoomShroom(type: EntityType<out Mushroom>, level: Level) : Mushroom(PazEnt
         ): Boolean {
             val blockBelow = level.getBlockState(pos.below())
             return checkValidSpawn(level, pos)
-                    && (blockBelow.`is`(PLANTABLE) || blockBelow.`is`(Blocks.GRAVEL))
+                    && (blockBelow.`is`(PLANTABLE) || blockBelow.`is`(Blocks.GRAVEL) || blockBelow.`is`(Blocks.BASALT))
         }
     }
 
@@ -52,13 +52,14 @@ class DoomShroom(type: EntityType<out Mushroom>, level: Level) : Mushroom(PazEnt
                     speed = 0.15,
                 )
                 val level = level() as? ServerLevel ?: return@ExplodeGoal
-                level.sendParticles(
-                    NukeWaveParticleOptions(4f),
+                level.sendParticles(NukeWaveParticleOptions(color = 0xCAACF6, scale = 4f),
                     x, y, z, 1, 0.0, 0.0, 0.0, 0.0
                 )
-                level.sendParticles(
-                    NukeBlastParticleOptions(2f),
+                level.sendParticles(NukeBlastParticleOptions(color = 0xC093FF, scale = 2.5f),
                     x, y, z, 1, 0.0, 0.0, 0.0, 0.0
+                )
+                level.sendParticles(NukeSmokeParticleOptions(color = 0x7425A3, scale = 0.7f),
+                    x, y+2, z, 16, 0.0, 0.8, 0.0, 0.0
                 )
             }
         ))
@@ -71,6 +72,6 @@ class DoomShroom(type: EntityType<out Mushroom>, level: Level) : Mushroom(PazEnt
     }
 
     override fun canSurviveOn(block: BlockState): Boolean {
-        return super.canSurviveOn(block) || block.`is`(Blocks.GRAVEL)
+        return super.canSurviveOn(block) || block.`is`(Blocks.GRAVEL) || block.`is`(Blocks.BASALT)
     }
 }

@@ -36,6 +36,7 @@ object PazServerParticles {
     @JvmField val ZOMBIE_OMEN: SimpleParticleType = registerSimple("zombie_omen")
     @JvmField val NUKE_WAVE: ParticleType<NukeWaveParticleOptions> = register("nuke_wave", { NukeWaveParticleOptions.CODEC}, {NukeWaveParticleOptions.STREAM_CODEC})
     @JvmField val NUKE_BLAST: ParticleType<NukeBlastParticleOptions> = register("nuke_blast", {NukeBlastParticleOptions.CODEC}, {NukeBlastParticleOptions.STREAM_CODEC})
+    @JvmField val NUKE_SMOKE: ParticleType<NukeSmokeParticleOptions> = register("nuke_smoke", {NukeSmokeParticleOptions.CODEC}, {NukeSmokeParticleOptions.STREAM_CODEC})
     @JvmField val PAINT_BALL: ParticleType<PaintParticleOptions> = register("paint_ball", {PaintParticleOptions.CODEC}, {PaintParticleOptions.STREAM_CODEC})
 
     fun registerSimple(name: String): SimpleParticleType {
@@ -79,24 +80,47 @@ class PaintParticleOptions(private val color: Int, scale: Float = 1f) : Scalable
     }
 }
 
-class NukeWaveParticleOptions(scale: Float = 1f) : ScalableParticleOptionsBase(scale) {
+class NukeWaveParticleOptions(private val color: Int = 0xFFFFFF, scale: Float = 1f) : ScalableParticleOptionsBase(scale) {
     override fun getType(): ParticleType<NukeWaveParticleOptions> = PazServerParticles.NUKE_WAVE
+    fun getColor(): Vector3f = ARGB.vector3fFromRGB24(this.color)
 
     companion object {
         val CODEC: MapCodec<NukeWaveParticleOptions> = RecordCodecBuilder.mapCodec { i ->
-            i.group(SCALE.fieldOf("scale").forGetter { it.scale }).apply(i, ::NukeWaveParticleOptions) }
+            i.group(
+                ExtraCodecs.RGB_COLOR_CODEC.fieldOf("color").forGetter { it.color },
+                SCALE.fieldOf("scale").forGetter { it.scale }
+            ).apply(i, ::NukeWaveParticleOptions) }
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, NukeWaveParticleOptions> = StreamCodec.composite(
-            ByteBufCodecs.FLOAT, { it.scale }, ::NukeWaveParticleOptions)
+            ByteBufCodecs.INT, { it.color }, ByteBufCodecs.FLOAT, { it.scale }, ::NukeWaveParticleOptions)
     }
 }
 
-class NukeBlastParticleOptions(scale: Float = 1f) : ScalableParticleOptionsBase(scale) {
+class NukeBlastParticleOptions(private val color: Int = 0xFFFFFF, scale: Float = 1f) : ScalableParticleOptionsBase(scale) {
     override fun getType(): ParticleType<NukeBlastParticleOptions> = PazServerParticles.NUKE_BLAST
+    fun getColor(): Vector3f = ARGB.vector3fFromRGB24(this.color)
 
     companion object {
         val CODEC: MapCodec<NukeBlastParticleOptions> = RecordCodecBuilder.mapCodec { i ->
-            i.group(SCALE.fieldOf("scale").forGetter { it.scale }).apply(i, ::NukeBlastParticleOptions) }
+            i.group(
+                ExtraCodecs.RGB_COLOR_CODEC.fieldOf("color").forGetter { it.color },
+                SCALE.fieldOf("scale").forGetter { it.scale }
+            ).apply(i, ::NukeBlastParticleOptions) }
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, NukeBlastParticleOptions> = StreamCodec.composite(
-            ByteBufCodecs.FLOAT, { it.scale }, ::NukeBlastParticleOptions)
+            ByteBufCodecs.INT, { it.color }, ByteBufCodecs.FLOAT, { it.scale }, ::NukeBlastParticleOptions)
+    }
+}
+
+class NukeSmokeParticleOptions(private val color: Int = 0xFFFFFF, scale: Float = 1f) : ScalableParticleOptionsBase(scale) {
+    override fun getType(): ParticleType<NukeSmokeParticleOptions> = PazServerParticles.NUKE_SMOKE
+    fun getColor(): Vector3f = ARGB.vector3fFromRGB24(this.color)
+
+    companion object {
+        val CODEC: MapCodec<NukeSmokeParticleOptions> = RecordCodecBuilder.mapCodec { i ->
+            i.group(
+                ExtraCodecs.RGB_COLOR_CODEC.fieldOf("color").forGetter { it.color },
+                SCALE.fieldOf("scale").forGetter { it.scale }
+            ).apply(i, ::NukeSmokeParticleOptions) }
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, NukeSmokeParticleOptions> = StreamCodec.composite(
+            ByteBufCodecs.INT, { it.color }, ByteBufCodecs.FLOAT, { it.scale }, ::NukeSmokeParticleOptions)
     }
 }

@@ -34,10 +34,6 @@ class NukeWaveParticle(
         this.setSpriteFromAge(sprites);
     }
 
-    override fun getQuadSize(a: Float): Float {
-        return super.getQuadSize(a)
-    }
-
     override fun extract(particleTypeRenderState: QuadParticleRenderState, camera: Camera, partialTickTime: Float) {
         val quaternion = Quaternionf()
         quaternion.rotationX(Mth.HALF_PI)
@@ -63,6 +59,8 @@ class NukeWaveParticle(
             random: RandomSource
         ): Particle {
             val particle = NukeWaveParticle(level, x, y, z, xAux, yAux, zAux, options.scale, sprite)
+            val color = options.getColor()
+            particle.setColor(color.x, color.y, color.z)
             return particle
         }
     }

@@ -2,6 +2,7 @@ package joshxviii.plantz
 
 import joshxviii.plantz.particles.*
 import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry
+import net.minecraft.client.particle.CampfireSmokeParticle
 import net.minecraft.client.particle.CritParticle
 import net.minecraft.client.particle.SpellParticle
 import net.minecraft.client.particle.SplashParticle
@@ -73,6 +74,14 @@ object PazParticles {
 
         it.register(PazServerParticles.NUKE_BLAST) { spriteSet ->
             NukeBlastParticle.Provider(spriteSet)
+        }
+
+        it.register(PazServerParticles.NUKE_BLAST) { spriteSet ->
+            NukeBlastParticle.Provider(spriteSet)
+        }
+
+        it.register(PazServerParticles.NUKE_SMOKE) { spriteSet ->
+            NukeSmokeParticle.Provider(spriteSet)
         }
 
         it.register(PazServerParticles.PAINT_BALL) { spriteSet ->
