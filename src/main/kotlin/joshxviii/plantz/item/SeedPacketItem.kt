@@ -34,20 +34,6 @@ import java.util.*
 
 class SeedPacketItem(properties: Properties) : Item(properties) {
 
-    override fun components(): DataComponentMap {
-        return super.components().apply {}
-    }
-
-    override fun getDefaultInstance(): ItemStack {
-        val default = super.getDefaultInstance()
-        default.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.PIG, CompoundTag()))
-        return default
-    }
-
-    override fun asItem(): Item {
-        return super.asItem()
-    }
-
     override fun getName(itemStack: ItemStack): Component {
         val component = itemStack.get(DataComponents.ENTITY_DATA) ?: return super.getName(itemStack)
         val entityId = BuiltInRegistries.ENTITY_TYPE.getKey(component.type())
@@ -62,15 +48,25 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
         target: LivingEntity,
         type: InteractionHand
     ): InteractionResult {
-        return InteractionResult.SUCCESS
+        if (player.cooldowns.isOnCooldown(itemStack)) return InteractionResult.PASS
+        if (target is Plant) {
+            val result = processSeedPacketInteraction(player, target, itemStack)
+            if (result == PacketInteractionResult.SUCCESS) {
+                itemStack.consume(1, player)
+                applyCooldown(itemStack, player)
+                return InteractionResult.SUCCESS_SERVER
+            }
+            if (result == PacketInteractionResult.FAIL) return InteractionResult.CONSUME
+        }
+        return super.interactLivingEntity(itemStack, player, target, type)
     }
 
     override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResult {
         val itemStack = player.getItemInHand(hand)
 
         val component = itemStack.get(DataComponents.ENTITY_DATA)
-        val entityType = component?.type()?: return InteractionResult.PASS
-        val waterPlaceable = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(entityType).`is`(PazTags.EntityTypes.PLANTABLE_ON_WATER)
+        val entityType = component?.type()
+        val waterPlaceable = entityType!=null && BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(entityType).`is`(PazTags.EntityTypes.PLANTABLE_ON_WATER)
 
         if (waterPlaceable) {// check water result first
             val waterHitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY)
@@ -97,6 +93,10 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
                 val pos: BlockPos = blockHitResult.blockPos
                 if (!level.mayInteract(player, pos)) return InteractionResult.PASS
                 UseOnContext(player, hand, blockHitResult).let {
+                    if (entityType==null) {
+                        player.sendOverlayMessage(Component.translatable("message.plantz.empty_packet").withStyle(ChatFormatting.RED))
+                        return InteractionResult.FAIL
+                    }
                     return tryPlant(level, player, entityType, itemStack, pos, it.clickedFace, it.horizontalDirection)
                 }
             }
@@ -177,16 +177,6 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
         itemStack.consume(1, player)
         if (!player.hasInfiniteMaterials()) {
             player.removeSunFromStorageAndInventory(sunCost)
-            // set cooldown
-            val group = BuiltInRegistries.ENTITY_TYPE.getKey(entityType)
-            if (PazConfig.PLANT_COOLDOWN_ENABLED) {
-                val cooldownTime = PazConfig.getCooldownTime(sunCost)
-                itemStack.set(DataComponents.USE_COOLDOWN, UseCooldown(cooldownTime, Optional.of(group)))
-                player.cooldowns.addCooldown(group, (cooldownTime*20).toInt())
-            } else {
-                player.cooldowns.removeCooldown(group)
-                itemStack.set(DataComponents.USE_COOLDOWN, UseCooldown(0f))
-            }
         }
         entity.playSound(SoundEvents.BIG_DRIPLEAF_PLACE)
         if (entity is TamableAnimal) entity.tame(player)
@@ -195,6 +185,58 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
         return InteractionResult.SUCCESS_SERVER
     }
 
+    // seed packet interaction with plants
+    fun processSeedPacketInteraction(player: Player, plant: Plant, itemStack: ItemStack): PacketInteractionResult {
+        val type = itemStack.get(DataComponents.ENTITY_DATA)?.type()
+        val availableSun = player.getTotalSun()
+        val sunCost = itemStack.get(PazComponents.SUN_COST)?.getSunCost(type)?: 0
+        val cantAfford = sunCost > availableSun && !player.hasInfiniteMaterials()
+
+        val result = when (type) {
+            PazEntities.COFFEE_BEAN -> {
+                when {
+                    plant.isGrowingSeeds -> {
+                        player.sendOverlayMessage(Component.translatable("message.plantz.no_coffee_while_growing").withStyle(ChatFormatting.RED))
+                        PacketInteractionResult.FAIL
+                    }
+                    cantAfford -> PacketInteractionResult.CANT_AFFORD
+                    plant.coffeeBuff>0 -> PacketInteractionResult.FAIL
+                    else -> {
+                        plant.applyCoffeeBuff()
+                        PacketInteractionResult.SUCCESS
+                    }
+                }
+            }
+            else -> PacketInteractionResult.NO_INTERACTION
+        }
+        // show message
+        if (result == PacketInteractionResult.CANT_AFFORD) player.sendOverlayMessage(Component.translatable("message.plantz.not_enough_sun", availableSun, sunCost).withStyle(ChatFormatting.RED))
+        // remove used sun
+        if (result == PacketInteractionResult.SUCCESS && !player.hasInfiniteMaterials()) {
+            player.removeSunFromStorageAndInventory(sunCost)
+            applyCooldown(itemStack, player)
+        }
+        return result
+    }
+    enum class PacketInteractionResult {
+        SUCCESS,
+        FAIL,
+        CANT_AFFORD,
+        NO_INTERACTION
+    }
+
+    fun applyCooldown(itemStack: ItemStack, player: Player) {
+        val entityType = itemStack.get(DataComponents.ENTITY_DATA)?.type()?: return
+        val group = BuiltInRegistries.ENTITY_TYPE.getKey(entityType)
+        if (PazConfig.PLANT_COOLDOWN_ENABLED) {
+            val cooldownTime = PazConfig.getCooldownTime(PazConfig.getSunCost(entityType))
+            itemStack.set(DataComponents.USE_COOLDOWN, UseCooldown(cooldownTime, Optional.of(group)))
+            player.cooldowns.addCooldown(group, (cooldownTime*20).toInt())
+        } else {
+            player.cooldowns.removeCooldown(group)
+            itemStack.set(DataComponents.USE_COOLDOWN, UseCooldown(0f))
+        }
+    }
 
     companion object {
         fun stackFor(type: EntityType<*>): ItemStack {

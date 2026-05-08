@@ -73,7 +73,7 @@ object PazEntities {
         height = 1.5f,
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 35.0,
-            attackDamage = 12.0,
+            attackDamage = 10.0,
             attackKnockback = 0.15,
             followRange = 4.75,
         )
@@ -100,7 +100,7 @@ object PazEntities {
         "ice_peashooter",
         EntityType.Builder.of(::IcePeaShooter, MobCategory.CREATURE),
         attributes = Plant.Companion.PlantAttributes(
-            attackDamage = 1.5,
+            attackDamage = 1.25,
         )
     )
     @JvmField val REPEATER: EntityType<Repeater> = registerPlant(
@@ -111,7 +111,7 @@ object PazEntities {
         "fire_peashooter",
         EntityType.Builder.of(::FirePeaShooter, MobCategory.CREATURE).fireImmune(),
         attributes = Plant.Companion.PlantAttributes(
-            attackDamage = 1.5,
+            attackDamage = 1.25,
         )
     )
     @JvmField val CACTUS: EntityType<Cactus> = registerPlant(
@@ -121,7 +121,7 @@ object PazEntities {
         height = 1.25f,
         eyeHeight = 0.85f,
         attributes = Plant.Companion.PlantAttributes(
-            attackDamage = 2.0,
+            attackDamage = 1.5,
             followRange = 34.0,
         )
     )
@@ -131,7 +131,7 @@ object PazEntities {
         width = 0.9f,
         height = 0.8f,
         attributes = Plant.Companion.PlantAttributes(
-            attackDamage = 2.5,
+            attackDamage = 2.0,
             attackKnockback = 0.5,
             followRange = 22.0,
         )
@@ -142,7 +142,7 @@ object PazEntities {
         width = 0.9f,
         height = 0.8f,
         attributes = Plant.Companion.PlantAttributes(
-            attackDamage = 2.0,
+            attackDamage = 1.5,
             attackKnockback = 0.5,
             followRange = 26.0,
         )
@@ -154,7 +154,7 @@ object PazEntities {
         height = 0.8f,
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 35.0,
-            attackDamage = 6.5,
+            attackDamage = 5.0,
             followRange = 38.0,
         )
     )
@@ -171,7 +171,7 @@ object PazEntities {
     )
     @JvmField val SCAREDY_SHROOM: EntityType<ScaredyShroom> = registerPlant(
         "scaredyshroom", EntityType.Builder.of(::ScaredyShroom, MobCategory.CREATURE),
-        width = 0.45f,
+        width = 0.5f,
         height = 0.9f,
         eyeHeight = 0.5f,
         attributes = Plant.Companion.PlantAttributes(
@@ -186,7 +186,7 @@ object PazEntities {
         width = 0.8f,
         height = 0.8f,
         attributes = Plant.Companion.PlantAttributes(
-            attackDamage = 2.5,
+            attackDamage = 2.0,
         )
     )
     @JvmField val SUN_SHROOM: EntityType<SunShroom> = registerPlant(
@@ -210,7 +210,7 @@ object PazEntities {
         height = 0.8f,
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 28.0,
-            followRange = 4.0
+            followRange = 5.0
         )
     )
     @JvmField val SEA_SHROOM: EntityType<SeaShroom> = registerPlant(

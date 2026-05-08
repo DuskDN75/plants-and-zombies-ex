@@ -85,42 +85,6 @@ fun Plant.processWateringItem(player: Player, item: ItemStack, hand: Interaction
     }
     return false
 }
-// seed packet interaction
-fun Plant.processSeedPacketInteraction(player: Player, packet: ItemStack): PacketInteractionResult {
-    val type = packet.get(DataComponents.ENTITY_DATA)?.type()
-    val availableSun = player.getTotalSun()
-    val sunCost = packet.get(PazComponents.SUN_COST)?.getSunCost(type)?: 0
-    val cantAfford = sunCost > availableSun && !player.hasInfiniteMaterials()
-
-    val result = when (type) {
-        PazEntities.COFFEE_BEAN -> {
-            when {
-                isGrowingSeeds -> {
-                    player.sendOverlayMessage(Component.translatable("message.plantz.no_coffee_while_growing").withStyle(ChatFormatting.RED))
-                    PacketInteractionResult.FAIL
-                }
-                cantAfford -> PacketInteractionResult.CANT_AFFORD
-                isAsleep -> {
-                    applyCoffeeBuff()
-                    PacketInteractionResult.SUCCESS
-                }
-                else -> PacketInteractionResult.FAIL
-            }
-        }
-        else -> PacketInteractionResult.NO_INTERACTION
-    }
-    // show message
-    if (result == PacketInteractionResult.CANT_AFFORD) player.sendOverlayMessage(Component.translatable("message.plantz.not_enough_sun", availableSun, sunCost).withStyle(ChatFormatting.RED))
-    // remove used sun
-    if (result == PacketInteractionResult.SUCCESS && !player.hasInfiniteMaterials()) player.removeSunFromStorageAndInventory(sunCost)
-    return result
-}
-enum class PacketInteractionResult {
-    SUCCESS,
-    FAIL,
-    CANT_AFFORD,
-    NO_INTERACTION
-}
 
 enum class PlantGrowNeeds {
     SOIL,

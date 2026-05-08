@@ -594,14 +594,6 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
             // water interaction
             if (processWateringItem(player, itemStack, hand, growNeeds)) return InteractionResult.SUCCESS_SERVER
 
-            // seed packet interaction
-            if (itemStack.`is`(PazItems.SEED_PACKET)) {
-                if (processSeedPacketInteraction(player, itemStack) == PacketInteractionResult.SUCCESS) {
-                    itemStack.consume(1, player)
-                    return InteractionResult.SUCCESS_SERVER
-                }
-            }
-
             //pot helmet interaction
             if (
                 hand == InteractionHand.MAIN_HAND

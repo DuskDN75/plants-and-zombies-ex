@@ -25,6 +25,7 @@
   "advancements.plantz.win_zombie_raid.description": "Defeat the Zombie Raid!",
 
   "message.plantz.too_damaged": "%s is too damaged to be transplanted!",
+  "message.plantz.empty_packet": "This seed packet is empty!",
   "message.plantz.already_planted": "There's already a plant here!",
   "message.plantz.cannot_survive": "This plant cannot survive here!",
   "message.plantz.not_yours": "You do not own this plant!",
@@ -77,7 +78,7 @@
   "item.plantz.zen_plant_pot": "Zen Plant Pot",
   "item.plantz.plant_pot_minecart": "Minecart with Plant Pot",
   "item.plantz.plant_pot_helmet": "Plant Pot Helmet",
-  "item.plantz.seed_packet": "Seed Packet",
+  "item.plantz.seed_packet": "Empty Seed Packet",
   "item.plantz.seed_packet.entity": "%s Seeds",
 
   "item.plantz.gravestone": "Gravestone",
