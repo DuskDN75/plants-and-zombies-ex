@@ -3,6 +3,7 @@ package joshxviii.plantz
 import joshxviii.plantz.PazMain.MODID
 import joshxviii.plantz.entity.plant.Chomper
 import joshxviii.plantz.entity.plant.Plant
+import joshxviii.plantz.entity.zombie.BrownCoat
 import joshxviii.plantz.entity.zombie.DiscoZombie
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Vec3i
@@ -215,12 +216,15 @@ fun List<String>.permutationsDescending(): List<String> = buildList {
 
 fun LivingEntity.getMagicName(): String {
     val name = this.customName?.string?.lowercase() ?: return ""
-    val hasMagicName: Boolean = when (this) {
-        is Chomper -> name == "chester"
-        is DiscoZombie -> name == "mj"
-        else -> false
+    val magicName = name.let {
+        when (this) {
+            is Chomper -> "chester"
+            is DiscoZombie -> "mj"
+            is BrownCoat -> "tugboat"
+            else -> return ""
+        }
     }
-    return if (hasMagicName) name else ""
+    return magicName
 }
 
 fun resolveTextureLocation(base: String, rm: ResourceManager, suffixes: List<String> = listOf()): Identifier? {
