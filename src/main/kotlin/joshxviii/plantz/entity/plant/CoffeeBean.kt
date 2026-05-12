@@ -51,6 +51,6 @@ class CoffeeBean(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.
     override fun attackGoals() {}
 
     override fun canSurviveOn(block: BlockState): Boolean {
-        return super.canSurviveOn(block) || !block.`is`(BlockTags.AIR)
+        return super.canSurviveOn(block) || !block.getCollisionShape(level(), blockPosition().below()).isEmpty
     }
 }

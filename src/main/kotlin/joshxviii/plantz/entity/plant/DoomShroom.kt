@@ -9,6 +9,7 @@ import joshxviii.plantz.ai.goal.ExplodeGoal
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
@@ -48,6 +49,9 @@ class DoomShroom(type: EntityType<out Explosive>, level: Level) : Explosive(PazE
             activateRange = 4.75,
             destroyBlocks = true,
             actionEndEffect = {
+                //TODO custom sounds
+                playSound(SoundEvents.DRAGON_FIREBALL_EXPLODE, 2f, 0.0f)
+                playSound(SoundEvents.ENDER_DRAGON_SHOOT, 2f, 0.0f)
                 addParticlesAroundSelf(
                     particle = ParticleTypes.LARGE_SMOKE,
                     amount = 58..60,
@@ -60,8 +64,8 @@ class DoomShroom(type: EntityType<out Explosive>, level: Level) : Explosive(PazE
                 level.sendParticles(NukeBlastParticleOptions(color = 0xC093FF, scale = 2.5f),
                     x, y, z, 1, 0.0, 0.0, 0.0, 0.0
                 )
-                level.sendParticles(NukeSmokeParticleOptions(color = 0x7425A3, scale = 0.7f),
-                    x, y+2, z, 16, 0.0, 0.8, 0.0, 0.0
+                level.sendParticles(NukeSmokeParticleOptions(color = 0x7425A3, scale = 0.85f),
+                    x, y+2.5, z, 17, 0.0, 1.0, 0.0, 0.0
                 )
             }
         ))

@@ -82,7 +82,7 @@ object PazEntities {
         "cherrybomb",
         EntityType.Builder.of(::CherryBomb, MobCategory.CREATURE),
         width = 0.625f,
-        height = 0.7f,
+        height = 0.75f,
         attributes = Plant.Companion.PlantAttributes(
             followRange = 3.75,
         )
@@ -406,7 +406,7 @@ object PazEntities {
         EntityType.Builder.of(::Sun, MobCategory.MISC)
             .fireImmune()
             .noLootTable()
-            .sized(0.15F, 0.15F)
+            .sized(0.3F, 0.3F)
             .clientTrackingRange(6)
             .updateInterval(20)
     )

@@ -11,12 +11,16 @@
 - Reduced sun fuel amount by half.
 - Disco zombie can now only spawn backup when there are < 3 backup dances nearby rather than < 4
 - Updated list of projectiles that wallnut can deflect.
+- Wall Nut can now be planted on most solid blocks
 - Increased the amount of healing sun gives to plants.
 - Mailboxes have been updated.
   - All players can now access mailboxes from any loaded chunk within the same dimension.
   - The address list is now sorted by distance from the current mailbox.
 - Fixed issues with projectiles phasing through entities, hitting entities multiple times, and not being deflected
 - Watering Can can take water out of a cauldron by crouching.
+- Endermen will now avoid plant projectiles
+- Made sun a little easier to pickup
+
 
 # Changelog 1.4
 - Added Doom-Shroom

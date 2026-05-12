@@ -55,7 +55,7 @@ class CherryBomb(type: EntityType<out Explosive>, level: Level) : Explosive(PazE
                 level.sendParticles(NukeBlastParticleOptions(color = 0xFFE88D, scale = 1f),
                     x, y, z, 1, 0.0, 0.0, 0.0, 0.0
                 )
-                level.sendParticles(NukeSmokeParticleOptions(color = 0xB87878, scale = 0.3f),
+                level.sendParticles(NukeSmokeParticleOptions(color = 0xB87878, scale = 0.7f),
                     x, y+1, z, 16, 0.0, 0.5, 0.0, 0.0
                 )
             }
@@ -69,6 +69,6 @@ class CherryBomb(type: EntityType<out Explosive>, level: Level) : Explosive(PazE
     }
 
     override fun canSurviveOn(block: BlockState): Boolean {
-        return super.canSurviveOn(block) || !block.`is`(BlockTags.AIR)
+        return super.canSurviveOn(block) || !block.getCollisionShape(level(), blockPosition().below()).isEmpty
     }
 }

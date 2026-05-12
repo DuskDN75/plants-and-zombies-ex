@@ -2,7 +2,9 @@ package joshxviii.plantz.entity.plant
 
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazTags.EntityTypes.WALLNUT_DEFLECTABLE
+import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.tags.BlockTags
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
@@ -10,6 +12,7 @@ import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow
 import net.minecraft.world.entity.projectile.arrow.ThrownTrident
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.BlockState
 
 class WallNut(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.WALL_NUT, level) {
 
@@ -28,5 +31,9 @@ class WallNut(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.WAL
     override fun actuallyHurt(level: ServerLevel, source: DamageSource, damage: Float) {
         val reducedDamage = if (source.entity is Zombie) damage*0.5f else damage
         super.actuallyHurt(level, source, reducedDamage)
+    }
+
+    override fun canSurviveOn(block: BlockState): Boolean {
+        return super.canSurviveOn(block) || !block.getCollisionShape(level(), blockPosition().below()).isEmpty
     }
 }

@@ -220,7 +220,7 @@ class Sun(type: EntityType<out Sun>, level: Level) : Entity(type, level) {
         deltaMovement = deltaMovement.add(movement)
         when {
             batteryPos!= null && distanceSq < 0.25 -> { touchedBattery(batteryPos!!) }
-            followingEntity != null && boundingBox.inflate(0.1).intersects(followingEntity!!.boundingBox) -> {
+            followingEntity != null && boundingBox.inflate(0.4).intersects(followingEntity!!.boundingBox) -> {
                 touchedEntity(followingEntity!!)
             }
         }
