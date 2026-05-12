@@ -28,7 +28,6 @@ fun Plant.processSunItem(player: Player, item: ItemStack, hand: InteractionHand,
 
     if (isTame && health < maxHealth) {// heal
         sunHeal(1)
-        addParticlesAroundSelf(particle = ParticleTypes.HAPPY_VILLAGER)
         success = true
     }
     else if (!isTame) {// try to tame

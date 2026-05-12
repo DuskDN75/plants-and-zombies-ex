@@ -251,10 +251,7 @@ class Sun(type: EntityType<out Sun>, level: Level) : Entity(type, level) {
             for (i in 0 until this.value) {
                 val success = when (entity) {
                     is Player -> tryToGiveSun(entity)
-                    is Plant -> {
-                        entity.addParticlesAroundSelf(particle = ParticleTypes.HAPPY_VILLAGER)
-                        entity.sunHeal()
-                    }
+                    is Plant -> entity.sunHeal()
                     else -> false
                 }
                 if(success) {

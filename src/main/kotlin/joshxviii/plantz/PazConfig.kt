@@ -25,7 +25,7 @@ object PazConfig {
 
     data class Data(
         var coopPlanting: Boolean = true,
-        var playerCreditForPlantKills: Boolean = false,
+        var playerCreditForPlantKills: Boolean = true,
         var seedGrowTime: Int = 12000,
         var extraGrowTimePerSun: Int = 2400,
         var zenPotTimeReduction: Double = 0.25,

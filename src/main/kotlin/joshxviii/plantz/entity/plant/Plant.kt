@@ -474,6 +474,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         val healingMultiplier = 4f
         val healingAmount = sunAmount * healingMultiplier
         val success = health < maxHealth
+        if (success) addParticlesAroundSelf(particle = ParticleTypes.HAPPY_VILLAGER)
         heal(healingAmount)
         return success
     }

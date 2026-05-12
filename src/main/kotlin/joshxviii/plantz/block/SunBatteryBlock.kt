@@ -1,6 +1,7 @@
 package joshxviii.plantz.block
 
 import com.mojang.serialization.MapCodec
+import joshxviii.plantz.PazBlocks
 import joshxviii.plantz.PazComponents
 import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazItems
@@ -141,6 +142,11 @@ class SunBatteryBlock(properties: Properties) : BaseEntityBlock(properties), Sim
     override fun hasAnalogOutputSignal(state: BlockState): Boolean = state.getValue(LEVEL) > 0
     override fun getAnalogOutputSignal(state: BlockState, level: Level, pos: BlockPos, direction: Direction): Int {
         return state.getValue(LEVEL)
+    }
+
+    override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState, includeData: Boolean): ItemStack {
+        return (level.getBlockEntity(pos) as? SunBatteryBlockEntity)?.theItem?:
+        super.getCloneItemStack(level, pos, state, includeData)
     }
 
     override fun codec(): MapCodec<out SunBatteryBlock> { return CODEC }

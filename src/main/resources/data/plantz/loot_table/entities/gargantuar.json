@@ -8,8 +8,12 @@
           "type": "minecraft:item",
           "conditions": [
             {
-              "condition": "minecraft:random_chance",
-              "chance": 0.4
+              "condition": "minecraft:damage_source_properties",
+              "predicate": {
+                "source_entity": {
+                  "type": "#plantz:plant"
+                }
+              }
             }
           ],
           "functions": [

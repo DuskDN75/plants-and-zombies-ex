@@ -56,7 +56,7 @@ public class ZombieMixin {
         Zombie entity = (Zombie) (Object) this;
         var isLeader = Objects.requireNonNull(entity.getAttribute(Attributes.MAX_HEALTH)).hasModifier(Identifier.withDefaultNamespace(LEADER_MODIFIER_ID));
 
-        boolean shouldAddEasyModeFlag = difficulty.getDifficulty()==Difficulty.EASY && level.getRandom().nextFloat()<0.01;
+        boolean shouldAddEasyModeFlag = difficulty.getEffectiveDifficulty() < 1.2 && level.getRandom().nextFloat()<0.0125;
 
         if((isLeader || shouldAddEasyModeFlag) && !(spawnReason.equals(EntitySpawnReason.REINFORCEMENT))) {
             var dropChance = spawnReason.equals(EntitySpawnReason.EVENT) ? 0.0F : 1.0F;
