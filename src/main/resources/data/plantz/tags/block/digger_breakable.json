@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "plantz:plant_pot",
     "minecraft:pointed_dripstone",

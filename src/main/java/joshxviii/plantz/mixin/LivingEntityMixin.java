@@ -190,7 +190,14 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     public void ownerIgnorePlantAttacks(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
         var self = (LivingEntity) (Object) this;
         var sourceEntity = source.getEntity();
+        var directEntity = source.getDirectEntity();
         if (sourceEntity instanceof Plant plant) {
+            if (plant.hasSameOwner(self)) {
+                cir.setReturnValue(false);
+                cir.cancel();
+            }
+        }
+        else if (directEntity instanceof Plant plant) {
             if (plant.hasSameOwner(self)) {
                 cir.setReturnValue(false);
                 cir.cancel();

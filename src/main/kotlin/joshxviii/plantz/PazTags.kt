@@ -16,6 +16,9 @@ object PazTags {
         @JvmField val PLANT_POT = tag("gives_plant_pot_protection")
         @JvmField val YETI_SPAWNABLE_ON = tag("yeti_spawnable_on")
         @JvmField val DIGGER_BREAKABLE = tag("digger_breakable")
+
+        //TODO add "can survive on" block tags for all plants.
+        @JvmField val SURVIVES_ON_POTATOMINE = tag("can_survive_on/potatomine")
         private fun tag(name: String): TagKey<Block> = TagKey.create(Registries.BLOCK, pazResource(name))
     }
 

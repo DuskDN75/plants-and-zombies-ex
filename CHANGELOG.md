@@ -16,13 +16,15 @@
 - Disco zombie can now only spawn backup when there are < 3 backup dances nearby rather than < 4
 - Updated list of projectiles that wallnut can deflect.
 - Wall Nut can now be planted on most solid blocks
+- Potatomine can be planted on sand and gravel blocks.
+- Endermen will now avoid plant projectiles
+- Fixed a bug were plants could still damage player owners with "coopPlanting" and "playerCreditForPlantKills" enabled. 
 - Mailboxes have been updated.
   - All players can now access mailboxes from any loaded chunk within the same dimension.
   - The address list is now sorted by distance from the current mailbox.
   - Added response messages when sending mail.
 - Fixed issues with projectiles phasing through entities, hitting entities multiple times, and not being deflected
 - Watering Can can take water out of a cauldron by crouching.
-- Endermen will now avoid plant projectiles
 - Gargantuar can only drop plant pot helmet when killed by a plant
 - Added 1.25% a chance for non leader zombies to spawn with flag when the local difficulty is < 1.2
 

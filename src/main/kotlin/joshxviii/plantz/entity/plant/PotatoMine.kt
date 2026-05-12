@@ -2,9 +2,11 @@ package joshxviii.plantz.entity.plant
 
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazSounds
+import joshxviii.plantz.PazTags
 import joshxviii.plantz.hasSameRootOwner
 import net.minecraft.core.particles.ItemParticleOption
 import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.tags.BlockTags
 import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
@@ -14,6 +16,8 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.state.BlockState
 
 class PotatoMine(type: EntityType<out Explosive>, level: Level) : Explosive(PazEntities.POTATO_MINE, level) {
     override fun registerGoals() {
@@ -62,5 +66,9 @@ class PotatoMine(type: EntityType<out Explosive>, level: Level) : Explosive(PazE
         if (isGrowingSeeds || cooldown > 0) return
         if (entity is Plant || (entity is Player && isTame) || this.hasSameRootOwner(entity)) return
         potatoMineExplode()
+    }
+
+    override fun canSurviveOn(block: BlockState): Boolean {
+        return super.canSurviveOn(block) || block.`is`(PazTags.BlockTags.SURVIVES_ON_POTATOMINE)
     }
 }

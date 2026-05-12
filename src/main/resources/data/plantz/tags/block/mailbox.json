@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "plantz:mailbox",
     "plantz:light_gray_mailbox",
