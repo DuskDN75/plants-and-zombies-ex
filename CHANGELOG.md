@@ -7,33 +7,49 @@
 ### Technical Changes
 
 # Changelog 1.4.1
+### Additions:
+- Added Bonk Choy
+  - Spawns in Bamboo Jungle and Savanna biomes.
 - Solar battery can be placed and will absorb nearby sun.
   - The light level and redstone level changes depending on the store amount of sun.
 - Added Electrified Mob Effect.
   - Mobs with the effect will zap nearby entities while in water or hit with any other type of electric damage.
   - Mobs with a higher level of the effect will apply a lower level of the electrified effect to entities it zapped. The higher the level, the more the effect will chain to other mobs.
+- Added translations for seven new languages.
+  - Spanish - @Maxi1978
+  - Portuguese - @theplayeris1
+  - Filipino - @Arseus
+  - Turkish - @TangHere
+  - Chinese - @_spos777
+  - Japanese - @_spos777
+  - Russian - @anyjerk
+### Fixes/Changes:
+#### General:
+- Separated server and client config files
+- Fixed an issue where the server and client config settings would clash and cause errors.
 - Adjusted spawn rates and drop chances.
+- The Watering Can is able to take water out of a cauldron by crouching.
+- Being struck by lightning will now apply the Electrified effect.
+- Mailboxes have been updated.
+  - All players can now access mailboxes from any loaded chunk within the same dimension.
+  - The address list is now sorted by distance from the current mailbox.
+  - Added response messages when sending mail.
 - Reduced sun fuel amount by half.
 - Made sun a little easier to pick up
 - Increased the amount of healing sun gives to plants.
-- Disco zombie can now only spawn backup when there are < 3 backup dances nearby rather than < 4
+- Fixed issues with projectiles phasing through entities, hitting entities multiple times, and not being deflected
+#### Plants:
 - Updated list of projectiles that wallnut can deflect.
 - Wall Nut can now be planted on most solid blocks
 - Potatomine can be planted on sand and gravel blocks.
 - Explosive plants will no longer continue to explode after being tamed.
 - Endermen will now avoid plant projectiles
-- Fixed a bug where plants could still damage player owners with "coopPlanting" and "playerCreditForPlantKills" enabled. 
-- Mailboxes have been updated.
-  - All players can now access mailboxes from any loaded chunk within the same dimension.
-  - The address list is now sorted by distance from the current mailbox.
-  - Added response messages when sending mail.
-- Fixed issues with projectiles phasing through entities, hitting entities multiple times, and not being deflected
-- The Watering Can is able to take water out of a cauldron by crouching.
+- Fixed a bug where plants could still damage player owners with "coopPlanting" and "playerCreditForPlantKills" enabled.
+#### Zombies:
+- Disco zombie can now only spawn backup when there are < 3 backup dances nearby rather than < 4
 - Improved Digger zombie pathfinding, block breaking speed, and what blocks it can break
 - Gargantuar can only drop a plant pot helmet when killed by a plant
 - Added 1.25% a chance for non-leader zombies to spawn with a flag when the local difficulty is < 1.2
-- Separated server and client config options
-- Fixed an issue where the server and client config settings would clash and cause errors.
 
 # Changelog 1.4
 - Added Doom-Shroom
