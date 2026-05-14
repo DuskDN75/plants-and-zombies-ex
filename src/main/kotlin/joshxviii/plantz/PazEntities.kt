@@ -403,6 +403,7 @@ object PazEntities {
     @JvmField val PEA: EntityType<Pea> = registerProjectile("pea", EntityType.Builder.of({_,l->Pea(l)}, MobCategory.MISC))
     @JvmField val PEA_ICE: EntityType<PeaIce> = registerProjectile("pea_ice", EntityType.Builder.of({_,l->PeaIce(l)}, MobCategory.MISC))
     @JvmField val PEA_FIRE: EntityType<PeaFire> = registerProjectile("pea_fire", EntityType.Builder.of({_,l->PeaFire(l)}, MobCategory.MISC))
+    @JvmField val PEA_ELECTRIC: EntityType<PeaElectric> = registerProjectile("pea_electric", EntityType.Builder.of({_,l-> PeaElectric(l)}, MobCategory.MISC))
     @JvmField val NEEDLE: EntityType<Needle> = registerProjectile("needle", EntityType.Builder.of({_,l->Needle(l)}, MobCategory.MISC), width = 0.42f, height = 0.42f)
     @JvmField val SPORE: EntityType<Spore> = registerProjectile("spore", EntityType.Builder.of({_,l->Spore(l)}, MobCategory.MISC))
     @JvmField val WATER_SPORE: EntityType<WaterSpore> = registerProjectile("water_spore", EntityType.Builder.of({_,l-> WaterSpore(l)}, MobCategory.MISC))

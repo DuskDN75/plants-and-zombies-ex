@@ -50,7 +50,7 @@ object PazEffects {
 
     @JvmField val HYPNOTIZE_POTION: Holder<Potion> = registerPotion("hypnotize", MobEffectInstance(HYPNOTIZE, 3600))
     @JvmField val BUTTERED_POTION: Holder<Potion> = registerPotion("buttered", MobEffectInstance(BUTTERED, 100))
-    @JvmField val ELECTRIFIED_POTION: Holder<Potion> = registerPotion("electrified", MobEffectInstance(ELECTRIFIED, 100))
+    @JvmField val ELECTRIFIED_POTION: Holder<Potion> = registerPotion("electrified", MobEffectInstance(ELECTRIFIED, 200))
     fun registerPotion(name: String, effects: MobEffectInstance): Holder<Potion> {
         val potion = Potion(name, effects)
         return Registry.registerForHolder(

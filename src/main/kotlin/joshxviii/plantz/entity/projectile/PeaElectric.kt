@@ -1,32 +1,38 @@
 package joshxviii.plantz.entity.projectile
 
 import joshxviii.plantz.PazDamageTypes
+import joshxviii.plantz.PazEffects
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazServerParticles
 import net.minecraft.tags.EntityTypeTags
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.animal.sheep.Sheep
 import net.minecraft.world.level.Level
+import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec2
 
-class PeaIce(
+class PeaElectric(
     level: Level,
     owner: LivingEntity? = null,
     spawnOffset: Vec2 = Vec2.ZERO,
-) : PazProjectile(PazEntities.PEA_ICE, level, owner, spawnOffset,
-    PazDamageTypes.PLANT_FREEZE
+) : PazProjectile(PazEntities.PEA_ELECTRIC, level, owner, spawnOffset,
+    PazDamageTypes.PLANT_ELECTRIC
 ) {
     override fun afterHitEntityEffect(target: LivingEntity) {
         super.afterHitEntityEffect(target)
-        if (target.`is`(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES)) return
-        target.addEffect(MobEffectInstance(MobEffects.SLOWNESS, 100, 0))
-        target.addEffect(MobEffectInstance(MobEffects.WEAKNESS, 100, 0))
+    }
+
+    override fun onHitEntity(hitResult: EntityHitResult) {
+        val target = hitResult.entity
+        (target as? LivingEntity)?.addEffect(MobEffectInstance(PazEffects.ELECTRIFIED, 50, 1))
+        super.onHitEntity(hitResult)
     }
 
     override fun onHit(hitResult: HitResult) {
         super.onHit(hitResult)
-        spawnParticle(PazServerParticles.ICE_PEA_HIT)
+        spawnParticle(PazServerParticles.ELECTRIC_PEA_HIT)
     }
 }

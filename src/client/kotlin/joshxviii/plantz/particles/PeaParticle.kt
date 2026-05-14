@@ -39,7 +39,7 @@ class PeaParticle private constructor(
         return quadSize * Mth.clamp((age + a) / lifetime * 32.0f, 0.0f, 1.0f)
     }
 
-    public override fun getLayer(): Layer =Layer.OPAQUE
+    public override fun getLayer(): Layer = Layer.OPAQUE
 
     class Provider(private val sprite: SpriteSet) : ParticleProvider<SimpleParticleType> {
         override fun createParticle(

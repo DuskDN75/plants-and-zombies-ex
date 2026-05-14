@@ -2,10 +2,13 @@ package joshxviii.plantz.entity.projectile
 
 import joshxviii.plantz.PaintParticleOptions
 import joshxviii.plantz.PazDamageTypes
+import joshxviii.plantz.PazEffects
 import joshxviii.plantz.PazEntities
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.animal.sheep.Sheep
 import net.minecraft.world.item.DyeColor

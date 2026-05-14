@@ -2,7 +2,9 @@ package joshxviii.plantz.effect
 
 import joshxviii.plantz.ElectricArcParticleOptions
 import joshxviii.plantz.PazDamageTypes
+import joshxviii.plantz.PazEffects
 import joshxviii.plantz.PazServerParticles
+import joshxviii.plantz.PazTags
 import joshxviii.plantz.hasSameRootOwner
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.server.level.ServerLevel
@@ -21,13 +23,14 @@ class ElectrifyMobEffect(
     particleOptions: ParticleOptions
 ) : MobEffect(category, color, particleOptions) {
     companion object {
-        const val ZAP_INTERVAL: Int = 25
+        const val ZAP_INTERVAL: Int = 12
         const val ZAP_RANGE: Double = 3.0
     }
 
     // chain lightening effect to nearby mobs
     override fun onMobHurt(level: ServerLevel, mob: LivingEntity, amplifier: Int, source: DamageSource, damage: Float) {
         super.onMobHurt(level, mob, amplifier, source, damage)
+        if (!source.`is`(PazTags.DamageTypes.IS_ELECTRIC)) return
         // targeting conditions for nearby candidates to zap
         val rootCauseEntity = source.entity
         val targetConditions = TargetingConditions.forNonCombat().ignoreLineOfSight().ignoreInvisibilityTesting().selector { entity, level ->
@@ -39,14 +42,21 @@ class ElectrifyMobEffect(
         nearbyTargets.randomOrNull()?.let {
             zap(level, it, rootCauseEntity)
             level.sendParticles(
-                ElectricArcParticleOptions(
-                    Vec3(it.x, it.y + level.random.nextFloat() * it.boundingBox.ysize, it.z),
-                    color = 0x88CCFF,
+                ElectricArcParticleOptions(// electric arc particle
+                    Vec3(it.getRandomX(0.2), it.randomY, it.getRandomZ(0.2)),
+                    color = 0xFFFFFF, // 0x88CCFF
                     thickness = 0.15f
                 ),
-                mob.x, mob.y + level.random.nextFloat() * mob.boundingBox.ysize, mob.z,
+                mob.getRandomX(0.2), mob.randomY, mob.getRandomZ(0.2),
                 1, 0.0, 0.0, 0.0, 0.0
             )
+
+            mob.getEffect(PazEffects.ELECTRIFIED)?.let { effect ->
+                if (effect.amplifier>0) {
+                    val duration = if (effect.isInfiniteDuration) 300 else (effect.duration*0.25f).toInt()
+                    it.addEffect(MobEffectInstance(PazEffects.ELECTRIFIED, duration.coerceAtMost(300), effect.amplifier-1))
+                }
+            }
         }
     }
 
@@ -60,7 +70,7 @@ class ElectrifyMobEffect(
         target.hurtServer(level, source, 0.01f)
         level.sendParticles(
             PazServerParticles.ELECTRIFIED,
-            target.x, target.y + target.boundingBox.ysize*0.5, target.z, 15,
+            target.x, target.y + target.boundingBox.ysize*0.5, target.z, 10,
             target.boundingBox.xsize*0.55,
             target.boundingBox.ysize*0.25,
             target.boundingBox.zsize*0.55,
