@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.block.state.BlockState
 
-class TangleKelp(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.SUNFLOWER, level) {
+class TangleKelp(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.TANGLE_KELP, level) {
 
     companion object {
         fun checkTangleKelpSpawnRules(

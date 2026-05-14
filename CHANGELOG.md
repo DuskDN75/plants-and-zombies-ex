@@ -6,6 +6,10 @@
 - Added The Graveyard biome
 ### Technical Changes
 
+# Changelog 1.4.2
+### Hotfix
+- Fixed a client-side crash on initialization.
+
 # Changelog 1.4.1
 ### Additions:
 - Added Bonk Choy

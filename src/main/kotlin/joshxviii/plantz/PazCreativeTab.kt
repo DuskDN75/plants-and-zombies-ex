@@ -38,7 +38,7 @@ object PazCreativeTab {
                 output.accept(SeedPacketItem.stackFor(PazEntities.KERNEL_PULT))
                 output.accept(SeedPacketItem.stackFor(PazEntities.MELON_PULT))
                 output.accept(SeedPacketItem.stackFor(PazEntities.BONK_CHOY))
-                //output.accept(SeedPacketItem.stackFor(PazEntities.TANGLE_KELP))
+                output.accept(SeedPacketItem.stackFor(PazEntities.TANGLE_KELP))
                 output.accept(SeedPacketItem.stackFor(PazEntities.SUN_SHROOM))
                 output.accept(SeedPacketItem.stackFor(PazEntities.PUFF_SHROOM))
                 output.accept(SeedPacketItem.stackFor(PazEntities.FUME_SHROOM))
@@ -56,7 +56,7 @@ object PazCreativeTab {
                 output.accept(PazItems.DISCO_ZOMBIE_SPAWN_EGG)
                 output.accept(PazItems.BACKUP_DANCER_SPAWN_EGG)
                 output.accept(PazItems.ALL_STAR_SPAWN_EGG)
-                //output.accept(PazItems.SOLDIER_ZOMBIE_SPAWN_EGG)
+                output.accept(PazItems.SOLDIER_ZOMBIE_SPAWN_EGG)
                 output.accept(PazItems.IMP_SPAWN_EGG)
                 output.accept(PazItems.GARGANTUAR_SPAWN_EGG)
 
@@ -76,6 +76,7 @@ object PazCreativeTab {
                 output.accept(PazBlocks.CONE)
                 output.accept(PazItems.NEWSPAPER)
                 output.accept(PazItems.FOOTBALL_HELMET)
+                output.accept(PazItems.DYE_BLASTER)
                 output.accept(PazBlocks.BRAINZ_FLAG)
                 output.accept(PazBlocks.PLANTZ_FLAG)
 
@@ -86,7 +87,7 @@ object PazCreativeTab {
                 PazBlocks.mailboxByColor.forEach { output.accept(it.value) }
 
                 // other
-                //output.accept(PazBlocks.GRAVESTONE)
+                output.accept(PazBlocks.GRAVESTONE)
             }
             .build()
     )
