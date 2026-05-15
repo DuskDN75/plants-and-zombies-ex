@@ -4,10 +4,14 @@ import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazSounds
 import joshxviii.plantz.PazTags
 import joshxviii.plantz.hasSameRootOwner
+import net.minecraft.core.Holder
 import net.minecraft.core.particles.ItemParticleOption
 import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.resources.ResourceKey
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.DifficultyInstance
+import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
@@ -37,13 +41,19 @@ class PotatoMine(type: EntityType<out Explosive>, level: Level) : Explosive(PazE
     override fun tick() {
         super.tick()
         if (cooldown>0) coolDownAnimationState.startIfStopped(tickCount)
-        if (swell == getMaxSwellTime()) potatoMineExplode()
     }
 
-    fun potatoMineExplode() {
-        explode(
+    override fun explode(
+        radius: Float,
+        sound: Holder.Reference<SoundEvent>,
+        damageType: ResourceKey<DamageType>,
+        destroyBlocks: Boolean
+    ) {
+        super.explode(
             radius = 1f,
             sound = PazSounds.POTATOMINE_EXPLODE,
+            damageType,
+            destroyBlocks,
         )
         addParticlesAroundSelf(
             particle = ItemParticleOption(
@@ -58,14 +68,13 @@ class PotatoMine(type: EntityType<out Explosive>, level: Level) : Explosive(PazE
             amount = 3..3,
             speed = 0.1,
         )
-        discard()
     }
 
     override fun getMaxSwellTime() = 4
     override fun doPush(entity: Entity) {
         if (isGrowingSeeds || cooldown > 0) return
         if (entity is Plant || (entity is Player && isTame) || this.hasSameRootOwner(entity)) return
-        potatoMineExplode()
+        explode()
     }
 
     override fun canSurviveOn(block: BlockState): Boolean {

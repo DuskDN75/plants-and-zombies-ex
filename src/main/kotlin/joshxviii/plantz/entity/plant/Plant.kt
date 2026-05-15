@@ -501,7 +501,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     }
 
     open fun getZenGrownSeedType(): EntityType<*> = type
-    protected fun awardSeedPacket(player: Player) {
+    fun awardSeedPacket(player: Player) {
         val level = level() as? ServerLevel ?: return
         receivedSun = 0
         receivedWater = 0

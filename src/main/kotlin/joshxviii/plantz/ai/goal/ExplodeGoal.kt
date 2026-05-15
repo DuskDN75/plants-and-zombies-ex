@@ -19,7 +19,6 @@ class ExplodeGoal(
     val activateRange: Double = 3.0,
     val actionPredicate: Predicate<PathfinderMob> = Predicate { true },
     val actionEndEffect: () -> Unit = {},
-    val discardOnExplode: Boolean = true,
 ) : Goal() {
 
     companion object {
@@ -29,7 +28,7 @@ class ExplodeGoal(
     private var target: LivingEntity? = null
 
     init {
-        setFlags(EnumSet.of<Flag>(Flag.MOVE))
+        flags = EnumSet.of<Flag>(Flag.MOVE)
     }
 
     override fun canUse(): Boolean {
@@ -79,8 +78,6 @@ class ExplodeGoal(
                 sound = sound,
                 destroyBlocks = destroyBlocks,
             )
-            if (discardOnExplode) explosiveEntity.discard()
-            explosiveEntity.swellDir = -1
         }
     }
 }

@@ -26,6 +26,13 @@
         }
       },
       {
+        "when": { "id": "plantz:explode_o_nut" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz:item/seed_packet/explode_o_nut"
+        }
+      },
+      {
         "when": { "id": "plantz:chomper" },
         "model": {
           "type": "minecraft:model",

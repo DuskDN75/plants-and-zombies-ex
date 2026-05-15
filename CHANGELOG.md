@@ -1,5 +1,16 @@
 # Changelog 1.5
-- Added Solider Zombie
+### Additions
+- Added Electric Peashooter
+- Added Tangle Kelp
+- Added Explode-O-Nut
+- Added plant transformations
+  - Some plants can be transformed into other plants under certain conditions.
+- Added Seed Packet Mutations
+  - When zen-gardening a plant, seeds for a different plant may be produced instead.
+    - Wall Nut has a 5% chance to produce Explode-O-Nut seeds.
+    - Explode-O-Nut has an 80% chance to produce Wall Nut seeds.
+    - Electric Peashooter has a 95% chance to produce Pea Shooter seeds.
+- Added Soldier Zombie
 - Added Dye Blaster
 - Added Gravestone Block
 	- Zombies will emerge from the ground near the gravestone during the night.

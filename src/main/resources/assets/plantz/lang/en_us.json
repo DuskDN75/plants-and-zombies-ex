@@ -108,6 +108,9 @@
   "item.minecraft.potion.effect.buttered": "Potion of Buttered",
   "item.minecraft.splash_potion.effect.buttered": "Splash Potion of Buttered",
   "item.minecraft.lingering_potion.effect.buttered": "Lingering Potion of Buttered",
+  "item.minecraft.potion.effect.electrified": "Potion of Electricity",
+  "item.minecraft.splash_potion.effect.electrified": "Splash Potion of Electricity",
+  "item.minecraft.lingering_potion.effect.electrified": "Lingering Potion of Electricity",
 
   "item.plantz.browncoat_spawn_egg": "Brown Coat Spawn Egg",
   "item.plantz.newspaper_zombie_spawn_egg": "Newspaper Zombie Spawn Egg",
@@ -116,6 +119,7 @@
   "item.plantz.disco_zombie_spawn_egg": "Disco Zombie Spawn Egg",
   "item.plantz.backup_dancer_spawn_egg": "Backup Dancer Spawn Egg",
   "item.plantz.all_star_spawn_egg": "All Star Spawn Egg",
+  "item.plantz.soldier_zombie_spawn_egg": "Soldier Zombie Spawn Egg",
   "item.plantz.imp_spawn_egg": "Imp Spawn Egg",
   "item.plantz.gargantuar_spawn_egg": "Gargantuar Spawn Egg",
 
@@ -147,6 +151,7 @@
   "entity.plantz.sunflower": "Sunflower",
   "entity.plantz.peashooter": "Peashooter",
   "entity.plantz.wallnut": "Wall Nut",
+  "entity.plantz.explode_o_nut": "Explode-O-Nut",
   "entity.plantz.chomper": "Chomper",
   "entity.plantz.cherrybomb": "Cherry Bomb",
   "entity.plantz.potatomine": "Potatomine",
@@ -155,6 +160,7 @@
   "entity.plantz.fire_peashooter": "Fire Peashooter",
   "entity.plantz.electric_peashooter": "Electric Peashooter",
   "entity.plantz.cactus": "Cactus",
+  "entity.plantz.lightning_reed": "Lightning Reed",
   "entity.plantz.cabbagepult": "Cabbage Pult",
   "entity.plantz.kernelpult": "Kernel Pult",
   "entity.plantz.melonpult": "Melon Pult",

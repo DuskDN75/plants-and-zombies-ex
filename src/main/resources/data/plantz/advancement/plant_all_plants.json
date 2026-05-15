@@ -42,6 +42,14 @@
         }
       }
     },
+    "plantz:explode_o_nut": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz:explode_o_nut"
+        }
+      }
+    },
     "plantz:chomper": {
       "trigger": "minecraft:tame_animal",
       "conditions": {

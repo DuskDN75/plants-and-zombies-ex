@@ -110,6 +110,7 @@ object PazModels {
         EntityRenderers.register(PazEntities.PEA_SHOOTER) { PlantRenderer(PeaShooterModel(it.bakeLayer(PeaShooterModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.SUNFLOWER) { PlantRenderer(SunflowerModel(it.bakeLayer(SunflowerModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.WALL_NUT) { PlantRenderer(WallNutModel(it.bakeLayer(WallNutModel.LAYER_LOCATION)), it) }
+        EntityRenderers.register(PazEntities.EXPLODE_O_NUT) { PlantRenderer(WallNutModel(it.bakeLayer(WallNutModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.CHOMPER) {PlantRenderer(ChomperModel(it.bakeLayer(ChomperModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.CHERRY_BOMB) { PlantRenderer(CherryBombModel(it.bakeLayer(CherryBombModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.POTATO_MINE) { PlantRenderer(PotatoMineModel(it.bakeLayer(PotatoMineModel.LAYER_LOCATION)), it) }

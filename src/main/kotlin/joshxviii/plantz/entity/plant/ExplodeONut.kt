@@ -14,11 +14,11 @@ import net.minecraft.world.entity.projectile.arrow.ThrownTrident
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class WallNut(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.WALL_NUT, level) {
+class ExplodeONut(type: EntityType<out Explosive>, level: Level) : Explosive(PazEntities.EXPLODE_O_NUT, level) {
 
     override fun attackGoals() {}
 
-    override fun getZenGrownSeedType(): EntityType<*> = if (random.nextFloat() < 0.05f) PazEntities.EXPLODE_O_NUT else super.getZenGrownSeedType()
+    override fun getZenGrownSeedType(): EntityType<*> = if (random.nextFloat() < 0.8f) PazEntities.WALL_NUT else super.getZenGrownSeedType()
 
     // solid collision
     override fun canBeCollidedWith(other: Entity?): Boolean = this.isAlive && other != attachedEntity

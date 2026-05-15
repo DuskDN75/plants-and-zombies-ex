@@ -49,6 +49,7 @@ abstract class Explosive(type: EntityType<out Explosive>, level: Level) : Plant(
 
     override fun tick() {
         super.tick()
+        if (swell == getMaxSwellTime() && !isRemoved) explode()
         calculateSwell()
     }
 
@@ -81,12 +82,14 @@ abstract class Explosive(type: EntityType<out Explosive>, level: Level) : Plant(
         swell = (swell + swellDir.coerceIn(-1,1)).coerceIn(0, getMaxSwellTime())
     }
 
-    fun explode(
+    open fun explode(
         radius: Float = 4.0f,
         sound: Holder.Reference<SoundEvent> = PazSounds.PLANT_EXPLODE,
         damageType: ResourceKey<DamageType> = PazDamageTypes.PLANT_AOE,
         destroyBlocks: Boolean = false,
     ) {
+        swellDir = -1
+        swell = 0
         val level = this.level()
         val source = this.damageSources().source(damageType, this,
             if (PazConfig.PLAYER_CREDIT_FOR_PLANT_KILLS) this.rootOwner else this)
@@ -116,6 +119,7 @@ abstract class Explosive(type: EntityType<out Explosive>, level: Level) : Plant(
             WeightedList.of(),
             SoundEvents.ITEM_BREAK
         )
+        if (discardOnExplode()) discard()
     }
-
+    open fun discardOnExplode(): Boolean = true
 }
