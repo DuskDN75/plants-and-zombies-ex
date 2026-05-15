@@ -3,6 +3,9 @@ package joshxviii.plantz.entity.plant
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
 import joshxviii.plantz.entity.projectile.Pea
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
@@ -26,5 +29,12 @@ class PeaShooter(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.
                     && (target is Zombie
                     || (target is Enemy && isTame))
         })
+    }
+
+    override fun actuallyHurt(level: ServerLevel, source: DamageSource, damage: Float) {
+        super.actuallyHurt(level, source, damage)
+        if (source.`is`(DamageTypes.LIGHTNING_BOLT)) {
+            convertToPlantType(PazEntities.ELECTRIC_PEA_SHOOTER)
+        }
     }
 }

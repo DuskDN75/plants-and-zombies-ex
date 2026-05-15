@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "minecraft:copper_golem",
-    "minecraft:iron_golem"
+    "minecraft:iron_golem",
+    "plantz:electric_peashooter"
   ]
 }

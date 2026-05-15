@@ -55,7 +55,6 @@ import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.component.AttackRange
 import net.minecraft.world.level.*
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.portal.TeleportTransition
@@ -337,6 +336,19 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
             source,
             if (potProtection) (damage * PazConfig.PLANT_POT_DAMAGE_REDUCTION).toFloat() else damage
         )
+    }
+
+    protected fun <T: Plant> convertToPlantType(
+        plantType: EntityType<T>,
+        level: ServerLevel = level() as ServerLevel,
+        afterConversion: (plantEntity: Plant) -> Unit = {}) {
+        convertTo(plantType, ConversionParams.single(this, true, true)) { newPlant ->
+            owner?.let {
+                if (it is Player) newPlant.tame(it)
+                else newPlant.owner = it
+            }
+            afterConversion(newPlant)
+        }
     }
 
     fun hasPlantPotProtection(): Boolean= getBlockBelow().`is`(PazTags.BlockTags.PLANT_POT) || isAttached()
