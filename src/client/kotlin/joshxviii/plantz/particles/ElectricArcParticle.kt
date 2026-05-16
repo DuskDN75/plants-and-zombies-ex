@@ -28,9 +28,6 @@ class ElectricArcParticle private constructor(
 
     override fun tick() {
         super.tick()
-        // Fade out
-        thickness = (1.0f - age.toFloat() / lifetime) * 0.9f
-        alpha = (1.0f - age.toFloat()+0.5f / lifetime) * 0.9f
     }
 
     override fun getGroup(): ParticleRenderType = PazParticles.ELECTRIC_ARC

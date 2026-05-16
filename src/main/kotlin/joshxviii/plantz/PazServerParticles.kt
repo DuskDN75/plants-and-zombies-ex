@@ -147,7 +147,7 @@ class ElectricArcParticleOptions(
                 Codec.DOUBLE.optionalFieldOf("ty", 0.0).forGetter { it.targetPos.y },
                 Codec.DOUBLE.optionalFieldOf("tz", 0.0).forGetter { it.targetPos.z },
                 ExtraCodecs.RGB_COLOR_CODEC.optionalFieldOf("color", 0xAACCFF).forGetter { it.color },
-                Codec.FLOAT.optionalFieldOf("thickness", 0.12f).forGetter { it.thickness }
+                Codec.FLOAT.optionalFieldOf("thickness", 0.0f).forGetter { it.thickness }
             ).apply(builder
             ) { x, y, z, color, thickness -> ElectricArcParticleOptions(Vec3(x, y, z), color, thickness) }
         }

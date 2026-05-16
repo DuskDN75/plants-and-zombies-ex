@@ -142,6 +142,18 @@ object PazEntities {
             followRange = 34.0,
         )
     )
+    @JvmField val LIGHTNING_REED: EntityType<LightningReed> = registerPlant(
+        "lightning_reed",
+        EntityType.Builder.of(::LightningReed, MobCategory.CREATURE),
+        width = 0.45f,
+        height = 1.25f,
+        eyeHeight = 0.7f,
+        attributes = Plant.Companion.PlantAttributes(
+            attackDamage = 1.0,
+            attackRange = 7.25,
+            followRange = 6.5,
+        )
+    )
     @JvmField val CABBAGE_PULT: EntityType<CabbagePult> = registerPlant(
         "cabbagepult",
         EntityType.Builder.of(::CabbagePult, MobCategory.CREATURE),

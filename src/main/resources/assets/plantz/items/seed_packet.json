@@ -89,6 +89,13 @@
         }
       },
       {
+        "when": { "id": "plantz:lightning_reed" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz:item/seed_packet/lightning_reed"
+        }
+      },
+      {
         "when": { "id": "plantz:cabbagepult" },
         "model": {
           "type": "minecraft:model",

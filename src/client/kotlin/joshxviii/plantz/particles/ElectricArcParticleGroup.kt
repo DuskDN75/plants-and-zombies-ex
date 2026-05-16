@@ -1,7 +1,14 @@
 package joshxviii.plantz.particles
 
+import com.mojang.blaze3d.pipeline.BlendFunction
+import com.mojang.blaze3d.pipeline.ColorTargetState
+import com.mojang.blaze3d.pipeline.DepthStencilState
+import com.mojang.blaze3d.pipeline.RenderPipeline
+import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
+import com.mojang.blaze3d.vertex.VertexFormat
+import joshxviii.plantz.PazRenderPipelines
 import joshxviii.plantz.pazResource
 import net.minecraft.client.Camera
 import net.minecraft.client.particle.*
@@ -13,6 +20,7 @@ import net.minecraft.client.renderer.rendertype.RenderSetup
 import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.client.renderer.state.level.CameraRenderState
 import net.minecraft.client.renderer.state.level.ParticleGroupRenderState
+import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
 import net.minecraft.world.phys.Vec3
 
@@ -35,11 +43,13 @@ class ElectricArcParticleGroup(engine: ParticleEngine) : ParticleGroup<ElectricA
         val color: Int,
         val alpha: Float,
         val age: Int,
-        val lifetime: Int
+        val lifetime: Int,
+        val random: RandomSource
     ) {
         companion object {
             fun fromParticle(particle: ElectricArcParticle, camera: Camera, partialTicks: Float): ElectricArcParticleRenderState {
                 val cameraPos = camera.position()
+
                 return ElectricArcParticleRenderState(
                     startPos = particle.startPos.subtract(cameraPos),
                     targetPos = Vec3(particle.targetPos.x, particle.targetPos.y, particle.targetPos.z).subtract(cameraPos),
@@ -47,7 +57,8 @@ class ElectricArcParticleGroup(engine: ParticleEngine) : ParticleGroup<ElectricA
                     color = particle.color,
                     alpha = particle.alpha,
                     age = particle.particleAge,
-                    lifetime = particle.lifetime
+                    lifetime = particle.lifetime,
+                    random = RandomSource.create(particle.hashCode().toLong())
                 )
             }
         }
@@ -70,23 +81,24 @@ class ElectricArcParticleGroup(engine: ParticleEngine) : ParticleGroup<ElectricA
 
         override fun submit(collector: SubmitNodeCollector, camera: CameraRenderState) {
             for (state in renderStates) {
-                collector.submitCustomGeometry(PoseStack(), RENDER_TYPE) { pose, buffer ->
+                collector.submitCustomGeometry(PoseStack(), RENDER_TYPE) { _, buffer ->
                     renderElectricArc(buffer, state)
                 }
             }
         }
 
         private fun renderElectricArc(buffer: VertexConsumer, state: ElectricArcParticleRenderState) {
-            val mainAlpha = state.alpha
-            val ageFactor = state.age.toFloat() / state.lifetime
+            val ageFactor = 1-(state.age.toFloat() / state.lifetime)
+            val mainAlpha = state.alpha * ageFactor
             val width = state.thickness * ageFactor
 
-            // main arc
-            renderSegmentedArc(buffer, state, width, mainAlpha, 9, jitterMultiplier = 1.1f)
+            // Main bright arc
+            renderSegmentedArc(buffer, state, width, mainAlpha, 10, 1.05f)
 
-            if (ageFactor < 0.6f) { // young arcs
-                renderSegmentedArc(buffer, state, width * 0.5f, mainAlpha * 0.65f, 7, jitterMultiplier = 1.4f, offset = 0.12)
-                renderSegmentedArc(buffer, state, width * 0.25f, mainAlpha * 0.45f, 6, jitterMultiplier = 1.6f, offset = -0.09)
+            // Secondary arcs for electricity feel
+            if (ageFactor < 0.65f) {
+                renderSegmentedArc(buffer, state, width * 0.55f, mainAlpha * 0.7f, 8, 1.35f, 0.08)
+                renderSegmentedArc(buffer, state, width * 0.35f, mainAlpha * 0.5f, 7, 1.6f, -0.10)
             }
         }
 
@@ -97,31 +109,30 @@ class ElectricArcParticleGroup(engine: ParticleEngine) : ParticleGroup<ElectricA
             alpha: Float,
             segments: Int,
             jitterMultiplier: Float = 1.0f,
-            offset: Double = 0.0
+            yOffset: Double = 0.0
         ) {
             var current = state.startPos
             val dir = state.targetPos.subtract(state.startPos)
-            val totalLength = dir.length()
+            val twist = state.random.nextFloat() * Mth.TWO_PI
 
             for (i in 0 until segments) {
                 val t = (i + 1.0) / segments
                 var next = state.startPos.add(dir.scale(t))
 
-                // chaotic lightning jitter
                 if (i in 1 until segments - 1) {
                     val progress = i.toDouble() / segments
-                    val jitter = (0.45 * jitterMultiplier) * (1.0 - progress * 0.3) * (1.0 - state.age.toDouble() / state.lifetime)
+                    val jitter = 0.42 * jitterMultiplier * (1.0 - progress * 0.4) * (1.0 - state.age.toDouble() / state.lifetime)
 
-                    val rnd = RandomSource.create((state.age * 37 + i * 17).toLong())
+                    val rnd = RandomSource.create((state.age * 31 + i * 19).toLong())
 
                     next = next.add(
                         rnd.nextDouble() * jitter - jitter * 0.5,
-                        rnd.nextDouble() * jitter * 0.75 - jitter * 0.35 + offset,
+                        rnd.nextDouble() * jitter * 0.8 - jitter * 0.35 + yOffset,
                         rnd.nextDouble() * jitter - jitter * 0.5
                     )
                 }
 
-                drawSegment(buffer, current, next, width, state.color, alpha)
+                drawSegment(buffer, current, next, width, state.color, alpha, twist)
                 current = next
             }
         }
@@ -132,11 +143,14 @@ class ElectricArcParticleGroup(engine: ParticleEngine) : ParticleGroup<ElectricA
             to: Vec3,
             width: Float,
             color: Int,
-            alpha: Float
+            alpha: Float,
+            twist: Float
         ) {
             val diff = to.subtract(from).normalize()
 
-            val perp = Vec3(-diff.z, 0.0, diff.x).normalize()
+            var perp = Vec3(-diff.z, 0.0, diff.x).normalize()
+
+            perp = perp.xRot(twist)
 
             val hw = width * 0.5
 
@@ -160,7 +174,7 @@ class ElectricArcParticleGroup(engine: ParticleEngine) : ParticleGroup<ElectricA
                 .setColor(r, g, b, a)
                 .setUv(0f, 0f)
                 .setUv1(0, 0)
-                .setNormal(0f, 0f, 0f)
+                .setNormal(0f, 1f, 0f)
                 .setLight(15728880)
         }
     }

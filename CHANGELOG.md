@@ -1,6 +1,7 @@
 # Changelog 1.5
 ### Additions
 - Added Electric Peashooter
+- Added Lightning Reed
 - Added Tangle Kelp
 - Added Explode-O-Nut
 - Added plant transformations

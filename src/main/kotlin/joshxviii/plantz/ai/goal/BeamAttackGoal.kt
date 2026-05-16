@@ -29,7 +29,7 @@ class BeamAttackGoal(
     val beamWidth : Double = 3.25,
     val damageMultiplier: Float = 1.0f,
     val damageType: ResourceKey<DamageType> = PazDamageTypes.PLANT,
-    val beamParticles : ParticleOptions? = null,
+    val particleFactory : (startPos: Vec3, targetPos: Vec3) -> Unit = { _, _ -> },
     val afterHitEntityEffect: (target: LivingEntity) -> Unit = {},
 ) : ActionGoal(usingEntity, cooldownTime, actionDelay, actionStartEffect, actionSuccessEffect, actionEndEffect, actionPredicate) {
     private var piercedEntities: MutableList<Entity>? = null
@@ -88,7 +88,7 @@ class BeamAttackGoal(
             }
         }
 
-        spawnBeamParticles(start, end)
+        particleFactory(start, end)
         return piercedEntities?.isNotEmpty() ?: false
     }
 
@@ -108,22 +108,4 @@ class BeamAttackGoal(
         val projection = lineStart.add(lineDir.scale(t))
         return point.distanceTo(projection)
     }
-
-     private fun spawnBeamParticles(start: Vec3, end: Vec3) {
-         if (beamParticles == null) return
-         val steps = (start.distanceTo(end) * 10).toInt()  // Density
-         val stepVec = end.subtract(start).scale(1.0 / steps)
-         var pos = start
-         for (i in 0 until steps) {
-
-             (usingEntity.level() as ServerLevel).sendParticles(
-                 beamParticles,
-                 pos.x, pos.y, pos.z,
-                 2,
-                 beamWidth/8, beamWidth/8, beamWidth/8,
-                 0.02
-             )
-             pos = pos.add(stepVec)
-         }
-     }
 }

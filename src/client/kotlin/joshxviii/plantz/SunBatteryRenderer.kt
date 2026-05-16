@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.math.Axis
 import joshxviii.plantz.SunRenderer.Companion.EMISSIVE_SUN
-import joshxviii.plantz.SunRenderer.Companion.RENDER_TYPE
 import joshxviii.plantz.block.SunBatteryBlock
 import joshxviii.plantz.block.entity.SunBatteryBlockEntity
 import joshxviii.plantz.model.zombies.PazZombieModel

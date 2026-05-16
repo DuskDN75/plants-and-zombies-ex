@@ -114,6 +114,14 @@
         }
       }
     },
+    "plantz:lightning_reed": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz:lightning_reed"
+        }
+      }
+    },
     "plantz:cabbagepult": {
       "trigger": "minecraft:tame_animal",
       "conditions": {

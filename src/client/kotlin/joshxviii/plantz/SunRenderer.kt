@@ -77,8 +77,7 @@ class SunRenderer(context: EntityRendererProvider.Context) :
 
     companion object {
         private val SUN_LOCATION = pazResource("textures/entity/sun.png")
-        public val RENDER_TYPE = RenderTypes.itemTranslucent(SUN_LOCATION)
-        public val EMISSIVE_SUN =
+        val EMISSIVE_SUN =
             RenderType.create(
                 "sun",
                 RenderSetup.builder(RenderPipelines.ENERGY_SWIRL)

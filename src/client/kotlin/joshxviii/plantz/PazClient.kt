@@ -11,6 +11,7 @@ object PazClient : ClientModInitializer {
 		PazParticles.registerAll()
 		PazScreens.registerAll()
 		PazClientNetwork.initialize()
+		PazRenderPipelines.initialize()
 
 		ClientLevelEvents.AFTER_CLIENT_LEVEL_CHANGE.register { minecraft, level ->
 			//MailboxManager.clearMailboxes()
