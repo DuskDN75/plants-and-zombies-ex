@@ -26,6 +26,8 @@ object PazModels {
 
     @JvmField
     val IS_HYPNOTIZED_KEY: RenderStateDataKey<Boolean> = RenderStateDataKey.create { "plantz:hypnotized" }
+    @JvmField
+    val PAINT_COLOR_KEY: RenderStateDataKey<Int> = RenderStateDataKey.create { "plantz:painted" }
 
     val EMPTY_LAYER: ModelLayerLocation = ModelLayerLocation(pazResource("empty"), "empty")
 

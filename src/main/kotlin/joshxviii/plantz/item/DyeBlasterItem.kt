@@ -17,6 +17,8 @@ import net.minecraft.world.item.ItemUseAnimation
 import net.minecraft.world.item.ProjectileWeaponItem
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.Level
+import net.minecraft.world.phys.Vec2
+import net.minecraft.world.phys.Vec3
 import java.util.function.Predicate
 
 class DyeBlasterItem(properties: Properties) : ProjectileWeaponItem(properties) {
@@ -77,6 +79,7 @@ class DyeBlasterItem(properties: Properties) : ProjectileWeaponItem(properties) 
         return PaintBall(
             level,
             shooter,
+            spawnOffset = Vec2(0.5f,-0.075f),
             color = color
         )
     }
@@ -90,6 +93,6 @@ class DyeBlasterItem(properties: Properties) : ProjectileWeaponItem(properties) 
         angle: Float,
         targetOverrride: LivingEntity?
     ) {
-        projectileEntity.shootFromRotation(shooter, shooter.xRot, shooter.yRot + angle, 0.0f, power, uncertainty)
+        projectileEntity.shootFromRotation(shooter, shooter.xRot, shooter.yRot + angle, 0f, power, uncertainty)
     }
 }

@@ -3,6 +3,7 @@ package joshxviii.plantz
 import joshxviii.plantz.effect.ButteredMobEffect
 import joshxviii.plantz.effect.ElectrifyMobEffect
 import joshxviii.plantz.effect.HypnotizedMobEffect
+import joshxviii.plantz.effect.PaintedMobEffect
 import joshxviii.plantz.effect.ToxicMobEffect
 import joshxviii.plantz.effect.ZombieOmenMobEffect
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType
@@ -29,6 +30,8 @@ object PazEffects {
             .withSoundOnAdded(PazSounds.APPLY_ZOMBIE_OMEN))
     @JvmField val ELECTRIFIED : Holder<MobEffect> = register("electrified",
         ElectrifyMobEffect(MobEffectCategory.HARMFUL, 0x87FFFB, PazServerParticles.ELECTRIFIED))
+    @JvmField val PAINTED : Holder<MobEffect> = register("painted",
+        PaintedMobEffect(MobEffectCategory.HARMFUL))
             //.withSoundOnAdded(PazSounds.APPLY_ZOMBIE_OMEN))
     @JvmField val BUTTERED: Holder<MobEffect> = register("buttered",
         ButteredMobEffect(MobEffectCategory.HARMFUL, 13416767, PazServerParticles.BUTTER_DRIP)

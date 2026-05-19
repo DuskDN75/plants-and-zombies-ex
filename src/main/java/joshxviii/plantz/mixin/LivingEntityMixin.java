@@ -1,8 +1,8 @@
 package joshxviii.plantz.mixin;
 
 import joshxviii.plantz.*;
+import joshxviii.plantz.effect.PaintedMobEffect;
 import joshxviii.plantz.entity.plant.Plant;
-import joshxviii.plantz.entity.plant.PlantUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -11,11 +11,8 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Util;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -23,11 +20,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.storage.ValueInput;
@@ -40,13 +34,11 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Objects;
 
 import static joshxviii.plantz.PazItems.DUCKY_TUBE_DAMAGE_INTERVAL;
 
@@ -55,12 +47,18 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
 
     @Unique
     private static final EntityDataAccessor<Boolean> DATA_HYPNO_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
+    @Unique
+    private static final EntityDataAccessor<Integer> DATA_PAINTED_COLOR = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
 
     @Shadow
     public abstract boolean hasEffect(Holder<MobEffect> effect);
 
     @Shadow
     public int swingTime;
+
+    @Shadow
+    public abstract @org.jspecify.annotations.Nullable MobEffectInstance getEffect(Holder<MobEffect> effect);
+
     @Unique
     private CompoundTag plantData = new CompoundTag();
 
@@ -95,6 +93,10 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     @Unique
     public boolean plantz$getHypnoId() {
         return ((Entity) (Object) this).getEntityData().get(DATA_HYPNO_ID);
+    }
+    @Unique
+    public int plantz$getPaintedColor() {
+        return ((Entity) (Object) this).getEntityData().get(DATA_PAINTED_COLOR);
     }
 
     @Unique
@@ -146,19 +148,24 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     public void defineData(SynchedEntityData.Builder entityData, CallbackInfo ci) {
         entityData.define(DATA_HYPNO_ID, false);
+        entityData.define(DATA_PAINTED_COLOR, -1);
     }
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void saveHypnoFlag(ValueOutput output, CallbackInfo ci) {
-        output.putBoolean("plantz:IsHypnotized", ((Entity) (Object) this).getEntityData().get(DATA_HYPNO_ID));
+        var self = (LivingEntity) (Object) this;
+        output.putBoolean("plantz:IsHypnotized", self.getEntityData().get(DATA_HYPNO_ID));
+        output.putInt("plantz:PaintedColor", self.getEntityData().get(DATA_PAINTED_COLOR));
         if (!this.plantz$getPlantData().isEmpty()) {
             output.store("plantz:AttachedPlant", CompoundTag.CODEC, this.plantz$getPlantData());
         }
     }
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
     private void loadHypnoFlag(ValueInput input, CallbackInfo ci) {
-        ((Entity) (Object) this).getEntityData().set(DATA_HYPNO_ID, input.getBooleanOr("plantz:IsHypnotized", false));
+        var self = (LivingEntity) (Object) this;
+        self.getEntityData().set(DATA_HYPNO_ID, input.getBooleanOr("plantz:IsHypnotized", false));
+        self.getEntityData().set(DATA_PAINTED_COLOR, input.getIntOr("plantz:PaintedColor", -1));
         plantz$setPlantData(input.read("plantz:AttachedPlant", CompoundTag.CODEC).orElseGet(CompoundTag::new));
-        if ((LivingEntity) (Object) this instanceof PathfinderMob mob) {
+        if (self instanceof PathfinderMob mob) {
             prevFloatTag = mob.getNavigation().canFloat();
             prevWaterMalus = mob.getPathfindingMalus(PathType.WATER);
             if (mob.getItemBySlot(EquipmentSlot.LEGS).is(PazItems.DUCKY_TUBE)) {
@@ -167,19 +174,34 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
             }
         }
     }
+
     @Inject(method = "onEffectAdded", at = @At(value = "TAIL"))
     public void onHypnoAdded(MobEffectInstance effect, Entity source, CallbackInfo ci) {
-        ((Entity) (Object) this).getEntityData().set(DATA_HYPNO_ID, this.hasEffect(PazEffects.HYPNOTIZE));
+        updateEffects();
     }
     @Inject(method = "onEffectsRemoved", at = @At(value = "TAIL"))
     public void onHypnoRemoved(Collection<MobEffectInstance> effects, CallbackInfo ci) {
-        ((Entity) (Object) this).getEntityData().set(DATA_HYPNO_ID, this.hasEffect(PazEffects.HYPNOTIZE));
+        updateEffects();
     }
+    @Unique
+    public void updateEffects() {
+        var self = (LivingEntity) (Object) this;
+        self.getEntityData().set(DATA_HYPNO_ID, this.hasEffect(PazEffects.HYPNOTIZE));
+        if (this.hasEffect(PazEffects.PAINTED)) {
+            if (Objects.requireNonNull(this.getEffect(PazEffects.PAINTED)).getEffect().value() instanceof PaintedMobEffect paintedEffect) {
+                var paintedColor = paintedEffect.getPaintColor();
+                self.getEntityData().set(DATA_PAINTED_COLOR, paintedColor);
+            }
+        }
+        else self.getEntityData().set(DATA_PAINTED_COLOR, -1);
+    }
+
     @Inject(method = "canBeAffected", at = @At(value = "RETURN"), cancellable = true)
     public void immuneToHypnosis(MobEffectInstance newEffect, CallbackInfoReturnable<Boolean> cir) {
         if (newEffect.is(PazEffects.HYPNOTIZE)) {
             cir.setReturnValue(!((Entity) (Object) this).is(PazTags.EntityTypes.CANNOT_HYPNOTIZE));
         }
+        updateEffects();
     }
     @Inject(method = "canAttack", at = @At(value = "RETURN"), cancellable = true)
     public void stopTargetingFriendlies(LivingEntity target, CallbackInfoReturnable<Boolean> cir) {

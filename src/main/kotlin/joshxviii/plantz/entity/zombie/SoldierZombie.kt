@@ -3,7 +3,11 @@ package joshxviii.plantz.entity.zombie
 import joshxviii.plantz.PazItems
 import joshxviii.plantz.PazSounds
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
+import joshxviii.plantz.entity.plant.Repeater
 import joshxviii.plantz.entity.projectile.PaintBall
+import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.network.syncher.EntityDataSerializers
+import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
@@ -25,7 +29,10 @@ class SoldierZombie(type: EntityType<out SoldierZombie>, level: Level) : PazZomb
             usingEntity = this,
             projectileFactory =  { PaintBall(level(), this) },
             velocity = 1.3,
-            actionDelay = 25))
+            actionDelay = 25,
+            actionEndEffect = {
+
+            }))
     }
 
     override fun addBehaviourGoals() {
