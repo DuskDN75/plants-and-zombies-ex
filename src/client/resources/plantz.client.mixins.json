@@ -10,6 +10,7 @@
   },
   "mixins": [
     "AvatarRendererMixin",
+    "GuiMixin",
     "HumanoidModelMixin",
     "LivingEntityRendererMixin"
   ]

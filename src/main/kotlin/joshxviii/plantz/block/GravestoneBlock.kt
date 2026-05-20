@@ -4,12 +4,16 @@ import com.mojang.serialization.MapCodec
 import joshxviii.plantz.block.entity.GravestoneBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.util.Util
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.ScheduledTickAccess
+import net.minecraft.world.level.Spawner
 import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
@@ -27,7 +31,7 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class GravestoneBlock(properties: Properties) : BaseEntityBlock(properties), SimpleWaterloggedBlock  {
+class GravestoneBlock(properties: Properties) : BaseEntityBlock(properties), SimpleWaterloggedBlock, Spawner  {
     companion object {
         val CODEC: MapCodec<GravestoneBlock> = simpleCodec(::GravestoneBlock)
         val SHAPE: VoxelShape = Util.make {
@@ -88,4 +92,7 @@ class GravestoneBlock(properties: Properties) : BaseEntityBlock(properties), Sim
     }
 
     override fun codec(): MapCodec<out GravestoneBlock> { return CODEC }
+    override fun setEntityId(type: EntityType<*>, random: RandomSource) {
+
+    }
 }
