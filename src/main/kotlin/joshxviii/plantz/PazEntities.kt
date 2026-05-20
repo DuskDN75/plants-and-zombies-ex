@@ -109,12 +109,15 @@ object PazEntities {
     @JvmField val REPEATER: EntityType<Repeater> = registerPlant(
         "repeater",
         EntityType.Builder.of(::Repeater, MobCategory.CREATURE),
+        attributes = Plant.Companion.PlantAttributes(
+            attackDamage = 1.0,
+        )
     )
     @JvmField val ICE_PEA_SHOOTER: EntityType<IcePeaShooter> = registerPlant(
         "ice_peashooter",
         EntityType.Builder.of(::IcePeaShooter, MobCategory.CREATURE),
         attributes = Plant.Companion.PlantAttributes(
-            attackDamage = 1.25,
+            attackDamage = 1.0,
         )
     )
     @JvmField val FIRE_PEA_SHOOTER: EntityType<FirePeaShooter> = registerPlant(
@@ -183,7 +186,7 @@ object PazEntities {
         height = 0.8f,
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 35.0,
-            attackDamage = 5.0,
+            attackDamage = 3.5,
             followRange = 38.0,
         )
     )
