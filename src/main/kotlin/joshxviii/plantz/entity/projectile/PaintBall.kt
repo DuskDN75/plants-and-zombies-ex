@@ -4,11 +4,12 @@ import joshxviii.plantz.PaintParticleOptions
 import joshxviii.plantz.PazDamageTypes
 import joshxviii.plantz.PazEffects
 import joshxviii.plantz.PazEntities
+import joshxviii.plantz.effect.PaintedMobEffect
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.util.ARGB
 import net.minecraft.world.effect.MobEffectInstance
-import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.animal.sheep.Sheep
 import net.minecraft.world.item.DyeColor
@@ -46,7 +47,7 @@ class PaintBall(
     override fun tick() {
         super.tick()
         spawnParticle(
-            PaintParticleOptions(dyeColor.textColor, 0.95f),
+            PaintParticleOptions(dyeColor.fireworkColor, 0.95f),
             spread = Vec3(0.01,0.01,0.01),
             speed = 0.015
         )
@@ -55,15 +56,30 @@ class PaintBall(
     override fun onHit(hitResult: HitResult) {
         super.onHit(hitResult)
         spawnParticle(
-            PaintParticleOptions(dyeColor.textColor, 1.95f),
+            PaintParticleOptions(dyeColor.fireworkColor, 1.95f),
             amount = 18,
             speed = 0.25
         )
     }
 
-    override fun onHitEntity(hitResult: EntityHitResult) {
-        super.onHitEntity(hitResult)
-        val target = hitResult.entity
+    override fun afterHitEntityEffect(target: LivingEntity) {
+        super.afterHitEntityEffect(target)
+        val oldEffect = target.getEffect(PazEffects.PAINTED)?.apply { effect.value().let {
+            if (it is PaintedMobEffect) it.paintColor = this@PaintBall.dyeColor.fireworkColor
+        } }
+        val paintedEffect = oldEffect?.effect?.value() as? PaintedMobEffect
+        if (paintedEffect is PaintedMobEffect) {
+            oldEffect.mapDuration { it + 40 }
+            paintedEffect.paintColor = ARGB.opaque(this@PaintBall.dyeColor.fireworkColor)
+            target.addEffect(oldEffect)
+        }
+        else {
+            val effectInstance = MobEffectInstance(PazEffects.PAINTED, 600, 0).apply { effect.value().let {
+                if (it is PaintedMobEffect) it.paintColor = ARGB.opaque(this@PaintBall.dyeColor.fireworkColor)
+            } }
+            target.addEffect(effectInstance)
+        }
+
         if (target is Sheep && target.hurtMarked) target.color = dyeColor
     }
 }

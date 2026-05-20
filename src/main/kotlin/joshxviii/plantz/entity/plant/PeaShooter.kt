@@ -21,7 +21,7 @@ class PeaShooter(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.
         this.goalSelector.addGoal(2, ProjectileAttackGoal(
             usingEntity = this,
             projectileFactory = { Pea(level(), this)},
-            cooldownTime = 20,
+            cooldownTime = 19,
             actionDelay = 3))
         this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
             target !is Plant
@@ -30,6 +30,8 @@ class PeaShooter(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.
                     || (target is Enemy && isTame))
         })
     }
+
+    override fun getZenGrownSeedType(): EntityType<*> = if (random.nextFloat() < 0.1f) PazEntities.REPEATER else super.getZenGrownSeedType()
 
     override fun actuallyHurt(level: ServerLevel, source: DamageSource, damage: Float) {
         super.actuallyHurt(level, source, damage)

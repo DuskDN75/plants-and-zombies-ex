@@ -1,16 +1,23 @@
 # Changelog 1.5
 ### Additions
 - Added Electric Peashooter
+  - Acquired by striking a peashooter with lightning.
 - Added Lightning Reed
+  - Found in swamps and near rivers during a thunderstorm.
 - Added Tangle Kelp
+  - Found in swamps and mangroves.
 - Added Explode-O-Nut
+  - Acquired from Wall Nut zen-gardening.
 - Added plant transformations
   - Some plants can be transformed into other plants under certain conditions.
 - Added Seed Packet Mutations
   - When zen-gardening a plant, seeds for a different plant may be produced instead.
     - Wall Nut has a 5% chance to produce Explode-O-Nut seeds.
     - Explode-O-Nut has an 80% chance to produce Wall Nut seeds.
-    - Electric Peashooter has a 95% chance to produce Pea Shooter seeds.
+    - Electric Peashooter has a 95% chance to produce Peashooter seeds.
+    - Peashooter has a 10% chance to produce Repeaters seeds.
+    - Repeaters has a 60% chance to produce Peashooter seeds.
+- Repeaters no longer spawn naturally.
 - Added Soldier Zombie
 - Added Dye Blaster
 - Added Gravestone Block

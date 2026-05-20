@@ -10,4 +10,7 @@ public interface LivingEntityAccessor {
     @Invoker("plantz$getHypnoId")
     boolean plantz$getHypnoId();
 
+    @Invoker("plantz$getPaintedColor")
+    int plantz$getPaintedColor();
+
 }

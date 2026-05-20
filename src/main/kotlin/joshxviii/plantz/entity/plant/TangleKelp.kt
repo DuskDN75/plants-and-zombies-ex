@@ -33,8 +33,8 @@ class TangleKelp(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.
             val inWater = level.getFluidState(pos).`is`(FluidTags.WATER)
             val rainBonus = if (isRaining) 2.25f else 1f
 
-            return EntitySpawnReason.isSpawner(spawnReason) ||
-                (inWater && random.nextFloat() < (0.1 * rainBonus))
+            return checkValidSpawn(level, pos, spawnReason)
+                    && inWater && random.nextFloat() < (0.1 * rainBonus)
         }
     }
 

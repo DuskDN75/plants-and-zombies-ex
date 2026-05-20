@@ -77,6 +77,9 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     companion object {
         val LOGGER: Logger = LoggerFactory.getLogger(Plant::class.java)
 
+        /**
+         * Default plant spawn rules
+         */
         fun checkPlantSpawnRules(
             type: EntityType<out Plant>,
             level: LevelAccessor,
@@ -85,15 +88,18 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
             random: RandomSource
         ): Boolean {
             val blockBelow = level.getBlockState(pos.below())
-            val isValid = checkValidSpawn(level, pos) && blockBelow.`is`(PLANTABLE) && pos.y > level.seaLevel - 8
+            val isValid = checkValidSpawn(level, pos, spawnReason) && blockBelow.`is`(PLANTABLE) && pos.y > level.seaLevel - 8
             return isValid
         }
 
-        // ensure plant groups are spread out and not clumped too close together
-        fun checkValidSpawn(level: LevelAccessor, pos: BlockPos): Boolean {
+        /**
+         * General Plant spawn rules. Should use this is for other plants custom spawn rules.
+         * Ensure plant groups are spread out and not clumped too close together.
+         */
+        fun checkValidSpawn(level: LevelAccessor, pos: BlockPos, spawnReason: EntitySpawnReason): Boolean {
             val blockAtPos = level.getBlockState(pos)
-            return level.getEntitiesOfClass(Plant::class.java, AABB(pos).inflate(38.0)) { it.tickCount > 0 }.isEmpty()
-                    && blockAtPos.getCollisionShape(level, pos.above()).isEmpty
+            return (level.getEntitiesOfClass(Plant::class.java, AABB(pos).inflate(38.0)) { it.tickCount > 0 }.isEmpty()
+                    && blockAtPos.getCollisionShape(level, pos.above()).isEmpty) || EntitySpawnReason.isSpawner(spawnReason)
         }
 
         private const val NUTRIENT_SUPPLY_MAX = 160  // ticks before suffocating when on invalid ground
@@ -346,6 +352,8 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
                 if (it is Player) newPlant.tame(it)
                 else newPlant.owner = it
             }
+            // TODO custom sounds
+            playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED)
             afterConversion(newPlant)
         }
     }

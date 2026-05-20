@@ -76,7 +76,7 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
             val pos: BlockPos = hitResult.blockPos
             if (level.getBlockState(pos).block !is LiquidBlock) return InteractionResult.PASS
             else if (level.mayInteract(player, pos) && player.mayUseItemAt(pos, hitResult.direction, itemStack)) {
-                val result = tryPlant(level, player, itemStack, pos, UseOnContext(player, hand, hitResult).clickedFace, Direction.UP, checkWater = true)
+                val result = tryPlant(level, player, itemStack, pos, UseOnContext(player, hand, hitResult).clickedFace, player.direction, checkWater = true)
                 if (result === InteractionResult.SUCCESS) player.awardStat(Stats.ITEM_USED.get(this))
 
                 return result

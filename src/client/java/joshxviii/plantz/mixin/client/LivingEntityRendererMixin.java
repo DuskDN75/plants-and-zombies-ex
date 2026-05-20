@@ -21,8 +21,9 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static joshxviii.plantz.PazModels.IS_HYPNOTIZED_KEY;
+import static joshxviii.plantz.PazModels.*;
 
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extends LivingEntityRenderState, M extends EntityModel<? super S>> implements RenderLayerParent<S, M> {
@@ -40,6 +41,8 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     private void checkForHypnoEffect(T entity, S state, float partialTicks, CallbackInfo ci) {
         boolean hasHypno = ((LivingEntityAccessor) entity).plantz$getHypnoId();
         state.setData(IS_HYPNOTIZED_KEY, hasHypno);
+        int paintColor = ((LivingEntityAccessor) entity).plantz$getPaintedColor();
+        state.setData(PAINT_COLOR_KEY, paintColor);
     }
 
     @Unique
@@ -50,10 +53,15 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
         at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;multiply(II)I")
     )
     private int plantz$applyHypnoTint(int tintedColor, S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
+        int finalColor = tintedColor;
+
         if (state.getDataOrDefault(IS_HYPNOTIZED_KEY, false)) {
-            return ARGB.multiply(tintedColor, PLANTZ_HYPNO_TINT);
+            finalColor = ARGB.multiply(finalColor, PLANTZ_HYPNO_TINT);
         }
 
-        return tintedColor;
+        int color = state.getDataOrDefault(PAINT_COLOR_KEY, -1);
+        if (color != -1) finalColor = ARGB.multiply(finalColor, color);
+
+        return finalColor;
     }
 }

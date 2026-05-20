@@ -32,7 +32,7 @@ class ProjectileAttackGoal(
     val inaccuracy: Float = 0.8f,
     val attackRadius: Float = usingEntity.attributes.getValue(Attributes.FOLLOW_RANGE).toFloat(),
     val useHighArc: Boolean = false,
-    val soundEvent: SoundEvent = PazSounds.PROJECTILE_FIRE,
+    val soundEvent: SoundEvent? = PazSounds.PROJECTILE_FIRE,
 ) : ActionGoal(usingEntity, cooldownTime, actionDelay, actionStartEffect, actionSuccessEffect, actionEndEffect, actionPredicate) {
     var distanceSqr: Double = 0.0
 
@@ -117,7 +117,7 @@ class ProjectileAttackGoal(
         if (projectile is Projectile) projectile.shoot(shootX, shootY, shootZ, finalVel.toFloat(), inaccuracy)
         else projectile.applyImpulse(shootX, shootY, shootZ, finalVel.toFloat(), inaccuracy)
 
-        usingEntity.playSound(soundEvent, 0.7f, 0.4f / (usingEntity.random.nextFloat() * 0.4f + 0.8f))
+        if (soundEvent!=null) usingEntity.playSound(soundEvent, 0.7f, 0.4f / (usingEntity.random.nextFloat() * 0.4f + 0.8f))
         return true
     }
 

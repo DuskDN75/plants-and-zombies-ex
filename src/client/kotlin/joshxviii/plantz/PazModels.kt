@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers
 import net.minecraft.client.renderer.entity.ArmorModelSet
 import net.minecraft.client.renderer.entity.EntityRenderers
 import net.minecraft.client.renderer.entity.ThrownItemRenderer
+import net.minecraft.resources.Identifier
 import net.minecraft.world.item.ItemStack
 import org.spongepowered.asm.mixin.Unique
 import java.util.function.Supplier
@@ -26,6 +27,10 @@ object PazModels {
 
     @JvmField
     val IS_HYPNOTIZED_KEY: RenderStateDataKey<Boolean> = RenderStateDataKey.create { "plantz:hypnotized" }
+    @JvmField
+    val PAINT_COLOR_KEY: RenderStateDataKey<Int> = RenderStateDataKey.create { "plantz:painted" }
+    @JvmField
+    val PAINT_OVERLAY_TEXTURE: Identifier = pazResource("textures/gui/paint_overlay.png")
 
     val EMPTY_LAYER: ModelLayerLocation = ModelLayerLocation(pazResource("empty"), "empty")
 

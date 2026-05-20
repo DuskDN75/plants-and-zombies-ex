@@ -3,6 +3,7 @@ package joshxviii.plantz
 import com.mojang.blaze3d.vertex.PoseStack
 import joshxviii.plantz.ai.PlantState
 import joshxviii.plantz.entity.plant.BonkChoy
+import joshxviii.plantz.entity.plant.ExplodeONut
 import joshxviii.plantz.entity.plant.Explosive
 import joshxviii.plantz.entity.plant.KernelPult
 import joshxviii.plantz.entity.plant.Plant
@@ -110,7 +111,7 @@ class PlantRenderer(
             }
         state.textureExtra =
             when (entity) {
-                is WallNut -> when {
+                is WallNut, is ExplodeONut -> when {
                     state.damagedAmount >= 0.75f -> "damage_medium"
                     state.damagedAmount >= 0.5f  -> "damage_low"
                     else -> ""
@@ -121,7 +122,8 @@ class PlantRenderer(
     }
 
     override fun getTextureLocation(state: PlantRenderState): Identifier {
-        return state.getTextureLocation(PlantRenderState.TEXTURE_PATH, state.getSuffixes())
+        val texture = state.getTextureLocation(PlantRenderState.TEXTURE_PATH, state.getSuffixes())
+        return texture
     }
 }
 

@@ -8,6 +8,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.entity.state.ZombieRenderState;
+import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
 import static joshxviii.plantz.UtilsKt.pazResource;
@@ -55,6 +56,17 @@ public class SoldierZombieModel extends PazZombieModel {
 
     @Override
     public void setupAnim(@NotNull ZombieRenderState state) {
+        float tempAttackTime = state.attackTime;
+        state.attackTime = 0;
         super.setupAnim(state);
+
+        float animationPos = state.walkAnimationPos;
+        float animationSpeed = state.walkAnimationSpeed;
+        if (state.attackTime<=0) this.rightArm.xRot = Mth.cos(animationPos * 0.6662F + Mth.PI) * 0.6F * animationSpeed * 0.5F / state.speedValue;
+        if (state.attackTime<=0) this.leftArm.xRot = Mth.cos(animationPos * 0.6662F) * 0.6F * animationSpeed * 0.5F / state.speedValue;
+        if (state.isAggressive) this.rightArm.xRot = state.xRot * (Mth.PI / 180f) - Mth.HALF_PI;
+        state.attackTime = tempAttackTime;
+
+        PazZombieRenderState pazState = (PazZombieRenderState) state;
     }
 }

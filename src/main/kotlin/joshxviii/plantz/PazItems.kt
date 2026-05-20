@@ -105,6 +105,7 @@ object PazItems {
     val DYE_BLASTER: Item = registerItem(
         "dye_blaster", ::DyeBlasterItem,
         properties = Item.Properties()
+            .stacksTo(1)
     )
     @JvmField
     val FOOTBALL_HELMET: Item = registerItem(

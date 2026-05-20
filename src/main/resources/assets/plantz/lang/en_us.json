@@ -42,6 +42,7 @@
   "death.attack.fume_plant": "%1$s inhaled too many of %2$s's toxic fumes",
   "death.attack.chomp_plant": "%1$s was chomped by %2$s",
   "death.attack.explode_plant": "%1$s was blown up by %2$s",
+  "death.attack.electric_plant": "%1$s was electrocuted by %2$s",
   "death.attack.paint": "%1$s was turned into an art piece by %2$s",
 
   "event.plantz.zombie_raid": "Zombie Raid",
@@ -74,6 +75,7 @@
   "item.plantz.football_helmet": "Football Helmet",
   "item.plantz.ducky_tube": "Ducky Tube",
   "item.plantz.newspaper": "Newspaper",
+  "item.plantz.dye_blaster": "Dye Blaster",
   "item.plantz.brainz_flag": "Brainz Flag",
   "item.plantz.plantz_flag": "Plantz Flag",
   "item.plantz.plant_pot": "Plant Pot",

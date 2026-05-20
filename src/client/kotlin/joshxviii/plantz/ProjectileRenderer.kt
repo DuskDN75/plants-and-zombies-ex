@@ -36,7 +36,7 @@ class ProjectileRenderer(
         poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot - 90.0f))
         poseStack.mulPose(Axis.ZP.rotationDegrees(state.xRot))
         poseStack.translate(0.0, -1.5, 0.0)
-        val tint = state.color?.textColor?: -1
+        val tint = state.color?.fireworkColor?: -1
         submitNodeCollector.submitModel(
             this.model,
             state,

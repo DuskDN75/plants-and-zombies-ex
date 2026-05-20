@@ -24,7 +24,7 @@ class CoffeeBean(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.
             random: RandomSource
         ): Boolean {
             val blockBelow = level.getBlockState(pos.below())
-            return checkValidSpawn(level, pos)
+            return checkValidSpawn(level, pos, spawnReason)
                     && (blockBelow.`is`(PLANTABLE) || !blockBelow.`is`(BlockTags.AIR))
         }
     }

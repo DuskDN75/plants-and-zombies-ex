@@ -21,6 +21,10 @@ object PazSpawnPlacements {
             weight = 6, minGroupSize = 1, maxGroupSize = 3)
         registerSpawnPlacement(PazEntities.CACTUS, Cactus::checkCactusSpawnRules)
 
+        addBiomeSpawn(PazTags.Biomes.HAS_LIGHTNING_REED, PazEntities.LIGHTNING_REED,
+            weight = 10, minGroupSize = 1, maxGroupSize = 2)
+        registerSpawnPlacement(PazEntities.LIGHTNING_REED, LightningReed::checkLightningReedSpawnRules)
+
         addBiomeSpawn(PazTags.Biomes.HAS_CHERRYBOMB, PazEntities.CHERRY_BOMB,
             weight = 20, minGroupSize = 1, maxGroupSize = 1)
         registerSpawnPlacement(PazEntities.CHERRY_BOMB, CherryBomb::checkCherryBombSpawnRules)
@@ -80,10 +84,6 @@ object PazSpawnPlacements {
         addBiomeSpawn(PazTags.Biomes.HAS_POTATOMINE, PazEntities.POTATO_MINE,
             weight = 3, minGroupSize = 1, maxGroupSize = 1)
         registerSpawnPlacement(PazEntities.POTATO_MINE, Plant::checkPlantSpawnRules)
-
-        addBiomeSpawn(PazTags.Biomes.HAS_REPEATER, PazEntities.REPEATER,
-            weight = 5, minGroupSize = 1, maxGroupSize = 1)
-        registerSpawnPlacement(PazEntities.REPEATER, Plant::checkPlantSpawnRules)
 
         addBiomeSpawn(PazTags.Biomes.HAS_SCAREDYSHROOM, PazEntities.SCAREDY_SHROOM,
             weight = 7, minGroupSize = 1, maxGroupSize = 1)

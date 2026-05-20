@@ -33,7 +33,7 @@ class CherryBomb(type: EntityType<out Explosive>, level: Level) : Explosive(PazE
             random: RandomSource
         ): Boolean {
             val blockBelow = level.getBlockState(pos.below())
-            return checkValidSpawn(level, pos)
+            return checkValidSpawn(level, pos, spawnReason)
                     && (blockBelow.`is`(PLANTABLE) || !blockBelow.`is`(BlockTags.AIR))
         }
     }
