@@ -1,5 +1,9 @@
 package joshxviii.plantz
 
+import joshxviii.plantz.PaintLayer.Companion.PAINT_TEXTURE_1
+import joshxviii.plantz.PaintLayer.Companion.PAINT_TEXTURE_2
+import joshxviii.plantz.PaintLayer.Companion.PAINT_TEXTURE_3
+import joshxviii.plantz.PaintLayer.Companion.PAINT_TEXTURE_4
 import joshxviii.plantz.block.entity.FlagBlockEntity
 import joshxviii.plantz.block.entity.SunBatteryBlockEntity
 import joshxviii.plantz.model.FlagBlockModel
@@ -19,18 +23,28 @@ import net.minecraft.client.renderer.entity.ArmorModelSet
 import net.minecraft.client.renderer.entity.EntityRenderers
 import net.minecraft.client.renderer.entity.ThrownItemRenderer
 import net.minecraft.resources.Identifier
-import net.minecraft.world.item.ItemStack
-import org.spongepowered.asm.mixin.Unique
-import java.util.function.Supplier
 
 object PazModels {
 
     @JvmField
     val IS_HYPNOTIZED_KEY: RenderStateDataKey<Boolean> = RenderStateDataKey.create { "plantz:hypnotized" }
     @JvmField
-    val PAINT_COLOR_KEY: RenderStateDataKey<Int> = RenderStateDataKey.create { "plantz:painted" }
-    @JvmField
-    val PAINT_OVERLAY_TEXTURE: Identifier = pazResource("textures/gui/overlay/paint1.png")
+    val PAINT_COLORS_KEY: RenderStateDataKey<Map<Int, Int>> = RenderStateDataKey.create { "plantz:painted" }
+
+    private val PAINT_OVERLAY_TEXTURE_1: Identifier = pazResource("textures/gui/overlay/paint1.png")
+    private val PAINT_OVERLAY_TEXTURE_2: Identifier = pazResource("textures/gui/overlay/paint2.png")
+    private val PAINT_OVERLAY_TEXTURE_3: Identifier = pazResource("textures/gui/overlay/paint3.png")
+    private val PAINT_OVERLAY_TEXTURE_4: Identifier = pazResource("textures/gui/overlay/paint4.png")
+    private val PAINT_OVERLAY_TEXTURE_5: Identifier = pazResource("textures/gui/overlay/paint5.png")
+    fun getOverlayTexture(value: Float): Identifier {
+        return when {
+            value < 0.2 -> PAINT_OVERLAY_TEXTURE_1
+            value < 0.4 -> PAINT_OVERLAY_TEXTURE_2
+            value < 0.6 -> PAINT_OVERLAY_TEXTURE_3
+            value < 0.8 -> PAINT_OVERLAY_TEXTURE_4
+            else -> PAINT_OVERLAY_TEXTURE_5
+        }
+    }
 
     val EMPTY_LAYER: ModelLayerLocation = ModelLayerLocation(pazResource("empty"), "empty")
 

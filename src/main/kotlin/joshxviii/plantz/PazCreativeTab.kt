@@ -66,6 +66,9 @@ object PazCreativeTab {
                 // gnome
                 //output.accept(PazItems.GNOME_SPAWN_EGG)
 
+                //music
+                output.accept(PazItems.MUSIC_DISC_GRASSY_GROOVE)
+
                 // items
                 output.accept(PazItems.SUN_BATTERY)
                 output.accept(PazItems.SUN)
@@ -83,8 +86,8 @@ object PazCreativeTab {
                 output.accept(PazBlocks.BRAINZ_FLAG)
                 output.accept(PazBlocks.PLANTZ_FLAG)
 
-                //music
-                output.accept(PazItems.MUSIC_DISC_GRASSY_GROOVE)
+                // balloons
+                output.accept(PazItems.BALLOON)
 
                 // mailboxes
                 PazBlocks.mailboxByColor.forEach { output.accept(it.value) }

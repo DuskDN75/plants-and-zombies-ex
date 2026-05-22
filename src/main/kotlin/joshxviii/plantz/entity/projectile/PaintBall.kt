@@ -75,5 +75,6 @@ class PaintBall(
             val effectInstance = PazEffects.PAINTED[dyeColor]?.let { MobEffectInstance(it, 180, 0, false, true, false) } ?: return
             target.addEffect(effectInstance)
         }
+        if (target is Sheep && target.hurtMarked) target.color = dyeColor
     }
 }

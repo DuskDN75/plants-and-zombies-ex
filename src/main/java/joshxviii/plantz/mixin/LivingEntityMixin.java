@@ -1,13 +1,18 @@
 package joshxviii.plantz.mixin;
 
+import com.mojang.serialization.Codec;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 import joshxviii.plantz.*;
 import joshxviii.plantz.effect.PaintedMobEffect;
 import joshxviii.plantz.entity.plant.Plant;
+import kotlin.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
@@ -38,8 +43,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Collection;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import static joshxviii.plantz.PazDataSerializers.DATA_PAINT_COLORS;
 import static joshxviii.plantz.PazItems.DUCKY_TUBE_DAMAGE_INTERVAL;
 
 @Mixin(LivingEntity.class)
@@ -48,7 +56,7 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     @Unique
     private static final EntityDataAccessor<Boolean> DATA_HYPNO_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
     @Unique
-    private static final EntityDataAccessor<Integer> DATA_PAINTED_COLOR = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Map<Integer, Integer>> DATA_PAINTED_COLORS = SynchedEntityData.defineId(LivingEntity.class, DATA_PAINT_COLORS);
 
     @Shadow
     public abstract boolean hasEffect(Holder<MobEffect> effect);
@@ -95,8 +103,8 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
         return ((Entity) (Object) this).getEntityData().get(DATA_HYPNO_ID);
     }
     @Unique
-    public int plantz$getPaintedColor() {
-        return ((Entity) (Object) this).getEntityData().get(DATA_PAINTED_COLOR);
+    public Map<Integer, Integer> plantz$getPaintedColors() {
+        return ((Entity) (Object) this).getEntityData().get(DATA_PAINTED_COLORS);
     }
 
     @Unique
@@ -148,13 +156,13 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     public void defineData(SynchedEntityData.Builder entityData, CallbackInfo ci) {
         entityData.define(DATA_HYPNO_ID, false);
-        entityData.define(DATA_PAINTED_COLOR, -1);
+        entityData.define(DATA_PAINTED_COLORS, new HashMap<>());
     }
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void saveHypnoFlag(ValueOutput output, CallbackInfo ci) {
         var self = (LivingEntity) (Object) this;
         output.putBoolean("plantz:IsHypnotized", self.getEntityData().get(DATA_HYPNO_ID));
-        output.putInt("plantz:PaintedColor", self.getEntityData().get(DATA_PAINTED_COLOR));
+        output.store("plantz:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT), self.getEntityData().get(DATA_PAINTED_COLORS));
         if (!this.plantz$getPlantData().isEmpty()) {
             output.store("plantz:AttachedPlant", CompoundTag.CODEC, this.plantz$getPlantData());
         }
@@ -163,7 +171,7 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     private void loadHypnoFlag(ValueInput input, CallbackInfo ci) {
         var self = (LivingEntity) (Object) this;
         self.getEntityData().set(DATA_HYPNO_ID, input.getBooleanOr("plantz:IsHypnotized", false));
-        self.getEntityData().set(DATA_PAINTED_COLOR, input.getIntOr("plantz:PaintedColor", -1));
+        self.getEntityData().set(DATA_PAINTED_COLORS, input.read("plantz:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT)).orElseGet(HashMap::new));
         plantz$setPlantData(input.read("plantz:AttachedPlant", CompoundTag.CODEC).orElseGet(CompoundTag::new));
         if (self instanceof PathfinderMob mob) {
             prevFloatTag = mob.getNavigation().canFloat();
@@ -187,7 +195,7 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     public void updateEffects() {
         var self = (LivingEntity) (Object) this;
         self.getEntityData().set(DATA_HYPNO_ID, this.hasEffect(PazEffects.HYPNOTIZE));
-        self.getEntityData().set(DATA_PAINTED_COLOR, PaintedMobEffect.getPaintColor(self));
+        self.getEntityData().set(DATA_PAINTED_COLORS, PaintedMobEffect.getPaintColors(self));
     }
 
     @Inject(method = "canBeAffected", at = @At(value = "RETURN"), cancellable = true)

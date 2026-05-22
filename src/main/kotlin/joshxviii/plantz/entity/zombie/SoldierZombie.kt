@@ -1,10 +1,14 @@
 package joshxviii.plantz.entity.zombie
 
+import joshxviii.plantz.PazDataSerializers.DATA_DYE_COLOR
 import joshxviii.plantz.PazItems
 import joshxviii.plantz.PazSounds
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
 import joshxviii.plantz.entity.plant.Repeater
 import joshxviii.plantz.entity.projectile.PaintBall
+import joshxviii.plantz.entity.zombie.Gargantuar.Companion.HAS_IMP_ID
+import joshxviii.plantz.entity.zombie.Gargantuar.Companion.SMASH_ATTACK_TIME_ID
+import joshxviii.plantz.entity.zombie.Gargantuar.Companion.THROW_TIME_ID
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
@@ -20,15 +24,28 @@ import net.minecraft.world.level.ServerLevelAccessor
 
 class SoldierZombie(type: EntityType<out SoldierZombie>, level: Level) : PazZombie(type, level) {
 
+    companion object {
+        val DYE_COLOR: EntityDataAccessor<DyeColor> = SynchedEntityData.defineId<DyeColor>(SoldierZombie::class.java, DATA_DYE_COLOR)
+    }
+
     init {
         xpReward = 10
+    }
+
+    var dyeColor: DyeColor
+        get() = this.entityData.get(DYE_COLOR)
+        set(value) = this.entityData.set(DYE_COLOR, value)
+
+    override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
+        super.defineSynchedData(entityData)
+        entityData.define(DYE_COLOR, DyeColor.WHITE)
     }
 
     override fun registerGoals() {
         super.registerGoals()
         this.goalSelector.addGoal(2, ProjectileAttackGoal(
             usingEntity = this,
-            projectileFactory =  { PaintBall(level(), this, color = DyeColor.VALUES[random.nextInt(DyeColor.VALUES.size)]) },
+            projectileFactory =  { PaintBall(level(), this, color = dyeColor) },
             velocity = 1.3,
             actionDelay = 8,
             soundEvent = null,
@@ -68,6 +85,11 @@ class SoldierZombie(type: EntityType<out SoldierZombie>, level: Level) : PazZomb
         val data = super.finalizeSpawn(level, difficulty, spawnReason, ZombieGroupData(false, false))
 
         setItemSlot(EquipmentSlot.MAINHAND, PazItems.DYE_BLASTER.defaultInstance)
+        dyeColor = DyeColor.VALUES.filter { it != DyeColor.WHITE && it != DyeColor.BLACK }.random()
+        setDropChance(EquipmentSlot.MAINHAND, 0.0f)
+        if (spawnReason != EntitySpawnReason.CONVERSION) {
+            setCanBreakDoors(true)
+        }
 
         return data
     }

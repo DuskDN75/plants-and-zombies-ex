@@ -1,5 +1,6 @@
 package joshxviii.plantz
 
+import io.netty.buffer.ByteBuf
 import joshxviii.plantz.ai.PlantState
 import joshxviii.plantz.ai.ZombieState
 import joshxviii.plantz.entity.gnome.GnomeSoundVariant
@@ -7,8 +8,12 @@ import joshxviii.plantz.entity.gnome.GnomeVariant
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityDataRegistry
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.syncher.EntityDataSerializer
+import net.minecraft.world.item.DyeColor
+import org.apache.logging.log4j.core.util.Integers
 
 object PazDataSerializers {
+    @JvmField val DATA_PAINT_COLORS = EntityDataSerializer.forValueType<Map<Int, Int>>(ByteBufCodecs.map(::HashMap, ByteBufCodecs.INT, ByteBufCodecs.INT))
+    @JvmField val DATA_DYE_COLOR = EntityDataSerializer.forValueType<DyeColor>(DyeColor.STREAM_CODEC)
     @JvmField val DATA_PLANT_STATE = EntityDataSerializer.forValueType<PlantState>(PlantState.STREAM_CODEC)
     @JvmField val DATA_ZOMBIE_STATE = EntityDataSerializer.forValueType<ZombieState>(ZombieState.STREAM_CODEC)
     @JvmField val DATA_COOLDOWN = EntityDataSerializer.forValueType<Int>(ByteBufCodecs.VAR_INT)
@@ -22,6 +27,8 @@ object PazDataSerializers {
     @JvmField val GNOME_SOUND_VARIANT = EntityDataSerializer.forValueType<GnomeSoundVariant>(GnomeSoundVariant.STREAM_CODEC)
 
     fun initialize() {
+        FabricEntityDataRegistry.register(pazResource("paint_colors"), DATA_PAINT_COLORS)
+        FabricEntityDataRegistry.register(pazResource("dye_color"), DATA_DYE_COLOR)
         FabricEntityDataRegistry.register(pazResource("plant_state"), DATA_PLANT_STATE)
         FabricEntityDataRegistry.register(pazResource("zombie_state"), DATA_ZOMBIE_STATE)
         FabricEntityDataRegistry.register(pazResource("cooldown"), DATA_COOLDOWN)

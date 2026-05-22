@@ -2,6 +2,7 @@ package joshxviii.plantz.mixin.client;
 
 import com.google.common.hash.HashCode;
 import joshxviii.plantz.PazEffects;
+import joshxviii.plantz.PazModels;
 import joshxviii.plantz.effect.PaintedMobEffect;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -21,9 +22,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Objects;
-
-import static joshxviii.plantz.PazModels.PAINT_OVERLAY_TEXTURE;
 
 /**
  * @author Josh
@@ -56,13 +54,13 @@ public abstract class GuiMixin {
 
 
         for (int i = 0; i < amplifier+1; i++) {
-            float scale = 0.2f * (random.nextFloat() + 0.5f);
+            float scale = 0.2f * (random.nextFloat() + 1.5f);
             float ratio = Math.min(graphics.guiWidth() / srcWidth, graphics.guiHeight() / srcWidth) * scale;
-            int width = Mth.floor(srcWidth * ratio);
-            int height = Mth.floor(srcWidth * ratio);
+            int width = Mth.floor(srcWidth * ratio * .5);
+            int height = Mth.floor(srcWidth * ratio * .5);
             int x = random.nextInt(graphics.guiWidth() - width);
             int y = random.nextInt(graphics.guiHeight() - height);
-            graphics.blit(RenderPipelines.GUI_TEXTURED, PAINT_OVERLAY_TEXTURE, x, y, 0.0F, 0.0F, width, height, width, height, ARGB.multiplyAlpha(ARGB.opaque(color), alpha));
+            graphics.blit(RenderPipelines.GUI_TEXTURED, PazModels.INSTANCE.getOverlayTexture(random.nextFloat()), x, y, 0.0F, 0.0F, width, height, width, height, ARGB.multiplyAlpha(ARGB.opaque(color), alpha));
         }
 
         //graphics.fill(RenderPipelines.GUI, 0, bottom, graphics.guiWidth(), graphics.guiHeight(), -16777216);

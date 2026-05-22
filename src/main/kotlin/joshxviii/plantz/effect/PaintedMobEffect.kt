@@ -1,8 +1,13 @@
 package joshxviii.plantz.effect
 
+import io.netty.buffer.ByteBuf
 import joshxviii.plantz.PazEffects.PAINTED
 import joshxviii.plantz.PazServerParticles
 import net.minecraft.core.particles.ParticleOptions
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.network.syncher.EntityDataSerializers
+import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.RandomSource
@@ -11,8 +16,7 @@ import net.minecraft.world.effect.MobEffectCategory
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.DyeColor
-import kotlin.collections.component1
-import kotlin.collections.component2
+import org.spongepowered.asm.mixin.Unique
 
 class PaintedMobEffect(
     category: MobEffectCategory,
@@ -30,10 +34,13 @@ class PaintedMobEffect(
         }
 
         @JvmStatic
-        fun getPaintColor(mob: LivingEntity?): Int {
-            return -1
+        fun getPaintColors(mob: LivingEntity?): Map<Int, Int> {
+            val colors =
+                PAINTED.entries
+                    .mapNotNull { (_, effect) -> mob?.getEffect(effect) }
+                    .associateBy( {(it.effect.value() as PaintedMobEffect).paintColor}, {it.amplifier})
+            return colors
         }
-
     }
 
     override fun shouldApplyEffectTickThisTick(tickCount: Int, amplification: Int): Boolean {
@@ -47,19 +54,19 @@ class PaintedMobEffect(
 
     override fun onEffectAdded(effectInstance: MobEffectInstance, entity: LivingEntity) {
         super.onEffectAdded(effectInstance, entity)
-        //random = RandomSource.create(entity.level().gameTime)
-    }
-
-    fun getRandomness(): RandomSource {
-        return RandomSource.create(random.hashCode().toLong())
     }
 
     override fun onEffectStarted(effectInstance: MobEffectInstance, entity: LivingEntity) {
+        random = RandomSource.create(entity.level().gameTime)
         super.onEffectStarted(effectInstance, entity)
     }
 
     override fun onEffectRemoved(effectInstance: MobEffectInstance, entity: LivingEntity) {
         super.onEffectRemoved(effectInstance, entity)
+    }
+
+    fun getRandomness(): RandomSource {
+        return RandomSource.create(random.hashCode().toLong())
     }
 
     override fun createParticleOptions(mobEffectInstance: MobEffectInstance): ParticleOptions {

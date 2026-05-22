@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.blaze3d.vertex.PoseStack;
 import joshxviii.plantz.DuckyTubeRenderLayer;
 import joshxviii.plantz.DyeVatRenderLayer;
+import joshxviii.plantz.PaintLayer;
 import joshxviii.plantz.mixin.LivingEntityAccessor;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -21,7 +22,10 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static joshxviii.plantz.PazModels.*;
 
@@ -35,14 +39,15 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     private void plantz$addDuckyTubeLayer(EntityRendererProvider.Context context, M model, float shadow, CallbackInfo ci) {
         this.addLayer(new DuckyTubeRenderLayer<>(this));
         this.addLayer(new DyeVatRenderLayer<>(this));
+        this.addLayer(new PaintLayer<>(this));
     }
 
     @Inject(method = "extractRenderState*", at = @At("TAIL"))
     private void checkForHypnoEffect(T entity, S state, float partialTicks, CallbackInfo ci) {
         boolean hasHypno = ((LivingEntityAccessor) entity).plantz$getHypnoId();
         state.setData(IS_HYPNOTIZED_KEY, hasHypno);
-        int paintColor = ((LivingEntityAccessor) entity).plantz$getPaintedColor();
-        state.setData(PAINT_COLOR_KEY, paintColor);
+        Map<Integer, Integer> paintColors = ((LivingEntityAccessor) entity).plantz$getPaintedColors();
+        state.setData(PAINT_COLORS_KEY, paintColors);
     }
 
     @Unique
@@ -53,15 +58,17 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
         at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;multiply(II)I")
     )
     private int plantz$applyHypnoTint(int tintedColor, S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
-        int finalColor = tintedColor;
+        AtomicInteger finalColor = new AtomicInteger(tintedColor);
 
         if (state.getDataOrDefault(IS_HYPNOTIZED_KEY, false)) {
-            finalColor = ARGB.multiply(finalColor, PLANTZ_HYPNO_TINT);
+            finalColor.set(ARGB.multiply(finalColor.get(), PLANTZ_HYPNO_TINT));
         }
 
-        int color = state.getDataOrDefault(PAINT_COLOR_KEY, -1);
-        if (color != -1) finalColor = ARGB.multiply(finalColor, color);
+        Map<Integer, Integer> colors = state.getDataOrDefault(PAINT_COLORS_KEY, new HashMap<>());
+        colors.forEach( (color, amplifier) -> {
+            if (color != -1) finalColor.set(ARGB.multiply(finalColor.get(), ARGB.opaque(color)));
+        });
 
-        return finalColor;
+        return finalColor.get();
     }
 }
