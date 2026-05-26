@@ -103,6 +103,11 @@ object PazItems {
                 .build())
     )
     @JvmField
+    val BALLOON: Item = registerItem(
+        "balloon",
+        properties = Item.Properties()
+    )
+    @JvmField
     val DYE_BLASTER: Item = registerItem(
         "dye_blaster", ::DyeBlasterItem,
         properties = Item.Properties()
