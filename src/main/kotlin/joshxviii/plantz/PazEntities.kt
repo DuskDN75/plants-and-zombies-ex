@@ -5,6 +5,7 @@ import joshxviii.plantz.PazTags.EntityTypes.IGNORED_BY_PLANT_ATTACKERS
 import joshxviii.plantz.PazTags.EntityTypes.ZOMBIE_RAIDERS
 import joshxviii.plantz.ai.goal.DestroyFlagGoal
 import joshxviii.plantz.ai.goal.PathfindToFlagGoal
+import joshxviii.plantz.entity.Balloon
 import joshxviii.plantz.entity.PlantPotMinecart
 import joshxviii.plantz.entity.Sun
 import joshxviii.plantz.entity.gnome.Gnome
@@ -456,6 +457,13 @@ object PazEntities {
             .noLootTable()
             .sized(0.98F, 0.7F)
             .passengerAttachments(0.75F)
+            .clientTrackingRange(8)
+    )
+    @JvmField val BALLOON: EntityType<Balloon> = register(
+        "balloon",
+        EntityType.Builder.of(::Balloon, MobCategory.MISC)
+            .noLootTable()
+            .sized(0.5f, 0.6125f)
             .clientTrackingRange(8)
     )
     @JvmField val SUN: EntityType<Sun> = register(

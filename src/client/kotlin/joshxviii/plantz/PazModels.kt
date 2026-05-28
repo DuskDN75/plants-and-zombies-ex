@@ -6,6 +6,7 @@ import joshxviii.plantz.PaintLayer.Companion.PAINT_TEXTURE_3
 import joshxviii.plantz.PaintLayer.Companion.PAINT_TEXTURE_4
 import joshxviii.plantz.block.entity.FlagBlockEntity
 import joshxviii.plantz.block.entity.SunBatteryBlockEntity
+import joshxviii.plantz.model.BalloonModel
 import joshxviii.plantz.model.FlagBlockModel
 import joshxviii.plantz.model.GnomeArmorModel
 import joshxviii.plantz.model.GnomeModel
@@ -122,6 +123,7 @@ object PazModels {
         ModelLayerRegistry.registerModelLayer(ARMOR_LAYER_LOCATION.legs)  { GnomeArmorModel.createLegsLayer() }
         ModelLayerRegistry.registerModelLayer(ARMOR_LAYER_LOCATION.feet)  { GnomeArmorModel.createBootsLayer() }
 
+        ModelLayerRegistry.registerModelLayer(BalloonModel.LAYER_LOCATION) { BalloonModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(FlagBlockModel.LAYER_LOCATION) { FlagBlockModel.createBodyLayer() }
 
 
@@ -187,6 +189,7 @@ object PazModels {
         EntityRenderers.register(PazEntities.PLANT_POT_MINECART) { PlantPotMinecartRenderer(it, ModelLayers.MINECART) }
         EntityRenderers.register(PazEntities.SUN) { SunRenderer(it) }
         EntityRenderers.register(PazEntities.THROWN_SUN_BOTTLE) { ThrownItemRenderer(it) }
+        EntityRenderers.register(PazEntities.BALLOON) { BalloonRenderer(it, BalloonModel(it.bakeLayer(BalloonModel.LAYER_LOCATION))) }
 
         BlockEntityRenderers.register<FlagBlockEntity, FlagRenderState>(PazBlocks.FLAG_BLOCK_ENTITY) { FlagRenderer(FlagBlockModel(it.bakeLayer(FlagBlockModel.LAYER_LOCATION))) }
         BlockEntityRenderers.register<SunBatteryBlockEntity, SunBatteryRenderSate>(PazBlocks.SUN_BATTERY_BLOCK_ENTITY) { SunBatteryRenderer() }

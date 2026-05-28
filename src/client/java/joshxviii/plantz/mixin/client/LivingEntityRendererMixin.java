@@ -64,10 +64,11 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
             finalColor.set(ARGB.multiply(finalColor.get(), PLANTZ_HYPNO_TINT));
         }
 
-        Map<Integer, Integer> colors = state.getDataOrDefault(PAINT_COLORS_KEY, new HashMap<>());
-        colors.forEach( (color, amplifier) -> {
-            if (color != -1) finalColor.set(ARGB.multiply(finalColor.get(), ARGB.opaque(color)));
-        });
+        // multiple colors end up just looking black. not gonna use this for now.
+//        Map<Integer, Integer> colors = state.getDataOrDefault(PAINT_COLORS_KEY, new HashMap<>());
+//        colors.forEach( (color, amplifier) -> {
+//            if (color != -1) finalColor.set(ARGB.multiply(finalColor.get(), ARGB.opaque(color)));
+//        });
 
         return finalColor.get();
     }

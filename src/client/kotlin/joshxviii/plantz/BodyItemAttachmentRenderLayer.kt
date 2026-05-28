@@ -17,7 +17,6 @@ import net.minecraft.client.renderer.item.ItemStackRenderState
 import net.minecraft.client.renderer.rendertype.LayeringTransform
 import net.minecraft.client.renderer.rendertype.RenderSetup
 import net.minecraft.client.renderer.rendertype.RenderType
-import net.minecraft.client.renderer.rendertype.TextureTransform
 import net.minecraft.client.renderer.rendertype.TextureTransform.OffsetTextureTransform
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.resources.Identifier
