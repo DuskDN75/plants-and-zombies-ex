@@ -3,10 +3,14 @@ package joshxviii.plantz.entity
 import LeashableEntity
 import joshxviii.plantz.PazDataSerializers.DATA_DYE_COLOR
 import joshxviii.plantz.PazEntities
+import joshxviii.plantz.PazServerParticles
 import net.minecraft.core.BlockPos
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.util.Mth
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
@@ -146,6 +150,13 @@ class Balloon(
         return if (isRemoved) true
         else if (this.isInvulnerableToBase(source)) false
         else {
+            playSound(SoundEvents.LAVA_POP) // TODO custom sounds
+            level.sendParticles(
+                PazServerParticles.POP,
+                x, y + boundingBox.ysize * 0.5, z,
+                1,
+                0.0, 0.0, 0.0, 0.0
+            )
             discard()
             true
         }
