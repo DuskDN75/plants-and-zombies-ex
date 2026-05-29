@@ -26,8 +26,10 @@ class BalloonRenderer(
         camera: CameraRenderState
     ) {
         poseStack.pushPose()
-        super.submit(state, poseStack, collector, camera)
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0f - state.yRot))
+        poseStack.mulPose(Axis.XP.rotationDegrees(state.xRot))
+        poseStack.scale(-1f,-1f,1f)
+        poseStack.translate(0.0f, -1.501f, 0.0f)
         collector.submitModel(
             model,
             state,
@@ -39,6 +41,7 @@ class BalloonRenderer(
             null
         )
         poseStack.popPose()
+        super.submit(state, poseStack, collector, camera)
     }
 
     override fun createRenderState(): BalloonRenderState = BalloonRenderState()
@@ -47,6 +50,7 @@ class BalloonRenderer(
         super.extractRenderState(entity, state, partialTicks)
         state.color = entity.dyeColor
         state.yRot = Mth.rotLerp(partialTicks, entity.yRotO, entity.yRot);
+        state.xRot = Mth.rotLerp(partialTicks, entity.xRotO, entity.xRot);
     }
 
     fun getTextureLocation(state: BalloonRenderState): Identifier {
@@ -58,4 +62,5 @@ class BalloonRenderState : EntityRenderState() {
     var color: DyeColor = DyeColor.WHITE
     @JvmField
     var yRot: Float = 0f
+    var xRot: Float = 0f
 }

@@ -5,21 +5,19 @@ import joshxviii.plantz.PazDataSerializers.DATA_DYE_COLOR
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.tags.EntityTypeTags
 import net.minecraft.util.Mth
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.InterpolationHandler
 import net.minecraft.world.entity.Leashable.LeashData
-import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.MoverType
-import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.phys.Vec3
+import kotlin.math.atan2
 import kotlin.math.sqrt
 
 class Balloon(
@@ -28,6 +26,12 @@ class Balloon(
 ) : LeashableEntity(type, level) {
     companion object {
         val DYE_COLOR: EntityDataAccessor<DyeColor> = SynchedEntityData.defineId(Balloon::class.java, DATA_DYE_COLOR)
+
+        private const val MAX_PULL_PITCH = 25.0f
+        private const val PITCH_SPEED_MULTIPLIER = 180.0f
+        private const val PITCH_LERP_SPEED = 0.25f
+        private const val YAW_LERP_SPEED = 0.5f
+        private const val MIN_ROTATION_SPEED = 0.001f
     }
     private val interpolation = InterpolationHandler(this)
 
@@ -46,12 +50,23 @@ class Balloon(
     override fun baseTick() {
         super.baseTick()
         yRotO = yRot
+        xRotO = xRot
     }
 
     override fun tick() {
         super.tick()
         while (yRot - yRotO < -180.0f) yRotO -= 360.0f
         while (yRot - yRotO >= 180.0f) yRotO += 360.0f
+
+        val horizontalSpeed = sqrt(deltaMovement.x * deltaMovement.x + deltaMovement.z * deltaMovement.z).toFloat()
+        val targetPitch = (horizontalSpeed * PITCH_SPEED_MULTIPLIER).coerceAtMost(MAX_PULL_PITCH)
+
+        xRot += (targetPitch - xRot) * PITCH_LERP_SPEED
+
+        if (horizontalSpeed > MIN_ROTATION_SPEED) {
+            val targetYaw = (atan2(deltaMovement.z, deltaMovement.x) * Mth.RAD_TO_DEG).toFloat() - 90.0f
+            yRot += Mth.wrapDegrees(targetYaw - yRot) * YAW_LERP_SPEED * horizontalSpeed
+        }
 
         if (!level().isClientSide) {
             pushCollidingEntities()
@@ -97,8 +112,11 @@ class Balloon(
         xa *= strength * 0.05
         za *= strength * 0.05
 
-        push(-xa, 0.0, -za)
-        entity.push(xa, 0.0, za)
+        if (entity is Balloon) entity.push(xa*0.05, 0.0, za*0.05)
+        else {
+            push(-xa*2, 0.0, -za*2)
+            entity.push(xa, 0.0, za)
+        }
     }
 
 
