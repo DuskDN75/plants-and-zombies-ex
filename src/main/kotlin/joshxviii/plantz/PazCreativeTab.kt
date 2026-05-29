@@ -87,7 +87,7 @@ object PazCreativeTab {
                 output.accept(PazBlocks.PLANTZ_FLAG)
 
                 // balloons
-                output.accept(PazItems.BALLOON)
+                PazItems.balloonByColor.forEach { output.accept(it.value) }
 
                 // mailboxes
                 PazBlocks.mailboxByColor.forEach { output.accept(it.value) }

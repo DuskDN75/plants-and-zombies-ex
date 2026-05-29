@@ -2,6 +2,8 @@ package joshxviii.plantz.entity
 
 import LeashableEntity
 import joshxviii.plantz.PazDataSerializers.DATA_DYE_COLOR
+import joshxviii.plantz.PazEntities
+import net.minecraft.core.BlockPos
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
@@ -112,7 +114,7 @@ class Balloon(
         xa *= strength * 0.05
         za *= strength * 0.05
 
-        if (entity is Balloon) entity.push(xa*0.05, 0.0, za*0.05)
+        if (entity is Balloon) entity.push(xa*0.075, 0.0, za*0.075)
         else {
             push(-xa*2, 0.0, -za*2)
             entity.push(xa, 0.0, za)

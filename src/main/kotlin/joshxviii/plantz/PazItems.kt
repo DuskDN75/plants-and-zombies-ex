@@ -42,8 +42,10 @@ import net.minecraft.world.item.equipment.ArmorMaterials
 import net.minecraft.world.item.equipment.ArmorType
 import net.minecraft.world.item.equipment.EquipmentAssets
 import net.minecraft.world.item.equipment.Equippable
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.ComposterBlock
 import net.minecraft.world.level.block.DispenserBlock
+import net.minecraft.world.level.material.MapColor
 import java.util.function.Function
 
 object PazItems {
@@ -102,11 +104,41 @@ object PazItems {
                 .setAsset(DUCKY_EQUIP_ASSET)
                 .build())
     )
-    @JvmField
-    val BALLOON: Item = registerItem(
-        "balloon",
-        properties = Item.Properties()
+    @JvmField val WHITE_BALLOON: Item = registerItem("white_balloon", {BalloonItem(it, DyeColor.WHITE)}, properties = Item.Properties())
+    @JvmField val LIGHT_GRAY_BALLOON: Item = registerItem("light_gray_balloon", {BalloonItem(it, DyeColor.LIGHT_GRAY)}, properties = Item.Properties())
+    @JvmField val GRAY_BALLOON: Item = registerItem("gray_balloon", {BalloonItem(it, DyeColor.GRAY)}, properties = Item.Properties())
+    @JvmField val BLACK_BALLOON: Item = registerItem("black_balloon", {BalloonItem(it, DyeColor.BLACK)}, properties = Item.Properties())
+    @JvmField val BROWN_BALLOON: Item = registerItem("brown_balloon", {BalloonItem(it, DyeColor.BROWN)}, properties = Item.Properties())
+    @JvmField val RED_BALLOON: Item = registerItem("red_balloon", {BalloonItem(it, DyeColor.RED)}, properties = Item.Properties())
+    @JvmField val ORANGE_BALLOON: Item = registerItem("orange_balloon", {BalloonItem(it, DyeColor.ORANGE)}, properties = Item.Properties())
+    @JvmField val YELLOW_BALLOON: Item = registerItem("yellow_balloon", {BalloonItem(it, DyeColor.YELLOW)}, properties = Item.Properties())
+    @JvmField val LIME_BALLOON: Item = registerItem("lime_balloon", {BalloonItem(it, DyeColor.LIME)}, properties = Item.Properties())
+    @JvmField val GREEN_BALLOON: Item = registerItem("green_balloon", {BalloonItem(it, DyeColor.GREEN)}, properties = Item.Properties())
+    @JvmField val CYAN_BALLOON: Item = registerItem("cyan_balloon", {BalloonItem(it, DyeColor.CYAN)}, properties = Item.Properties())
+    @JvmField val LIGHT_BLUE_BALLOON: Item = registerItem("light_blue_balloon", {BalloonItem(it, DyeColor.LIGHT_BLUE)}, properties = Item.Properties())
+    @JvmField val BLUE_BALLOON: Item = registerItem("blue_balloon", {BalloonItem(it, DyeColor.BLUE)}, properties = Item.Properties())
+    @JvmField val PURPLE_BALLOON: Item = registerItem("purple_balloon", {BalloonItem(it, DyeColor.PURPLE)}, properties = Item.Properties())
+    @JvmField val MAGENTA_BALLOON: Item = registerItem("magenta_balloon", {BalloonItem(it, DyeColor.MAGENTA)}, properties = Item.Properties())
+    @JvmField val PINK_BALLOON: Item = registerItem("pink_balloon", {BalloonItem(it, DyeColor.PINK)}, properties = Item.Properties())
+    val balloonByColor = mapOf(
+        DyeColor.WHITE to      WHITE_BALLOON,
+        DyeColor.LIGHT_GRAY to LIGHT_GRAY_BALLOON,
+        DyeColor.GRAY to       GRAY_BALLOON,
+        DyeColor.BLACK to      BLACK_BALLOON,
+        DyeColor.BROWN to      BROWN_BALLOON,
+        DyeColor.RED to        RED_BALLOON,
+        DyeColor.ORANGE to     ORANGE_BALLOON,
+        DyeColor.YELLOW to     YELLOW_BALLOON,
+        DyeColor.LIME to       LIME_BALLOON,
+        DyeColor.GREEN to      GREEN_BALLOON,
+        DyeColor.CYAN to       CYAN_BALLOON,
+        DyeColor.LIGHT_BLUE to LIGHT_BLUE_BALLOON,
+        DyeColor.BLUE to       BLUE_BALLOON,
+        DyeColor.PURPLE to     PURPLE_BALLOON,
+        DyeColor.MAGENTA to    MAGENTA_BALLOON,
+        DyeColor.PINK to       PINK_BALLOON
     )
+
     @JvmField
     val DYE_BLASTER: Item = registerItem(
         "dye_blaster", ::DyeBlasterItem,
