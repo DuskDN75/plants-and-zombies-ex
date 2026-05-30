@@ -9,5 +9,7 @@ import net.minecraft.world.item.ItemStack
 class DuckyTubeItem(properties: Properties) : Item(properties) {
     override fun inventoryTick(itemStack: ItemStack, level: ServerLevel, owner: Entity, slot: EquipmentSlot?) {
         super.inventoryTick(itemStack, level, owner, slot)
+        slot?.isArmor ?: return
+
     }
 }

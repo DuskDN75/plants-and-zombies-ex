@@ -20,9 +20,15 @@
 - Repeaters no longer spawn naturally.
 - Added Soldier Zombie
 - Added Dye Blaster
+  - The dye blaster consumes dye as ammo.
+  - Players and mobs shot with the blaster will be given the "painted" mob effect.
+- Added Balloons
+  - Balloons are attached to leads by default and can be tied to other mobs and fences.
+  - Balloons pull the holder upward slightly. By carrying enough balloons, you can negate fall damage or even begin to float.
 - Added Gravestone Block
 	- Zombies will emerge from the ground near the gravestone during the night.
 - Added The Graveyard biome
+- The Football Helmet now gives increased speed and step height while sprinting.
 ### Technical Changes
 
 # Changelog 1.4.2

@@ -89,7 +89,7 @@ object PazItems {
     val DUCKY_EQUIP_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, pazResource("ducky_tube"))
     @JvmField
     val DUCKY_TUBE: Item = registerItem(
-        "ducky_tube",
+        "ducky_tube", ::DuckyTubeItem,
         properties = Item.Properties()
             .durability(225)
             .attributes(
@@ -147,7 +147,7 @@ object PazItems {
     )
     @JvmField
     val FOOTBALL_HELMET: Item = registerItem(
-        "football_helmet",
+        "football_helmet", ::FootBallHelmetItem,
         properties = Item.Properties()
             .humanoidArmor(ArmorMaterials.CHAINMAIL, ArmorType.HELMET)
             .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage(
@@ -185,7 +185,7 @@ object PazItems {
     )
     @JvmField
     val PLANT_POT_HELMET: Item = registerItem(
-        "plant_pot_helmet",
+        "plant_pot_helmet", ::PlantPotHelmetItem,
         properties = Item.Properties()
             .durability(185)
             .rarity(Rarity.UNCOMMON)
