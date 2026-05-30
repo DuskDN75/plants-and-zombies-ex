@@ -81,7 +81,7 @@ class DyeBlasterItem(properties: Properties) : ProjectileWeaponItem(properties) 
         return PaintBall(
             level,
             shooter,
-            spawnOffset = Vec2(0.5f,-0.075f),
+            spawnOffset = Vec2(0.5f,-0.0f),
             color = color
         )
     }

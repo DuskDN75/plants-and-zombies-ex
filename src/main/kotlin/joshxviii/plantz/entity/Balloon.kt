@@ -4,10 +4,14 @@ import LeashableEntity
 import joshxviii.plantz.PazDataSerializers.DATA_DYE_COLOR
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazServerParticles
+import joshxviii.plantz.applyImpulse
+import joshxviii.plantz.entity.zombie.AllStar.Companion.CHARGE_BOOST_ID
+import joshxviii.plantz.pazResource
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
@@ -17,7 +21,11 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.InterpolationHandler
 import net.minecraft.world.entity.Leashable.LeashData
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.MoverType
+import net.minecraft.world.entity.ai.attributes.AttributeModifier
+import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.storage.ValueInput
@@ -38,6 +46,7 @@ class Balloon(
         private const val PITCH_LERP_SPEED = 0.25f
         private const val YAW_LERP_SPEED = 0.5f
         private const val MIN_ROTATION_SPEED = 0.001f
+        private const val HOLDER_PULL_FORCE = 0.0666
     }
     private val interpolation = InterpolationHandler(this)
 
@@ -88,6 +97,17 @@ class Balloon(
         } else {
             deltaMovement = deltaMovement.scale(0.98)
         }
+
+        val holder = leashHolder as? LivingEntity ?: return
+        if ((holder as? Player)?.abilities?.flying == true) return
+        val distanceTo = distanceTo(holder)
+        val stretchScaler = ((distanceTo - leashElasticDistance()) / leashElasticDistance()).coerceIn(0.0, 1.0)
+        if (stretchScaler <= 0.0) return
+        if (y < holder.y) return
+        val stretchDirection = position().subtract(holder.position()).normalize()
+        val stretchForce = stretchDirection.multiply(Vec3.Y_AXIS).scale(stretchScaler * HOLDER_PULL_FORCE)
+        holder.addDeltaMovement(stretchForce)
+        holder.checkFallDistanceAccumulation()
     }
 
     private fun pushCollidingEntities() {
@@ -130,15 +150,23 @@ class Balloon(
     override fun isPickable(): Boolean = true
     override fun getDefaultGravity(): Double = -0.005
     override fun leashElasticDistance(): Double = 3.0
-    override fun leashTooFarBehaviour() {}
+    override fun leashTooFarBehaviour() {
+        super.leashTooFarBehaviour()
+    }
     override fun closeRangeLeashBehaviour(leashHolder: Entity) {
         super.closeRangeLeashBehaviour(leashHolder)
+    }
+
+    override fun onElasticLeashPull() {
+        super.onElasticLeashPull()
     }
 
     override fun setLeashedTo(holder: Entity, synch: Boolean) {
         super.setLeashedTo(holder, synch)
     }
+
     override fun onLeashRemoved() {
+        val holder = this.leashHolder
         super.onLeashRemoved()
     }
 
