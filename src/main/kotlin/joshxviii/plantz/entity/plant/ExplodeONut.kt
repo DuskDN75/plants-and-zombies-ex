@@ -20,8 +20,7 @@ class ExplodeONut(type: EntityType<out Explosive>, level: Level) : Explosive(Paz
 
     override fun getZenGrownSeedType(): EntityType<*> = if (random.nextFloat() < 0.8f) PazEntities.WALL_NUT else super.getZenGrownSeedType()
 
-    // solid collision
-    override fun canBeCollidedWith(other: Entity?): Boolean = this.isAlive && other != attachedEntity
+    override fun canBeCollidedWith(other: Entity?): Boolean = WallNut.wallNutCollision(this, other)
 
     override fun hurtServer(level: ServerLevel, source: DamageSource, damage: Float): Boolean {
         source.directEntity?.let {

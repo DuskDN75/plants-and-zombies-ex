@@ -28,7 +28,6 @@ import net.minecraft.world.level.SimpleExplosionDamageCalculator
 import java.util.Optional
 
 abstract class Explosive(type: EntityType<out Explosive>, level: Level) : Plant(type, level) {
-
     companion object {
         val EXPLOSION_CALCULATOR: ExplosionDamageCalculator = SimpleExplosionDamageCalculator(false, true, Optional.of<Float>(1f), Optional.ofNullable(null))
         val DESTRUCTIVE_EXPLOSION_CALCULATOR: ExplosionDamageCalculator = SimpleExplosionDamageCalculator(true, false, Optional.of<Float>(1.5f), Optional.ofNullable(null))
