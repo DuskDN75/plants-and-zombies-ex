@@ -1,11 +1,18 @@
 package joshxviii.plantz.entity.plant
 
+import joshxviii.plantz.NukeBlastParticleOptions
+import joshxviii.plantz.NukeSmokeParticleOptions
+import joshxviii.plantz.NukeWaveParticleOptions
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazTags.EntityTypes.WALLNUT_DEFLECTABLE
 import net.minecraft.core.Direction
+import net.minecraft.core.Holder
+import net.minecraft.resources.ResourceKey
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.monster.zombie.Zombie
@@ -32,6 +39,31 @@ class ExplodeONut(type: EntityType<out Explosive>, level: Level) : Explosive(Paz
     override fun actuallyHurt(level: ServerLevel, source: DamageSource, damage: Float) {
         val reducedDamage = if (source.entity is Zombie) damage*0.5f else damage
         super.actuallyHurt(level, source, reducedDamage)
+    }
+
+    override fun explode(
+        radius: Float,
+        sound: Holder.Reference<SoundEvent>,
+        damageType: ResourceKey<DamageType>,
+        destroyBlocks: Boolean,
+        discardOnExplode: Boolean
+    ) {
+        super.explode(radius, sound, damageType, destroyBlocks, discardOnExplode)
+        val level = level() as? ServerLevel ?: return
+        level.sendParticles(NukeWaveParticleOptions(color = 0xD0370D, scale = 2f),
+            x, y, z, 1, 0.0, 0.0, 0.0, 0.0
+        )
+        level.sendParticles(NukeBlastParticleOptions(color = 0xFFE88D, scale = 1.5f),
+            x, y, z, 1, 0.0, 0.0, 0.0, 0.0
+        )
+        level.sendParticles(NukeSmokeParticleOptions(color = 0xB87878, scale = 0.6f),
+            x, y+1, z, 15, 0.0, 0.5, 0.0, 0.0
+        )
+    }
+
+    override fun die(source: DamageSource) {
+        if (source.entity is Zombie) explode(discardOnExplode = false)
+        super.die(source)
     }
 
     override fun canSurviveOn(block: BlockState): Boolean {

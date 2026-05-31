@@ -86,6 +86,7 @@ abstract class Explosive(type: EntityType<out Explosive>, level: Level) : Plant(
         sound: Holder.Reference<SoundEvent> = PazSounds.PLANT_EXPLODE,
         damageType: ResourceKey<DamageType> = PazDamageTypes.PLANT_AOE,
         destroyBlocks: Boolean = false,
+        discardOnExplode: Boolean = discardOnExplode()
     ) {
         swellDir = -1
         swell = 0
@@ -118,7 +119,7 @@ abstract class Explosive(type: EntityType<out Explosive>, level: Level) : Plant(
             WeightedList.of(),
             SoundEvents.ITEM_BREAK
         )
-        if (discardOnExplode()) discard()
+        if (discardOnExplode) discard()
     }
     open fun discardOnExplode(): Boolean = true
 }

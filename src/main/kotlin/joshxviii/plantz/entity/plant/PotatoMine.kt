@@ -47,13 +47,15 @@ class PotatoMine(type: EntityType<out Explosive>, level: Level) : Explosive(PazE
         radius: Float,
         sound: Holder.Reference<SoundEvent>,
         damageType: ResourceKey<DamageType>,
-        destroyBlocks: Boolean
+        destroyBlocks: Boolean,
+        discardOnExplode: Boolean
     ) {
         super.explode(
             radius = 1f,
             sound = PazSounds.POTATOMINE_EXPLODE,
             damageType,
             destroyBlocks,
+            discardOnExplode
         )
         addParticlesAroundSelf(
             particle = ItemParticleOption(
