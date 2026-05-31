@@ -1,6 +1,7 @@
 package joshxviii.plantz.ai.goal
 
 import joshxviii.plantz.entity.plant.Plant
+import net.minecraft.util.Mth
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.goal.Goal
 import java.util.function.Predicate
@@ -39,7 +40,10 @@ abstract class ActionGoal(
             && !(usingEntity is Plant && usingEntity.cooldown > -1)
             && actionTimer == -1
         ) {
-            (usingEntity as? Plant)?.cooldown = cooldownTime+cooldownVariationRange.random() // start animation
+            (usingEntity as? Plant)?.cooldown = Mth.floor(
+                (cooldownTime+cooldownVariationRange.random()) *
+                        if (usingEntity.poweredUp) 0.8 else 1.0
+            ).coerceAtLeast(actionDelay)
             actionTimer = actionDelay.coerceAtLeast(0)
             actionStartEffect()
             isDoingAction = true

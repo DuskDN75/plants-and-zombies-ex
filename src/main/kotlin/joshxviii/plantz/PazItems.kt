@@ -36,16 +36,13 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.item.*
 import net.minecraft.world.item.Items.GLASS_BOTTLE
 import net.minecraft.world.item.component.ItemAttributeModifiers
-import net.minecraft.world.item.component.TooltipDisplay
 import net.minecraft.world.item.component.UseCooldown
 import net.minecraft.world.item.equipment.ArmorMaterials
 import net.minecraft.world.item.equipment.ArmorType
 import net.minecraft.world.item.equipment.EquipmentAssets
 import net.minecraft.world.item.equipment.Equippable
-import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.ComposterBlock
 import net.minecraft.world.level.block.DispenserBlock
-import net.minecraft.world.level.material.MapColor
 import java.util.function.Function
 
 object PazItems {
@@ -147,7 +144,7 @@ object PazItems {
     )
     @JvmField
     val FOOTBALL_HELMET: Item = registerItem(
-        "football_helmet", ::FootBallHelmetItem,
+        "football_helmet", ::FootballHelmetItem,
         properties = Item.Properties()
             .humanoidArmor(ArmorMaterials.CHAINMAIL, ArmorType.HELMET)
             .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage(

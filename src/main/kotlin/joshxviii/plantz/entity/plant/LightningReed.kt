@@ -59,7 +59,7 @@ class LightningReed(type: EntityType<out Plant>, level: Level) : Plant(PazEntiti
                     ElectricArcParticleOptions(
                         Vec3(it.getRandomX(0.2), it.randomY, it.getRandomZ(0.2)),
                         color = 0xBDFDF5,
-                        thickness = 0.9f
+                        thickness = 0.15f
                     ),
                     x + direction.x, y + eyeHeight, z + direction.z,
                     1, 0.0, 0.0, 0.0, 0.0

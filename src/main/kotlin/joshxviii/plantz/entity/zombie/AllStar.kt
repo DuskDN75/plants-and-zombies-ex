@@ -72,7 +72,7 @@ class AllStar(type: EntityType<out AllStar>, level: Level) : PazZombie(type, lev
                 )
                 if (tickCount%2==0) level.sendParticles(
                     ParticleTypes.WHITE_SMOKE,
-                    x, eyeHeight+y, z, 2, 0.1, 0.2, 0.1, 0.05
+                    x, randomY, z, 2, 0.1, 0.2, 0.1, 0.05
                 )
             }
             if (chargingTime==0) removeChargeBoost()

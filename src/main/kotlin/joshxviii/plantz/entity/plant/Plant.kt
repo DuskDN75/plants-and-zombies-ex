@@ -1,18 +1,22 @@
 package joshxviii.plantz.entity.plant
 
 import joshxviii.plantz.*
+import joshxviii.plantz.PazDamageTypes
 import joshxviii.plantz.PazDataSerializers.DATA_COFFEE_BUFF
 import joshxviii.plantz.PazDataSerializers.DATA_COOLDOWN
 import joshxviii.plantz.PazDataSerializers.DATA_PLANT_STATE
+import joshxviii.plantz.PazDataSerializers.DATA_POWERED_UP
 import joshxviii.plantz.PazDataSerializers.DATA_RECEIVED_SUN
 import joshxviii.plantz.PazDataSerializers.DATA_RECEIVED_WATER
 import joshxviii.plantz.PazDataSerializers.DATA_SEED_GROW_COOLDOWN
 import joshxviii.plantz.PazDataSerializers.DATA_SLEEPING
+import joshxviii.plantz.PazSounds
 import joshxviii.plantz.PazTags.BlockTags.PLANTABLE
 import joshxviii.plantz.ai.PlantState
 import joshxviii.plantz.ai.goal.SleepGoal
 import joshxviii.plantz.entity.Sun
 import joshxviii.plantz.item.SeedPacketItem
+import joshxviii.plantz.pazResource
 import net.minecraft.ChatFormatting
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -50,6 +54,7 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal
+import net.minecraft.world.entity.ai.village.poi.PoiManager
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
@@ -103,6 +108,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         }
 
         private const val NUTRIENT_SUPPLY_MAX = 160  // ticks before suffocating when on invalid ground
+        private const val FLAG_POWER_RANGE = 3
 
         val PLANT_STATE: EntityDataAccessor<PlantState> = SynchedEntityData.defineId<PlantState>(Plant::class.java, DATA_PLANT_STATE)
         val COOLDOWN: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Plant::class.java, DATA_COOLDOWN)
@@ -112,6 +118,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         val SEED_GROW_COOLDOWN: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Plant::class.java, DATA_SEED_GROW_COOLDOWN)
         val ATTACHED_PLAYER: EntityDataAccessor<Optional<EntityReference<LivingEntity>>> = SynchedEntityData.defineId(Plant::class.java, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE)
         val SLEEPING: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(Plant::class.java, DATA_SLEEPING)
+        val POWERED_UP: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(Plant::class.java, DATA_POWERED_UP)
 
         val ON_PLAYER_HEAD_EFFECTS: Identifier = pazResource("on_player_head_effects")
 
@@ -119,7 +126,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
             val maxHealth: Double = 20.0,
             val attackDamage: Double = 1.0,
             val attackKnockback: Double = 0.001,
-            val attackRange: Double = 1.0,
+            val attackRange: Double = 2.5,
             val movementSpeed: Double = 0.0,
             val followRange: Double = 14.0,
             val armor: Double = 0.0,
@@ -146,9 +153,11 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
 
     var isAsleep: Boolean
         get() = this.entityData.get(SLEEPING)
-        set(value) {
-            this.entityData.set(SLEEPING, value)
-        }
+        set(value) = this.entityData.set(SLEEPING, value)
+
+    var poweredUp: Boolean
+        get() = this.entityData.get(POWERED_UP)
+        set(value) = this.entityData.set(POWERED_UP, value)
 
     val damagedPercent: Float
         get() { return 1.0f - (this.health / this.maxHealth); }
@@ -240,12 +249,13 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         entityData.define(SEED_GROW_COOLDOWN, 0)
         entityData.define(COFFEE_BUFF, 0)
         entityData.define(SLEEPING, false)
+        entityData.define(POWERED_UP, false)
         entityData.define(ATTACHED_PLAYER, Optional.empty())
     }
 
     override fun onSyncedDataUpdated(accessor: EntityDataAccessor<*>) {
         super.onSyncedDataUpdated(accessor)
-        if (accessor == RECEIVED_SUN || accessor == RECEIVED_WATER && level().isClientSide) {
+        if ((accessor == POWERED_UP && poweredUp) || accessor == RECEIVED_SUN || accessor == RECEIVED_WATER && level().isClientSide) {
             funnyBounce()
         }
     }
@@ -257,6 +267,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         output.putInt("plantz:SeedGrowTime", seedGrowCooldown)
         output.putInt("plantz:CoffeeBuff", coffeeBuff)
         output.putInt("plantz:Cooldown", cooldown)
+        output.putBoolean("plantz:IsPoweredUp", poweredUp)
         attachedPlayerReference.let { EntityReference.store(it, output, "plantz:AttachedPlayer") }
     }
 
@@ -267,6 +278,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         seedGrowCooldown = input.getInt("plantz:SeedGrowTime").getOrElse { 0 }
         coffeeBuff = input.getInt("plantz:CoffeeBuff").getOrElse { 0 }
         cooldown = input.getInt("plantz:Cooldown").getOrElse { -1 }
+        poweredUp = input.getBooleanOr("plantz:IsPoweredUp", false)
         attachedPlayerReference = Optional.ofNullable((EntityReference.read<LivingEntity>(input, "plantz:AttachedPlayer"))).getOrNull()
     }
 
@@ -390,6 +402,8 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         val level = this.level()
 
         if (level is ServerLevel) {
+            updatePlantPower(level)
+
             if (cooldown > -1) {
                 if (cooldown == 0) cooldownFinished()
                 cooldown--
@@ -427,6 +441,16 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
                     PazServerParticles.ENERGIZED,
                     horizontalSpreadScale = 0.0,
                     amount = 1..2,
+                )
+            }
+        }
+
+        if (poweredUp)  {
+            if (level().isClientSide && getRandom().nextInt(16) == 0) {
+                addParticlesAroundSelf(
+                    level,
+                    PazServerParticles.POWERED_UP,
+                    amount = 1..1,
                 )
             }
         }
@@ -561,6 +585,25 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     open fun sleepsDuringDay(): Boolean = this.`is`(PazTags.EntityTypes.MUSHROOM)
     open fun canSurviveOn(block: BlockState) : Boolean = block.`is`(PLANTABLE)
     open fun cooldownFinished() {}
+
+    private fun updatePlantPower(level: ServerLevel) {
+        val nearFlag = hasNearbyPlantzFlag(level)
+        if (nearFlag != poweredUp) {
+            poweredUp = nearFlag
+            if (poweredUp) addParticlesAroundSelf(particle = PazServerParticles.POWERED_UP)
+        }
+    }
+
+    private fun hasNearbyPlantzFlag(level: ServerLevel): Boolean {
+        val flagPos = level.poiManager.findClosest(
+            { it.value() == PazBlocks.PLANTZ_FLAG_POI },
+            blockPosition(),
+            FLAG_POWER_RANGE,
+            PoiManager.Occupancy.ANY
+        ).orElse(null) ?: return false
+
+        return level.getBlockState(flagPos).`is`(PazBlocks.PLANTZ_FLAG)
+    }
 
     fun getBlockBelow(): BlockState {
         val feetY = y - 0.001
@@ -725,30 +768,31 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         level: Level = level(),
         particle: ParticleOptions = ParticleTypes.SPLASH,
         amount: IntRange = 8..9,
-        horizontalSpreadScale: Double = boundingBox.xsize*0.5,
-        verticalSpreadScale: Double = boundingBox.ysize*0.5,
+        horizontalSpreadScale: Double = 1.0,
+        verticalSpreadScale: Double = 1.0,
         height: Float = 0.2f,
         speed: Double = 0.0,
     ) {
         if (level is ServerLevel) {
+            val px = getRandomX(horizontalSpreadScale)
+            val py = y + height + random.nextDouble() * bbHeight * verticalSpreadScale
+            val pz = getRandomZ(horizontalSpreadScale)
             level.sendParticles(
                 particle,
-                x, y + height, z,
+                px, py, pz,
                 amount.random(),
-                horizontalSpreadScale, verticalSpreadScale, horizontalSpreadScale,
+                0.0, 0.0, 0.0,
                 speed
             )
         }
         else repeat(amount.random()) {
+            val px = getRandomX(horizontalSpreadScale)
+            val py = y + height + random.nextDouble() * bbHeight * verticalSpreadScale
+            val pz = getRandomZ(horizontalSpreadScale)
             // Random offsets for velocity
             val xa = random.nextGaussian() * 0.02
             val ya = random.nextGaussian() * 0.02
             val za = random.nextGaussian() * 0.02
-
-            // Position inside the bounding box
-            val px = getRandomX(horizontalSpreadScale)
-            val py = y + height + random.nextDouble() * bbHeight * verticalSpreadScale
-            val pz = getRandomZ(horizontalSpreadScale)
 
             level.addParticle(
                 particle,

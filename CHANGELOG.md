@@ -29,6 +29,7 @@
 	- Zombies will emerge from the ground near the gravestone during the night.
 - Added The Graveyard biome
 - The Football Helmet now gives increased speed and step height while sprinting.
+- Plantz Flag now reduces the cooldown of nearby plants by 20%.
 ### Technical Changes
 
 # Changelog 1.4.2

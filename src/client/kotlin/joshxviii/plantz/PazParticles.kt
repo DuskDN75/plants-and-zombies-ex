@@ -72,6 +72,10 @@ object PazParticles {
             EnergizedParticle.Provider(spriteSet)
         }
 
+        it.register(PazServerParticles.POWERED_UP) { spriteSet ->
+            PoweredUpParticle.Provider(spriteSet)
+        }
+
         it.register(PazServerParticles.POP) { sprite ->
             PopParticle.Provider(sprite)
         }

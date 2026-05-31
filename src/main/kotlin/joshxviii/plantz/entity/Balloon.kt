@@ -105,7 +105,7 @@ class Balloon(
         if (stretchScaler <= 0.0) return
         if (y < holder.y) return
         val stretchDirection = position().subtract(holder.position()).normalize()
-        val stretchForce = stretchDirection.multiply(Vec3.Y_AXIS).scale(stretchScaler * HOLDER_PULL_FORCE)
+        val stretchForce = stretchDirection.multiply(Vec3.Y_AXIS).scale(stretchScaler * HOLDER_PULL_FORCE * if (holder.isCrouching) 0.5 else 1.0)
         holder.addDeltaMovement(stretchForce)
         holder.checkFallDistanceAccumulation()
     }

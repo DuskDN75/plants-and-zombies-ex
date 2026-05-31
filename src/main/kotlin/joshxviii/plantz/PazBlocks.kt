@@ -211,11 +211,11 @@ object PazBlocks {
                 DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.builder()
                     .add(
                         Attributes.MOVEMENT_SPEED,
-                        AttributeModifier(pazResource("plantz_flag"), 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+                        AttributeModifier(pazResource("plantz_flag"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
                         EquipmentSlotGroup.HAND
                     ).add(
                         Attributes.ATTACK_SPEED,
-                        AttributeModifier(pazResource("plantz_flag"), 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+                        AttributeModifier(pazResource("plantz_flag"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
                         EquipmentSlotGroup.HAND
                     ).build()
             )

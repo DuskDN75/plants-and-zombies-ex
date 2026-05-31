@@ -103,7 +103,7 @@ class DestroyFlagGoal(
         val followRange = mob.getAttribute(Attributes.FOLLOW_RANGE)?.value?.toInt()
         val poiManager = (mob.level() as ServerLevel).poiManager
         val flagPoi: BlockPos? = poiManager.findClosest(
-            { p: Holder<PoiType> -> p.value() == PLANTZ_FLAG_POI },
+            { it.value() == PLANTZ_FLAG_POI },
             mob.blockPosition(),
             min(searchRange, followRange?:8),
             Occupancy.ANY

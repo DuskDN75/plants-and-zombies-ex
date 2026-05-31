@@ -1,7 +1,12 @@
 package joshxviii.plantz.item
 
+import joshxviii.plantz.PazSounds
 import joshxviii.plantz.entity.zombie.AllStar.Companion.CHARGE_BOOST_ID
+import net.minecraft.core.particles.BlockParticleOption
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
@@ -13,10 +18,14 @@ import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import kotlin.math.sqrt
 
-class FootBallHelmetItem(properties: Properties) : Item(properties) {
+class FootballHelmetItem(properties: Properties) : Item(properties) {
     companion object {
         private const val DAMAGE_INTERVAL = 35
         private const val KNOCKBACK_STRENGTH = 0.8
+    }
+
+    private fun isWearingFootballHelmet(entity: LivingEntity): Boolean {
+        return entity.getItemBySlot(EquipmentSlot.HEAD).item is FootballHelmetItem
     }
 
     fun removeModifiers(entity: LivingEntity?) {
@@ -28,15 +37,16 @@ class FootBallHelmetItem(properties: Properties) : Item(properties) {
     override fun inventoryTick(itemStack: ItemStack, level: ServerLevel, owner: Entity, slot: EquipmentSlot?) {
         super.inventoryTick(itemStack, level, owner, slot)
         if (level.isClientSide || owner !is LivingEntity) return
-        if (slot == null || !slot.isArmor) {
+        if (!isWearingFootballHelmet(owner)) {
             removeModifiers(owner)
             return
         }
-        if (!owner.isSprinting) {
+        if (!owner.isSprinting || !owner.onGround() || owner.isCrouching) {
             removeModifiers(owner)
             return
         }
         else if (owner.getAttribute(Attributes.MOVEMENT_SPEED)?.getModifier(CHARGE_BOOST_ID) == null) {
+            level.playSound(null, owner.blockPosition(), SoundEvents.WIND_CHARGE_BURST.value(), SoundSource.PLAYERS, 0.25f, 1.3f)
             owner.getAttribute(Attributes.MOVEMENT_SPEED)?.addTransientModifier(
                 AttributeModifier(CHARGE_BOOST_ID, 0.025, AttributeModifier.Operation.ADD_VALUE)
             )
@@ -45,8 +55,17 @@ class FootBallHelmetItem(properties: Properties) : Item(properties) {
             )
         }
         if (!level.isClientSide && owner.tickCount % DAMAGE_INTERVAL == 0 && owner.getRandom().nextFloat() > 0.5f) {
-            itemStack.hurtAndBreak(1, owner, slot)
+            if (slot != null) itemStack.hurtAndBreak(1, owner, slot)
         }
+
+        level.sendParticles(
+            BlockParticleOption(ParticleTypes.BLOCK, level.getBlockState(owner.blockPosition().below())),
+            owner.x, owner.y + 0.05, owner.z, 1, 0.0, 0.0, 0.0, 0.6
+        )
+        if (owner.tickCount%2==0) level.sendParticles(
+            ParticleTypes.WHITE_SMOKE,
+            owner.x, owner.randomY, owner.z, 2, 0.1, 0.1, 0.1, 0.05
+        )
 
         val look = owner.lookAngle
         val horizontalLook = Vec3(look.x, 0.0, look.z).normalize()

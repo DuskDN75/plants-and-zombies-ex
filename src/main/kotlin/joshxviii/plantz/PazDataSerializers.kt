@@ -23,6 +23,7 @@ object PazDataSerializers {
     @JvmField val DATA_SEED_GROW_COOLDOWN = EntityDataSerializer.forValueType<Int>(ByteBufCodecs.VAR_INT)
     @JvmField val DATA_COFFEE_BUFF = EntityDataSerializer.forValueType<Int>(ByteBufCodecs.VAR_INT)
     @JvmField val DATA_SLEEPING = EntityDataSerializer.forValueType<Boolean>(ByteBufCodecs.BOOL)
+    @JvmField val DATA_POWERED_UP = EntityDataSerializer.forValueType<Boolean>(ByteBufCodecs.BOOL)
     @JvmField val GNOME_VARIANT = EntityDataSerializer.forValueType<GnomeVariant>(GnomeVariant.STREAM_CODEC)
     @JvmField val GNOME_SOUND_VARIANT = EntityDataSerializer.forValueType<GnomeSoundVariant>(GnomeSoundVariant.STREAM_CODEC)
 
@@ -38,6 +39,7 @@ object PazDataSerializers {
         FabricEntityDataRegistry.register(pazResource("seed_grow_cooldown"), DATA_SEED_GROW_COOLDOWN)
         FabricEntityDataRegistry.register(pazResource("coffe_buff"), DATA_COFFEE_BUFF)
         FabricEntityDataRegistry.register(pazResource("sleeping"), DATA_SLEEPING)
+        FabricEntityDataRegistry.register(pazResource("powered_up"), DATA_POWERED_UP)
         FabricEntityDataRegistry.register(pazResource("gnome_variant"), GNOME_VARIANT)
         FabricEntityDataRegistry.register(pazResource("gnome_sound_variant"), GNOME_SOUND_VARIANT)
     }
