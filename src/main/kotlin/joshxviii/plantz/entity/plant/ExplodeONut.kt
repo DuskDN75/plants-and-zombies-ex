@@ -39,6 +39,7 @@ class ExplodeONut(type: EntityType<out Explosive>, level: Level) : Explosive(Paz
     override fun actuallyHurt(level: ServerLevel, source: DamageSource, damage: Float) {
         val reducedDamage = if (source.entity is Zombie) damage*0.5f else damage
         super.actuallyHurt(level, source, reducedDamage)
+        if (health <= 0) explode()
     }
 
     override fun explode(
@@ -48,7 +49,7 @@ class ExplodeONut(type: EntityType<out Explosive>, level: Level) : Explosive(Paz
         destroyBlocks: Boolean,
         discardOnExplode: Boolean
     ) {
-        super.explode(radius, sound, damageType, destroyBlocks, discardOnExplode)
+        super.explode(3f, sound, damageType, destroyBlocks, discardOnExplode)
         val level = level() as? ServerLevel ?: return
         level.sendParticles(NukeWaveParticleOptions(color = 0xD0370D, scale = 2f),
             x, y, z, 1, 0.0, 0.0, 0.0, 0.0
@@ -59,11 +60,6 @@ class ExplodeONut(type: EntityType<out Explosive>, level: Level) : Explosive(Paz
         level.sendParticles(NukeSmokeParticleOptions(color = 0xB87878, scale = 0.6f),
             x, y+1, z, 15, 0.0, 0.5, 0.0, 0.0
         )
-    }
-
-    override fun die(source: DamageSource) {
-        if (source.entity is Zombie) explode(discardOnExplode = false)
-        super.die(source)
     }
 
     override fun canSurviveOn(block: BlockState): Boolean {

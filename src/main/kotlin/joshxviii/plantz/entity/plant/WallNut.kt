@@ -3,6 +3,7 @@ package joshxviii.plantz.entity.plant
 import jdk.internal.net.http.common.TimeSource.source
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazTags.EntityTypes.WALLNUT_DEFLECTABLE
+import joshxviii.plantz.entity.Sun
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.BlockTags
@@ -31,6 +32,7 @@ class WallNut(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.WAL
                     }
                 }
             }
+            if (other is Sun) return false
             return wallnut.isAlive && other != wallnut.attachedEntity
         }
     }

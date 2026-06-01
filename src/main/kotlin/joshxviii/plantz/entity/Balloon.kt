@@ -46,7 +46,10 @@ class Balloon(
         private const val PITCH_LERP_SPEED = 0.25f
         private const val YAW_LERP_SPEED = 0.5f
         private const val MIN_ROTATION_SPEED = 0.001f
-        private const val HOLDER_PULL_FORCE = 0.0666
+        private const val HOLDER_GRAVITY_LIFT_MULTIPLIER = 0.4
+        private const val HOLDER_PULL_STIFFNESS = 0.0075
+        private const val MAX_HOLDER_PULL_FORCE = 0.16
+        private const val MAX_HOLDER_UPWARD_VELOCITY = 0.5
     }
     private val interpolation = InterpolationHandler(this)
 
@@ -100,13 +103,25 @@ class Balloon(
 
         val holder = leashHolder as? LivingEntity ?: return
         if ((holder as? Player)?.abilities?.flying == true) return
-        val distanceTo = distanceTo(holder)
-        val stretchScaler = ((distanceTo - leashElasticDistance()) / leashElasticDistance()).coerceIn(0.0, 1.0)
-        if (stretchScaler <= 0.0) return
         if (y < holder.y) return
-        val stretchDirection = position().subtract(holder.position()).normalize()
-        val stretchForce = stretchDirection.multiply(Vec3.Y_AXIS).scale(stretchScaler * HOLDER_PULL_FORCE * if (holder.isCrouching) 0.5 else 1.0)
-        holder.addDeltaMovement(stretchForce)
+        val verticalStretch = y - holder.y - leashElasticDistance()
+        if (verticalStretch <= 0.0) return
+
+        val crouchMultiplier = if (holder.isCrouching) 0.5 else 1.0
+        val gravityLift = holder.getAttributeValue(Attributes.GRAVITY) * HOLDER_GRAVITY_LIFT_MULTIPLIER
+        val springLift = verticalStretch * HOLDER_PULL_STIFFNESS
+        val totalLift = ((gravityLift + springLift) * crouchMultiplier)
+            .coerceAtMost(MAX_HOLDER_PULL_FORCE)
+
+        val currentYVelocity = holder.deltaMovement.y
+        val availableLift = (MAX_HOLDER_UPWARD_VELOCITY - currentYVelocity).coerceAtLeast(0.0)
+        val appliedLift = totalLift.coerceAtMost(availableLift)
+
+        if (appliedLift <= 0.0) return
+
+        holder.addDeltaMovement(Vec3(0.0, appliedLift, 0.0))
+        holder.needsSync = true
+        holder.checkFallDistanceAccumulation()
         holder.checkFallDistanceAccumulation()
     }
 
