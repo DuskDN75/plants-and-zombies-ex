@@ -63,18 +63,18 @@ object PazEntities {
         "wallnut",
         EntityType.Builder.of(::WallNut, MobCategory.CREATURE),
         width = 1.0f,
-        height = 1.1f,
+        height = 1.15f,
         attributes = Plant.Companion.PlantAttributes(
-            maxHealth = 50.0,
+            maxHealth = 60.0,
         )
     )
     @JvmField val EXPLODE_O_NUT: EntityType<ExplodeONut> = registerPlant(
         "explode_o_nut",
         EntityType.Builder.of(::ExplodeONut, MobCategory.CREATURE),
         width = 1.0f,
-        height = 1.1f,
+        height = 1.15f,
         attributes = Plant.Companion.PlantAttributes(
-            maxHealth = 40.0,
+            maxHealth = 60.0,
         )
     )
     @JvmField val CHOMPER: EntityType<Chomper> = registerPlant(
@@ -82,7 +82,7 @@ object PazEntities {
         EntityType.Builder.of(::Chomper, MobCategory.CREATURE),
         height = 1.5f,
         attributes = Plant.Companion.PlantAttributes(
-            maxHealth = 30.0,
+            maxHealth = 25.0,
             attackDamage = 10.0,
             attackKnockback = 0.15,
             attackRange = 3.0,
@@ -372,7 +372,7 @@ object PazEntities {
         attributes = Zombie.createAttributes()
             .add(Attributes.ATTACK_DAMAGE, 8.0)
             .add(Attributes.MAX_HEALTH, 75.0)
-            .add(Attributes.STEP_HEIGHT, 1.1)
+            .add(Attributes.STEP_HEIGHT, 1.0)
             .add(Attributes.MOVEMENT_SPEED, 0.23)
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 1.5)
     )
