@@ -23,6 +23,7 @@ object PazCreativeTab {
             .icon { ItemStack(PazItems.SUN) }
 
             .displayItems { parameters, output ->
+
                 // seed packets
                 output.accept(SeedPacketItem.stackFor(PazEntities.SUNFLOWER))
                 output.accept(SeedPacketItem.stackFor(PazEntities.PEA_SHOOTER))
@@ -64,7 +65,7 @@ object PazCreativeTab {
                 output.accept(PazItems.GARGANTUAR_SPAWN_EGG)
 
                 // gnome
-                //output.accept(PazItems.GNOME_SPAWN_EGG)
+                if (parameters.hasPermissions()) output.accept(PazItems.GNOME_SPAWN_EGG)
 
                 //music
                 output.accept(PazItems.MUSIC_DISC_GRASSY_GROOVE)

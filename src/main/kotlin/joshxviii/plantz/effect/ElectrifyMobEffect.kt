@@ -15,6 +15,7 @@ import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.targeting.TargetingConditions
+import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.phys.Vec3
 
 class ElectrifyMobEffect(
@@ -36,8 +37,9 @@ class ElectrifyMobEffect(
         val rootCauseEntity = source.entity
         val targetConditions = TargetingConditions.forNonCombat().ignoreLineOfSight().ignoreInvisibilityTesting().selector { entity, level ->
             val isRootSource = rootCauseEntity?.let { entity.hasSameRootOwner(it) || it.`is`(entity) } ?: false
+            val onSameTeam = (entity is Enemy && mob is Enemy) || (entity !is Enemy && mob !is Enemy)
             val canHurt = (rootCauseEntity as? LivingEntity)?.canAttack(entity) ?: true
-            !entity.`is`(mob) && !entity.hurtMarked && !isRootSource && canHurt
+            !entity.`is`(mob) && !entity.hurtMarked && !isRootSource && canHurt && onSameTeam
         }
         val nearbyTargets = level.getNearbyEntities(LivingEntity::class.java, targetConditions, mob, mob.boundingBox.inflate(ZAP_RANGE))
         nearbyTargets.randomOrNull()?.let {
@@ -80,8 +82,7 @@ class ElectrifyMobEffect(
     }
 
     override fun shouldApplyEffectTickThisTick(tickCount: Int, amplification: Int): Boolean {
-        val interval = ZAP_INTERVAL shr amplification
-        return if (interval > 0) tickCount % interval == 0 else true
+        return tickCount % ZAP_INTERVAL == 0
     }
 
     override fun onEffectAdded(effectInstance: MobEffectInstance, entity: LivingEntity) {
