@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.*
 import java.util.*
+import java.util.Arrays.sort
 import java.util.function.Predicate
 import java.util.function.ToDoubleFunction
 import kotlin.math.sign
@@ -45,6 +46,7 @@ abstract class PazProjectile(
 
     protected var inGroundTime: Int = 0
     private var piercingIgnoreEntityIds = mutableSetOf<Int>()
+    private val canHitPredicate: Predicate<Entity> = Predicate { entity -> this.canHitEntity(entity) }
 
     companion object {
         val PIERCE_LEVEL: EntityDataAccessor<Byte> = SynchedEntityData.defineId(PazProjectile::class.java, EntityDataSerializers.BYTE)
@@ -87,20 +89,22 @@ abstract class PazProjectile(
             }
         }
 
-        if (this.isInGround()) {
+        val inGround = this.isInGround()
+        if (inGround) {
             inGroundTime++
+            if (inGroundTime > stickInGroundTime()) discard()
+            super.tick()
+            return
         }
-        else {
-            inGroundTime=0
-            this.updateRotation()
-        }
-        if (inGroundTime>stickInGroundTime()) discard()
+
+        inGroundTime = 0
+        this.updateRotation()
 
         this.handleFirstTickBubbleColumn()
 
         val originalPosition = this.position()
         if (physicsEnabled) {
-            val blockHitResult = this.level()
+            val blockHitResult = level
                 .clipIncludingBorder(
                     ClipContext(
                         originalPosition,
@@ -117,18 +121,38 @@ abstract class PazProjectile(
         }
 
         applyInertia()
-        if(!this.isInGround()) this.applyGravity()
+        this.applyGravity()
 
         super.tick()
     }
 
     private fun stepMoveAndHit(blockHitResult: BlockHitResult) {
+        val pierceLevel = this.getPierceLevel().toInt()
         while (this.isAlive) {
             val initialPosition = this.position()
-            val entitiesHit = findHitEntities(initialPosition, blockHitResult.getLocation())
-                .toList()
-                .sortedBy { initialPosition.distanceToSqr(it.entity.position()) }
-            val firstEntityHit = entitiesHit.firstOrNull()
+            val blockHitLoc = blockHitResult.location
+
+            val entitiesHit: List<EntityHitResult> = if (pierceLevel > 0) {
+                val raw = findHitEntities(initialPosition, blockHitLoc)
+                if (raw.isEmpty()) emptyList()
+                else {
+                    val arr = raw.toTypedArray()
+                    sort(arr) { a, b ->
+                        initialPosition.distanceToSqr(a.entity.position())
+                            .compareTo(initialPosition.distanceToSqr(b.entity.position()))
+                    }
+                    arr.asList()
+                }
+            } else {
+                val nearest = ProjectileUtil.getEntityHitResult(
+                    this.level(), this, initialPosition, blockHitLoc,
+                    this.boundingBox.expandTowards(this.deltaMovement),
+                    canHitPredicate, ProjectileUtil.computeMargin(this)
+                )
+                if (nearest == null) emptyList() else listOf(nearest)
+            }
+
+            val firstEntityHit = if (entitiesHit.isEmpty()) null else entitiesHit[0]
             val nextLocation = (firstEntityHit ?: blockHitResult).location
             this.setPos(nextLocation)
             this.applyEffectsFromBlocks(initialPosition, nextLocation)
@@ -141,12 +165,17 @@ abstract class PazProjectile(
                 }
                 break
             } else if (this.isAlive && !this.noPhysics) {
-                val deflection: ProjectileDeflection = if (isAlive) entitiesHit
-                    .map { hitTargetOrDeflectSelf(it) }
-                    .find { it != ProjectileDeflection.NONE } ?: ProjectileDeflection.NONE
-                    else ProjectileDeflection.NONE
+                var deflection: ProjectileDeflection = ProjectileDeflection.NONE
+                for (hit in entitiesHit) {
+                    val d = hitTargetOrDeflectSelf(hit)
+                    if (d != ProjectileDeflection.NONE) {
+                        deflection = d
+                        break
+                    }
+                    if (!isAlive) break
+                }
                 this.needsSync = true
-                if (this.getPierceLevel() > 0 && deflection === ProjectileDeflection.NONE) {
+                if (pierceLevel > 0 && deflection === ProjectileDeflection.NONE) {
                     continue
                 }
                 break
@@ -156,7 +185,9 @@ abstract class PazProjectile(
 
     protected open fun findHitEntities(from: Vec3, to: Vec3): MutableCollection<EntityHitResult> {
         return ProjectileUtil.getManyEntityHitResult(
-            this.level(), this, from, to, this.boundingBox.expandTowards(this.deltaMovement).inflate(1.0), { entity: Entity -> this.canHitEntity(entity) }, false
+            this.level(), this, from, to,
+            this.boundingBox.expandTowards(this.deltaMovement),
+            canHitPredicate, false
         )
     }
 
@@ -300,9 +331,12 @@ abstract class PazProjectile(
     }
 
     override fun canHitEntity(entity: Entity): Boolean {
-        if ((entity is Plant && entityOwner is Plant) || (entity is Enemy && entityOwner is Enemy)) return false
-        return if (this.hasSameRootOwner(entity)) false
-        else entity !is Projectile && super.canHitEntity(entity) && !this.piercingIgnoreEntityIds.contains(entity.id)
+        if (entity is Projectile) return false
+        if (piercingIgnoreEntityIds.contains(entity.id)) return false
+        val owner = entityOwner
+        if ((entity is Plant && owner is Plant) || (entity is Enemy && owner is Enemy)) return false
+        if (this.hasSameRootOwner(entity)) return false
+        return super.canHitEntity(entity)
     }
 
     fun spawnParticle(
