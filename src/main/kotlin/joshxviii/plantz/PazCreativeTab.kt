@@ -61,6 +61,7 @@ object PazCreativeTab {
                 output.accept(PazItems.BACKUP_DANCER_SPAWN_EGG)
                 output.accept(PazItems.ALL_STAR_SPAWN_EGG)
                 output.accept(PazItems.SOLDIER_ZOMBIE_SPAWN_EGG)
+                output.accept(PazItems.ROBO_ZOMBIE_SPAWN_EGG)
                 output.accept(PazItems.IMP_SPAWN_EGG)
                 output.accept(PazItems.GARGANTUAR_SPAWN_EGG)
 
