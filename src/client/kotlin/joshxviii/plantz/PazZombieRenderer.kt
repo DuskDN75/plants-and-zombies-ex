@@ -8,6 +8,7 @@ import joshxviii.plantz.entity.zombie.Gargantuar
 import joshxviii.plantz.entity.zombie.NewspaperZombie
 import joshxviii.plantz.entity.zombie.PazZombie
 import joshxviii.plantz.model.zombies.PazZombieModel
+import net.minecraft.client.model.EntityModel
 import net.minecraft.client.model.geom.ModelLayerLocation
 import net.minecraft.client.model.geom.ModelLayers
 import net.minecraft.client.model.geom.ModelPart
@@ -16,8 +17,13 @@ import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.entity.AbstractZombieRenderer
 import net.minecraft.client.renderer.entity.ArmorModelSet
 import net.minecraft.client.renderer.entity.EntityRendererProvider
+import net.minecraft.client.renderer.entity.RenderLayerParent
+import net.minecraft.client.renderer.entity.layers.EyesLayer
 import net.minecraft.client.renderer.entity.state.ZombieRenderState
+import net.minecraft.client.renderer.rendertype.RenderType
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.client.renderer.state.level.CameraRenderState
+import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.AnimationState
@@ -30,16 +36,16 @@ class PazZombieRenderer(
     private val babyModel: PazZombieModel = PazZombieModel(null, context.bakeLayer(ModelLayers.ZOMBIE_BABY)),
     armorSet: ArmorModelSet<ModelLayerLocation> = ModelLayers.ZOMBIE_ARMOR,
     babyArmorSet: ArmorModelSet<ModelLayerLocation> = ModelLayers.ZOMBIE_BABY_ARMOR
-) : AbstractZombieRenderer<Zombie, ZombieRenderState, ZombieModel<ZombieRenderState>>(
+) : AbstractZombieRenderer<PazZombie, ZombieRenderState, PazZombieModel>(
     context,
     defaultModel,
     babyModel,
-    ArmorModelSet.bake<ZombieModel<ZombieRenderState>>(armorSet, context.modelSet) { root: ModelPart -> ZombieModel(root) },
-    ArmorModelSet.bake<ZombieModel<ZombieRenderState>>(babyArmorSet, context.modelSet) { root: ModelPart -> ZombieModel(root) }
+    ArmorModelSet.bake<PazZombieModel>(armorSet, context.modelSet) { root: ModelPart -> PazZombieModel(null, root) },
+    ArmorModelSet.bake<PazZombieModel>(babyArmorSet, context.modelSet) { root: ModelPart -> PazZombieModel(null, root) }
 ) {
 
     init {
-
+        addLayer(EmissiveZombieLayer(this))
     }
 
     override fun submit(
@@ -67,7 +73,7 @@ class PazZombieRenderer(
         return super.getShadowRadius(state)
     }
 
-    override fun extractRenderState(entity: Zombie, state: ZombieRenderState, partialTicks: Float) {
+    override fun extractRenderState(entity: PazZombie, state: ZombieRenderState, partialTicks: Float) {
         super.extractRenderState(entity, state, partialTicks)
         (entity as PazZombie)
         (state as PazZombieRenderState)
@@ -93,6 +99,27 @@ class PazZombieRenderer(
         (state as PazZombieRenderState)
         return state.getTextureLocation(PazZombieRenderState.TEXTURE_PATH, state.getSuffixes())
     }
+}
+
+class EmissiveZombieLayer<M : EntityModel<ZombieRenderState>>(
+    renderer: RenderLayerParent<ZombieRenderState, M>,
+) : EyesLayer<ZombieRenderState, M>(renderer) {
+
+    override fun submit(
+        poseStack: PoseStack,
+        submitNodeCollector: SubmitNodeCollector,
+        lightCoords: Int,
+        state: ZombieRenderState,
+        yRot: Float,
+        xRot: Float
+    ) {
+        if (state !is PazZombieRenderState) return
+        val textureLocation = state.getEmissiveTextureLocation(PazZombieRenderState.TEXTURE_PATH, state.getSuffixes()) ?: return
+        val renderType = RenderTypes.eyes(textureLocation)
+        submitNodeCollector.order(1).submitModel(this.parentModel, state, poseStack, renderType, lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
+    }
+
+    override fun renderType(): RenderType = RenderTypes.lines()
 }
 
 class PazZombieRenderState : ZombieRenderState() {

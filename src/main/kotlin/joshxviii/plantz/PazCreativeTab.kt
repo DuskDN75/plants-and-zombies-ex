@@ -56,11 +56,13 @@ object PazCreativeTab {
                 output.accept(PazItems.BROWN_COAT_SPAWN_EGG)
                 output.accept(PazItems.NEWSPAPER_ZOMBIE_SPAWN_EGG)
                 output.accept(PazItems.DIGGER_ZOMBIE_SPAWN_EGG)
+                output.accept(PazItems.ENGINEER_ZOMBIE_SPAWN_EGG)
                 output.accept(PazItems.ZOMBIE_YETI_SPAWN_EGG)
                 output.accept(PazItems.DISCO_ZOMBIE_SPAWN_EGG)
                 output.accept(PazItems.BACKUP_DANCER_SPAWN_EGG)
                 output.accept(PazItems.ALL_STAR_SPAWN_EGG)
                 output.accept(PazItems.SOLDIER_ZOMBIE_SPAWN_EGG)
+                output.accept(PazItems.ROBO_ZOMBIE_SPAWN_EGG)
                 output.accept(PazItems.IMP_SPAWN_EGG)
                 output.accept(PazItems.GARGANTUAR_SPAWN_EGG)
 
