@@ -323,6 +323,16 @@ object PazEntities {
             .add(Attributes.MOVEMENT_SPEED, 0.225)
             .add(Attributes.FOLLOW_RANGE, 26.0)
     )
+    @JvmField val ENGINEER_ZOMBIE: EntityType<EngineerZombie> =  registerZombie(
+        "engineer_zombie",
+        EntityType.Builder.of(::EngineerZombie, MobCategory.MONSTER)
+            .sized(0.63f, 1.95f)
+            .eyeHeight(1.74f)
+            .clientTrackingRange(8),
+        attributes = Zombie.createAttributes()
+            .add(Attributes.ATTACK_DAMAGE, 1.5)
+            .add(Attributes.MAX_HEALTH, 30.0)
+    )
     @JvmField val ZOMBIE_YETI: EntityType<ZombieYeti> =  registerZombie(
         "zombie_yeti",
         EntityType.Builder.of(::ZombieYeti, MobCategory.MONSTER)

@@ -67,7 +67,7 @@ public class RoboZombieModel extends PazZombieModel {
 
     @Override
     public void setupAnim(@NotNull ZombieRenderState state) {
-        super.setupAnim(state);
+        //super.setupAnim(state);
         PazZombieRenderState pazState = (PazZombieRenderState) state;
 
     }
