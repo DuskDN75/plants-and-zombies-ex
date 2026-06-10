@@ -487,7 +487,7 @@ object PazEntities {
         "balloon",
         EntityType.Builder.of(::Balloon, MobCategory.MISC)
             .noLootTable()
-            .sized(0.5f, 0.6125f)
+            .sized(0.6f, 0.7f)
             .clientTrackingRange(8)
     )
     @JvmField val SUN: EntityType<Sun> = register(
