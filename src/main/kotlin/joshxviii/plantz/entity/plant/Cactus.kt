@@ -56,6 +56,6 @@ class Cactus(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.CACT
     }
 
     override fun canSurviveOn(block: BlockState): Boolean {
-        return super.canSurviveOn(block) || block.`is`(BlockTags.SAND) || block.`is`(Blocks.SOUL_SAND)
+        return super.canSurviveOn(block) || block.`is`(BlockTags.SAND) || block.`is`(Blocks.SOUL_SAND) || block.`is`(Blocks.CACTUS)
     }
 }

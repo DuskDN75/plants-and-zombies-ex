@@ -331,6 +331,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     override fun hurtServer(level: ServerLevel, source: DamageSource, damage: Float): Boolean {
         if (source.directEntity != owner) source.entity?.let { if (hasSameOwner(it)) return false }
         if ( attachedEntity.let { it!=null && source.entity?.`is`(it)==true } ) return false
+        if (source.`is`(DamageTypes.CACTUS)) return false
         return super.hurtServer(
             level,
             if (source.entity is Zombie && source.`is`(DamageTypes.MOB_ATTACK)) DamageSource(

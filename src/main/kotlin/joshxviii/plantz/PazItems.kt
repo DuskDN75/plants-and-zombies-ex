@@ -278,6 +278,8 @@ object PazItems {
             }
         })
 
+        DispenserBlock.registerProjectileBehavior(SUN_BOTTLE)
+
         DispenserBlock.registerBehavior(
             PLANT_POT_MINECART, object : MinecartDispenseItemBehavior(PazEntities.PLANT_POT_MINECART) {}
         )
