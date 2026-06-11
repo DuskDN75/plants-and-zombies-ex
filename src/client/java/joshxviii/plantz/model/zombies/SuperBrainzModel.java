@@ -6,15 +6,21 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.entity.state.ZombieRenderState;
+import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Quaternionf;
+
+import java.util.Objects;
 
 import static joshxviii.plantz.UtilsKt.pazResource;
 
 public class SuperBrainzModel extends PazZombieModel {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("super_brainz"), "main");
+    ModelPart cape;
 
     public SuperBrainzModel(final ModelPart root) {
         super(null, root);
+        cape = root.getChild("root").getChild("body").getChild("cape");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -73,6 +79,13 @@ public class SuperBrainzModel extends PazZombieModel {
     public void setupAnim(@NotNull ZombieRenderState state) {
         //super.setupAnim(state);
         PazZombieRenderState pazState = (PazZombieRenderState) state;
-
+        cape.resetPose();
+        cape.rotateBy(
+                new Quaternionf()
+                        .rotateY((float) -Math.PI)
+                        .rotateX((6.0F + pazState.getCapeLean() / 2.0F + pazState.getCapeFlap()) * (float) -(Math.PI / 180.0))
+                        .rotateZ(pazState.getCapeLean2() / 2.0F * (float) -(Math.PI / 180.0))
+                        .rotateY((180.0F - pazState.getCapeLean2() / 2.0F) * (float) -(Math.PI / 180.0))
+        );
     }
 }

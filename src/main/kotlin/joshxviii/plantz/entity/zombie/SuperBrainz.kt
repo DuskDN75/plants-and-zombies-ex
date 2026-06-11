@@ -1,21 +1,7 @@
 package joshxviii.plantz.entity.zombie
 
-import joshxviii.plantz.PazDataSerializers.DATA_DYE_COLOR
-import joshxviii.plantz.PazDataSerializers.GNOME_VARIANT
 import joshxviii.plantz.PazDataSerializers.SUPER_BRAINZ_VARIANT
-import joshxviii.plantz.PazItems
-import joshxviii.plantz.PazSounds
-import joshxviii.plantz.ai.goal.ProjectileAttackGoal
-import joshxviii.plantz.entity.gnome.Gnome
-import joshxviii.plantz.entity.gnome.GnomeVariant
-import joshxviii.plantz.entity.plant.Repeater
-import joshxviii.plantz.entity.projectile.Missile
-import joshxviii.plantz.entity.projectile.PaintBall
-import joshxviii.plantz.entity.zombie.Gargantuar.Companion.HAS_IMP_ID
-import joshxviii.plantz.entity.zombie.Gargantuar.Companion.SMASH_ATTACK_TIME_ID
-import joshxviii.plantz.entity.zombie.Gargantuar.Companion.THROW_TIME_ID
 import net.minecraft.network.syncher.EntityDataAccessor
-import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
@@ -23,7 +9,6 @@ import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.*
-import net.minecraft.world.item.DyeColor
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.storage.ValueInput
@@ -40,9 +25,24 @@ class SuperBrainz(type: EntityType<out SuperBrainz>, level: Level) : PazZombie(t
         xpReward = 40
     }
 
+    var xCape = 0.0f
+    var yCape = 0.0f
+    var zCape = 0.0f
+    var xCapeO = 0.0f
+    var yCapeO = 0.0f
+    var zCapeO = 0.0f
+
+    var walkDist = 0f
+    var walkDistO = 0f
+
     var variant: SuperBrainzVariant
         get() = this.entityData.get(DATA_VARIANT_ID)
         set(value) = this.entityData.set(DATA_VARIANT_ID, value)
+
+    override fun tick() {
+        super.tick()
+        updateCapeState()
+    }
 
     override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
         super.defineSynchedData(entityData)
@@ -80,6 +80,35 @@ class SuperBrainz(type: EntityType<out SuperBrainz>, level: Level) : PazZombie(t
     override fun doHurtTarget(level: ServerLevel, target: Entity): Boolean {
         val result = super.doHurtTarget(level, target)
         return result
+    }
+
+    fun updateCapeState() {
+        walkDistO = walkDist
+        val delta = deltaMovement
+
+        xCapeO = xCape
+        yCapeO = yCape
+        zCapeO = zCape
+
+        val dx = (x - xCape).toFloat()
+        val dy = (y - yCape).toFloat()
+        val dz = (z - zCape).toFloat()
+
+        if (dx * dx + dy * dy + dz * dz > 100.0) {
+            xCape = x.toFloat()
+            yCape = y.toFloat()
+            zCape = z.toFloat()
+            xCapeO = xCape
+            yCapeO = yCape
+            zCapeO = zCape
+        } else {
+            xCape += dx * 0.25f
+            yCape += dy * 0.25f
+            zCape += dz * 0.25f
+        }
+
+        val horizontalSpeed = delta.horizontalDistance()
+        walkDist += horizontalSpeed.toFloat()
     }
 
     override fun finalizeSpawn(
