@@ -1,9 +1,13 @@
 package joshxviii.plantz.entity.zombie
 
 import joshxviii.plantz.PazDataSerializers.DATA_DYE_COLOR
+import joshxviii.plantz.PazDataSerializers.GNOME_VARIANT
+import joshxviii.plantz.PazDataSerializers.SUPER_BRAINZ_VARIANT
 import joshxviii.plantz.PazItems
 import joshxviii.plantz.PazSounds
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
+import joshxviii.plantz.entity.gnome.Gnome
+import joshxviii.plantz.entity.gnome.GnomeVariant
 import joshxviii.plantz.entity.plant.Repeater
 import joshxviii.plantz.entity.projectile.Missile
 import joshxviii.plantz.entity.projectile.PaintBall
@@ -22,36 +26,41 @@ import net.minecraft.world.entity.*
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
+import kotlin.jvm.optionals.getOrDefault
 
-class RoboZombie(type: EntityType<out RoboZombie>, level: Level) : PazZombie(type, level) {
+class SuperBrainz(type: EntityType<out SuperBrainz>, level: Level) : PazZombie(type, level) {
 
     companion object {
-
+        val DATA_VARIANT_ID: EntityDataAccessor<SuperBrainzVariant> = SynchedEntityData.defineId(SuperBrainz::class.java, SUPER_BRAINZ_VARIANT)
     }
 
     init {
-        xpReward = 20
+        xpReward = 40
     }
+
+    var variant: SuperBrainzVariant
+        get() = this.entityData.get(DATA_VARIANT_ID)
+        set(value) = this.entityData.set(DATA_VARIANT_ID, value)
 
     override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
         super.defineSynchedData(entityData)
+        entityData.define(DATA_VARIANT_ID, SuperBrainzVariant.pickRandomVariant())
+    }
+
+    override fun addAdditionalSaveData(output: ValueOutput) {
+        super.addAdditionalSaveData(output)
+        output.store("variant", SuperBrainzVariant.CODEC, variant)
+    }
+
+    override fun readAdditionalSaveData(input: ValueInput) {
+        super.readAdditionalSaveData(input)
+        variant = input.read<SuperBrainzVariant>("variant", SuperBrainzVariant.CODEC).getOrDefault(SuperBrainzVariant.pickRandomVariant())
     }
 
     override fun registerGoals() {
         super.registerGoals()
-        this.goalSelector.addGoal(2, ProjectileAttackGoal(
-            usingEntity = this,
-            projectileFactory =  { Missile(level(), this) },
-            velocity = 1.3,
-            actionDelay = 8,
-            soundEvent = null,
-            actionEndEffect = {
-
-            }))
-    }
-
-    override fun addBehaviourGoals() {
-        behaviourGoalsNoMelee()
     }
 
     //TODO custom sounds

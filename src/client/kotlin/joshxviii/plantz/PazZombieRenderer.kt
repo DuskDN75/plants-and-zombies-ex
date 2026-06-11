@@ -7,6 +7,7 @@ import joshxviii.plantz.entity.zombie.DiscoZombie
 import joshxviii.plantz.entity.zombie.Gargantuar
 import joshxviii.plantz.entity.zombie.NewspaperZombie
 import joshxviii.plantz.entity.zombie.PazZombie
+import joshxviii.plantz.entity.zombie.SuperBrainz
 import joshxviii.plantz.model.zombies.PazZombieModel
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.model.geom.ModelLayerLocation
@@ -91,6 +92,7 @@ class PazZombieRenderer(
             when (entity) {
                 is Gargantuar -> if (entity.hasImp) "imp" else ""
                 is NewspaperZombie -> if (entity.isAngry()) "angry" else ""
+                is SuperBrainz -> entity.variant.suffix
                 else -> ""
             }
     }

@@ -411,6 +411,19 @@ object PazEntities {
             .add(Attributes.MOVEMENT_SPEED, 0.23)
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 1.5)
     )
+    @JvmField val SUPER_BRAINZ: EntityType<SuperBrainz> =  registerZombie(
+        "super_brainz",
+        EntityType.Builder.of(::SuperBrainz, MobCategory.MONSTER)
+            .sized(0.6f, 1.95f)
+            .eyeHeight(1.74f)
+            .clientTrackingRange(8),
+        attributes = Zombie.createAttributes()
+            .add(Attributes.ATTACK_DAMAGE, 8.0)
+            .add(Attributes.MAX_HEALTH, 100.0)
+            .add(Attributes.STEP_HEIGHT, 1.0)
+            .add(Attributes.MOVEMENT_SPEED, 0.23)
+            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 1.5)
+    )
     @JvmField val IMP: EntityType<Imp> =  registerZombie(
         "imp",
         EntityType.Builder.of(::Imp, MobCategory.MONSTER)

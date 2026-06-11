@@ -131,11 +131,11 @@ class Gnome(type: EntityType<out Gnome>, level: Level) :Monster(type, level) {
         super.defineSynchedData(entityData)
         entityData.define(
             DATA_VARIANT_ID,
-            GnomeVariant.getDefault()
+            GnomeVariant.pickRandomVariant()
         )
         entityData.define(
             DATA_SOUND_VARIANT_ID,
-            GnomeSoundVariant.getDefault()
+            GnomeSoundVariant.pickRandomVariant()
         )
     }
 
