@@ -50,36 +50,36 @@ class MailboxBlockEntity(
 
     companion object {
         val DEFAULT_NAME = Component.translatable("item.plantz.mailbox");
+
+        fun tick(level: Level, pos: BlockPos, state: BlockState, blockEntity: MailboxBlockEntity) {
+            blockEntity.tickCount++
+
+            if (level.isClientSide && blockEntity.tickCount % 25 == 0) {
+                blockEntity.tickCount += level.random.nextInt(3)
+                if (state.getValue(STATE) == MailboxState.HAS_MAIL)
+                    level.addParticle(PazServerParticles.NOTIFY, pos.x+0.5, pos.y+0.8, pos.z+0.5, 0.0, 0.0, 0.0)
+                return
+            }
+
+            if (state.getValue(STATE) == MailboxState.EJECTING) {
+                if (blockEntity.ejectTimer > 0) {
+                    blockEntity.ejectTimer--
+                } else {
+                    blockEntity.updateMailboxState(MailboxState.INACTIVE)
+                    blockEntity.ejectTimer = 0
+                    blockEntity.setChanged()
+                    blockEntity.playSound(SoundEvents.VAULT_CLOSE_SHUTTER, 1.7f)
+                }
+            }
+
+            if (blockEntity.tickCount % 100 == 0) {
+                (level as? ServerLevel)?.getMailboxMailQueue()?.deliverTo(blockEntity)
+            }
+        }
     }
 
     private val inventory = SimpleContainer(5)
     override fun getContainerSize(): Int = 5
-
-    fun tick(level: Level, pos: BlockPos, state: BlockState) {
-        tickCount++
-
-        if (level.isClientSide && tickCount % 25 == 0) {
-            tickCount += level.random.nextInt(3)
-            if (blockState.getValue(STATE) == MailboxState.HAS_MAIL)
-            level.addParticle(PazServerParticles.NOTIFY, pos.x+0.5, pos.y+0.8, pos.z+0.5, 0.0, 0.0, 0.0)
-            return
-        }
-
-        if (state.getValue(STATE) == MailboxState.EJECTING) {
-            if (ejectTimer > 0) {
-                ejectTimer--
-            } else {
-                updateMailboxState(MailboxState.INACTIVE)
-                ejectTimer = 0
-                setChanged()
-                playSound(SoundEvents.VAULT_CLOSE_SHUTTER, 1.7f)
-            }
-        }
-
-        if (tickCount % 100 == 0) {
-            (level as? ServerLevel)?.getMailboxMailQueue()?.deliverTo(this)
-        }
-    }
 
     override fun createMenu(containerId: Int, inventory: Inventory): AbstractContainerMenu = MailboxMenu(containerId, inventory, asMailBoxData())
     override fun getScreenOpeningData(player: ServerPlayer): MailboxData = asMailBoxData()

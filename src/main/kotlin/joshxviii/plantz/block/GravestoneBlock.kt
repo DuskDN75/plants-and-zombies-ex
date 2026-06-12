@@ -1,7 +1,9 @@
 package joshxviii.plantz.block
 
 import com.mojang.serialization.MapCodec
+import joshxviii.plantz.PazBlocks
 import joshxviii.plantz.block.entity.GravestoneBlockEntity
+import joshxviii.plantz.block.entity.MailboxBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
@@ -11,6 +13,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.ScheduledTickAccess
 import net.minecraft.world.level.Spawner
@@ -20,6 +23,8 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.Rotation
 import net.minecraft.world.level.block.SimpleWaterloggedBlock
 import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityTicker
+import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
@@ -31,7 +36,7 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class GravestoneBlock(properties: Properties) : BaseEntityBlock(properties), SimpleWaterloggedBlock, Spawner  {
+class GravestoneBlock(properties: Properties) : BaseEntityBlock(properties), SimpleWaterloggedBlock {
     companion object {
         val CODEC: MapCodec<GravestoneBlock> = simpleCodec(::GravestoneBlock)
         val SHAPE: VoxelShape = Util.make {
@@ -47,6 +52,14 @@ class GravestoneBlock(properties: Properties) : BaseEntityBlock(properties), Sim
 
     init {
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false))
+    }
+
+    override fun <T : BlockEntity> getTicker(level: Level, blockState: BlockState, type: BlockEntityType<T>): BlockEntityTicker<T>? {
+        return if (type == PazBlocks.GRAVESTONE_BLOCK_ENTITY) {
+            BlockEntityTicker { level, pos, state, blockEntity ->
+                GravestoneBlockEntity.tick(level, pos, state, blockEntity as GravestoneBlockEntity)
+            }
+        } else null
     }
 
     override fun newBlockEntity(worldPosition: BlockPos, blockState: BlockState): BlockEntity {
@@ -92,7 +105,4 @@ class GravestoneBlock(properties: Properties) : BaseEntityBlock(properties), Sim
     }
 
     override fun codec(): MapCodec<out GravestoneBlock> { return CODEC }
-    override fun setEntityId(type: EntityType<*>, random: RandomSource) {
-
-    }
 }

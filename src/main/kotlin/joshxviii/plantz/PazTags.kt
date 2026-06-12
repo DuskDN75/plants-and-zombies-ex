@@ -52,6 +52,7 @@ object PazTags {
     }
 
     object Biomes {
+        val GRAVESTONE_IGNORE_BRIGHTNESS = tag("gravestone_ignore_brightness")
 
         val HAS_SUNFLOWER = tag("plant/has_sunflower")
         val HAS_SUNFLOWER_ALT = tag("plant/has_sunflower_alt")

@@ -93,7 +93,7 @@ class MailboxBlock(
     override fun <T : BlockEntity> getTicker(level: Level, blockState: BlockState, type: BlockEntityType<T>): BlockEntityTicker<T>? {
         return if (type == PazBlocks.MAILBOX_ENTITY) {
             BlockEntityTicker { level, pos, state, blockEntity ->
-                (blockEntity as MailboxBlockEntity).tick(level, pos, state)
+                MailboxBlockEntity.tick(level, pos, state, blockEntity as MailboxBlockEntity)
             }
         } else null
     }
