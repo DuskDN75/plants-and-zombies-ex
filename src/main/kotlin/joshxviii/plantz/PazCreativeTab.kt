@@ -74,6 +74,7 @@ object PazCreativeTab {
                 output.accept(PazItems.MUSIC_DISC_GRASSY_GROOVE)
 
                 // items
+                output.accept(PazItems.BRAINZ_METAL)
                 output.accept(PazItems.SUN_BATTERY)
                 output.accept(PazItems.SUN)
                 output.accept(PazItems.SUN_BOTTLE)

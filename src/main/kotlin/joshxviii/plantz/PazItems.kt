@@ -75,6 +75,11 @@ object PazItems {
             .component(PazComponents.STORED_WATER, StoredWater())
     )
     @JvmField
+    val BRAINZ_METAL: Item = registerItem(
+        "brainz_metal",
+        properties = Item.Properties()
+    )
+    @JvmField
     val NEWSPAPER: Item = registerItem(
         "newspaper", ::NewspaperItem,
         properties = Item.Properties()

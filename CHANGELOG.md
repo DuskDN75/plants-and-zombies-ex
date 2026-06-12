@@ -1,5 +1,21 @@
 # Changelog 1.5
 ### Additions
+#### General:   
+- Plantz Flag now reduces the cooldown of nearby plants by 20%.
+- Added Brainz Metal.
+  - Drops from the Rob Zombie, Super Brainz, and Zombie Bots built by the engineer.
+  - Used for crafting special zombie tech.
+- Added Dye Blaster
+- The dye blaster consumes dye as ammo.
+- Players and mobs shot with the blaster will be given the "painted" mob effect.
+- Added Balloons
+    - Balloons are attached to leads by default and can be tied to other mobs and fences.
+    - Balloons pull the holder upward slightly. By carrying enough balloons, you can negate fall damage or even begin to float.
+- Added Gravestone Block
+    - Zombies will emerge from the ground near the gravestone during the night.
+- Added The Graveyard biome
+- The Football Helmet now gives increased speed and step height while sprinting. Nearby Mobs will also be knocked back.
+#### Plants:
 - Added Electric Peashooter
   - Acquired by striking a peashooter with lightning.
 - Added Lightning Reed
@@ -18,18 +34,16 @@
     - Peashooter has a 10% chance to produce Repeater seeds.
     - Repeater has a 60% chance to produce Peashooter seeds.
 - Repeaters no longer spawn naturally.
+#### Zombies:
 - Added Soldier Zombie
-- Added Dye Blaster
-  - The dye blaster consumes dye as ammo.
-  - Players and mobs shot with the blaster will be given the "painted" mob effect.
-- Added Balloons
-  - Balloons are attached to leads by default and can be tied to other mobs and fences.
-  - Balloons pull the holder upward slightly. By carrying enough balloons, you can negate fall damage or even begin to float.
-- Added Gravestone Block
-	- Zombies will emerge from the ground near the gravestone during the night.
-- Added The Graveyard biome
-- The Football Helmet now gives increased speed and step height while sprinting. Nearby Mobs will also be knocked back.
-- Plantz Flag now reduces the cooldown of nearby plants by 20%.
+  - Spawns during a zombie raid.
+  - Uses the dye blaster.
+- Added Robo Zombie
+  - Spawns during a zombie raid.
+- Added Engineer Zombie
+  - Spawns during a zombie raid.
+- Added Super Brainz
+  - Spawns during a zombie raid.
 - Zombies will now attack Wall Nuts when walking into them.
 ### Technical Changes
 

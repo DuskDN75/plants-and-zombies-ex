@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": [
+      "plantz:brainz_metal"
+    ],
+    "@": [
+      "minecraft:daylight_detector"
+    ],
+    "*": [
+      "minecraft:glass"
+    ]
+  },
+  "pattern": [
+    "#@#",
+    "* *",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "plantz:sun_battery"
+  }
+}

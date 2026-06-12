@@ -7,9 +7,12 @@ import joshxviii.plantz.PazEntities.DIGGER_ZOMBIE
 import joshxviii.plantz.PazEntities.DISCO_ZOMBIE
 import joshxviii.plantz.PazEntities.IMP
 import joshxviii.plantz.PazEntities.NEWSPAPER_ZOMBIE
+import joshxviii.plantz.PazServerParticles
+import joshxviii.plantz.PazSounds
 import joshxviii.plantz.PazTags
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.EntitySpawnReason
@@ -35,8 +38,8 @@ class GravestoneBlockEntity(
 
         val SPAWN_TABLE_WEIGHTS = mapOf(
             BROWN_COAT          to 20,
-            NEWSPAPER_ZOMBIE    to 12,
-            IMP                 to 5,
+            NEWSPAPER_ZOMBIE    to 8,
+            IMP                 to 2,
             DIGGER_ZOMBIE       to 1,
             DISCO_ZOMBIE        to 1,
             ALL_STAR            to 1,
@@ -48,7 +51,7 @@ class GravestoneBlockEntity(
             blockEntity.ticksSinceLastSpawn++
 
             if (blockEntity.ticksSinceLastSpawn >= blockEntity.spawnDelay) {
-                blockEntity.trySpawnZombie(level)
+                blockEntity.trySpawnZombie(level, pos)
             }
         }
     }
@@ -71,18 +74,18 @@ class GravestoneBlockEntity(
         return !(level.isBrightOutside && level.getBrightness(LightLayer.SKY, blockPos) >= 7)
     }
 
-    private fun canSpawn(level: ServerLevel): Boolean {
-        if ( !isDarkEnough(level) && !level.isThundering && !level.getBiome(worldPosition).`is`(PazTags.Biomes.GRAVESTONE_IGNORE_BRIGHTNESS)) return false
+    private fun canSpawn(level: ServerLevel, pos: BlockPos): Boolean {
+        if ( !isDarkEnough(level) && !level.getBiome(pos).`is`(PazTags.Biomes.GRAVESTONE_IGNORE_BRIGHTNESS) ) return false
 
         val nearbyPlayer = level.hasNearbyAlivePlayer(
-            worldPosition.center.x,
-            worldPosition.center.y,
-            worldPosition.center.z,
+            pos.center.x,
+            pos.center.y,
+            pos.center.z,
             PLAYER_RANGE.toDouble()
         )
-        if (nearbyPlayer) return false
+        if (!nearbyPlayer) return false
 
-        val aabb = AABB.ofSize(worldPosition.center, 32.0, 16.0, 32.0)
+        val aabb = AABB.ofSize(pos.center, 32.0, 16.0, 32.0)
         val nearbyZombies = level.getEntitiesOfClass(Zombie::class.java, aabb) { zombie ->
             true
         }
@@ -90,11 +93,11 @@ class GravestoneBlockEntity(
         return nearbyZombies.size < MAX_ZOMBIES
     }
 
-    private fun trySpawnZombie(level: ServerLevel) {
-        if (!canSpawn(level)) return
+    private fun trySpawnZombie(level: ServerLevel, pos: BlockPos) {
+        if (!canSpawn(level, pos)) return
 
         val type = rollZombieType(level.random) ?: return
-        val spawnPos = findSpawnPosition(level) ?: return
+        val spawnPos = findSpawnPosition(level, pos) ?: return
 
         val zombie = type.create(
             level,
@@ -111,16 +114,31 @@ class GravestoneBlockEntity(
 
         spawnDelay = Mth.randomBetweenInclusive(level.random, SPAWN_DELAY_MIN, SPAWN_DELAY_MAX)
         ticksSinceLastSpawn = 0
+        level.sendParticles(
+            PazServerParticles.ZOMBIE_OMEN,
+            pos.center.x,
+            pos.center.y,
+            pos.center.z,
+            4, 0.25, 0.125, 0.25, 0.0
+        )
+        level.sendParticles(
+            PazServerParticles.ZOMBIE_OMEN,
+            spawnPos.center.x,
+            spawnPos.center.y,
+            spawnPos.center.z,
+            3, 0.15, 0.0, 0.15, 0.0
+        )
+        level.playSound(null, pos, PazSounds.APPLY_ZOMBIE_OMEN, SoundSource.BLOCKS, 0.75f, 2.0f)
     }
 
-    private fun findSpawnPosition(level: ServerLevel): BlockPos? {
+    private fun findSpawnPosition(level: ServerLevel, pos: BlockPos): BlockPos? {
         val random = level.random
         for (i in 0..7) {
-            val x = worldPosition.x + Mth.randomBetweenInclusive(random, -3, 3)
-            val z = worldPosition.z + Mth.randomBetweenInclusive(random, -3, 3)
-            val pos = BlockPos(x, worldPosition.y, z)
+            val x = pos.x + Mth.randomBetweenInclusive(random, -3, 3)
+            val z = pos.z + Mth.randomBetweenInclusive(random, -3, 3)
+            val pos = BlockPos(x, pos.y, z)
 
-            var spawnY = worldPosition.y
+            var spawnY = pos.y
             while (spawnY > level.minY && level.isEmptyBlock(pos.atY(spawnY - 1))) spawnY--
             while (spawnY < level.maxY && !level.isEmptyBlock(pos.atY(spawnY))) spawnY++
 

@@ -52,7 +52,7 @@ class LightningReed(type: EntityType<out Plant>, level: Level) : Plant(PazEntiti
             cooldownTime = 16,
             damageType = PazDamageTypes.PLANT_ELECTRIC,
             beforeHitEntityEffect = {
-                it.addEffect(MobEffectInstance(PazEffects.ELECTRIFIED, 100, 2), this)
+                it.addEffect(MobEffectInstance(PazEffects.ELECTRIFIED, 100, 1), this)
                 val eyeHeight = eyeHeight.toDouble()
                 val direction = this.headLookAngle.scale(0.5)
                 (level() as? ServerLevel)?.sendParticles(
