@@ -32,7 +32,7 @@ public class SuperBrainzModel extends PazZombieModel {
         PartDefinition head = root.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 44).addBox(-4.0F, -9.0F, -4.0F, 8.0F, 9.0F, 8.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 61).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.5F)), PartPose.offset(0.0F, -17.0F, -1.0F));
 
-        PartDefinition cube_r1 = head.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(66, 68).addBox(-3.0F, -2.0F, -1.0F, 6.0F, 5.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -9.75F, -4.0F, -0.3927F, 0.0F, 0.0F));
+        PartDefinition cube_r1 = head.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(66, 79).addBox(-3.0F, -2.0F, -1.0F, 6.0F, 5.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -9.75F, -4.0F, -0.3927F, 0.0F, 0.0F));
 
         PartDefinition hat = head.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.offset(0.0F, 29.0F, 1.0F));
 
@@ -60,24 +60,28 @@ public class SuperBrainzModel extends PazZombieModel {
 
         PartDefinition cape = body.addOrReplaceChild("cape", CubeListBuilder.create().texOffs(0, 77).addBox(-8.0F, 0.0F, 0.0F, 16.0F, 17.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -17.0F, 4.0F));
 
-        PartDefinition right_arm = root.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(32, 44).addBox(0.0F, -2.0F, -3.0F, 6.0F, 18.0F, 6.0F, new CubeDeformation(0.0F))
-                .texOffs(28, 18).addBox(-0.55F, -2.6F, -3.45F, 7.0F, 19.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(8.0F, -15.0F, 0.0F));
+        PartDefinition left_arm = root.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(34, 49).addBox(0.0F, -2.0F, -3.0F, 6.0F, 9.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(8.0F, -15.0F, 0.0F));
 
-        PartDefinition left_arm = root.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(56, 44).addBox(-6.0F, -2.0F, -3.0F, 6.0F, 18.0F, 6.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 18).addBox(-6.55F, -2.6F, -3.45F, 7.0F, 19.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(-8.0F, -15.0F, 0.0F));
+        PartDefinition left_fist = left_arm.addOrReplaceChild("left_fist", CubeListBuilder.create().texOffs(34, 64).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 9.0F, 6.0F, new CubeDeformation(0.0F))
+                .texOffs(28, 27).addBox(-3.55F, -0.6F, -3.45F, 7.0F, 10.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(3.0F, 7.0F, 0.0F));
 
-        PartDefinition right_leg = root.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(50, 68).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.0F, 0.0F, 0.0F));
+        PartDefinition right_arm = root.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(58, 49).addBox(-6.0F, -2.0F, -3.0F, 6.0F, 9.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(-8.0F, -15.0F, 0.0F));
 
-        PartDefinition left_leg = root.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(34, 68).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(54, 84).addBox(-2.0F, 9.0F, -4.0F, 4.0F, 3.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(34, 84).addBox(-2.5F, -0.5F, -2.5F, 5.0F, 13.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(3.0F, 0.0F, 0.0F));
+        PartDefinition right_fist = right_arm.addOrReplaceChild("right_fist", CubeListBuilder.create().texOffs(58, 64).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 9.0F, 6.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 27).addBox(-3.55F, -0.6F, -3.45F, 7.0F, 10.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.0F, 7.0F, 0.0F));
+
+        PartDefinition right_leg = root.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(50, 79).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.0F, 0.0F, 0.0F));
+
+        PartDefinition left_leg = root.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(34, 79).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(54, 95).addBox(-2.0F, 9.0F, -4.0F, 4.0F, 3.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(34, 95).addBox(-2.5F, -0.5F, -2.5F, 5.0F, 13.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(3.0F, 0.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
     @Override
     public void setupAnim(@NotNull ZombieRenderState state) {
-        //super.setupAnim(state);
+        super.setupAnim(state);
         PazZombieRenderState pazState = (PazZombieRenderState) state;
         cape.resetPose();
         cape.rotateBy(

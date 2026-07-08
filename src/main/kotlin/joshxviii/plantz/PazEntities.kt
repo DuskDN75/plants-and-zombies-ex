@@ -401,7 +401,7 @@ object PazEntities {
     @JvmField val ROBO_ZOMBIE: EntityType<RoboZombie> =  registerZombie(
         "robo_zombie",
         EntityType.Builder.of(::RoboZombie, MobCategory.MONSTER)
-            .sized(0.6f, 1.95f)
+            .sized(1.0f, 2.0f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
         attributes = Zombie.createAttributes()
@@ -414,8 +414,8 @@ object PazEntities {
     @JvmField val SUPER_BRAINZ: EntityType<SuperBrainz> =  registerZombie(
         "super_brainz",
         EntityType.Builder.of(::SuperBrainz, MobCategory.MONSTER)
-            .sized(0.6f, 1.95f)
-            .eyeHeight(1.74f)
+            .sized(1.0f, 2.2f)
+            .eyeHeight(2.0f)
             .clientTrackingRange(8),
         attributes = Zombie.createAttributes()
             .add(Attributes.ATTACK_DAMAGE, 8.0)

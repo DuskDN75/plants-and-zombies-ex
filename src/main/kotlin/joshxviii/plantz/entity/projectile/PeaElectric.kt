@@ -29,7 +29,7 @@ class PeaElectric(
             PazServerParticles.ELECTRIFIED,
             amount = 1,
             spread = Vec3(0.01,0.01,0.01),
-            speed = 0.1
+            speed = 0.4
         )
     }
 

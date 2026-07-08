@@ -12,8 +12,8 @@ public class RoboZombie<T extends Entity> extends EntityModel<T> {
 	private final ModelPart jaw;
 	private final ModelPart body;
 	private final ModelPart rocket_pack;
-	private final ModelPart right_arm;
 	private final ModelPart left_arm;
+	private final ModelPart right_arm;
 	private final ModelPart right_leg;
 	private final ModelPart left_leg;
 	private final ModelPart treads;
@@ -26,8 +26,8 @@ public class RoboZombie<T extends Entity> extends EntityModel<T> {
 		this.jaw = this.head.getChild("jaw");
 		this.body = this.root.getChild("body");
 		this.rocket_pack = this.body.getChild("rocket_pack");
-		this.right_arm = this.root.getChild("right_arm");
 		this.left_arm = this.root.getChild("left_arm");
+		this.right_arm = this.root.getChild("right_arm");
 		this.right_leg = this.root.getChild("right_leg");
 		this.left_leg = this.root.getChild("left_leg");
 		this.treads = this.root.getChild("treads");
@@ -63,9 +63,9 @@ public class RoboZombie<T extends Entity> extends EntityModel<T> {
 		PartDefinition rocket_pack = body.addOrReplaceChild("rocket_pack", CubeListBuilder.create().texOffs(60, 0).addBox(-3.0F, -9.3333F, 0.0F, 6.0F, 20.0F, 6.0F, new CubeDeformation(0.0F))
 		.texOffs(46, 56).addBox(-3.5F, -9.3333F, -0.5F, 7.0F, 20.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -10.6667F, 5.0F));
 
-		PartDefinition right_arm = root.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(84, 0).addBox(0.0F, -2.0F, -2.5F, 5.0F, 18.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(7.0F, -14.0F, -0.5F));
+		PartDefinition left_arm = root.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(84, 0).addBox(0.0F, -2.0F, -2.5F, 5.0F, 18.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(7.0F, -14.0F, -0.5F));
 
-		PartDefinition left_arm = root.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(0, 88).addBox(-5.0F, -2.0F, -2.5F, 5.0F, 18.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(-7.0F, -14.0F, -0.5F));
+		PartDefinition right_arm = root.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(0, 88).addBox(-5.0F, -2.0F, -2.5F, 5.0F, 18.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(-7.0F, -14.0F, -0.5F));
 
 		PartDefinition right_leg = root.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(86, 89).addBox(-2.5F, 0.0F, -2.5F, 5.0F, 12.0F, 5.0F, new CubeDeformation(0.0F))
 		.texOffs(32, 94).addBox(-2.5F, 9.0F, -4.5F, 5.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.5F, 0.0F, -0.5F));
