@@ -1,5 +1,6 @@
 package joshxviii.plantz.entity.zombie
 
+import joshxviii.plantz.PazItems
 import joshxviii.plantz.PazSounds
 import joshxviii.plantz.PazTags
 import joshxviii.plantz.ai.goal.MineBlocksToTargetGoal
@@ -56,6 +57,8 @@ class EngineerZombie(type: EntityType<out EngineerZombie>, level: Level) : PazZo
         val data = super.finalizeSpawn(level, difficulty, spawnReason, ZombieGroupData(false, false))
 
         setCanBreakDoors(true)
+        setItemSlot(EquipmentSlot.OFFHAND, PazItems.BOT_BLUEPRINT.defaultInstance)
+        setDropChance(EquipmentSlot.OFFHAND, 0.0f)
 
         return data
     }
