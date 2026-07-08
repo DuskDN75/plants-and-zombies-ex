@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "plantz:item/brainz_metal"
+    "layer0": "plantz:item/brainz_alloy"
   }
 }

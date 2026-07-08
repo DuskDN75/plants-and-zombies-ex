@@ -2,14 +2,14 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
+    "@": [
+      "minecraft:amethyst_shard"
+    ],
     "#": [
       "plantz:brainz_metal"
     ],
     "+": [
       "minecraft:netherite_ingot"
-    ],
-    "@": [
-      "minecraft:amethyst_shard"
     ],
     "*": [
       "minecraft:redstone"

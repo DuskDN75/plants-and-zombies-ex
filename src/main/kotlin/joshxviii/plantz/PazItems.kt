@@ -75,8 +75,8 @@ object PazItems {
             .component(PazComponents.STORED_WATER, StoredWater())
     )
     @JvmField
-    val BRAINZ_METAL: Item = registerItem(
-        "brainz_metal",
+    val BRAINZ_ALLOY: Item = registerItem(
+        "brainz_alloy",
         properties = Item.Properties()
     )
     @JvmField

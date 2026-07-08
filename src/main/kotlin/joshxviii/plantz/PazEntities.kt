@@ -11,6 +11,7 @@ import joshxviii.plantz.entity.Sun
 import joshxviii.plantz.entity.gnome.Gnome
 import joshxviii.plantz.entity.plant.*
 import joshxviii.plantz.entity.projectile.*
+import joshxviii.plantz.entity.turret.Turret
 import joshxviii.plantz.entity.zombie.*
 import joshxviii.plantz.mixin.MobAccessor
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents
@@ -19,6 +20,7 @@ import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
+import net.minecraft.world.damagesource.DamageSources
 import net.minecraft.world.entity.*
 import net.minecraft.world.entity.Mob.createMobAttributes
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
@@ -456,6 +458,19 @@ object PazEntities {
     )
     // endregion
 
+    @JvmField val ZOMBIE_TURRET: EntityType<Turret> = registerTurret(
+        "zombie_turret",
+        attributes = createMobAttributes()
+            .add(Attributes.MAX_HEALTH, 20.0)
+            .add(Attributes.ATTACK_DAMAGE, 2.0)
+    )
+    @JvmField val ELECTRO_TURRET: EntityType<Turret> = registerTurret(
+        "electro_turret",
+        attributes = createMobAttributes()
+            .add(Attributes.MAX_HEALTH, 20.0)
+            .add(Attributes.ATTACK_DAMAGE, 2.0)
+    )
+
     @JvmField val GNOME: EntityType<Gnome> =  registerGnome(
         "gnome",
         EntityType.Builder.of(::Gnome, MobCategory.MONSTER)
@@ -546,6 +561,18 @@ object PazEntities {
         attributes: AttributeSupplier.Builder = createMobAttributes()
     ): EntityType<T> {
         val type = register(name, builder)
+        FabricDefaultAttributeRegistry.register(type, attributes)
+        return type
+    }
+
+    private fun <T : Turret> registerTurret(
+        name : String,
+        builder: EntityType.Builder<T> = EntityType.Builder.createNothing(MobCategory.MONSTER),
+        attributes: AttributeSupplier.Builder = createMobAttributes()
+    ): EntityType<T> {
+        val type = register(name, builder
+            .ridingOffset(-0.7f)
+            .notInPeaceful())
         FabricDefaultAttributeRegistry.register(type, attributes)
         return type
     }
