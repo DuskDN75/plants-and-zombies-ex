@@ -1,7 +1,7 @@
 package joshxviii.plantz.entity.projectile
 
-import joshxviii.plantz.PazConfig
-import joshxviii.plantz.PazDamageTypes
+import joshxviii.plantz.init.PazConfig
+import joshxviii.plantz.init.PazDamageTypes
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.hasSameRootOwner
 import net.minecraft.core.BlockPos
@@ -28,10 +28,8 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.*
-import java.util.*
 import java.util.Arrays.sort
 import java.util.function.Predicate
-import java.util.function.ToDoubleFunction
 import kotlin.math.sign
 
 abstract class PazProjectile(

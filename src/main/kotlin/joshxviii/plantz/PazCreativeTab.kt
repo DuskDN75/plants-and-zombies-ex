@@ -1,5 +1,8 @@
 package joshxviii.plantz
 
+import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.init.PazItems
 import joshxviii.plantz.item.SeedPacketItem
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries

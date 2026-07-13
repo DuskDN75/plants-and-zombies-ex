@@ -1,7 +1,7 @@
 package joshxviii.plantz.effect
 
-import joshxviii.plantz.PazEffects.HYPNOTIZED_GOAL_ATTACHMENT
-import joshxviii.plantz.PazTags
+import joshxviii.plantz.init.PazEffects.HYPNOTIZED_GOAL_ATTACHMENT
+import joshxviii.plantz.init.PazTags
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.mixin.MobAccessor
 import net.minecraft.server.level.ServerLevel

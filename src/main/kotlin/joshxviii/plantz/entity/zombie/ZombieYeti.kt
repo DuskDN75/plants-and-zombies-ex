@@ -1,8 +1,8 @@
 package joshxviii.plantz.entity.zombie
 
-import joshxviii.plantz.PazDamageTypes
-import joshxviii.plantz.PazSounds
-import joshxviii.plantz.PazTags
+import joshxviii.plantz.init.PazDamageTypes
+import joshxviii.plantz.init.PazSounds
+import joshxviii.plantz.init.PazTags
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
 import joshxviii.plantz.canReachTarget
 import joshxviii.plantz.entity.projectile.PowderSnowChunk

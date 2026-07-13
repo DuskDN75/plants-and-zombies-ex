@@ -2,6 +2,7 @@ package joshxviii.plantz
 
 import joshxviii.plantz.gui.MailboxScreen
 import joshxviii.plantz.gui.TimeMachineScreen
+import joshxviii.plantz.init.PazMenus
 import net.minecraft.client.gui.screens.MenuScreens
 
 object PazScreens {

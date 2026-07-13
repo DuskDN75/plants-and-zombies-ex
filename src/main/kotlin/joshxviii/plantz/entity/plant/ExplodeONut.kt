@@ -1,23 +1,19 @@
 package joshxviii.plantz.entity.plant
 
-import joshxviii.plantz.NukeBlastParticleOptions
-import joshxviii.plantz.NukeSmokeParticleOptions
-import joshxviii.plantz.NukeWaveParticleOptions
-import joshxviii.plantz.PazEntities
-import joshxviii.plantz.PazTags.EntityTypes.WALLNUT_DEFLECTABLE
-import net.minecraft.core.Direction
+import joshxviii.plantz.init.NukeBlastParticleOptions
+import joshxviii.plantz.init.NukeSmokeParticleOptions
+import joshxviii.plantz.init.NukeWaveParticleOptions
+import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.init.PazTags.EntityTypes.WALLNUT_DEFLECTABLE
 import net.minecraft.core.Holder
 import net.minecraft.resources.ResourceKey
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
-import net.minecraft.tags.BlockTags
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.monster.zombie.Zombie
-import net.minecraft.world.entity.projectile.arrow.AbstractArrow
-import net.minecraft.world.entity.projectile.arrow.ThrownTrident
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 

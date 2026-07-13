@@ -1,7 +1,7 @@
 package joshxviii.plantz.entity.projectile
 
-import joshxviii.plantz.PazDamageTypes
-import joshxviii.plantz.PazEntities
+import joshxviii.plantz.init.PazDamageTypes
+import joshxviii.plantz.init.PazEntities
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.HitResult

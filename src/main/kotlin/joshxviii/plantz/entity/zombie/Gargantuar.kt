@@ -3,6 +3,11 @@ package joshxviii.plantz.entity.zombie
 import joshxviii.plantz.*
 import joshxviii.plantz.ai.ZombieState
 import joshxviii.plantz.entity.zombie.Gargantuar.SmashAttackGoal.Companion.ATTACK_DELAY_TIME
+import joshxviii.plantz.init.NukeWaveParticleOptions
+import joshxviii.plantz.init.PazDamageTypes
+import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.init.PazSounds
+import joshxviii.plantz.init.PazTags
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleTypes
@@ -249,7 +254,8 @@ class Gargantuar(type: EntityType<out Gargantuar>, level: Level) : PazZombie(typ
                     pos.x, pos.y+0.2, pos.z,
                     45, 1.0, 0.4, 1.0, 0.01
                 )
-                level.sendParticles(NukeWaveParticleOptions(color = 0xD8E7E8, scale = 3.5f),
+                level.sendParticles(
+                    NukeWaveParticleOptions(color = 0xD8E7E8, scale = 3.5f),
                     pos.x, gargantuar.y+0.2, pos.z, 1, 0.0, 0.0, 0.0, 0.0
                 )
             }

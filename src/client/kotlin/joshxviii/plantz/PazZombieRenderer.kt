@@ -3,8 +3,8 @@ package joshxviii.plantz
 import com.mojang.blaze3d.vertex.PoseStack
 import joshxviii.plantz.ai.ZombieState
 import joshxviii.plantz.entity.zombie.*
+import joshxviii.plantz.init.PazConfig
 import joshxviii.plantz.model.zombies.PazZombieModel
-import net.minecraft.client.entity.ClientAvatarState
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.model.geom.ModelLayerLocation
 import net.minecraft.client.model.geom.ModelLayers
@@ -15,7 +15,6 @@ import net.minecraft.client.renderer.entity.ArmorModelSet
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.RenderLayerParent
 import net.minecraft.client.renderer.entity.layers.EyesLayer
-import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.ZombieRenderState
 import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.client.renderer.rendertype.RenderTypes

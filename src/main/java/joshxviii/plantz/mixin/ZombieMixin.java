@@ -1,13 +1,12 @@
 package joshxviii.plantz.mixin;
 
-import joshxviii.plantz.PazBlocks;
-import joshxviii.plantz.PazDamageTypes;
-import joshxviii.plantz.PazEffects;
+import joshxviii.plantz.init.PazBlocks;
+import joshxviii.plantz.init.PazDamageTypes;
+import joshxviii.plantz.init.PazEffects;
 import joshxviii.plantz.entity.zombie.Gargantuar;
 import joshxviii.plantz.entity.zombie.ZombieYeti;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntitySpawnReason;

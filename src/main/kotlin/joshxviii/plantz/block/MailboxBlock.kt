@@ -2,8 +2,8 @@ package joshxviii.plantz.block
 
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import joshxviii.plantz.PazBlocks
-import joshxviii.plantz.PazCriteria
+import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazCriteria
 import joshxviii.plantz.block.entity.MailboxBlockEntity
 import joshxviii.plantz.block.entity.MailboxManager
 import joshxviii.plantz.inventory.MailboxMenu

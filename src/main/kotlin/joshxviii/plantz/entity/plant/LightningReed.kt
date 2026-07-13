@@ -1,18 +1,13 @@
 package joshxviii.plantz.entity.plant
 
-import joshxviii.plantz.ElectricArcParticleOptions
-import joshxviii.plantz.PazDamageTypes
-import joshxviii.plantz.PazEffects
-import joshxviii.plantz.PazEntities
-import joshxviii.plantz.PazServerParticles
-import joshxviii.plantz.ai.goal.BeamAttackGoal
+import joshxviii.plantz.init.ElectricArcParticleOptions
+import joshxviii.plantz.init.PazDamageTypes
+import joshxviii.plantz.init.PazEffects
+import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.init.PazServerParticles
 import joshxviii.plantz.ai.goal.MeleeAttackActionGoal
-import joshxviii.plantz.ai.goal.ProjectileAttackGoal
-import joshxviii.plantz.entity.projectile.PeaElectric
-import joshxviii.plantz.entity.projectile.PeaFire
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.tags.FluidTags
 import net.minecraft.util.RandomSource
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.EntitySpawnReason

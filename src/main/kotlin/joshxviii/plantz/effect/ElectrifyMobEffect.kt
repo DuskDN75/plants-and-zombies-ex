@@ -1,10 +1,10 @@
 package joshxviii.plantz.effect
 
-import joshxviii.plantz.ElectricArcParticleOptions
-import joshxviii.plantz.PazDamageTypes
-import joshxviii.plantz.PazEffects
-import joshxviii.plantz.PazServerParticles
-import joshxviii.plantz.PazTags
+import joshxviii.plantz.init.ElectricArcParticleOptions
+import joshxviii.plantz.init.PazDamageTypes
+import joshxviii.plantz.init.PazEffects
+import joshxviii.plantz.init.PazServerParticles
+import joshxviii.plantz.init.PazTags
 import joshxviii.plantz.hasSameRootOwner
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.server.level.ServerLevel

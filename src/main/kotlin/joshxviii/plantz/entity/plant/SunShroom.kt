@@ -1,6 +1,6 @@
 package joshxviii.plantz.entity.plant
 
-import joshxviii.plantz.PazEntities
+import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.ai.PlantState
 import joshxviii.plantz.ai.goal.GenerateSunGoal
 import net.minecraft.world.entity.EntityType

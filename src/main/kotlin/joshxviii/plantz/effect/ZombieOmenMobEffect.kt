@@ -1,6 +1,6 @@
 package joshxviii.plantz.effect
 
-import joshxviii.plantz.PazBlocks.PLANTZ_FLAG_POI
+import joshxviii.plantz.init.PazBlocks.PLANTZ_FLAG_POI
 import joshxviii.plantz.raid.getZombieRaids
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder

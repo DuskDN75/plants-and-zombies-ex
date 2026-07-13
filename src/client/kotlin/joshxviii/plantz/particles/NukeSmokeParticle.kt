@@ -1,6 +1,6 @@
 package joshxviii.plantz.particles
 
-import joshxviii.plantz.NukeSmokeParticleOptions
+import joshxviii.plantz.init.NukeSmokeParticleOptions
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.particle.Particle
 import net.minecraft.client.particle.ParticleProvider

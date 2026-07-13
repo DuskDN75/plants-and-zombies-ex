@@ -1,7 +1,7 @@
 package joshxviii.plantz.entity.plant
 
-import joshxviii.plantz.PazBlocks
-import joshxviii.plantz.PazEntities
+import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
 import joshxviii.plantz.entity.projectile.WaterSpore
 import net.minecraft.core.BlockPos

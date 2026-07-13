@@ -1,7 +1,7 @@
-package joshxviii.plantz
+package joshxviii.plantz.init
 
 import joshxviii.plantz.advancement.*
-import net.minecraft.advancements.CriterionProgress
+import joshxviii.plantz.pazResource
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 

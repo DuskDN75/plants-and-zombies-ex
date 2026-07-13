@@ -8,6 +8,7 @@ import joshxviii.plantz.entity.plant.Explosive
 import joshxviii.plantz.entity.plant.KernelPult
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.entity.plant.WallNut
+import joshxviii.plantz.init.PazConfig
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.entity.EntityRendererProvider

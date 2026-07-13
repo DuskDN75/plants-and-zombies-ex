@@ -1,7 +1,7 @@
 package joshxviii.plantz.ai.goal
 
-import joshxviii.plantz.PazBlocks.PLANTZ_FLAG
-import joshxviii.plantz.PazEffects
+import joshxviii.plantz.init.PazBlocks.PLANTZ_FLAG
+import joshxviii.plantz.init.PazEffects
 import joshxviii.plantz.lookAtBlockPos
 import joshxviii.plantz.moveToBlockPos
 import joshxviii.plantz.raid.getZombieRaids

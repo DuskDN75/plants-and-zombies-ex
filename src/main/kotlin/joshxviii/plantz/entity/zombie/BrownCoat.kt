@@ -1,7 +1,7 @@
 package joshxviii.plantz.entity.zombie
 
-import joshxviii.plantz.PazBlocks
-import joshxviii.plantz.PazSounds
+import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazSounds
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents

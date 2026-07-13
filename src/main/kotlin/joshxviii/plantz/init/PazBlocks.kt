@@ -1,12 +1,21 @@
-package joshxviii.plantz
+package joshxviii.plantz.init
 
-import joshxviii.plantz.block.*
+import joshxviii.plantz.block.ConeBlock
+import joshxviii.plantz.block.FlagBlock
+import joshxviii.plantz.block.GravestoneBlock
+import joshxviii.plantz.block.MailboxBlock
+import joshxviii.plantz.block.PlantPotBlock
+import joshxviii.plantz.block.SunBatteryBlock
+import joshxviii.plantz.block.TimeMachineBlock
+import joshxviii.plantz.block.WateringCanBlock
+import joshxviii.plantz.block.ZenPlantPotBlock
 import joshxviii.plantz.block.entity.FlagBlockEntity
 import joshxviii.plantz.block.entity.GravestoneBlockEntity
 import joshxviii.plantz.block.entity.MailboxBlockEntity
 import joshxviii.plantz.block.entity.SunBatteryBlockEntity
 import joshxviii.plantz.block.entity.TimeMachineBlockEntity
 import joshxviii.plantz.item.component.BlocksProjectileDamage
+import joshxviii.plantz.pazResource
 import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
 import net.fabricmc.fabric.api.`object`.builder.v1.world.poi.PoiHelper
 import net.minecraft.core.BlockPos
@@ -151,6 +160,9 @@ object PazBlocks {
             .pushReaction(PushReaction.DESTROY),
         ::ConeBlock,
         Item.Properties()
+            .component(DataComponents.MAX_DAMAGE, 54)
+            .component(DataComponents.MAX_STACK_SIZE, 1)
+            .component(DataComponents.DAMAGE, 0)
             .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage(breakChance = 0.12f))
             .component(
                 DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.HEAD)
@@ -164,7 +176,11 @@ object PazBlocks {
                         EquipmentSlotGroup.HEAD
                     ).add(
                         Attributes.KNOCKBACK_RESISTANCE,
-                        AttributeModifier(pazResource("cone_knockback_resistance"), 0.1, AttributeModifier.Operation.ADD_VALUE),
+                        AttributeModifier(
+                            pazResource("cone_knockback_resistance"),
+                            0.1,
+                            AttributeModifier.Operation.ADD_VALUE
+                        ),
                         EquipmentSlotGroup.HEAD
                     ).build()
             )
@@ -186,11 +202,17 @@ object PazBlocks {
                 DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.builder()
                     .add(
                         Attributes.SPAWN_REINFORCEMENTS_CHANCE,
-                        AttributeModifier(pazResource("zombie_leader_flag"), 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+                        AttributeModifier(
+                            pazResource("zombie_leader_flag"),
+                            1.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                        ),
                         EquipmentSlotGroup.HAND
                     ).add(
                         Attributes.FOLLOW_RANGE,
-                        AttributeModifier(pazResource("zombie_leader_flag"), 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+                        AttributeModifier(
+                            pazResource("zombie_leader_flag"),
+                            1.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                        ),
                         EquipmentSlotGroup.HAND
                     ).build()
             )
@@ -211,11 +233,19 @@ object PazBlocks {
                 DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.builder()
                     .add(
                         Attributes.MOVEMENT_SPEED,
-                        AttributeModifier(pazResource("plantz_flag"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+                        AttributeModifier(
+                            pazResource("plantz_flag"),
+                            0.2,
+                            AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                        ),
                         EquipmentSlotGroup.HAND
                     ).add(
                         Attributes.ATTACK_SPEED,
-                        AttributeModifier(pazResource("plantz_flag"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+                        AttributeModifier(
+                            pazResource("plantz_flag"),
+                            0.2,
+                            AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                        ),
                         EquipmentSlotGroup.HAND
                     ).build()
             )

@@ -1,8 +1,7 @@
 package joshxviii.plantz.entity.plant
 
-import joshxviii.plantz.PazEntities
+import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
-import joshxviii.plantz.entity.plant.BonkChoy.Companion.USE_UPPERCUT
 import joshxviii.plantz.entity.projectile.Pea
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers

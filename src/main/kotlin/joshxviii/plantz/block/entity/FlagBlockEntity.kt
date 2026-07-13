@@ -1,7 +1,7 @@
 package joshxviii.plantz.block.entity
 
-import joshxviii.plantz.PazBlocks
-import joshxviii.plantz.PazEffects
+import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazEffects
 import joshxviii.plantz.effect.ZombieOmenMobEffect
 import net.minecraft.core.BlockPos
 import net.minecraft.sounds.SoundSource

@@ -1,18 +1,14 @@
 package joshxviii.plantz.entity.plant
 
-import joshxviii.plantz.PazBlocks
-import joshxviii.plantz.PazEntities
-import joshxviii.plantz.ai.goal.ProjectileAttackGoal
-import joshxviii.plantz.entity.projectile.WaterSpore
+import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazEntities
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.RandomSource
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
-import net.minecraft.world.entity.monster.Creeper
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.level.Level

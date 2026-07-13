@@ -1,15 +1,15 @@
 package joshxviii.plantz.block.entity
 
-import joshxviii.plantz.PazBlocks
-import joshxviii.plantz.PazEntities.ALL_STAR
-import joshxviii.plantz.PazEntities.BROWN_COAT
-import joshxviii.plantz.PazEntities.DIGGER_ZOMBIE
-import joshxviii.plantz.PazEntities.DISCO_ZOMBIE
-import joshxviii.plantz.PazEntities.IMP
-import joshxviii.plantz.PazEntities.NEWSPAPER_ZOMBIE
-import joshxviii.plantz.PazServerParticles
-import joshxviii.plantz.PazSounds
-import joshxviii.plantz.PazTags
+import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazEntities.ALL_STAR
+import joshxviii.plantz.init.PazEntities.BROWN_COAT
+import joshxviii.plantz.init.PazEntities.DIGGER_ZOMBIE
+import joshxviii.plantz.init.PazEntities.DISCO_ZOMBIE
+import joshxviii.plantz.init.PazEntities.IMP
+import joshxviii.plantz.init.PazEntities.NEWSPAPER_ZOMBIE
+import joshxviii.plantz.init.PazServerParticles
+import joshxviii.plantz.init.PazSounds
+import joshxviii.plantz.init.PazTags
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource

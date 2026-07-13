@@ -1,9 +1,9 @@
 package joshxviii.plantz.block.entity
 
 import com.mojang.serialization.Codec
-import joshxviii.plantz.MailboxData
-import joshxviii.plantz.PazBlocks
-import joshxviii.plantz.PazServerParticles
+import joshxviii.plantz.init.MailboxData
+import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazServerParticles
 import joshxviii.plantz.block.MailboxBlock.Companion.FACING
 import joshxviii.plantz.block.MailboxBlock.Companion.STATE
 import joshxviii.plantz.block.MailboxState

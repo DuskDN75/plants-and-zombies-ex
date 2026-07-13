@@ -1,6 +1,10 @@
 package joshxviii.plantz.entity.plant
 
-import joshxviii.plantz.*
+import joshxviii.plantz.init.PazCriteria
+import joshxviii.plantz.init.PazEffects
+import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.init.PazServerParticles
+import joshxviii.plantz.init.PazSounds
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.damagesource.DamageSource

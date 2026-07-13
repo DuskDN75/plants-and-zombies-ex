@@ -1,9 +1,9 @@
 package joshxviii.plantz.entity.gnome
 
-import joshxviii.plantz.PazDataSerializers.GNOME_SOUND_VARIANT
-import joshxviii.plantz.PazDataSerializers.GNOME_VARIANT
-import joshxviii.plantz.PazSounds.GNOME_JUMP
-import joshxviii.plantz.PazTags
+import joshxviii.plantz.init.PazDataSerializers.GNOME_SOUND_VARIANT
+import joshxviii.plantz.init.PazDataSerializers.GNOME_VARIANT
+import joshxviii.plantz.init.PazSounds.GNOME_JUMP
+import joshxviii.plantz.init.PazTags
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
 import joshxviii.plantz.entity.plant.Plant
 import net.minecraft.core.BlockPos

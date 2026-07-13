@@ -1,6 +1,6 @@
 package joshxviii.plantz.networking
 
-import joshxviii.plantz.MailboxData
+import joshxviii.plantz.init.MailboxData
 import joshxviii.plantz.pazResource
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.RegistryFriendlyByteBuf

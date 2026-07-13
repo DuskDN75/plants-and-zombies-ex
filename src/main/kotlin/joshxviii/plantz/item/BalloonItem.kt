@@ -1,6 +1,6 @@
 package joshxviii.plantz.item
 
-import joshxviii.plantz.PazEntities
+import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.entity.Balloon
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction

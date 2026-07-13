@@ -1,16 +1,10 @@
 package joshxviii.plantz.networking
 
-import joshxviii.plantz.MailboxData
 import joshxviii.plantz.pazResource
-import net.minecraft.core.registries.Registries
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload
-import net.minecraft.resources.Identifier
-import net.minecraft.resources.ResourceKey
-import net.minecraft.world.level.Level
-import java.util.stream.Stream
 
 data class ServerConfigResponsePayload(
     val json: String

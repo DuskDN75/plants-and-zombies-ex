@@ -1,7 +1,7 @@
 package joshxviii.plantz.mixin.client;
 
 
-import joshxviii.plantz.PazItems;
+import joshxviii.plantz.init.PazItems;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.world.InteractionHand;

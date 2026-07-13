@@ -1,9 +1,10 @@
-package joshxviii.plantz
+package joshxviii.plantz.init
 
 import joshxviii.plantz.item.component.BlocksProjectileDamage
 import joshxviii.plantz.item.component.StoredSun
 import joshxviii.plantz.item.component.StoredWater
 import joshxviii.plantz.item.component.SunCost
+import joshxviii.plantz.pazResource
 import net.minecraft.core.Registry
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries

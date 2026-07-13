@@ -1,7 +1,7 @@
 package joshxviii.plantz.entity.plant
 
-import joshxviii.plantz.PazEntities
-import joshxviii.plantz.PazSounds
+import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.init.PazSounds
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
 import joshxviii.plantz.entity.projectile.Spore
 import net.minecraft.network.syncher.EntityDataAccessor

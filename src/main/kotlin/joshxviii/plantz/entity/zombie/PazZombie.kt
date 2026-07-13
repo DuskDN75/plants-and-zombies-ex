@@ -1,10 +1,10 @@
 package joshxviii.plantz.entity.zombie
 
-import joshxviii.plantz.PazBlocks
-import joshxviii.plantz.PazDamageTypes
-import joshxviii.plantz.PazDataSerializers.DATA_ZOMBIE_STATE
-import joshxviii.plantz.PazItems
-import joshxviii.plantz.PazTags
+import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazDamageTypes
+import joshxviii.plantz.init.PazDataSerializers.DATA_ZOMBIE_STATE
+import joshxviii.plantz.init.PazItems
+import joshxviii.plantz.init.PazTags
 import joshxviii.plantz.ai.ZombieState
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.BlockParticleOption
@@ -42,6 +42,12 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
     val emergeAnimation : AnimationState = AnimationState()
 
     companion object {
+
+        /**
+         * The default speed of a zombie
+         */
+        const val ZOMBIE_SPEED = 0.15
+
         fun checkPazZombieSpawnRules(
             type: EntityType<out Mob>,
             level: ServerLevelAccessor,

@@ -1,8 +1,8 @@
 package joshxviii.plantz.entity.zombie
 
-import joshxviii.plantz.PazDamageTypes
-import joshxviii.plantz.PazItems
-import joshxviii.plantz.PazSounds
+import joshxviii.plantz.init.PazDamageTypes
+import joshxviii.plantz.init.PazItems
+import joshxviii.plantz.init.PazSounds
 import joshxviii.plantz.pazResource
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleTypes

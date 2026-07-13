@@ -2,6 +2,11 @@ package joshxviii.plantz.item
 
 import joshxviii.plantz.*
 import joshxviii.plantz.entity.plant.Plant
+import joshxviii.plantz.init.PazComponents
+import joshxviii.plantz.init.PazConfig
+import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.init.PazItems
+import joshxviii.plantz.init.PazTags
 import net.minecraft.ChatFormatting
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -21,7 +26,6 @@ import net.minecraft.world.entity.TamableAnimal
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.SpawnEggItem
 import net.minecraft.world.item.component.TypedEntityData
 import net.minecraft.world.item.component.UseCooldown
 import net.minecraft.world.item.context.UseOnContext
@@ -137,10 +141,13 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
         if (entity is Plant) {
             val spawnBlockCollisionShape = level.getBlockState(spawnPos).getCollisionShape(level, spawnPos).let { if (it.isEmpty.not()) it.bounds() else null }
             val entityBox = entity.boundingBox.move(spawnPos.multiply(-1))
-            if (
-                !(entity.canSurviveOn(level.getBlockState(spawnPos.below())) || checkWater)
-                || !(spawnBlockCollisionShape==null || !entityBox.intersects(spawnBlockCollisionShape))
-            ) {
+
+            val invalidSpace = !(entity.canSurviveOn(level.getBlockState(spawnPos.below())) || checkWater)
+                    || !(spawnBlockCollisionShape==null || !entityBox.intersects(spawnBlockCollisionShape))
+
+            val occupiedSpace = Plant.hasAdjacentPlant(level, spawnPos)
+
+            if (invalidSpace || occupiedSpace) {
                 player.sendOverlayMessage(
                     Component.translatable("message.plantz.cannot_survive").withStyle(ChatFormatting.RED)
                 )

@@ -1,25 +1,13 @@
 package joshxviii.plantz.entity.zombie
 
-import joshxviii.plantz.PazItems
-import joshxviii.plantz.PazSounds
-import joshxviii.plantz.PazTags
-import joshxviii.plantz.ai.goal.MineBlocksToTargetGoal
-import joshxviii.plantz.ai.pathfinding.MinerNavigation
-import net.minecraft.core.BlockPos
+import joshxviii.plantz.init.PazItems
+import joshxviii.plantz.init.PazSounds
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
-import net.minecraft.tags.ItemTags
-import net.minecraft.tags.TagKey
-import net.minecraft.util.RandomSource
-import net.minecraft.world.Difficulty
 import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.*
-import net.minecraft.world.entity.ai.navigation.PathNavigation
-import net.minecraft.world.item.Item
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
 

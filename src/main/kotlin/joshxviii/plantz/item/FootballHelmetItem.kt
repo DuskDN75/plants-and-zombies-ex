@@ -1,6 +1,5 @@
 package joshxviii.plantz.item
 
-import joshxviii.plantz.PazSounds
 import joshxviii.plantz.entity.zombie.AllStar.Companion.CHARGE_BOOST_ID
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleTypes

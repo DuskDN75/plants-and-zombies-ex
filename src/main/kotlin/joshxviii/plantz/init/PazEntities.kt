@@ -1,8 +1,5 @@
-package joshxviii.plantz
+package joshxviii.plantz.init
 
-import joshxviii.plantz.PazTags.EntityTypes.ATTACKS_PLANTS
-import joshxviii.plantz.PazTags.EntityTypes.IGNORED_BY_PLANT_ATTACKERS
-import joshxviii.plantz.PazTags.EntityTypes.ZOMBIE_RAIDERS
 import joshxviii.plantz.ai.goal.DestroyFlagGoal
 import joshxviii.plantz.ai.goal.PathfindToFlagGoal
 import joshxviii.plantz.entity.Balloon
@@ -14,13 +11,13 @@ import joshxviii.plantz.entity.projectile.*
 import joshxviii.plantz.entity.turret.Turret
 import joshxviii.plantz.entity.zombie.*
 import joshxviii.plantz.mixin.MobAccessor
+import joshxviii.plantz.pazResource
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
-import net.minecraft.world.damagesource.DamageSources
 import net.minecraft.world.entity.*
 import net.minecraft.world.entity.Mob.createMobAttributes
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
@@ -38,15 +35,15 @@ object PazEntities {
 
             if (entity is Zombie) (entity as MobAccessor).targetSelector.addGoal(4, NearestAttackableTargetGoal(entity, Gnome::class.java, 5, true, false, null))
 
-            if (entity is PathfinderMob && entity.`is`(ZOMBIE_RAIDERS)) {
+            if (entity is PathfinderMob && entity.`is`(PazTags.EntityTypes.ZOMBIE_RAIDERS)) {
                 (entity as MobAccessor).goalSelector.addGoal(2, DestroyFlagGoal(entity))
                 (entity as MobAccessor).goalSelector.addGoal(3, PathfindToFlagGoal(entity))
             }
 
-            if (entity is Mob && entity.`is`(ATTACKS_PLANTS) && entity !is ZombifiedPiglin) {
-                (entity as MobAccessor).targetSelector.addGoal(2, NearestAttackableTargetGoal(entity, WallNut::class.java, 6, true, true) { target, level -> ((target as? WallNut ?: target as? ExplodeONut)?.let { it.distanceToSqr(entity) < 3.5 } ?: false)})
+            if (entity is Mob && entity.`is`(PazTags.EntityTypes.ATTACKS_PLANTS) && entity !is ZombifiedPiglin) {
+                (entity as MobAccessor).targetSelector.addGoal(0, NearestAttackableTargetGoal(entity, WallNut::class.java, 6, true, true) { target, level -> ((target as? WallNut ?: target as? ExplodeONut)?.let { it.distanceToSqr(entity) < 7 } ?: false)})
                 (entity as MobAccessor).targetSelector.addGoal(3, NearestAttackableTargetGoal(entity, Plant::class.java, 5, true, false) { target, level ->
-                    target !is WallNut && !target.`is`(IGNORED_BY_PLANT_ATTACKERS) })
+                    target !is WallNut && !target.`is`(PazTags.EntityTypes.IGNORED_BY_PLANT_ATTACKERS) })
             }
         }
     }
@@ -59,7 +56,7 @@ object PazEntities {
     )
     @JvmField val PEA_SHOOTER: EntityType<PeaShooter> = registerPlant(
         "peashooter",
-        EntityType.Builder.of(::PeaShooter, MobCategory.CREATURE),
+        EntityType.Builder.of(::PeaShooter, MobCategory.CREATURE)
     )
     @JvmField val WALL_NUT: EntityType<WallNut> = registerPlant(
         "wallnut",
@@ -111,31 +108,22 @@ object PazEntities {
     )
     @JvmField val REPEATER: EntityType<Repeater> = registerPlant(
         "repeater",
-        EntityType.Builder.of(::Repeater, MobCategory.CREATURE),
-        attributes = Plant.Companion.PlantAttributes(
-            attackDamage = 1.0,
-        )
+        EntityType.Builder.of(::Repeater, MobCategory.CREATURE)
     )
     @JvmField val ICE_PEA_SHOOTER: EntityType<IcePeaShooter> = registerPlant(
         "ice_peashooter",
-        EntityType.Builder.of(::IcePeaShooter, MobCategory.CREATURE),
-        attributes = Plant.Companion.PlantAttributes(
-            attackDamage = 1.0,
-        )
+        EntityType.Builder.of(::IcePeaShooter, MobCategory.CREATURE)
     )
     @JvmField val FIRE_PEA_SHOOTER: EntityType<FirePeaShooter> = registerPlant(
         "fire_peashooter",
         EntityType.Builder.of(::FirePeaShooter, MobCategory.CREATURE).fireImmune(),
         attributes = Plant.Companion.PlantAttributes(
-            attackDamage = 1.25,
+            attackDamage = Plant.PEA_DAMAGE*2,
         )
     )
     @JvmField val ELECTRIC_PEA_SHOOTER: EntityType<ElectricPeaShooter> = registerPlant(
         "electric_peashooter",
-        EntityType.Builder.of(::ElectricPeaShooter, MobCategory.CREATURE),
-        attributes = Plant.Companion.PlantAttributes(
-            attackDamage = 1.0,
-        )
+        EntityType.Builder.of(::ElectricPeaShooter, MobCategory.CREATURE)
     )
     @JvmField val CACTUS: EntityType<Cactus> = registerPlant(
         "cactus",
@@ -144,7 +132,7 @@ object PazEntities {
         height = 1.25f,
         eyeHeight = 0.85f,
         attributes = Plant.Companion.PlantAttributes(
-            attackDamage = 1.5,
+            maxHealth = Plant.PEA_DAMAGE*1.5,
             followRange = 34.0,
         )
     )
@@ -155,7 +143,7 @@ object PazEntities {
         height = 1.0f,
         eyeHeight = 0.7f,
         attributes = Plant.Companion.PlantAttributes(
-            attackDamage = 1.5,
+            attackDamage = Plant.PEA_DAMAGE,
             attackRange = 7.25,
             followRange = 6.5,
         )
@@ -189,7 +177,7 @@ object PazEntities {
         height = 0.8f,
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 35.0,
-            attackDamage = 3.5,
+            attackDamage = Plant.PEA_DAMAGE*2,
             followRange = 38.0,
         )
     )
@@ -199,7 +187,7 @@ object PazEntities {
         height = 0.8f,
         eyeHeight = 0.5f,
         attributes = Plant.Companion.PlantAttributes(
-            attackDamage = 4.0,
+            attackDamage = Plant.PEA_DAMAGE*2,
             attackKnockback = 0.45,
             attackRange = 2.5,
             followRange = 4.0,
@@ -224,7 +212,7 @@ object PazEntities {
         eyeHeight = 0.3f,
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 12.0,
-            attackDamage = 0.5,
+            attackDamage = 1.0,
             followRange = 10.0,
         )
     )
@@ -302,6 +290,7 @@ object PazEntities {
             .clientTrackingRange(8),
         attributes = Zombie.createAttributes()
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 10.0)
+            .add(Attributes.MAX_HEALTH, 16.0)
     )
     @JvmField val NEWSPAPER_ZOMBIE: EntityType<NewspaperZombie> =  registerZombie(
         "newspaper_zombie",
@@ -310,7 +299,6 @@ object PazEntities {
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
         attributes = Zombie.createAttributes()
-            .add(Attributes.MOVEMENT_SPEED, 0.22)
             .add(Attributes.MAX_HEALTH, 25.0)
     )
     @JvmField val DIGGER_ZOMBIE: EntityType<DiggerZombie> =  registerZombie(
@@ -322,7 +310,6 @@ object PazEntities {
         attributes = Zombie.createAttributes()
             .add(Attributes.ATTACK_DAMAGE, 2.0)
             .add(Attributes.MAX_HEALTH, 35.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.225)
             .add(Attributes.FOLLOW_RANGE, 26.0)
     )
     @JvmField val ENGINEER_ZOMBIE: EntityType<EngineerZombie> =  registerZombie(
@@ -343,7 +330,6 @@ object PazEntities {
         attributes = Zombie.createAttributes()
             .add(Attributes.ATTACK_DAMAGE, 13.0)
             .add(Attributes.MAX_HEALTH, 120.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.27)
             .add(Attributes.KNOCKBACK_RESISTANCE, 0.5)
             .add(Attributes.SCALE, 1.25)
             .add(Attributes.STEP_HEIGHT, 1.0)
@@ -359,7 +345,6 @@ object PazEntities {
         attributes = Zombie.createAttributes()
             .add(Attributes.ATTACK_DAMAGE, 7.0)
             .add(Attributes.MAX_HEALTH, 60.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.235)
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.1)
     )
     @JvmField val BACKUP_DANCER: EntityType<BackupDancer> =  registerZombie(
@@ -371,7 +356,6 @@ object PazEntities {
         attributes = Zombie.createAttributes()
             .add(Attributes.ATTACK_DAMAGE, 3.5)
             .add(Attributes.MAX_HEALTH, 20.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.3)
             .add(Attributes.FOLLOW_RANGE, 24.0)
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0)
     )
@@ -383,9 +367,8 @@ object PazEntities {
             .clientTrackingRange(8),
         attributes = Zombie.createAttributes()
             .add(Attributes.ATTACK_DAMAGE, 8.0)
-            .add(Attributes.MAX_HEALTH, 75.0)
+            .add(Attributes.MAX_HEALTH, 20.0)
             .add(Attributes.STEP_HEIGHT, 1.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.23)
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 1.5)
     )
     @JvmField val SOLDIER_ZOMBIE: EntityType<SoldierZombie> = registerZombie(
@@ -397,7 +380,6 @@ object PazEntities {
         attributes = Zombie.createAttributes()
             .add(Attributes.ATTACK_DAMAGE, 4.0)
             .add(Attributes.MAX_HEALTH, 40.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.237)
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 2.0)
     )
     @JvmField val ROBO_ZOMBIE: EntityType<RoboZombie> =  registerZombie(
@@ -410,7 +392,6 @@ object PazEntities {
             .add(Attributes.ATTACK_DAMAGE, 8.0)
             .add(Attributes.MAX_HEALTH, 100.0)
             .add(Attributes.STEP_HEIGHT, 1.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.23)
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 1.5)
     )
     @JvmField val SUPER_BRAINZ: EntityType<SuperBrainz> =  registerZombie(
@@ -423,7 +404,6 @@ object PazEntities {
             .add(Attributes.ATTACK_DAMAGE, 8.0)
             .add(Attributes.MAX_HEALTH, 100.0)
             .add(Attributes.STEP_HEIGHT, 1.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.23)
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 1.5)
     )
     @JvmField val IMP: EntityType<Imp> =  registerZombie(
@@ -436,7 +416,7 @@ object PazEntities {
         attributes = Zombie.createAttributes()
             .add(Attributes.ATTACK_DAMAGE, 1.5)
             .add(Attributes.MAX_HEALTH, 15.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.3)
+            .add(Attributes.MOVEMENT_SPEED, 0.2)
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.3)
     )
     @JvmField val GARGANTUAR: EntityType<Gargantuar> =  registerZombie(
@@ -448,7 +428,7 @@ object PazEntities {
         attributes = Zombie.createAttributes()
             .add(Attributes.ATTACK_DAMAGE, 8.0)
             .add(Attributes.MAX_HEALTH, 500.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.21)
+            .add(Attributes.MOVEMENT_SPEED, 0.12)
             .add(Attributes.KNOCKBACK_RESISTANCE, 1.4)
             .add(Attributes.EXPLOSION_KNOCKBACK_RESISTANCE, 0.7)
             .add(Attributes.SCALE, 1.33)

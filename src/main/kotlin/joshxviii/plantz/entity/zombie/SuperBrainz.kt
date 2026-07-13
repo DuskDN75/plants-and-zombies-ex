@@ -1,6 +1,6 @@
 package joshxviii.plantz.entity.zombie
 
-import joshxviii.plantz.PazDataSerializers.SUPER_BRAINZ_VARIANT
+import joshxviii.plantz.init.PazDataSerializers.SUPER_BRAINZ_VARIANT
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel

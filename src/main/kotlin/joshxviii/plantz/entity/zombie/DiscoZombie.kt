@@ -1,8 +1,8 @@
 package joshxviii.plantz.entity.zombie
 
-import joshxviii.plantz.PazEffects
-import joshxviii.plantz.PazEntities
-import joshxviii.plantz.PazSounds
+import joshxviii.plantz.init.PazEffects
+import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.init.PazSounds
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.Vec3i

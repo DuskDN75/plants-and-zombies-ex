@@ -1,7 +1,8 @@
-package joshxviii.plantz
+package joshxviii.plantz.init
 
 import com.mojang.datafixers.util.Pair
-import joshxviii.plantz.PazWorldGen.GRAVEYARD
+import joshxviii.plantz.PazMain
+import joshxviii.plantz.pazResource
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
@@ -27,7 +28,7 @@ object PazWorldGen: TerraBlenderApi {
     @JvmField val GRAVEYARD = registerBiome("graveyard")
 
     private fun registerBiome(name: String) : ResourceKey<Biome> {
-        return ResourceKey.create(Registries.BIOME, pazResource(name) )
+        return ResourceKey.create(Registries.BIOME, pazResource(name))
     }
 }
 
@@ -49,7 +50,7 @@ class OverworldRegion(
             .erosion(Erosion.EROSION_0, Erosion.EROSION_1)
             .depth(Depth.SURFACE, Depth.FLOOR)
             .weirdness(Weirdness.HIGH_SLICE_NORMAL_ASCENDING, Weirdness.MID_SLICE_NORMAL_DESCENDING)
-            .build().forEach(Consumer { point: ParameterPoint? -> builder.add(point, GRAVEYARD) })
+            .build().forEach(Consumer { point: ParameterPoint? -> builder.add(point, PazWorldGen.GRAVEYARD) })
 
         builder.build().forEach(mapper)
     }
@@ -85,7 +86,7 @@ object SurfaceRuleData {
 
         return SurfaceRules.sequence(
             SurfaceRules.ifTrue(
-                SurfaceRules.isBiome(GRAVEYARD),
+                SurfaceRules.isBiome(PazWorldGen.GRAVEYARD),
                 SurfaceRules.sequence(
                     myceliumSurface,
                     undergroundStone

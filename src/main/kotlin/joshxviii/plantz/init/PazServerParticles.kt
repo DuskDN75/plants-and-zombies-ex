@@ -1,10 +1,10 @@
-package joshxviii.plantz
+package joshxviii.plantz.init
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import joshxviii.plantz.pazResource
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes
-import net.fabricmc.loader.impl.lib.sat4j.core.Vec
 import net.minecraft.core.Registry
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleType
@@ -17,7 +17,6 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.ARGB
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.phys.Vec3
-import org.joml.Vector3d
 import org.joml.Vector3f
 import java.util.function.Function
 

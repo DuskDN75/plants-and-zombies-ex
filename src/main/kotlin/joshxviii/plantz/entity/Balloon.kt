@@ -1,19 +1,11 @@
 package joshxviii.plantz.entity
 
 import LeashableEntity
-import joshxviii.plantz.PazDataSerializers.DATA_DYE_COLOR
-import joshxviii.plantz.PazEntities
-import joshxviii.plantz.PazServerParticles
-import joshxviii.plantz.applyImpulse
-import joshxviii.plantz.entity.zombie.AllStar.Companion.CHARGE_BOOST_ID
-import joshxviii.plantz.pazResource
-import net.minecraft.core.BlockPos
-import net.minecraft.core.particles.ParticleTypes
+import joshxviii.plantz.init.PazDataSerializers.DATA_DYE_COLOR
+import joshxviii.plantz.init.PazServerParticles
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.SynchedEntityData
-import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.util.Mth
 import net.minecraft.world.damagesource.DamageSource
@@ -23,7 +15,6 @@ import net.minecraft.world.entity.InterpolationHandler
 import net.minecraft.world.entity.Leashable.LeashData
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.MoverType
-import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor

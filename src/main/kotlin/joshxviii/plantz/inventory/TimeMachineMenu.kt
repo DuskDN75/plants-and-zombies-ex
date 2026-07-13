@@ -1,6 +1,6 @@
 package joshxviii.plantz.inventory
 
-import joshxviii.plantz.PazMenus
+import joshxviii.plantz.init.PazMenus
 import net.minecraft.core.BlockPos
 import net.minecraft.world.Container
 import net.minecraft.world.SimpleContainer
@@ -9,7 +9,6 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
-import java.util.*
 
 class TimeMachineMenu(
     containerId: Int,

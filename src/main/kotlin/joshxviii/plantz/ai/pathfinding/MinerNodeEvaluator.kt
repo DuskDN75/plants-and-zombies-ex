@@ -1,6 +1,6 @@
 package joshxviii.plantz.ai.pathfinding
 
-import joshxviii.plantz.PazTags
+import joshxviii.plantz.init.PazTags
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.Mob
 import net.minecraft.world.level.pathfinder.Node

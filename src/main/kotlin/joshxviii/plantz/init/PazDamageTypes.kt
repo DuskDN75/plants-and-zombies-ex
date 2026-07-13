@@ -1,5 +1,6 @@
-package joshxviii.plantz
+package joshxviii.plantz.init
 
+import joshxviii.plantz.pazResource
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.damagesource.DamageType
@@ -34,7 +35,7 @@ object PazDamageTypes {
     private fun registerDamageType(
         name: String
     ) : ResourceKey<DamageType> {
-        return ResourceKey.create(Registries.DAMAGE_TYPE, pazResource(name) )
+        return ResourceKey.create(Registries.DAMAGE_TYPE, pazResource(name))
     }
 
     fun initialize() {}

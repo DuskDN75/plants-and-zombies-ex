@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import joshxviii.plantz.block.FlagBlock
 import joshxviii.plantz.block.entity.FlagBlockEntity
+import joshxviii.plantz.init.PazBlocks
 import joshxviii.plantz.model.FlagBlockModel
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer

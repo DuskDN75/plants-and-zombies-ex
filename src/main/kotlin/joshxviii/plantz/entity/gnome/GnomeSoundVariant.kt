@@ -2,7 +2,7 @@ package joshxviii.plantz.entity.gnome
 
 import com.mojang.serialization.Codec
 import io.netty.buffer.ByteBuf
-import joshxviii.plantz.PazSounds
+import joshxviii.plantz.init.PazSounds
 import net.minecraft.core.Holder
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec

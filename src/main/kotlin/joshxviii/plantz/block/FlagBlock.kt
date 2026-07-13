@@ -1,7 +1,7 @@
 package joshxviii.plantz.block
 
 import com.mojang.serialization.MapCodec
-import joshxviii.plantz.PazBlocks
+import joshxviii.plantz.init.PazBlocks
 import joshxviii.plantz.block.entity.FlagBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction

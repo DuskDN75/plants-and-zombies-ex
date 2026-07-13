@@ -1,7 +1,7 @@
 package joshxviii.plantz.entity.projectile
 
-import joshxviii.plantz.PazDamageTypes
-import joshxviii.plantz.PazEntities
+import joshxviii.plantz.init.PazDamageTypes
+import joshxviii.plantz.init.PazEntities
 import net.minecraft.core.particles.ItemParticleOption
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.world.entity.LivingEntity

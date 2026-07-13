@@ -1,6 +1,6 @@
 package joshxviii.plantz.entity.projectile
 
-import joshxviii.plantz.PazSounds
+import joshxviii.plantz.init.PazSounds
 import net.minecraft.core.particles.ExplosionParticleInfo
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel

@@ -29,7 +29,7 @@
 		],
 		"terrablender": [
 			{
-				"value": "joshxviii.plantz.PazWorldGen",
+				"value": "joshxviii.plantz.init.PazWorldGen",
 				"adapter": "kotlin"
 			}
 		]

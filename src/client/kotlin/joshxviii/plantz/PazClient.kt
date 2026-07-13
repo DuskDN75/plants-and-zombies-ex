@@ -1,6 +1,6 @@
 package joshxviii.plantz
 
-import joshxviii.plantz.block.entity.MailboxManager
+import joshxviii.plantz.init.PazConfig
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLevelEvents
 

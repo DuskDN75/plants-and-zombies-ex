@@ -8,6 +8,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import joshxviii.plantz.*
 import joshxviii.plantz.advancement.ZombieRaidContext
 import joshxviii.plantz.block.entity.FlagBlockEntity
+import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazCriteria
+import joshxviii.plantz.init.PazEffects
+import joshxviii.plantz.init.PazEntities
 import net.minecraft.SharedConstants
 import net.minecraft.core.BlockPos
 import net.minecraft.core.BlockPos.MutableBlockPos

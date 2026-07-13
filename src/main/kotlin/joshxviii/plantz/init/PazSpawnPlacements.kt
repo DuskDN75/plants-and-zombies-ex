@@ -1,4 +1,4 @@
-package joshxviii.plantz
+package joshxviii.plantz.init
 
 import joshxviii.plantz.entity.plant.*
 import joshxviii.plantz.entity.zombie.DiggerZombie

@@ -1,5 +1,7 @@
 package joshxviii.plantz
 
+import joshxviii.plantz.init.PazConfig
+import joshxviii.plantz.init.ServerConfig
 import joshxviii.plantz.inventory.MailboxMenu
 import joshxviii.plantz.networking.MailboxListResponsePayload
 import joshxviii.plantz.networking.SendMailResponsePayload

@@ -1,16 +1,15 @@
-package joshxviii.plantz
+package joshxviii.plantz.init
 
-import io.netty.buffer.ByteBuf
 import joshxviii.plantz.ai.PlantState
 import joshxviii.plantz.ai.ZombieState
 import joshxviii.plantz.entity.gnome.GnomeSoundVariant
 import joshxviii.plantz.entity.gnome.GnomeVariant
 import joshxviii.plantz.entity.zombie.SuperBrainzVariant
+import joshxviii.plantz.pazResource
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityDataRegistry
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.syncher.EntityDataSerializer
 import net.minecraft.world.item.DyeColor
-import org.apache.logging.log4j.core.util.Integers
 
 object PazDataSerializers {
     @JvmField val DATA_PAINT_COLORS = EntityDataSerializer.forValueType<Map<Int, Int>>(ByteBufCodecs.map(::HashMap, ByteBufCodecs.INT, ByteBufCodecs.INT))

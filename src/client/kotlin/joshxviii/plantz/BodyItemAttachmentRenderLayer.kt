@@ -3,6 +3,7 @@ package joshxviii.plantz
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import joshxviii.plantz.PazModels.PAINT_COLORS_KEY
+import joshxviii.plantz.init.PazItems
 import joshxviii.plantz.model.zombies.PazZombieModel
 import net.minecraft.client.Minecraft
 import net.minecraft.client.model.EntityModel

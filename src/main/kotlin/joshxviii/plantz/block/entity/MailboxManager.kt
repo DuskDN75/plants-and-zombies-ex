@@ -1,6 +1,6 @@
 package joshxviii.plantz.block.entity
 
-import joshxviii.plantz.MailboxData
+import joshxviii.plantz.init.MailboxData
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.level.Level

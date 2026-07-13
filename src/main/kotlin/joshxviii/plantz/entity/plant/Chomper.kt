@@ -1,8 +1,12 @@
 package joshxviii.plantz.entity.plant
 
 import joshxviii.plantz.*
-import joshxviii.plantz.PazTags.EntityTypes.CANNOT_CHOMP
+import joshxviii.plantz.init.PazTags.EntityTypes.CANNOT_CHOMP
 import joshxviii.plantz.ai.goal.MeleeAttackActionGoal
+import joshxviii.plantz.init.PazDamageTypes
+import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.init.PazServerParticles
+import joshxviii.plantz.init.PazSounds
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData

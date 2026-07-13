@@ -1,18 +1,17 @@
 package joshxviii.plantz.mixin;
 
 import com.mojang.serialization.Codec;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
 import joshxviii.plantz.*;
 import joshxviii.plantz.effect.PaintedMobEffect;
 import joshxviii.plantz.entity.plant.Plant;
-import kotlin.Pair;
+import joshxviii.plantz.init.PazEffects;
+import joshxviii.plantz.init.PazItems;
+import joshxviii.plantz.init.PazTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
@@ -44,11 +43,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import static joshxviii.plantz.PazDataSerializers.DATA_PAINT_COLORS;
-import static joshxviii.plantz.PazItems.DUCKY_TUBE_DAMAGE_INTERVAL;
+import static joshxviii.plantz.init.PazDataSerializers.DATA_PAINT_COLORS;
+import static joshxviii.plantz.init.PazItems.DUCKY_TUBE_DAMAGE_INTERVAL;
 
 @Mixin(LivingEntity.class)
 abstract public class LivingEntityMixin implements PlantHeadAttachment {

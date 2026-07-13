@@ -1,7 +1,5 @@
 package joshxviii.plantz.mixin.client;
 
-import com.google.common.hash.HashCode;
-import joshxviii.plantz.PazEffects;
 import joshxviii.plantz.PazModels;
 import joshxviii.plantz.effect.PaintedMobEffect;
 import net.minecraft.client.DeltaTracker;

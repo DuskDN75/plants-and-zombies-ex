@@ -1,8 +1,8 @@
 package joshxviii.plantz.entity
 
-import joshxviii.plantz.PazBlocks
-import joshxviii.plantz.PazCriteria
-import joshxviii.plantz.PazItems
+import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazCriteria
+import joshxviii.plantz.init.PazItems
 import joshxviii.plantz.block.PlantPotBlock
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.item.SeedPacketItem

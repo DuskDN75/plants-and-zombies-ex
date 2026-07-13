@@ -1,6 +1,7 @@
-package joshxviii.plantz
+package joshxviii.plantz.init
 
 import com.google.gson.GsonBuilder
+import joshxviii.plantz.PazMain
 import net.fabricmc.api.EnvType
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.registries.BuiltInRegistries

@@ -1,9 +1,9 @@
 package joshxviii.plantz.entity.plant
 
-import joshxviii.plantz.PazConfig
-import joshxviii.plantz.PazDamageTypes
-import joshxviii.plantz.PazDataSerializers.DATA_SWELL_DIR
-import joshxviii.plantz.PazSounds
+import joshxviii.plantz.init.PazConfig
+import joshxviii.plantz.init.PazDamageTypes
+import joshxviii.plantz.init.PazDataSerializers.DATA_SWELL_DIR
+import joshxviii.plantz.init.PazSounds
 import net.minecraft.ChatFormatting
 import net.minecraft.core.Holder
 import net.minecraft.core.particles.ParticleTypes

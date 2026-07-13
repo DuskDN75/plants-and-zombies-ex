@@ -1,20 +1,26 @@
 package joshxviii.plantz.entity.plant
 
 import joshxviii.plantz.*
-import joshxviii.plantz.PazDamageTypes
-import joshxviii.plantz.PazDataSerializers.DATA_COFFEE_BUFF
-import joshxviii.plantz.PazDataSerializers.DATA_COOLDOWN
-import joshxviii.plantz.PazDataSerializers.DATA_PLANT_STATE
-import joshxviii.plantz.PazDataSerializers.DATA_POWERED_UP
-import joshxviii.plantz.PazDataSerializers.DATA_RECEIVED_SUN
-import joshxviii.plantz.PazDataSerializers.DATA_RECEIVED_WATER
-import joshxviii.plantz.PazDataSerializers.DATA_SEED_GROW_COOLDOWN
-import joshxviii.plantz.PazDataSerializers.DATA_SLEEPING
-import joshxviii.plantz.PazSounds
-import joshxviii.plantz.PazTags.BlockTags.PLANTABLE
+import joshxviii.plantz.init.PazDamageTypes
+import joshxviii.plantz.init.PazDataSerializers.DATA_COFFEE_BUFF
+import joshxviii.plantz.init.PazDataSerializers.DATA_COOLDOWN
+import joshxviii.plantz.init.PazDataSerializers.DATA_PLANT_STATE
+import joshxviii.plantz.init.PazDataSerializers.DATA_POWERED_UP
+import joshxviii.plantz.init.PazDataSerializers.DATA_RECEIVED_SUN
+import joshxviii.plantz.init.PazDataSerializers.DATA_RECEIVED_WATER
+import joshxviii.plantz.init.PazDataSerializers.DATA_SEED_GROW_COOLDOWN
+import joshxviii.plantz.init.PazDataSerializers.DATA_SLEEPING
+import joshxviii.plantz.init.PazSounds
+import joshxviii.plantz.init.PazTags.BlockTags.PLANTABLE
 import joshxviii.plantz.ai.PlantState
 import joshxviii.plantz.ai.goal.SleepGoal
 import joshxviii.plantz.entity.Sun
+import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazConfig
+import joshxviii.plantz.init.PazCriteria
+import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.init.PazServerParticles
+import joshxviii.plantz.init.PazTags
 import joshxviii.plantz.item.SeedPacketItem
 import joshxviii.plantz.pazResource
 import net.minecraft.ChatFormatting
@@ -83,6 +89,25 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         val LOGGER: Logger = LoggerFactory.getLogger(Plant::class.java)
 
         /**
+         * The default damage of a single pea
+         */
+        const val PEA_DAMAGE = 2.5
+
+        /**
+         * Checks for nearby plants in a 3x3 radius, and excludes itself.
+         */
+        fun hasAdjacentPlant(level: Level, pos: BlockPos) : Boolean {
+
+            val searchBox = AABB(pos).inflate(1.0)
+
+            val plants = level.getEntitiesOfClass(Plant::class.java, searchBox) { plant ->
+                plant.blockPosition() != pos && plant.isAlive
+            }
+
+            return plants.isNotEmpty()
+        }
+
+        /**
          * Default plant spawn rules
          */
         fun checkPlantSpawnRules(
@@ -93,7 +118,8 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
             random: RandomSource
         ): Boolean {
             val blockBelow = level.getBlockState(pos.below())
-            val isValid = checkValidSpawn(level, pos, spawnReason) && blockBelow.`is`(PLANTABLE) && pos.y > level.seaLevel - 8
+            val isValid = checkValidSpawn(level, pos, spawnReason) && blockBelow.`is`(PLANTABLE) && pos.y > level.seaLevel - 8 && !hasAdjacentPlant(
+                level as Level, pos)
             return isValid
         }
 
@@ -103,11 +129,15 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
          */
         fun checkValidSpawn(level: LevelAccessor, pos: BlockPos, spawnReason: EntitySpawnReason): Boolean {
             val blockAtPos = level.getBlockState(pos)
+
+            if (EntitySpawnReason.isSpawner(spawnReason)) return true
+
             return (level.getEntitiesOfClass(Plant::class.java, AABB(pos).inflate(38.0)) { it.tickCount > 0 }.isEmpty()
-                    && blockAtPos.getCollisionShape(level, pos.above()).isEmpty) || EntitySpawnReason.isSpawner(spawnReason)
+                    && blockAtPos.getCollisionShape(level, pos.above()).isEmpty) && !hasAdjacentPlant(
+                level as Level, pos)
         }
 
-        private const val NUTRIENT_SUPPLY_MAX = 160  // ticks before suffocating when on invalid ground
+        private const val NUTRIENT_SUPPLY_MAX = 50  // ticks before suffocating when on invalid ground
         private const val FLAG_POWER_RANGE = 3
 
         val PLANT_STATE: EntityDataAccessor<PlantState> = SynchedEntityData.defineId<PlantState>(Plant::class.java, DATA_PLANT_STATE)
@@ -124,7 +154,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
 
         data class PlantAttributes(
             val maxHealth: Double = 20.0,
-            val attackDamage: Double = 1.0,
+            val attackDamage: Double = PEA_DAMAGE,
             val attackKnockback: Double = 0.001,
             val attackRange: Double = 2.5,
             val movementSpeed: Double = 0.0,
@@ -575,7 +605,8 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
 
     // if on invalid ground plant should start to suffocate
     private fun onValidGround() : Boolean {
-        return (attachedEntity != null) || canSurviveOn(getBlockBelow()) || vehicle?.`is`(PazEntities.PLANT_POT_MINECART) == true
+        return (attachedEntity != null) || (canSurviveOn(getBlockBelow()) && !hasAdjacentPlant(level(), blockPosition())) || vehicle?.`is`(
+            PazEntities.PLANT_POT_MINECART) == true
     }
 
     fun sunIsVisible() : Boolean {
@@ -585,6 +616,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     open fun sleepsDuringNight(): Boolean = false
     open fun sleepsDuringDay(): Boolean = this.`is`(PazTags.EntityTypes.MUSHROOM)
     open fun canSurviveOn(block: BlockState) : Boolean = block.`is`(PLANTABLE)
+
     open fun cooldownFinished() {}
 
     private fun updatePlantPower(level: ServerLevel) {

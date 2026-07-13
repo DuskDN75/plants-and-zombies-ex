@@ -1,9 +1,9 @@
 package joshxviii.plantz.entity.projectile
 
-import joshxviii.plantz.PazDamageTypes
-import joshxviii.plantz.PazEffects
-import joshxviii.plantz.PazEntities
-import joshxviii.plantz.PazServerParticles
+import joshxviii.plantz.init.PazDamageTypes
+import joshxviii.plantz.init.PazEffects
+import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.init.PazServerParticles
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.world.effect.MobEffectInstance

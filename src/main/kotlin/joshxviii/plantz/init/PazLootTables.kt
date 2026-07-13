@@ -1,5 +1,7 @@
-package joshxviii.plantz
+package joshxviii.plantz.init
 
+import joshxviii.plantz.PazMain
+import joshxviii.plantz.pazResource
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.Identifier
@@ -19,13 +21,13 @@ object PazLootTables {
     private fun registerLootTable(
         name: String
     ) : ResourceKey<LootTable> {
-        return ResourceKey.create(Registries.LOOT_TABLE, pazResource(name) )
+        return ResourceKey.create(Registries.LOOT_TABLE, pazResource(name))
     }
 
     private fun registerVillagerTrade(
         name: String
     ) : ResourceKey<VillagerTrade> {
-        return ResourceKey.create(Registries.VILLAGER_TRADE, pazResource(name) )
+        return ResourceKey.create(Registries.VILLAGER_TRADE, pazResource(name))
     }
 
     fun initialize() {

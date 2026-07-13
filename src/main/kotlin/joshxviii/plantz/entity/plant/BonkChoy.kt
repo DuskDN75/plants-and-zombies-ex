@@ -1,8 +1,8 @@
 package joshxviii.plantz.entity.plant
 
 import joshxviii.plantz.*
-import joshxviii.plantz.ai.PlantState
 import joshxviii.plantz.ai.goal.MeleeAttackActionGoal
+import joshxviii.plantz.init.PazEntities
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData

@@ -1,11 +1,9 @@
 package joshxviii.plantz
 
-import joshxviii.plantz.PaintLayer.Companion.PAINT_TEXTURE_1
-import joshxviii.plantz.PaintLayer.Companion.PAINT_TEXTURE_2
-import joshxviii.plantz.PaintLayer.Companion.PAINT_TEXTURE_3
-import joshxviii.plantz.PaintLayer.Companion.PAINT_TEXTURE_4
 import joshxviii.plantz.block.entity.FlagBlockEntity
 import joshxviii.plantz.block.entity.SunBatteryBlockEntity
+import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.model.BalloonModel
 import joshxviii.plantz.model.FlagBlockModel
 import joshxviii.plantz.model.GnomeArmorModel

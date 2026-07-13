@@ -1,8 +1,8 @@
 package joshxviii.plantz.item
 
-import joshxviii.plantz.PazBlocks
-import joshxviii.plantz.PazComponents
-import joshxviii.plantz.PazSounds
+import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazComponents
+import joshxviii.plantz.init.PazSounds
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.particles.ParticleTypes

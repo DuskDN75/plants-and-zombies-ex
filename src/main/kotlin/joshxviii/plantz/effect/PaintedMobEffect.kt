@@ -1,13 +1,8 @@
 package joshxviii.plantz.effect
 
-import io.netty.buffer.ByteBuf
-import joshxviii.plantz.PazEffects.PAINTED
-import joshxviii.plantz.PazServerParticles
+import joshxviii.plantz.init.PazEffects.PAINTED
+import joshxviii.plantz.init.PazServerParticles
 import net.minecraft.core.particles.ParticleOptions
-import net.minecraft.network.codec.ByteBufCodecs
-import net.minecraft.network.syncher.EntityDataAccessor
-import net.minecraft.network.syncher.EntityDataSerializers
-import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.RandomSource
@@ -16,7 +11,6 @@ import net.minecraft.world.effect.MobEffectCategory
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.DyeColor
-import org.spongepowered.asm.mixin.Unique
 
 class PaintedMobEffect(
     category: MobEffectCategory,

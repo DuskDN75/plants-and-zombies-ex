@@ -1,4 +1,4 @@
-package joshxviii.plantz
+package joshxviii.plantz.init
 
 import joshxviii.plantz.effect.ButteredMobEffect
 import joshxviii.plantz.effect.ElectrifyMobEffect
@@ -6,6 +6,7 @@ import joshxviii.plantz.effect.HypnotizedMobEffect
 import joshxviii.plantz.effect.PaintedMobEffect
 import joshxviii.plantz.effect.ToxicMobEffect
 import joshxviii.plantz.effect.ZombieOmenMobEffect
+import joshxviii.plantz.pazResource
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 import net.fabricmc.fabric.impl.attachment.AttachmentRegistryImpl
 import net.minecraft.core.Holder
@@ -14,13 +15,11 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectCategory
 import net.minecraft.world.effect.MobEffectInstance
-import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.alchemy.Potion
-import org.jetbrains.annotations.Nullable
 
 object PazEffects {
 
@@ -43,8 +42,10 @@ object PazEffects {
             .addAttributeModifier(Attributes.MOVEMENT_SPEED, pazResource("effect.buttered"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
             .addAttributeModifier(Attributes.JUMP_STRENGTH, pazResource("effect.buttered"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
             .addAttributeModifier(Attributes.ATTACK_DAMAGE, pazResource("effect.buttered"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
-            .addAttributeModifier(Attributes.ENTITY_INTERACTION_RANGE, pazResource("effect.buttered"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
-            .addAttributeModifier(Attributes.BLOCK_INTERACTION_RANGE, pazResource("effect.buttered"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.ENTITY_INTERACTION_RANGE,
+                pazResource("effect.buttered"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.BLOCK_INTERACTION_RANGE,
+                pazResource("effect.buttered"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
     )
 
     fun register(name: String, mobEffect: MobEffect): Holder<MobEffect> {

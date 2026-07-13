@@ -1,7 +1,8 @@
-package joshxviii.plantz
+package joshxviii.plantz.init
 
 import joshxviii.plantz.inventory.MailboxMenu
 import joshxviii.plantz.inventory.TimeMachineMenu
+import joshxviii.plantz.pazResource
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuType
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry

@@ -1,6 +1,6 @@
 package joshxviii.plantz.ai.goal
 
-import joshxviii.plantz.PazSounds
+import joshxviii.plantz.init.PazSounds
 import joshxviii.plantz.applyImpulse
 import joshxviii.plantz.entity.plant.Plant
 import net.minecraft.server.level.ServerLevel
@@ -29,7 +29,7 @@ class ProjectileAttackGoal(
     actionPredicate: Predicate<PathfinderMob> = Predicate { true },
     val projectileFactory: () -> Entity,
     val velocity : Double = 0.9,
-    val inaccuracy: Float = 0.8f,
+    val inaccuracy: Float = 0.0f,
     val attackRadius: Float = usingEntity.attributes.getValue(Attributes.FOLLOW_RANGE).toFloat(),
     val useHighArc: Boolean = false,
     val soundEvent: SoundEvent? = PazSounds.PROJECTILE_FIRE,
@@ -128,7 +128,7 @@ class ProjectileAttackGoal(
             target.z - projectile.z
         )
 
-        val targetVel = target.knownSpeed
+        val targetVel = Vec3(target.deltaMovement.x, 0.0, target.deltaMovement.z)
         if (targetVel.lengthSqr() <= 0.000001) return basePos
 
         val g = projectile.gravity

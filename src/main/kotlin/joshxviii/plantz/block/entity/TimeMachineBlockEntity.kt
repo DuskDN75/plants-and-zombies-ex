@@ -1,7 +1,7 @@
 package joshxviii.plantz.block.entity
 
-import joshxviii.plantz.PazBlocks
-import joshxviii.plantz.TimeMachineData
+import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.TimeMachineData
 import joshxviii.plantz.inventory.TimeMachineMenu
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider
 import net.minecraft.core.BlockPos

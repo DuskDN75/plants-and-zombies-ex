@@ -1,4 +1,4 @@
-package joshxviii.plantz
+package joshxviii.plantz.init
 
 import joshxviii.plantz.networking.MailboxListResponsePayload
 import joshxviii.plantz.networking.SendMailRequestPayload

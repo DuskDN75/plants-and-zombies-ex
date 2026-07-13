@@ -1,8 +1,8 @@
 package joshxviii.plantz.entity.projectile
 
-import joshxviii.plantz.PazDamageTypes
-import joshxviii.plantz.PazEntities
-import joshxviii.plantz.PazServerParticles
+import joshxviii.plantz.init.PazDamageTypes
+import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.init.PazServerParticles
 import net.minecraft.tags.EntityTypeTags
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects

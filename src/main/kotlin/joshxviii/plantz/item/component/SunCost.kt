@@ -1,7 +1,7 @@
 package joshxviii.plantz.item.component
 
 import com.mojang.serialization.Codec
-import joshxviii.plantz.PazConfig
+import joshxviii.plantz.init.PazConfig
 import net.minecraft.ChatFormatting
 import net.minecraft.core.component.DataComponentGetter
 import net.minecraft.core.component.DataComponents

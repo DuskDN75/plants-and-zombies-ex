@@ -1,5 +1,6 @@
-package joshxviii.plantz
+package joshxviii.plantz.init
 
+import joshxviii.plantz.pazResource
 import net.minecraft.core.registries.Registries
 import net.minecraft.tags.TagKey
 import net.minecraft.world.damagesource.DamageType

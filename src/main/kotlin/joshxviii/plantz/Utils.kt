@@ -1,11 +1,10 @@
 package joshxviii.plantz
 
-import joshxviii.plantz.PazEntities.MAGIC_NAMES
 import joshxviii.plantz.PazMain.MODID
-import joshxviii.plantz.entity.plant.Chomper
 import joshxviii.plantz.entity.plant.Plant
-import joshxviii.plantz.entity.zombie.BrownCoat
-import joshxviii.plantz.entity.zombie.DiscoZombie
+import joshxviii.plantz.init.PazComponents
+import joshxviii.plantz.init.PazConfig
+import joshxviii.plantz.init.PazItems
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Vec3i
 import net.minecraft.nbt.CompoundTag
@@ -13,7 +12,6 @@ import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerEntityGetter
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.*
 import net.minecraft.world.entity.Entity.MoveFunction

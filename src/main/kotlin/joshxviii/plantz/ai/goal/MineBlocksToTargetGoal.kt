@@ -1,7 +1,7 @@
 package joshxviii.plantz.ai.goal
 
-import joshxviii.plantz.PazConfig
-import joshxviii.plantz.PazTags
+import joshxviii.plantz.init.PazConfig
+import joshxviii.plantz.init.PazTags
 import joshxviii.plantz.ai.pathfinding.MinerNodeEvaluator
 import joshxviii.plantz.canReachTarget
 import joshxviii.plantz.getEndPos

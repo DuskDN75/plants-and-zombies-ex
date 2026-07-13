@@ -1,10 +1,9 @@
 package joshxviii.plantz.entity.plant
 
-import joshxviii.plantz.PazEntities
-import joshxviii.plantz.PazServerParticles
+import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.init.PazServerParticles
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
 import joshxviii.plantz.entity.projectile.PeaElectric
-import joshxviii.plantz.entity.projectile.PeaFire
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal

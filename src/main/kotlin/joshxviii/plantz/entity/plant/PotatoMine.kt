@@ -1,15 +1,14 @@
 package joshxviii.plantz.entity.plant
 
-import joshxviii.plantz.PazEntities
-import joshxviii.plantz.PazSounds
-import joshxviii.plantz.PazTags
+import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.init.PazSounds
+import joshxviii.plantz.init.PazTags
 import joshxviii.plantz.hasSameRootOwner
 import net.minecraft.core.Holder
 import net.minecraft.core.particles.ItemParticleOption
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.resources.ResourceKey
 import net.minecraft.sounds.SoundEvent
-import net.minecraft.tags.BlockTags
 import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.Entity
@@ -20,7 +19,6 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
-import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
 
 class PotatoMine(type: EntityType<out Explosive>, level: Level) : Explosive(PazEntities.POTATO_MINE, level) {

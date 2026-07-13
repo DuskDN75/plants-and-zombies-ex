@@ -233,7 +233,11 @@
   "entity.plantz.gnome": "Garden Gnome",
   "entity.plantz.plant_pot_minecart": "Minecart with Plant Pot",
 
-  "itemGroup.plantz.plantz_tab": "Plants & Zombies",
+  "itemGroup.plantz.plantz_plant_tab": "Plants & Zombies - Plants",
+
+  "itemGroup.plantz.plantz_zombie_tab": "Plants & Zombies - Zombies",
+
+  "itemGroup.plantz.plantz_item_tab": "Plants & Zombies - Items",
 
   "container.plantz.send_mail": "Send Mail",
   "container.plantz.mailbox_coords": "%d, %d, %d",

@@ -1,19 +1,15 @@
 package joshxviii.plantz.block
 
 import com.mojang.serialization.MapCodec
-import joshxviii.plantz.PazBlocks
-import joshxviii.plantz.PazComponents
-import joshxviii.plantz.PazConfig
-import joshxviii.plantz.PazItems
+import joshxviii.plantz.init.PazComponents
+import joshxviii.plantz.init.PazItems
 import joshxviii.plantz.block.entity.SunBatteryBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
 import net.minecraft.util.Util
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext

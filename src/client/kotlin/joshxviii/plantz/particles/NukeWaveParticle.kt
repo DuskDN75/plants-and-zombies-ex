@@ -1,6 +1,6 @@
 package joshxviii.plantz.particles
 
-import joshxviii.plantz.NukeWaveParticleOptions
+import joshxviii.plantz.init.NukeWaveParticleOptions
 import net.minecraft.client.Camera
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.particle.Particle

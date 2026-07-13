@@ -1,7 +1,6 @@
 package joshxviii.plantz.gui
 
-import joshxviii.plantz.MailboxData
-import joshxviii.plantz.block.entity.MailboxBlockEntity
+import joshxviii.plantz.init.MailboxData
 import joshxviii.plantz.pazResource
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Tooltip

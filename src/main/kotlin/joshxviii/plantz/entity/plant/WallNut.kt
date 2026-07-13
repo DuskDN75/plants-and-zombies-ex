@@ -1,7 +1,7 @@
 package joshxviii.plantz.entity.plant
 
-import joshxviii.plantz.PazEntities
-import joshxviii.plantz.PazTags.EntityTypes.WALLNUT_DEFLECTABLE
+import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.init.PazTags.EntityTypes.WALLNUT_DEFLECTABLE
 import joshxviii.plantz.entity.Sun
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand

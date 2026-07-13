@@ -1,8 +1,8 @@
 package joshxviii.plantz.inventory
 
-import joshxviii.plantz.MailboxData
-import joshxviii.plantz.PazMenus
-import joshxviii.plantz.PazTags
+import joshxviii.plantz.init.MailboxData
+import joshxviii.plantz.init.PazMenus
+import joshxviii.plantz.init.PazTags
 import joshxviii.plantz.block.entity.MailboxManager
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component

@@ -1,7 +1,7 @@
 package joshxviii.plantz.entity.zombie
 
-import joshxviii.plantz.PazSounds
-import joshxviii.plantz.PazTags
+import joshxviii.plantz.init.PazSounds
+import joshxviii.plantz.init.PazTags
 import joshxviii.plantz.ai.goal.MineBlocksToTargetGoal
 import joshxviii.plantz.ai.pathfinding.MinerNavigation
 import net.minecraft.core.BlockPos

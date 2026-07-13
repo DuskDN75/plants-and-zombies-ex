@@ -1,24 +1,11 @@
-package joshxviii.plantz
+package joshxviii.plantz.init
 
-import joshxviii.plantz.PazEntities.ALL_STAR
-import joshxviii.plantz.PazEntities.BACKUP_DANCER
-import joshxviii.plantz.PazEntities.BROWN_COAT
-import joshxviii.plantz.PazEntities.DIGGER_ZOMBIE
-import joshxviii.plantz.PazEntities.DISCO_ZOMBIE
-import joshxviii.plantz.PazEntities.ENGINEER_ZOMBIE
-import joshxviii.plantz.PazEntities.GARGANTUAR
-import joshxviii.plantz.PazEntities.GNOME
-import joshxviii.plantz.PazEntities.IMP
-import joshxviii.plantz.PazEntities.NEWSPAPER_ZOMBIE
-import joshxviii.plantz.PazEntities.ROBO_ZOMBIE
-import joshxviii.plantz.PazEntities.SOLDIER_ZOMBIE
-import joshxviii.plantz.PazEntities.SUPER_BRAINZ
-import joshxviii.plantz.PazEntities.ZOMBIE_YETI
 import joshxviii.plantz.item.*
 import joshxviii.plantz.item.component.BlocksProjectileDamage
 import joshxviii.plantz.item.component.StoredSun
 import joshxviii.plantz.item.component.StoredWater
 import joshxviii.plantz.item.component.SunCost
+import joshxviii.plantz.pazResource
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents
 import net.fabricmc.fabric.api.registry.FuelValueEvents
 import net.fabricmc.fabric.impl.item.ItemComponentTooltipProviderRegistryImpl
@@ -88,6 +75,7 @@ object PazItems {
     val NEWSPAPER: Item = registerItem(
         "newspaper", ::NewspaperItem,
         properties = Item.Properties()
+            .durability(24)
             .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage(
                 slot = EquipmentSlotGroup.HAND,
                 breakChance = 0.1f,
@@ -159,6 +147,7 @@ object PazItems {
     val FOOTBALL_HELMET: Item = registerItem(
         "football_helmet", ::FootballHelmetItem,
         properties = Item.Properties()
+            .durability(210)
             .humanoidArmor(ArmorMaterials.CHAINMAIL, ArmorType.HELMET)
             .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage(
                 breakChance = 0.025f)
@@ -211,21 +200,21 @@ object PazItems {
         properties = Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).jukeboxPlayable(PazJukeboxSongs.GRASSY_GROOVE)
     )
 
-    @JvmField val BROWN_COAT_SPAWN_EGG: Item = registerSpawnEgg(BROWN_COAT)
-    @JvmField val NEWSPAPER_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(NEWSPAPER_ZOMBIE)
-    @JvmField val DIGGER_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(DIGGER_ZOMBIE)
-    @JvmField val ENGINEER_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(ENGINEER_ZOMBIE)
-    @JvmField val ZOMBIE_YETI_SPAWN_EGG: Item = registerSpawnEgg(ZOMBIE_YETI)
-    @JvmField val DISCO_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(DISCO_ZOMBIE)
-    @JvmField val BACKUP_DANCER_SPAWN_EGG: Item = registerSpawnEgg(BACKUP_DANCER)
-    @JvmField val ALL_STAR_SPAWN_EGG: Item = registerSpawnEgg(ALL_STAR)
-    @JvmField val SOLDIER_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(SOLDIER_ZOMBIE)
-    @JvmField val ROBO_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(ROBO_ZOMBIE)
-    @JvmField val SUPER_BRAINZ_SPAWN_EGG: Item = registerSpawnEgg(SUPER_BRAINZ)
-    @JvmField val IMP_SPAWN_EGG: Item = registerSpawnEgg(IMP)
-    @JvmField val GARGANTUAR_SPAWN_EGG: Item = registerSpawnEgg(GARGANTUAR)
+    @JvmField val BROWN_COAT_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.BROWN_COAT)
+    @JvmField val NEWSPAPER_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.NEWSPAPER_ZOMBIE)
+    @JvmField val DIGGER_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.DIGGER_ZOMBIE)
+    @JvmField val ENGINEER_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.ENGINEER_ZOMBIE)
+    @JvmField val ZOMBIE_YETI_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.ZOMBIE_YETI)
+    @JvmField val DISCO_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.DISCO_ZOMBIE)
+    @JvmField val BACKUP_DANCER_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.BACKUP_DANCER)
+    @JvmField val ALL_STAR_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.ALL_STAR)
+    @JvmField val SOLDIER_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.SOLDIER_ZOMBIE)
+    @JvmField val ROBO_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.ROBO_ZOMBIE)
+    @JvmField val SUPER_BRAINZ_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.SUPER_BRAINZ)
+    @JvmField val IMP_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.IMP)
+    @JvmField val GARGANTUAR_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.GARGANTUAR)
 
-    @JvmField val GNOME_SPAWN_EGG: Item = registerSpawnEgg(GNOME)
+    @JvmField val GNOME_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.GNOME)
 
     private fun registerItem(
         name: String,
@@ -233,7 +222,7 @@ object PazItems {
         properties: Item.Properties = Item.Properties()
     ) : Item {
 
-        val key = ResourceKey.create(Registries.ITEM, pazResource(name) )
+        val key = ResourceKey.create(Registries.ITEM, pazResource(name))
         val item = itemFactory.apply(properties.setId(key))
         Registry.register(BuiltInRegistries.ITEM, key, item)
 
@@ -283,6 +272,12 @@ object PazItems {
                     ).build()
 
                 builder.set(DataComponents.ATTRIBUTE_MODIFIERS, armorModifier)
+
+                builder.set(DataComponents.MAX_DAMAGE, 165)
+
+                builder.set(DataComponents.MAX_STACK_SIZE, 1)
+
+                builder.set(DataComponents.DAMAGE, 0)
             }
         }
 

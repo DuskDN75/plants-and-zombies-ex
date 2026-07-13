@@ -1,8 +1,8 @@
 package joshxviii.plantz.block.entity
 
-import joshxviii.plantz.PazBlocks
-import joshxviii.plantz.PazComponents
-import joshxviii.plantz.PazItems
+import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazComponents
+import joshxviii.plantz.init.PazItems
 import joshxviii.plantz.block.SunBatteryBlock
 import joshxviii.plantz.item.component.StoredSun
 import net.minecraft.core.BlockPos
