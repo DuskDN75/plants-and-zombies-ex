@@ -1,28 +1,27 @@
-package joshxviii.plantz.entity.plant
+package joshxviii.plantz.entity.plant.init
 
-import joshxviii.plantz.*
-import joshxviii.plantz.init.PazDamageTypes
-import joshxviii.plantz.init.PazDataSerializers.DATA_COFFEE_BUFF
-import joshxviii.plantz.init.PazDataSerializers.DATA_COOLDOWN
-import joshxviii.plantz.init.PazDataSerializers.DATA_PLANT_STATE
-import joshxviii.plantz.init.PazDataSerializers.DATA_POWERED_UP
-import joshxviii.plantz.init.PazDataSerializers.DATA_RECEIVED_SUN
-import joshxviii.plantz.init.PazDataSerializers.DATA_RECEIVED_WATER
-import joshxviii.plantz.init.PazDataSerializers.DATA_SEED_GROW_COOLDOWN
-import joshxviii.plantz.init.PazDataSerializers.DATA_SLEEPING
-import joshxviii.plantz.init.PazSounds
-import joshxviii.plantz.init.PazTags.BlockTags.PLANTABLE
 import joshxviii.plantz.ai.PlantState
 import joshxviii.plantz.ai.goal.SleepGoal
 import joshxviii.plantz.entity.Sun
+import joshxviii.plantz.entity.plant.utils.PlantGrowNeeds
+import joshxviii.plantz.entity.plant.utils.processSunItem
+import joshxviii.plantz.entity.plant.utils.processWateringItem
 import joshxviii.plantz.init.PazBlocks
 import joshxviii.plantz.init.PazConfig
 import joshxviii.plantz.init.PazCriteria
+import joshxviii.plantz.init.PazDamageTypes
+import joshxviii.plantz.init.PazDataSerializers
 import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.init.PazServerParticles
+import joshxviii.plantz.init.PazSounds
 import joshxviii.plantz.init.PazTags
 import joshxviii.plantz.item.SeedPacketItem
-import joshxviii.plantz.pazResource
+import joshxviii.plantz.util.PlantHeadAttachment
+import joshxviii.plantz.util.canWearPlant
+import joshxviii.plantz.util.hasSameRootOwner
+import joshxviii.plantz.util.pazResource
+import joshxviii.plantz.util.positionPlant
+import joshxviii.plantz.util.tryToSetPlantOnHead
 import net.minecraft.ChatFormatting
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -40,16 +39,26 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.tags.FluidTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.util.Mth
-import net.minecraft.util.ProblemReporter.ScopedCollector
+import net.minecraft.util.ProblemReporter
 import net.minecraft.util.RandomSource
 import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
-import net.minecraft.world.entity.*
+import net.minecraft.world.entity.AgeableMob
+import net.minecraft.world.entity.AnimationState
+import net.minecraft.world.entity.ConversionParams
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EntityReference
+import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.SpawnGroupData
+import net.minecraft.world.entity.TamableAnimal
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
@@ -66,8 +75,14 @@ import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.*
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelAccessor
+import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.LightLayer
+import net.minecraft.world.level.ServerLevelAccessor
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.portal.TeleportTransition
 import net.minecraft.world.level.storage.TagValueOutput
 import net.minecraft.world.level.storage.ValueInput
@@ -76,7 +91,7 @@ import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.*
+import java.util.Optional
 import kotlin.jvm.optionals.getOrElse
 import kotlin.jvm.optionals.getOrNull
 
@@ -98,7 +113,11 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
          */
         fun hasAdjacentPlant(level: Level, pos: BlockPos) : Boolean {
 
-            val searchBox = AABB(pos).inflate(1.0)
+//            for (direction in Direction.entries) {
+//                val searchBox = AABB(pos).inflate(1.0)
+//            }
+
+            val searchBox = AABB(pos).inflate(1.0, 0.0, 1.0)
 
             val plants = level.getEntitiesOfClass(Plant::class.java, searchBox) { plant ->
                 plant.blockPosition() != pos && plant.isAlive
@@ -118,7 +137,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
             random: RandomSource
         ): Boolean {
             val blockBelow = level.getBlockState(pos.below())
-            val isValid = checkValidSpawn(level, pos, spawnReason) && blockBelow.`is`(PLANTABLE) && pos.y > level.seaLevel - 8 && !hasAdjacentPlant(
+            val isValid = checkValidSpawn(level, pos, spawnReason) && blockBelow.`is`(PazTags.BlockTags.PLANTABLE) && pos.y > level.seaLevel - 8 && !hasAdjacentPlant(
                 level as Level, pos)
             return isValid
         }
@@ -140,15 +159,31 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         private const val NUTRIENT_SUPPLY_MAX = 50  // ticks before suffocating when on invalid ground
         private const val FLAG_POWER_RANGE = 3
 
-        val PLANT_STATE: EntityDataAccessor<PlantState> = SynchedEntityData.defineId<PlantState>(Plant::class.java, DATA_PLANT_STATE)
-        val COOLDOWN: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Plant::class.java, DATA_COOLDOWN)
-        val COFFEE_BUFF: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Plant::class.java, DATA_COFFEE_BUFF)
-        val RECEIVED_SUN: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Plant::class.java, DATA_RECEIVED_SUN)
-        val RECEIVED_WATER: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Plant::class.java, DATA_RECEIVED_WATER)
-        val SEED_GROW_COOLDOWN: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Plant::class.java, DATA_SEED_GROW_COOLDOWN)
+        val PLANT_STATE: EntityDataAccessor<PlantState> = SynchedEntityData.defineId<PlantState>(Plant::class.java,
+            PazDataSerializers.DATA_PLANT_STATE
+        )
+        val COOLDOWN: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Plant::class.java,
+            PazDataSerializers.DATA_COOLDOWN
+        )
+        val COFFEE_BUFF: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Plant::class.java,
+            PazDataSerializers.DATA_COFFEE_BUFF
+        )
+        val RECEIVED_SUN: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Plant::class.java,
+            PazDataSerializers.DATA_RECEIVED_SUN
+        )
+        val RECEIVED_WATER: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Plant::class.java,
+            PazDataSerializers.DATA_RECEIVED_WATER
+        )
+        val SEED_GROW_COOLDOWN: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Plant::class.java,
+            PazDataSerializers.DATA_SEED_GROW_COOLDOWN
+        )
         val ATTACHED_PLAYER: EntityDataAccessor<Optional<EntityReference<LivingEntity>>> = SynchedEntityData.defineId(Plant::class.java, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE)
-        val SLEEPING: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(Plant::class.java, DATA_SLEEPING)
-        val POWERED_UP: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(Plant::class.java, DATA_POWERED_UP)
+        val SLEEPING: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(Plant::class.java,
+            PazDataSerializers.DATA_SLEEPING
+        )
+        val POWERED_UP: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(Plant::class.java,
+            PazDataSerializers.DATA_POWERED_UP
+        )
 
         val ON_PLAYER_HEAD_EFFECTS: Identifier = pazResource("on_player_head_effects")
 
@@ -235,7 +270,8 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
 
     fun applyOnHeadEffects() {
         if(getAttribute(Attributes.SCALE)?.hasModifier(ON_PLAYER_HEAD_EFFECTS)==false) getAttribute(Attributes.SCALE)!!.addPermanentModifier(
-            AttributeModifier(ON_PLAYER_HEAD_EFFECTS, -0.25, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL))
+            AttributeModifier(ON_PLAYER_HEAD_EFFECTS, -0.25, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+        )
         noPhysics = true
     }
     fun removeOnHeadEffects() {
@@ -321,10 +357,12 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     open fun getActionSound(): SoundEvent? = null// TODO make custom sounds
 
     override fun registerGoals() {
-        this.goalSelector.addGoal(1, SleepGoal(this,
+        this.goalSelector.addGoal(1, SleepGoal(
+            this,
             sleepDuringDay = sleepsDuringDay(),
             sleepDuringNight = sleepsDuringNight()
-        ))
+        )
+        )
         this.goalSelector.addGoal(3, RandomLookAroundGoal(this))
         this.goalSelector.addGoal(3, LookAtPlayerGoal(this, Player::class.java, 8.0f))
         attackGoals()
@@ -410,7 +448,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
 
     override fun teleport(transition: TeleportTransition): Entity? {
         val result = super.teleport(transition)
-        val oldLevel = this.level() as? ServerLevel?: return result
+        val oldLevel = this.level() as? ServerLevel ?: return result
         val newLevel = transition.newLevel
 
         if (!isRemoved) {
@@ -615,7 +653,25 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     fun exposedToRain(): Boolean = level().isRainingAt(blockPosition().above())
     open fun sleepsDuringNight(): Boolean = false
     open fun sleepsDuringDay(): Boolean = this.`is`(PazTags.EntityTypes.MUSHROOM)
-    open fun canSurviveOn(block: BlockState) : Boolean = block.`is`(PLANTABLE)
+    open fun canSurviveOn(block: BlockState) : Boolean = block.`is`(PazTags.BlockTags.PLANTABLE)
+
+    open fun waterSurvivalCheck(block: BlockState): Boolean {
+        if (block.`is`(PazBlocks.ZEN_PLANT_POT)) {
+            return true
+        }
+
+        if (block.`is`(PazBlocks.WATER_POT)) {
+            return true
+        }
+
+        if (block.`is`(Blocks.WATER_CAULDRON)) {
+            return block.getValue(BlockStateProperties.LEVEL_CAULDRON) > 0
+        }
+
+        val fluidState = level().getFluidState(blockPosition())
+
+        return fluidState.`is`(FluidTags.WATER)
+    }
 
     open fun cooldownFinished() {}
 
@@ -691,8 +747,10 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
                     itemStack.hurtAndBreak(4, player, hand.asEquipmentSlot())
                     playSound(if (getBlockBelow().fluidState.isFull) SoundEvents.BUCKET_FILL
                     else SoundEvents.ROOTED_DIRT_BREAK)
-                    level.sendParticles(BlockParticleOption(
-                        ParticleTypes.BLOCK, getBlockBelow()),
+                    level.sendParticles(
+                        BlockParticleOption(
+                            ParticleTypes.BLOCK, getBlockBelow()
+                        ),
                         x, y+0.05, z, 16, 0.25,0.0,0.25, 0.4)
                 }
                 if (player is ServerPlayer) PazCriteria.RELOCATION.trigger(player, success)
@@ -724,7 +782,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     }
 
     fun applyCoffeeBuff() {
-        val level = level() as? ServerLevel?: return
+        val level = level() as? ServerLevel ?: return
         coffeeBuff = PazConfig.COFFEE_BUFF_DURATION
         playSound(SoundEvents.WITCH_DRINK, 1f, 1.5f)
         addParticlesAroundSelf(level,
@@ -734,7 +792,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     }
 
     fun attachToEntity(entity: LivingEntity): Boolean {
-        ScopedCollector(this.problemPath(), LOGGER).use { reporter ->
+        ProblemReporter.ScopedCollector(this.problemPath(), LOGGER).use { reporter ->
             val output = TagValueOutput.createWithContext(reporter, this.registryAccess())
             this.saveWithoutId(output)
             output.putString("id", this.encodeId!!)
@@ -771,7 +829,9 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
 
     fun verifyOwner(player: Player): Boolean {
         if (!isTame || (player != owner && !PazConfig.COOP_PLANTING)) {
-            player.sendOverlayMessage(Component.translatable("message.plantz.not_yours", this.name).withStyle(ChatFormatting.RED))
+            player.sendOverlayMessage(
+                Component.translatable("message.plantz.not_yours", this.name).withStyle(
+                    ChatFormatting.RED))
             return false
         }
         return true

@@ -1,7 +1,7 @@
 package joshxviii.plantz.gui
 
 import joshxviii.plantz.init.MailboxData
-import joshxviii.plantz.pazResource
+import joshxviii.plantz.util.pazResource
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.network.chat.CommonComponents

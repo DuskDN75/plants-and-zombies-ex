@@ -1,6 +1,5 @@
 package joshxviii.plantz.entity.zombie
 
-import joshxviii.plantz.*
 import joshxviii.plantz.ai.ZombieState
 import joshxviii.plantz.entity.zombie.Gargantuar.SmashAttackGoal.Companion.ATTACK_DELAY_TIME
 import joshxviii.plantz.init.NukeWaveParticleOptions
@@ -8,6 +7,7 @@ import joshxviii.plantz.init.PazDamageTypes
 import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.init.PazSounds
 import joshxviii.plantz.init.PazTags
+import joshxviii.plantz.util.applyImpulse
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleTypes

@@ -1,18 +1,14 @@
 package joshxviii.plantz.mixin;
 
-import joshxviii.plantz.PlantHeadAttachment;
-import joshxviii.plantz.entity.plant.Plant;
-import net.minecraft.core.UUIDUtil;
+import joshxviii.plantz.util.PlantHeadAttachment;
+import joshxviii.plantz.entity.plant.init.Plant;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.block.Portal;
 import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * @author Josh

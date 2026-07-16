@@ -8,9 +8,8 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.util.Mth;
-import net.minecraft.util.Unit;
 
-import static joshxviii.plantz.UtilsKt.pazResource;
+import static joshxviii.plantz.util.UtilsKt.pazResource;
 
 /**
  * @author Josh

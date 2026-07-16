@@ -3,7 +3,7 @@ package joshxviii.plantz.entity.zombie
 import joshxviii.plantz.init.PazDamageTypes
 import joshxviii.plantz.init.PazItems
 import joshxviii.plantz.init.PazSounds
-import joshxviii.plantz.pazResource
+import joshxviii.plantz.util.pazResource
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.syncher.EntityDataAccessor

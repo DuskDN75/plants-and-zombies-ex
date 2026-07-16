@@ -1,12 +1,8 @@
 package joshxviii.plantz.mixin;
 
-import joshxviii.plantz.PlantHeadAttachment;
-import joshxviii.plantz.entity.plant.Plant;
+import joshxviii.plantz.entity.plant.init.Plant;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.profiling.Profiler;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.entity.EntityTickList;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

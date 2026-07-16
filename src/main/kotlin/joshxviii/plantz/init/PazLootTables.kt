@@ -1,7 +1,7 @@
 package joshxviii.plantz.init
 
 import joshxviii.plantz.PazMain
-import joshxviii.plantz.pazResource
+import joshxviii.plantz.util.pazResource
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.Identifier

@@ -1,9 +1,10 @@
 package joshxviii.plantz.entity.plant
 
+import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.init.PazSounds
 import joshxviii.plantz.init.PazTags
-import joshxviii.plantz.hasSameRootOwner
+import joshxviii.plantz.util.hasSameRootOwner
 import net.minecraft.core.Holder
 import net.minecraft.core.particles.ItemParticleOption
 import net.minecraft.core.particles.ParticleTypes

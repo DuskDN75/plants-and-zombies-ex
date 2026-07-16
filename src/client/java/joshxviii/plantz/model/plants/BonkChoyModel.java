@@ -1,17 +1,14 @@
 package joshxviii.plantz.model.plants;
 
 import joshxviii.plantz.PlantRenderState;
-import joshxviii.plantz.ai.PlantState;
 import joshxviii.plantz.animation.plants.BonkChoyAnimation;
-import joshxviii.plantz.animation.plants.PotatoMineAnimation;
-import joshxviii.plantz.animation.plants.ScaredyShroomAnimation;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import org.jetbrains.annotations.NotNull;
-import static joshxviii.plantz.UtilsKt.pazResource;
+import static joshxviii.plantz.util.UtilsKt.pazResource;
 
 public class BonkChoyModel extends PlantModel {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("bonkchoy"), "main");

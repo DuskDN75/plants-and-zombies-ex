@@ -11,6 +11,7 @@ import joshxviii.plantz.model.GnomeModel
 import joshxviii.plantz.model.plants.*
 import joshxviii.plantz.model.projectiles.*
 import joshxviii.plantz.model.zombies.*
+import joshxviii.plantz.util.pazResource
 import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.RenderStateDataKey
 import net.minecraft.client.model.geom.ModelLayerLocation
@@ -22,6 +23,14 @@ import net.minecraft.client.renderer.entity.ArmorModelSet
 import net.minecraft.client.renderer.entity.EntityRenderers
 import net.minecraft.client.renderer.entity.ThrownItemRenderer
 import net.minecraft.resources.Identifier
+import net.fabricmc.fabric.api.client.rendering.v1.BlockColorRegistry
+import net.minecraft.client.color.block.BlockTintSource
+import net.minecraft.client.renderer.BiomeColors
+import net.minecraft.client.renderer.block.BlockAndTintGetter
+import net.minecraft.client.renderer.block.FluidRenderer
+import net.minecraft.core.BlockPos
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.FluidState
 
 object PazModels {
 
@@ -199,5 +208,19 @@ object PazModels {
 
         BlockEntityRenderers.register<FlagBlockEntity, FlagRenderState>(PazBlocks.FLAG_BLOCK_ENTITY) { FlagRenderer(FlagBlockModel(it.bakeLayer(FlagBlockModel.LAYER_LOCATION))) }
         BlockEntityRenderers.register<SunBatteryBlockEntity, SunBatteryRenderSate>(PazBlocks.SUN_BATTERY_BLOCK_ENTITY) { SunBatteryRenderer() }
+
+        // REGISTER BLOCK COLORS
+
+        BlockColorRegistry.register(
+            listOf(object : BlockTintSource {
+                override fun color(state: BlockState): Int {
+                    return 0x3F76E4
+                }
+
+                override fun colorInWorld(state: BlockState, level: BlockAndTintGetter, pos: BlockPos): Int {
+                    return BiomeColors.getAverageWaterColor(level, pos)
+                }
+            }), PazBlocks.WATER_POT
+        )
     }
 }

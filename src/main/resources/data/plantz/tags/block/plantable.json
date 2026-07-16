@@ -1,5 +1,5 @@
 {
-  "replace": false,
+  "replace": true,
   "values": [
     "minecraft:mud",
     "minecraft:dirt_path",
@@ -11,7 +11,8 @@
     "#minecraft:grass_blocks",
     "#minecraft:nylium",
     "#minecraft:moss_blocks",
-    "#plantz:gives_plant_pot_protection",
+    "plantz:plant_pot",
+    "plantz:zen_plant_pot",
     "#plantz:farmable"
   ]
 }

@@ -1,7 +1,7 @@
 package joshxviii.plantz.init
 
 import joshxviii.plantz.entity.gnome.GnomeSoundVariant
-import joshxviii.plantz.pazResource
+import joshxviii.plantz.util.pazResource
 import net.minecraft.core.Holder
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries

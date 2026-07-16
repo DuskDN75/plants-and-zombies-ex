@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 
-import static joshxviii.plantz.UtilsKt.pazResource;
+import static joshxviii.plantz.util.UtilsKt.pazResource;
 
 public class TangleKelpModel extends PlantModel {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("tanglekelp"), "main");

@@ -1,9 +1,7 @@
-package joshxviii.plantz
+package joshxviii.plantz.init
 
-import joshxviii.plantz.init.PazBlocks
-import joshxviii.plantz.init.PazEntities
-import joshxviii.plantz.init.PazItems
 import joshxviii.plantz.item.SeedPacketItem
+import joshxviii.plantz.util.pazResource
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -12,17 +10,19 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.ItemStack
 
-object PazCreativeTab {
+abstract class PazCreativeTab {
     // Define the key for the custom tab
-    private val PAZ_TAB_KEY: ResourceKey<CreativeModeTab> =
-        ResourceKey.create(Registries.CREATIVE_MODE_TAB, pazResource("plantz_tab"))
+    companion object {
+        private val paz_tab_key: ResourceKey<CreativeModeTab> =
+            ResourceKey.create(Registries.CREATIVE_MODE_TAB, pazResource("plantz_tab"))
+    }
 
     // Register the tab
-    val PAZ_TAB: CreativeModeTab = Registry.register(
+    val paz_tab: CreativeModeTab = Registry.register(
         BuiltInRegistries.CREATIVE_MODE_TAB,
-        PAZ_TAB_KEY,
+        paz_tab_key,
         CreativeModeTab.builder(CreativeModeTab.Row.BOTTOM, 0)
-            .title(Component.translatable("itemGroup.plantz.plantz_tab"))
+            .title(Component.translatable("itemGroup.plantz.plantz_plant_tab"))
             .icon { ItemStack(PazItems.SUN) }
 
             .displayItems { parameters, output ->
@@ -84,6 +84,7 @@ object PazCreativeTab {
                 output.accept(PazItems.SUN_BOTTLE)
                 output.accept(PazItems.WATERING_CAN)
                 output.accept(PazBlocks.PLANT_POT)
+                output.accept(PazBlocks.WATER_POT)
                 output.accept(PazBlocks.ZEN_PLANT_POT)
                 output.accept(PazItems.PLANT_POT_MINECART)
                 output.accept(PazItems.PLANT_POT_HELMET)

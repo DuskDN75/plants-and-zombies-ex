@@ -6,7 +6,7 @@ import joshxviii.plantz.entity.plant.BonkChoy
 import joshxviii.plantz.entity.plant.ExplodeONut
 import joshxviii.plantz.entity.plant.Explosive
 import joshxviii.plantz.entity.plant.KernelPult
-import joshxviii.plantz.entity.plant.Plant
+import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.entity.plant.WallNut
 import joshxviii.plantz.init.PazConfig
 import net.minecraft.client.model.EntityModel

@@ -4,9 +4,9 @@ import joshxviii.plantz.init.PazBlocks.PLANTZ_FLAG
 import joshxviii.plantz.init.PazBlocks.PLANTZ_FLAG_POI
 import joshxviii.plantz.init.PazEffects
 import joshxviii.plantz.block.entity.FlagBlockEntity
-import joshxviii.plantz.canReachTarget
-import joshxviii.plantz.lookAtBlockPos
-import joshxviii.plantz.moveToBlockPos
+import joshxviii.plantz.util.canReachTarget
+import joshxviii.plantz.util.lookAtBlockPos
+import joshxviii.plantz.util.moveToBlockPos
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.PathfinderMob

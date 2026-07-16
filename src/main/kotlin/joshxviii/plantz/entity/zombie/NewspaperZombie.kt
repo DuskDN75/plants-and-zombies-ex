@@ -3,7 +3,7 @@ package joshxviii.plantz.entity.zombie
 import joshxviii.plantz.init.PazItems
 import joshxviii.plantz.init.PazSounds
 import joshxviii.plantz.init.PazTags
-import joshxviii.plantz.pazResource
+import joshxviii.plantz.util.pazResource
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent

@@ -4,14 +4,12 @@ package joshxviii.plantz.model.plants;// Made with Blockbench 5.0.7
 
 import joshxviii.plantz.PlantRenderState;
 import joshxviii.plantz.animation.plants.CactusAnimation;
-import net.minecraft.client.animation.KeyframeAnimation;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import org.jetbrains.annotations.NotNull;
-import static joshxviii.plantz.UtilsKt.pazResource;
+import static joshxviii.plantz.util.UtilsKt.pazResource;
 
 public class CactusModel extends PlantModel{
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("cactus"), "main");

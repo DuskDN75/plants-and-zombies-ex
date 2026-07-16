@@ -3,37 +3,23 @@ package joshxviii.plantz
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.math.Axis
-import joshxviii.plantz.SunRenderer.Companion.EMISSIVE_SUN
 import joshxviii.plantz.block.SunBatteryBlock
 import joshxviii.plantz.block.entity.SunBatteryBlockEntity
-import joshxviii.plantz.model.zombies.PazZombieModel
-import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.screens.Overlay
+import joshxviii.plantz.util.pazResource
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.SubmitNodeCollector
-import net.minecraft.client.renderer.SubmitNodeCollector.CustomGeometryRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer
-import net.minecraft.client.renderer.item.ItemStackRenderState
 import net.minecraft.client.renderer.rendertype.OutputTarget
 import net.minecraft.client.renderer.rendertype.RenderSetup
 import net.minecraft.client.renderer.rendertype.RenderType
-import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.client.renderer.state.level.CameraRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.client.resources.model.sprite.SpriteId
-import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
-import net.minecraft.util.RandomSource
-import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.phys.Vec3
-import org.joml.Quaternionf
-import org.joml.Vector3f
-import kotlin.math.floor
-import kotlin.math.min
 import kotlin.math.pow
-import kotlin.math.sqrt
 
 class SunBatteryRenderer() : BlockEntityRenderer<SunBatteryBlockEntity, SunBatteryRenderSate> {
     companion object {

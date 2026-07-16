@@ -2,7 +2,7 @@ package joshxviii.plantz.entity.gnome
 
 import com.mojang.serialization.Codec
 import io.netty.buffer.ByteBuf
-import joshxviii.plantz.pazResource
+import joshxviii.plantz.util.pazResource
 import net.minecraft.core.ClientAsset
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec

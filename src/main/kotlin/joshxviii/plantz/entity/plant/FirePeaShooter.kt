@@ -3,11 +3,11 @@ package joshxviii.plantz.entity.plant
 import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.init.PazServerParticles
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
+import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.entity.projectile.PeaFire
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
-import net.minecraft.world.entity.monster.Creeper
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
@@ -24,7 +24,7 @@ class FirePeaShooter(type: EntityType<out Plant>, level: Level) : Plant(PazEntit
             actionDelay = 3))
         this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
             target !is Plant
-                    && target !is Creeper
+                    
                     && (target is Zombie
                     || (target is Enemy && isTame)
                     || (target is Player && !isTame))

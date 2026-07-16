@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.entity.state.ZombieRenderState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static joshxviii.plantz.UtilsKt.pazResource;
+import static joshxviii.plantz.util.UtilsKt.pazResource;
 
 public class PazZombieModel extends ZombieModel<@NotNull ZombieRenderState> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("paz_zombie"), "main");

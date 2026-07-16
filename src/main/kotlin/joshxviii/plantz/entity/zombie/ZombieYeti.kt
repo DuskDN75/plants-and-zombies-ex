@@ -4,7 +4,7 @@ import joshxviii.plantz.init.PazDamageTypes
 import joshxviii.plantz.init.PazSounds
 import joshxviii.plantz.init.PazTags
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
-import joshxviii.plantz.canReachTarget
+import joshxviii.plantz.util.canReachTarget
 import joshxviii.plantz.entity.projectile.PowderSnowChunk
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel

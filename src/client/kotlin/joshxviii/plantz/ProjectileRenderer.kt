@@ -3,7 +3,7 @@ package joshxviii.plantz
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import joshxviii.plantz.entity.projectile.PaintBall
-import joshxviii.plantz.entity.projectile.PeaFire
+import joshxviii.plantz.util.pazResource
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.SubmitNodeCollector

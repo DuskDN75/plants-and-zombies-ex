@@ -6,6 +6,7 @@ import joshxviii.plantz.init.NukeWaveParticleOptions
 import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.init.PazTags.BlockTags.PLANTABLE
 import joshxviii.plantz.ai.goal.ExplodeGoal
+import joshxviii.plantz.entity.plant.init.Plant
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel

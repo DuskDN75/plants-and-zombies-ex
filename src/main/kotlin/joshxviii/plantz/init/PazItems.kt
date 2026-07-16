@@ -5,7 +5,7 @@ import joshxviii.plantz.item.component.BlocksProjectileDamage
 import joshxviii.plantz.item.component.StoredSun
 import joshxviii.plantz.item.component.StoredWater
 import joshxviii.plantz.item.component.SunCost
-import joshxviii.plantz.pazResource
+import joshxviii.plantz.util.pazResource
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents
 import net.fabricmc.fabric.api.registry.FuelValueEvents
 import net.fabricmc.fabric.impl.item.ItemComponentTooltipProviderRegistryImpl

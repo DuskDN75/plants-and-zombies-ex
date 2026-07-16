@@ -1,6 +1,6 @@
 package joshxviii.plantz.init
 
-import joshxviii.plantz.pazResource
+import joshxviii.plantz.util.pazResource
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.item.JukeboxSong

@@ -2,8 +2,8 @@ package joshxviii.plantz.entity.projectile
 
 import joshxviii.plantz.init.PazConfig
 import joshxviii.plantz.init.PazDamageTypes
-import joshxviii.plantz.entity.plant.Plant
-import joshxviii.plantz.hasSameRootOwner
+import joshxviii.plantz.entity.plant.init.Plant
+import joshxviii.plantz.util.hasSameRootOwner
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleTypes

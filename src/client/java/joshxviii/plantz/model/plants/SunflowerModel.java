@@ -1,16 +1,13 @@
 package joshxviii.plantz.model.plants;
 
 import joshxviii.plantz.PlantRenderState;
-import joshxviii.plantz.animation.plants.SunShroomAnimation;
 import joshxviii.plantz.animation.plants.SunflowerAnimation;
-import net.minecraft.client.animation.KeyframeAnimation;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import org.jetbrains.annotations.NotNull;
-import static joshxviii.plantz.UtilsKt.pazResource;
+import static joshxviii.plantz.util.UtilsKt.pazResource;
 
 public class SunflowerModel extends PlantModel {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor

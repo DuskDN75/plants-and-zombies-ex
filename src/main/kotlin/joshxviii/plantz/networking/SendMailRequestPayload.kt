@@ -6,7 +6,7 @@ import joshxviii.plantz.block.entity.MailboxMailQueue
 import joshxviii.plantz.block.entity.MailboxManager
 import joshxviii.plantz.block.entity.getMailboxMailQueue
 import joshxviii.plantz.inventory.MailboxMenu
-import joshxviii.plantz.pazResource
+import joshxviii.plantz.util.pazResource
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.core.BlockPos
 import net.minecraft.network.RegistryFriendlyByteBuf

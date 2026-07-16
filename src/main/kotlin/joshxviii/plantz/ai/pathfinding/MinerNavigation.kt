@@ -1,6 +1,6 @@
 package joshxviii.plantz.ai.pathfinding
 
-import joshxviii.plantz.canReachTarget
+import joshxviii.plantz.util.canReachTarget
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.PathfinderMob

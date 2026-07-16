@@ -3,8 +3,8 @@ package joshxviii.plantz.ai.goal
 import joshxviii.plantz.init.PazConfig
 import joshxviii.plantz.init.PazTags
 import joshxviii.plantz.ai.pathfinding.MinerNodeEvaluator
-import joshxviii.plantz.canReachTarget
-import joshxviii.plantz.getEndPos
+import joshxviii.plantz.util.canReachTarget
+import joshxviii.plantz.util.getEndPos
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource

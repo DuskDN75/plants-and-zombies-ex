@@ -1,5 +1,7 @@
 package joshxviii.plantz.entity.plant
 
+import joshxviii.plantz.entity.plant.init.AttackingPlant
+import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.init.PazBlocks
 import joshxviii.plantz.init.PazEntities
 import net.minecraft.core.BlockPos
@@ -15,11 +17,11 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.block.state.BlockState
 
-class TangleKelp(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.TANGLE_KELP, level) {
+class TangleKelp(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlant(PazEntities.TANGLE_KELP, level) {
 
     companion object {
         fun checkTangleKelpSpawnRules(
-            type: EntityType<out Plant>,
+            type: EntityType<out AttackingPlant>,
             level: ServerLevelAccessor,
             spawnReason: EntitySpawnReason,
             pos: BlockPos,
@@ -38,17 +40,11 @@ class TangleKelp(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.
 
     override fun registerGoals() {
         super.registerGoals()
-
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
-            target !is Plant
-                    && (target is Zombie
-                    || (target is Enemy && isTame))
-        })
     }
 
     override fun canBreatheUnderwater(): Boolean = true
 
     override fun canSurviveOn(block: BlockState): Boolean {
-        return block.`is`(PazBlocks.ZEN_PLANT_POT) || level().getBlockState(blockPosition()).fluidState.`is`(FluidTags.WATER)
+        return waterSurvivalCheck(block)
     }
 }

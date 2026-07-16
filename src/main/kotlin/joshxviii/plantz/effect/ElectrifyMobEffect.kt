@@ -5,7 +5,7 @@ import joshxviii.plantz.init.PazDamageTypes
 import joshxviii.plantz.init.PazEffects
 import joshxviii.plantz.init.PazServerParticles
 import joshxviii.plantz.init.PazTags
-import joshxviii.plantz.hasSameRootOwner
+import joshxviii.plantz.util.hasSameRootOwner
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.damagesource.DamageSource

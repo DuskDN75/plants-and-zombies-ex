@@ -1,0 +1,110 @@
+package joshxviii.plantz.entity.plant.init
+
+import joshxviii.plantz.ai.PlantState
+import joshxviii.plantz.ai.goal.ProjectileAttackGoal
+import joshxviii.plantz.ai.goal.SleepGoal
+import joshxviii.plantz.entity.Sun
+import joshxviii.plantz.entity.plant.utils.PlantGrowNeeds
+import joshxviii.plantz.entity.plant.utils.processSunItem
+import joshxviii.plantz.entity.plant.utils.processWateringItem
+import joshxviii.plantz.entity.projectile.Pea
+import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazConfig
+import joshxviii.plantz.init.PazCriteria
+import joshxviii.plantz.init.PazDamageTypes
+import joshxviii.plantz.init.PazDataSerializers
+import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.init.PazServerParticles
+import joshxviii.plantz.init.PazSounds
+import joshxviii.plantz.init.PazTags
+import joshxviii.plantz.item.SeedPacketItem
+import joshxviii.plantz.util.PlantHeadAttachment
+import joshxviii.plantz.util.canWearPlant
+import joshxviii.plantz.util.hasSameRootOwner
+import joshxviii.plantz.util.pazResource
+import joshxviii.plantz.util.positionPlant
+import joshxviii.plantz.util.tryToSetPlantOnHead
+import net.minecraft.ChatFormatting
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.core.component.DataComponents
+import net.minecraft.core.particles.BlockParticleOption
+import net.minecraft.core.particles.ParticleOptions
+import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.chat.Component
+import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.network.syncher.EntityDataSerializers
+import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.resources.Identifier
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.tags.ItemTags
+import net.minecraft.util.Mth
+import net.minecraft.util.ProblemReporter
+import net.minecraft.util.RandomSource
+import net.minecraft.world.DifficultyInstance
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.damagesource.DamageTypes
+import net.minecraft.world.entity.AgeableMob
+import net.minecraft.world.entity.AnimationState
+import net.minecraft.world.entity.ConversionParams
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EntityReference
+import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.SpawnGroupData
+import net.minecraft.world.entity.TamableAnimal
+import net.minecraft.world.entity.ai.attributes.AttributeModifier
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier
+import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.entity.ai.control.BodyRotationControl
+import net.minecraft.world.entity.ai.control.LookControl
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal
+import net.minecraft.world.entity.ai.village.poi.PoiManager
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.entity.monster.Enemy
+import net.minecraft.world.entity.monster.zombie.Zombie
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelAccessor
+import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.LightLayer
+import net.minecraft.world.level.ServerLevelAccessor
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.portal.TeleportTransition
+import net.minecraft.world.level.storage.TagValueOutput
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
+import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.Vec3
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import java.util.Optional
+import kotlin.jvm.optionals.getOrElse
+import kotlin.jvm.optionals.getOrNull
+
+/**
+ * Base class for all plant entities that attack.
+ * Provides basic behavior for all attacking plants.
+ */
+abstract class PultPlant(type: EntityType<out PultPlant>, level: Level) : AttackingPlant(type, level) {
+    companion object {
+        val LOGGER: Logger = LoggerFactory.getLogger(PultPlant::class.java)
+    }
+
+    override fun mustSeeTarget(): Boolean {
+        return false
+    }
+}

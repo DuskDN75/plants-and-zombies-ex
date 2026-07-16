@@ -4,6 +4,7 @@ import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.init.PazTags.BlockTags.PLANTABLE
 import joshxviii.plantz.ai.goal.FurthestAttackableTargetGoal
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
+import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.entity.projectile.Needle
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.BlockTags
@@ -11,7 +12,6 @@ import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.monster.Creeper
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.level.Level
@@ -49,7 +49,7 @@ class Cactus(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.CACT
             mustReach = false
         ) { target, level ->
             target !is Plant
-                    && target !is Creeper
+                    
                     && (target is Zombie
                     || (target is Enemy && isTame))
         })

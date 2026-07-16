@@ -2,6 +2,7 @@ package joshxviii.plantz
 
 import joshxviii.plantz.init.PazServerParticles
 import joshxviii.plantz.particles.*
+import joshxviii.plantz.util.pazResource
 import net.fabricmc.fabric.api.client.particle.v1.ParticleGroupRegistry
 import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry
 import net.minecraft.client.particle.CritParticle

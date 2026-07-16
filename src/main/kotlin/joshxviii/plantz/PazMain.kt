@@ -21,6 +21,7 @@ import joshxviii.plantz.init.PazSounds
 import joshxviii.plantz.init.PazSpawnPlacements
 import joshxviii.plantz.networking.ServerConfigResponsePayload
 import joshxviii.plantz.raid.getZombieRaids
+import joshxviii.plantz.init.PazCreativeTab
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents

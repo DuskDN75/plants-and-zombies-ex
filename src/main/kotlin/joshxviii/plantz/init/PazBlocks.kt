@@ -7,6 +7,7 @@ import joshxviii.plantz.block.MailboxBlock
 import joshxviii.plantz.block.PlantPotBlock
 import joshxviii.plantz.block.SunBatteryBlock
 import joshxviii.plantz.block.TimeMachineBlock
+import joshxviii.plantz.block.WaterPotBlock
 import joshxviii.plantz.block.WateringCanBlock
 import joshxviii.plantz.block.ZenPlantPotBlock
 import joshxviii.plantz.block.entity.FlagBlockEntity
@@ -15,7 +16,7 @@ import joshxviii.plantz.block.entity.MailboxBlockEntity
 import joshxviii.plantz.block.entity.SunBatteryBlockEntity
 import joshxviii.plantz.block.entity.TimeMachineBlockEntity
 import joshxviii.plantz.item.component.BlocksProjectileDamage
-import joshxviii.plantz.pazResource
+import joshxviii.plantz.util.pazResource
 import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
 import net.fabricmc.fabric.api.`object`.builder.v1.world.poi.PoiHelper
 import net.minecraft.core.BlockPos
@@ -58,6 +59,15 @@ object PazBlocks {
             .noOcclusion()
             .pushReaction(PushReaction.NORMAL),
         ::PlantPotBlock
+    )
+    @JvmField val WATER_POT: Block = registerBlock(
+        "water_pot",
+        BlockBehaviour.Properties.of()
+            .sound(SoundType.STONE)
+            .strength(0.2F)
+            .noOcclusion()
+            .pushReaction(PushReaction.NORMAL),
+        ::WaterPotBlock
     )
     @JvmField val ZEN_PLANT_POT: Block = registerBlock(
         "zen_plant_pot",

@@ -2,6 +2,8 @@ package joshxviii.plantz.entity.plant
 
 import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
+import joshxviii.plantz.entity.plant.init.Plant
+import joshxviii.plantz.entity.plant.init.PultPlant
 import joshxviii.plantz.entity.projectile.Butter
 import joshxviii.plantz.entity.projectile.Kernel
 import net.minecraft.network.syncher.EntityDataAccessor
@@ -10,13 +12,12 @@ import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
-import net.minecraft.world.entity.monster.Creeper
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec2
 
-class KernelPult(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.KERNEL_PULT, level) {
+class KernelPult(type: EntityType<out PultPlant>, level: Level) : PultPlant(PazEntities.KERNEL_PULT, level) {
 
     companion object {
         val HAS_BUTTER: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(KernelPult::class.java, EntityDataSerializers.BOOLEAN)
@@ -45,11 +46,5 @@ class KernelPult(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.
             cooldownTime = 26,
             actionDelay = 12,
             actionStartEffect = { hasButterShot = random.nextFloat() < 0.25 }))
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, false, false) { target, level ->
-            target !is Plant
-                    && target !is Creeper
-                    && (target is Zombie
-                    || (target is Enemy && isTame))
-        })
     }
 }

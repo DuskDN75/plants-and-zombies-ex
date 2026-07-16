@@ -1,5 +1,6 @@
-package joshxviii.plantz.entity.plant
+package joshxviii.plantz.entity.plant.utils
 
+import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.init.PazComponents
 import joshxviii.plantz.init.PazConfig
 import joshxviii.plantz.init.PazItems

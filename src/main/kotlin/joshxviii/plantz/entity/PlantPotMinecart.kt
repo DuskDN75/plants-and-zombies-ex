@@ -1,10 +1,10 @@
 package joshxviii.plantz.entity
 
+import joshxviii.plantz.block.BasePotBlock
 import joshxviii.plantz.init.PazBlocks
 import joshxviii.plantz.init.PazCriteria
 import joshxviii.plantz.init.PazItems
-import joshxviii.plantz.block.PlantPotBlock
-import joshxviii.plantz.entity.plant.Plant
+import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.item.SeedPacketItem
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -67,6 +67,6 @@ class PlantPotMinecart(type: EntityType<out AbstractMinecart>, level: Level) : A
     override fun getDropItem(): Item = PazItems.PLANT_POT_MINECART
 
     override fun getDefaultDisplayBlockState(): BlockState {
-        return PazBlocks.PLANT_POT.defaultBlockState().setValue<Direction, Direction>(PlantPotBlock.FACING, Direction.NORTH)
+        return PazBlocks.PLANT_POT.defaultBlockState().setValue<Direction, Direction>(BasePotBlock.FACING, Direction.NORTH)
     }
 }

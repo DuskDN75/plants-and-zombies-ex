@@ -6,7 +6,7 @@ import joshxviii.plantz.effect.HypnotizedMobEffect
 import joshxviii.plantz.effect.PaintedMobEffect
 import joshxviii.plantz.effect.ToxicMobEffect
 import joshxviii.plantz.effect.ZombieOmenMobEffect
-import joshxviii.plantz.pazResource
+import joshxviii.plantz.util.pazResource
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 import net.fabricmc.fabric.impl.attachment.AttachmentRegistryImpl
 import net.minecraft.core.Holder

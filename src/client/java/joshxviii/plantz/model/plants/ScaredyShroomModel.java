@@ -3,16 +3,14 @@ package joshxviii.plantz.model.plants;
 import joshxviii.plantz.PlantRenderState;
 import joshxviii.plantz.animation.plants.ScaredyShroomAnimation;
 import net.minecraft.client.animation.KeyframeAnimation;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.AnimationState;
 import org.jetbrains.annotations.NotNull;
 
-import static joshxviii.plantz.UtilsKt.pazResource;
+import static joshxviii.plantz.util.UtilsKt.pazResource;
 
 
 public class ScaredyShroomModel extends PlantModel {

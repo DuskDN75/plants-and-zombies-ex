@@ -1,7 +1,7 @@
 package joshxviii.plantz.ai.goal
 
-import joshxviii.plantz.entity.plant.Plant
-import joshxviii.plantz.entity.plant.PlantGrowNeeds
+import joshxviii.plantz.entity.plant.init.Plant
+import joshxviii.plantz.entity.plant.utils.PlantGrowNeeds
 import net.minecraft.sounds.SoundEvents.FOX_SLEEP
 import net.minecraft.world.entity.ai.goal.Goal
 

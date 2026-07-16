@@ -1,6 +1,6 @@
 package joshxviii.plantz.ai.goal
 
-import joshxviii.plantz.entity.plant.Plant
+import joshxviii.plantz.entity.plant.init.Plant
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.attributes.Attributes

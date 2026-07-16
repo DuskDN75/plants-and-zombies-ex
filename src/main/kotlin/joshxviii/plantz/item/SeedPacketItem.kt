@@ -1,12 +1,14 @@
 package joshxviii.plantz.item
 
 import joshxviii.plantz.*
-import joshxviii.plantz.entity.plant.Plant
+import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.init.PazComponents
 import joshxviii.plantz.init.PazConfig
 import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.init.PazItems
 import joshxviii.plantz.init.PazTags
+import joshxviii.plantz.util.getTotalSun
+import joshxviii.plantz.util.removeSunFromStorageAndInventory
 import net.minecraft.ChatFormatting
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction

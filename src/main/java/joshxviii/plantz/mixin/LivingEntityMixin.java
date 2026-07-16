@@ -1,12 +1,12 @@
 package joshxviii.plantz.mixin;
 
 import com.mojang.serialization.Codec;
-import joshxviii.plantz.*;
 import joshxviii.plantz.effect.PaintedMobEffect;
-import joshxviii.plantz.entity.plant.Plant;
+import joshxviii.plantz.entity.plant.init.Plant;
 import joshxviii.plantz.init.PazEffects;
 import joshxviii.plantz.init.PazItems;
 import joshxviii.plantz.init.PazTags;
+import joshxviii.plantz.util.PlantHeadAttachment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;

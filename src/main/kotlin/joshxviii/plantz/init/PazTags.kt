@@ -1,6 +1,6 @@
 package joshxviii.plantz.init
 
-import joshxviii.plantz.pazResource
+import joshxviii.plantz.util.pazResource
 import net.minecraft.core.registries.Registries
 import net.minecraft.tags.TagKey
 import net.minecraft.world.damagesource.DamageType
@@ -78,6 +78,7 @@ object PazTags {
         val HAS_FUMESHROOM = tag("plant/has_fumeshroom")
         val HAS_HYPNOSHROOM = tag("plant/has_hypnoshroom")
         val HAS_DOOM_SHROOM = tag("plant/has_doomshroom")
+        val HAS_LILYPAD = tag("plant/has_lilypad")
         val HAS_SEA_SHROOM = tag("plant/has_seashroom")
         val HAS_SCAREDYSHROOM = tag("plant/has_scaredyshroom")
 

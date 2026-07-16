@@ -3,6 +3,8 @@ package joshxviii.plantz.entity.plant
 import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.init.PazTags.EntityTypes.WALLNUT_DEFLECTABLE
 import joshxviii.plantz.entity.Sun
+import joshxviii.plantz.entity.plant.init.Plant
+import joshxviii.plantz.init.PazBlocks
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.damagesource.DamageSource
@@ -11,7 +13,9 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.Fluids
 
 class WallNut(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.WALL_NUT, level) {
 
@@ -50,6 +54,15 @@ class WallNut(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.WAL
     }
 
     override fun canSurviveOn(block: BlockState): Boolean {
-        return super.canSurviveOn(block) || !block.getCollisionShape(level(), blockPosition().below()).isEmpty
+
+        val isWater = block.`is`(Blocks.WATER) || block.fluidState.`is`(Fluids.WATER) || block.`is`(PazBlocks.WATER_POT)
+
+        val isLava = block.`is`(Blocks.LAVA) || block.fluidState.`is`(Fluids.LAVA)
+
+        if (isWater || isLava) return false
+
+        val solidFloor = !block.getCollisionShape(level(), blockPosition().below()).isEmpty
+
+        return super.canSurviveOn(block) || solidFloor
     }
 }

@@ -1,6 +1,7 @@
 package joshxviii.plantz
 
 import joshxviii.plantz.init.PazEntities.MAGIC_NAMES
+import joshxviii.plantz.util.pazResource
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.resources.Identifier

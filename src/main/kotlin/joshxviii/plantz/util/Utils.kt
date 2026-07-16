@@ -1,7 +1,7 @@
-package joshxviii.plantz
+package joshxviii.plantz.util
 
 import joshxviii.plantz.PazMain.MODID
-import joshxviii.plantz.entity.plant.Plant
+import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.init.PazComponents
 import joshxviii.plantz.init.PazConfig
 import joshxviii.plantz.init.PazItems

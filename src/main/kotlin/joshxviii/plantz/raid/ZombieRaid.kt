@@ -12,6 +12,7 @@ import joshxviii.plantz.init.PazBlocks
 import joshxviii.plantz.init.PazCriteria
 import joshxviii.plantz.init.PazEffects
 import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.util.tickTimeFormat
 import net.minecraft.SharedConstants
 import net.minecraft.core.BlockPos
 import net.minecraft.core.BlockPos.MutableBlockPos

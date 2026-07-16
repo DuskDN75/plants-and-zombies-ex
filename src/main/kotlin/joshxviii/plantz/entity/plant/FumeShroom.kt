@@ -6,6 +6,7 @@ import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.init.PazServerParticles
 import joshxviii.plantz.ai.PlantState
 import joshxviii.plantz.ai.goal.BeamAttackGoal
+import joshxviii.plantz.entity.plant.init.Plant
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData

@@ -5,6 +5,7 @@ import com.mojang.math.Axis
 import joshxviii.plantz.PazModels.PAINT_COLORS_KEY
 import joshxviii.plantz.init.PazItems
 import joshxviii.plantz.model.zombies.PazZombieModel
+import joshxviii.plantz.util.pazResource
 import net.minecraft.client.Minecraft
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.model.HumanoidModel

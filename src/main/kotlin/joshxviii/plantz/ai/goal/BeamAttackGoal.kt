@@ -2,7 +2,7 @@ package joshxviii.plantz.ai.goal
 
 import joshxviii.plantz.init.PazConfig
 import joshxviii.plantz.init.PazDamageTypes
-import joshxviii.plantz.entity.plant.Plant
+import joshxviii.plantz.entity.plant.init.Plant
 import net.minecraft.resources.ResourceKey
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.Mth

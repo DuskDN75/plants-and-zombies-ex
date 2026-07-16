@@ -3,6 +3,7 @@ package joshxviii.plantz.entity.plant
 import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.init.PazSounds
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
+import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.entity.projectile.Spore
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers
@@ -13,7 +14,6 @@ import net.minecraft.world.entity.ai.control.LookControl
 import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.ai.targeting.TargetingConditions
-import net.minecraft.world.entity.monster.Creeper
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
@@ -63,7 +63,7 @@ class ScaredyShroom(type: EntityType<out Plant>, level: Level) : Plant(PazEntiti
         })
         this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, _ ->
             target !is Plant
-                    && target !is Creeper
+                    
                     && (target is Zombie
                     || (target is Enemy && isTame))
         })

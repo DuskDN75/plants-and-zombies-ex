@@ -1,8 +1,10 @@
 package joshxviii.plantz.entity.plant
 
-import joshxviii.plantz.*
 import joshxviii.plantz.ai.goal.MeleeAttackActionGoal
+import joshxviii.plantz.entity.plant.init.AttackingPlant
+import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.util.applyImpulse
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
@@ -13,14 +15,13 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.SpawnGroupData
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
-import net.minecraft.world.entity.monster.Creeper
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
 
-class BonkChoy(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.BONK_CHOY, level) {
+class BonkChoy(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlant(PazEntities.BONK_CHOY, level) {
 
     companion object {
         val USE_UPPERCUT: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(BonkChoy::class.java, EntityDataSerializers.BOOLEAN)
@@ -64,13 +65,6 @@ class BonkChoy(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.BO
 
     override fun registerGoals() {
         super.registerGoals()
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
-            target !is Plant
-                    && target !is Creeper
-                    && (target is Zombie
-                    || (target is Enemy && isTame)
-                    || (target is Player && !isTame))
-        })
     }
 
     fun reassessAttack() {

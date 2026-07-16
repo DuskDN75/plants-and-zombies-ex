@@ -1,5 +1,6 @@
 package joshxviii.plantz.entity.projectile
 
+import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.init.PazDamageTypes
 import joshxviii.plantz.init.PazEffects
 import joshxviii.plantz.init.PazEntities
@@ -21,7 +22,7 @@ class Butter(
 ) : PazProjectile(
     PazEntities.BUTTER, level, owner, spawnOffset,
     PazDamageTypes.PLANT,
-    damage = 3.5f,
+    damage = Plant.PEA_DAMAGE.toFloat()*2,
     knockback = 0.2
 ) {
     override fun getDefaultGravity(): Double = 0.03

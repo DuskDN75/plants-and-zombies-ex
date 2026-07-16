@@ -8,7 +8,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import org.jetbrains.annotations.NotNull;
 
-import static joshxviii.plantz.UtilsKt.pazResource;
+import static joshxviii.plantz.util.UtilsKt.pazResource;
 
 public class MissileModel extends EntityModel<@NotNull ProjectileRenderState> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("missle"), "main");

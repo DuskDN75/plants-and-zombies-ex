@@ -1,5 +1,6 @@
 package joshxviii.plantz.entity.plant
 
+import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.init.PazConfig
 import joshxviii.plantz.init.PazDamageTypes
 import joshxviii.plantz.init.PazDataSerializers.DATA_SWELL_DIR

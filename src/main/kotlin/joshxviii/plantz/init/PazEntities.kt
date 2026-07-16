@@ -7,11 +7,12 @@ import joshxviii.plantz.entity.PlantPotMinecart
 import joshxviii.plantz.entity.Sun
 import joshxviii.plantz.entity.gnome.Gnome
 import joshxviii.plantz.entity.plant.*
+import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.entity.projectile.*
 import joshxviii.plantz.entity.turret.Turret
 import joshxviii.plantz.entity.zombie.*
 import joshxviii.plantz.mixin.MobAccessor
-import joshxviii.plantz.pazResource
+import joshxviii.plantz.util.pazResource
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.minecraft.core.Registry
@@ -143,7 +144,7 @@ object PazEntities {
         height = 1.0f,
         eyeHeight = 0.7f,
         attributes = Plant.Companion.PlantAttributes(
-            attackDamage = Plant.PEA_DAMAGE,
+            attackDamage = Plant.PEA_DAMAGE*0.5,
             attackRange = 7.25,
             followRange = 6.5,
         )
@@ -154,7 +155,7 @@ object PazEntities {
         width = 0.9f,
         height = 0.8f,
         attributes = Plant.Companion.PlantAttributes(
-            attackDamage = 2.0,
+            attackDamage = Plant.PEA_DAMAGE*2,
             attackKnockback = 0.5,
             followRange = 22.0,
         )
@@ -165,7 +166,7 @@ object PazEntities {
         width = 0.9f,
         height = 0.8f,
         attributes = Plant.Companion.PlantAttributes(
-            attackDamage = 1.5,
+            attackDamage = Plant.PEA_DAMAGE,
             attackKnockback = 0.5,
             followRange = 26.0,
         )
@@ -177,7 +178,7 @@ object PazEntities {
         height = 0.8f,
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 35.0,
-            attackDamage = Plant.PEA_DAMAGE*2,
+            attackDamage = Plant.PEA_DAMAGE*4,
             followRange = 38.0,
         )
     )
@@ -189,7 +190,7 @@ object PazEntities {
         attributes = Plant.Companion.PlantAttributes(
             attackDamage = Plant.PEA_DAMAGE*2,
             attackKnockback = 0.45,
-            attackRange = 2.5,
+            attackRange = 3.0,
             followRange = 4.0,
         )
     )
@@ -200,7 +201,7 @@ object PazEntities {
         eyeHeight = 0.5f,
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 14.0,
-            attackDamage = 0.75,
+            attackDamage = Plant.PEA_DAMAGE*120,
             followRange = 1.0,
             scale = 1.25
         )
@@ -212,7 +213,7 @@ object PazEntities {
         eyeHeight = 0.3f,
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 12.0,
-            attackDamage = 1.0,
+            attackDamage = Plant.PEA_DAMAGE,
             followRange = 10.0,
         )
     )
@@ -224,7 +225,7 @@ object PazEntities {
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 18.0,
             followRange = 22.0,
-            attackDamage = 1.0,
+            attackDamage = Plant.PEA_DAMAGE,
         )
     )
     @JvmField val FUME_SHROOM: EntityType<FumeShroom> = registerPlant(
@@ -233,7 +234,7 @@ object PazEntities {
         width = 0.8f,
         height = 0.8f,
         attributes = Plant.Companion.PlantAttributes(
-            attackDamage = 2.0,
+            attackDamage = Plant.PEA_DAMAGE*2,
         )
     )
     @JvmField val SUN_SHROOM: EntityType<SunShroom> = registerPlant(
@@ -260,13 +261,21 @@ object PazEntities {
             followRange = 5.0
         )
     )
+    @JvmField val LILYPAD: EntityType<LilyPad> = registerPlant(
+        "lilypad", EntityType.Builder.of(::LilyPad, MobCategory.CREATURE),
+        width = 0.8f,
+        height = 0.1f,
+        attributes = Plant.Companion.PlantAttributes(
+            maxHealth = 12.0,
+        )
+    )
     @JvmField val SEA_SHROOM: EntityType<SeaShroom> = registerPlant(
         "seashroom", EntityType.Builder.of(::SeaShroom, MobCategory.CREATURE),
         width = 0.5f,
         height = 0.5f,
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 12.0,
-            attackDamage = 0.5,
+            attackDamage = Plant.PEA_DAMAGE,
             followRange = 10.0,
         )
     )

@@ -6,6 +6,7 @@ import joshxviii.plantz.init.PazEffects
 import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.init.PazServerParticles
 import joshxviii.plantz.ai.goal.MeleeAttackActionGoal
+import joshxviii.plantz.entity.plant.init.Plant
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
@@ -14,7 +15,6 @@ import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
-import net.minecraft.world.entity.monster.Creeper
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
@@ -63,7 +63,7 @@ class LightningReed(type: EntityType<out Plant>, level: Level) : Plant(PazEntiti
         ))
         this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
             target !is Plant
-                    && target !is Creeper
+                    
                     && (target is Zombie
                     || (target is Enemy && isTame)
                     || (target is Player && !isTame))

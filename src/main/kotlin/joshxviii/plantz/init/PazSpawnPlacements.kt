@@ -1,6 +1,7 @@
 package joshxviii.plantz.init
 
 import joshxviii.plantz.entity.plant.*
+import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.entity.zombie.DiggerZombie
 import joshxviii.plantz.entity.zombie.PazZombie
 import joshxviii.plantz.entity.zombie.ZombieYeti
@@ -48,6 +49,10 @@ object PazSpawnPlacements {
         addBiomeSpawn(PazTags.Biomes.HAS_DOOM_SHROOM, PazEntities.DOOM_SHROOM,
             weight = 25, minGroupSize = 1, maxGroupSize = 1)
         registerSpawnPlacement(PazEntities.DOOM_SHROOM, DoomShroom::checkDoomShroomSpawnRules)
+
+        addBiomeSpawn(PazTags.Biomes.HAS_LILYPAD, PazEntities.SEA_SHROOM,
+            weight = 2, minGroupSize = 1, maxGroupSize = 3)
+        registerSpawnPlacement(PazEntities.LILYPAD, SeaShroom::checkSeaShroomSpawnRules, spawnPlacements = SpawnPlacementTypes.IN_WATER)
 
         addBiomeSpawn(PazTags.Biomes.HAS_SEA_SHROOM, PazEntities.SEA_SHROOM,
             weight = 2, minGroupSize = 1, maxGroupSize = 3)

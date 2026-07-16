@@ -1,8 +1,8 @@
 package joshxviii.plantz.ai.goal
 
 import joshxviii.plantz.init.PazSounds
-import joshxviii.plantz.applyImpulse
-import joshxviii.plantz.entity.plant.Plant
+import joshxviii.plantz.util.applyImpulse
+import joshxviii.plantz.entity.plant.init.Plant
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.util.Mth

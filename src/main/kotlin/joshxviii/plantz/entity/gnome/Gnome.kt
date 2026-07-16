@@ -5,7 +5,7 @@ import joshxviii.plantz.init.PazDataSerializers.GNOME_VARIANT
 import joshxviii.plantz.init.PazSounds.GNOME_JUMP
 import joshxviii.plantz.init.PazTags
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
-import joshxviii.plantz.entity.plant.Plant
+import joshxviii.plantz.entity.plant.init.Plant
 import net.minecraft.core.BlockPos
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.SynchedEntityData
