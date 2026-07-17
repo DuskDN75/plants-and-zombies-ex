@@ -157,7 +157,8 @@ object PazEntities {
         attributes = Plant.Companion.PlantAttributes(
             attackDamage = Plant.PEA_DAMAGE*2,
             attackKnockback = 0.5,
-            followRange = 22.0,
+            followRange = 45.0,
+            attackRange = 15.0,
         )
     )
     @JvmField val KERNEL_PULT: EntityType<KernelPult> = registerPlant(
@@ -168,7 +169,8 @@ object PazEntities {
         attributes = Plant.Companion.PlantAttributes(
             attackDamage = Plant.PEA_DAMAGE,
             attackKnockback = 0.5,
-            followRange = 26.0,
+            followRange = 45.0,
+            attackRange = 15.0,
         )
     )
     @JvmField val MELON_PULT: EntityType<MelonPult> = registerPlant(
@@ -179,7 +181,8 @@ object PazEntities {
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 35.0,
             attackDamage = Plant.PEA_DAMAGE*4,
-            followRange = 38.0,
+            followRange = 45.0,
+            attackRange = 15.0,
         )
     )
     @JvmField val BONK_CHOY: EntityType<BonkChoy> = registerPlant(

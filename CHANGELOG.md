@@ -1,3 +1,23 @@
+# Changelog (EX) 1.0
+### Additions
+#### General:
+#### Plants:
+- Added Lilypad
+  - Found in any warm ocean or wet biome.
+- Removed Seed Packet Mutations
+  - When zen-gardening a plant, seeds for a different plant may be produced instead.
+    - Wall Nut has a 5% chance to produce Explode-O-Nut seeds.
+    - Explode-O-Nut no longer have mutations.
+    - Electric Peashooters no longer have mutations.
+    - Peashooter has a 5% chance to produce Repeater seeds.
+    - Repeaters no longer have mutations.
+- Repeaters spawn naturally again.
+#### Zombies:
+- Zombies will now primarily attack Wall Nuts.
+### Technical Changes
+
+
+
 # Changelog 1.5
 ### Additions
 #### General:   

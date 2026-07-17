@@ -83,8 +83,6 @@ class ProjectileAttackGoal(
 
         val level = usingEntity.level() as ServerLevel
         val projectile = projectileFactory()
-        if (projectile is Projectile) Projectile.spawnProjectile(projectile, level, ItemStack.EMPTY)
-        else level.addFreshEntity(projectile)
 
         /**
          * Pretends that the plant is at 0, 0, 0 and gets the relative position of the target
@@ -98,7 +96,7 @@ class ProjectileAttackGoal(
         val horzDistance = targetPosNow.horizontalDistance()
 
         val distanceRatio = (horzDistance / attackRadius).coerceIn(0.0, 1.0)
-        val finalVel = if(useHighArc) Mth.lerp(distanceRatio, 0.0, velocity) else velocity
+        val finalVel = if(useHighArc) Mth.lerp(distanceRatio, velocity * 0.35, velocity) else velocity
 
         val targetPos = calculateMovingTargetPosition(targetPosNow,target, projectile, finalVel)
         val arcs = calculateProjectileArcs(targetPos, projectile.gravity, finalVel)
@@ -120,8 +118,13 @@ class ProjectileAttackGoal(
         val shootY = Mth.sin(finalAngle).toDouble()
         val shootZ = (horizUnitZ * horizComp)
 
-        if (projectile is Projectile) projectile.shoot(shootX, shootY, shootZ, finalVel.toFloat(), inaccuracy)
-        else projectile.applyImpulse(shootX, shootY, shootZ, finalVel.toFloat(), inaccuracy)
+        if (projectile is Projectile) {
+            Projectile.spawnProjectile(projectile, level, ItemStack.EMPTY)
+            projectile.shoot(shootX, shootY, shootZ, finalVel.toFloat(), inaccuracy)
+        } else {
+            level.addFreshEntity(projectile)
+            projectile.applyImpulse(shootX, shootY, shootZ, finalVel.toFloat(), inaccuracy)
+        }
 
         if (soundEvent!=null) usingEntity.playSound(soundEvent, 0.7f, 0.4f / (usingEntity.random.nextFloat() * 0.4f + 0.8f))
         return true
@@ -129,30 +132,34 @@ class ProjectileAttackGoal(
 
     private fun calculateMovingTargetPosition(basePos: Vec3, target: LivingEntity, projectile: Entity, v: Double): Vec3 {
 
-        val targetVel = Vec3(target.deltaMovement.x, 0.0, target.deltaMovement.z)
+        val targetVel = Vec3(
+            target.x - target.xo,
+            0.0,
+            target.z - target.zo
+        )
         if (targetVel.lengthSqr() <= 0.000001) return basePos
 
         val g = projectile.gravity
 
-        println(projectile.position())
-        println(usingEntity.eyePosition)
+        var time = basePos.horizontalDistance() / v + 1.0
 
-        var predicted = basePos
+        repeat(8) {
+            val predicted = basePos.add(targetVel.scale(time))
 
-        repeat(4) {
             val arcs = calculateProjectileArcs(predicted, g, v) ?: return predicted
             val angle = if (useHighArc) arcs.first else arcs.second
 
             val horizontalSpeed = v * Mth.cos(angle)
-            if (horizontalSpeed <= 0.000001) return predicted
 
             val horizontalDistance = predicted.horizontalDistance()
-            val flightTime = horizontalDistance / horizontalSpeed
+            val flightTime = horizontalDistance / horizontalSpeed + 1.0
 
-            predicted = basePos.add(targetVel.scale(flightTime))
+            time = Mth.lerp(0.5f, time.toFloat(), flightTime.toFloat()).toDouble()
+
+            println("vel=$targetVel time=$time prediction=$predicted")
         }
 
-        return predicted
+        return basePos.add(targetVel.scale(time))
     }
 
     /**
@@ -178,7 +185,7 @@ class ProjectileAttackGoal(
         var discriminant = v4 - g * (g * horiz2_d + 2.0 * v2 * dy)
 
         //impossible shot if discriminant is < 0
-        if (discriminant < 0.0) discriminant = 0.0
+        if (discriminant < 0.0) return null
 
         val sqrtDisc = sqrt(discriminant)
         val denom = g * horizDist

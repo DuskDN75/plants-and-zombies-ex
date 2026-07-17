@@ -201,7 +201,7 @@ abstract class PazProjectile(
             owner?.setLastHurtMob(target)
 
             // get damage from attribute
-            val source = this.damageSources().source(damageType, this, owner)
+            val source = this.damageSources().source(damageType, this)
             if(target.hurtServer(serverLevel, source, damage)) {
                 if (target is LivingEntity) {
                     val knockbackDirection = calculateHorizontalHurtKnockbackDirection(target, source)
