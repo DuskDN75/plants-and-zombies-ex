@@ -48,9 +48,10 @@ abstract class CarrierPlant(type: EntityType<out CarrierPlant>, level: Level) : 
         val itemStack = player.getItemInHand(hand)
         val serverLevel = this.level()
 
-        if (passengers.isNotEmpty()) return InteractionResult.PASS
-
         if (itemStack.`is`(PazItems.SEED_PACKET)) {
+
+            if (passengers.isNotEmpty()) return InteractionResult.PASS
+
             val plantType = SeedPacketItem.typeFromStack(itemStack)
 
             val entity = if (serverLevel is ServerLevel) plantType?.create(serverLevel, null, BlockPos.containing(this.position()), EntitySpawnReason.SPAWN_ITEM_USE, true, false) else null
@@ -72,11 +73,12 @@ abstract class CarrierPlant(type: EntityType<out CarrierPlant>, level: Level) : 
 
             itemStack.consume(1, player)
             entity?.playSound(SoundEvents.BIG_DRIPLEAF_PLACE, 1.0f, 1.0f)
-            if (entity is TamableAnimal) entity.tame(player)
             serverLevel.gameEvent(player, GameEvent.ENTITY_PLACE, this.position())
-            if (player is ServerPlayer) PazCriteria.PLANT_POT_MINECRAFT.trigger(player, entity !=null && hasPassenger(entity))
+
+            return InteractionResult.SUCCESS_SERVER
+        } else {
+            return super.interact(player, hand, location)
         }
-        return InteractionResult.SUCCESS_SERVER
     }
 
     override fun attackGoals() {}

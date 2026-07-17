@@ -210,6 +210,14 @@
         }
       }
     },
+    "plantz:lilypad": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz:lilypad"
+        }
+      }
+    },
     "plantz:seashroom": {
       "trigger": "minecraft:tame_animal",
       "conditions": {

@@ -1,26 +1,19 @@
 package joshxviii.plantz.entity.plant
 
-import joshxviii.plantz.init.PazBlocks
-import joshxviii.plantz.init.PazEntities
-import joshxviii.plantz.ai.goal.ProjectileAttackGoal
+import joshxviii.plantz.entity.plant.init.CarrierPlant
 import joshxviii.plantz.entity.plant.init.Plant
-import joshxviii.plantz.entity.projectile.WaterSpore
-import net.minecraft.core.BlockPos
+import joshxviii.plantz.init.PazEntities
 import net.minecraft.tags.FluidTags
-import net.minecraft.util.RandomSource
-import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
-import net.minecraft.world.entity.monster.Enemy
-import net.minecraft.world.entity.monster.zombie.Zombie
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.ServerLevelAccessor
-import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.phys.shapes.CollisionContext
+import kotlin.math.abs
 
-class LilyPad(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.LILYPAD, level) {
+class LilyPad(type: EntityType<out CarrierPlant>, level: Level) : CarrierPlant(PazEntities.LILYPAD, level) {
 
     override fun isPushedByFluid(): Boolean {
         return false
@@ -28,17 +21,37 @@ class LilyPad(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.LIL
 
     override fun registerGoals() {
         super.registerGoals()
+    }
 
-        this.goalSelector.addGoal(2, ProjectileAttackGoal(
-            usingEntity = this,
-            projectileFactory = { WaterSpore(level(), this) },
-            cooldownTime = 20))
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
-            target !is Plant
-                    
-                    && (target is Zombie
-                    || (target is Enemy && isTame))
-        })
+    override fun doWaterSplashEffect() {
+
+    }
+
+
+
+    override fun tick() {
+        super.tick()
+
+        if (this.isInWater) {
+
+            val level = this.level()
+            val blockPos = this.blockPosition()
+            val fluidState = level.getFluidState(blockPos)
+
+            val fluidHeight = fluidState.getHeight(level, blockPos)
+            if (fluidHeight <= 0.0f || fluidState.isEmpty) {
+                return
+            }
+
+            val waterSurfaceY = blockPos.y.toDouble() + fluidHeight.toDouble()
+
+            val distance = waterSurfaceY - this.y
+
+            if (abs(distance) < 0.2) {
+
+                this.setDeltaMovement(this.x, 0.0, this.z)
+            }
+        }
     }
 
     override fun canBreatheUnderwater(): Boolean = true
@@ -46,4 +59,8 @@ class LilyPad(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.LIL
     override fun canSurviveOn(block: BlockState): Boolean {
         return waterSurvivalCheck(block)
     }
+
+//    override fun isNoGravity(): Boolean {
+//        return this.isInWater || super.isNoGravity()
+//    }
 }

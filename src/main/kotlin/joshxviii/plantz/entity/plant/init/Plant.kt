@@ -111,7 +111,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         /**
          * Checks for nearby plants in a 3x3 radius, and excludes itself.
          */
-        fun hasAdjacentPlant(level: Level, pos: BlockPos) : Boolean {
+        fun hasAdjacentPlant(level: Level, pos: BlockPos, ogPlant: Plant? = null) : Boolean {
 
 //            for (direction in Direction.entries) {
 //                val searchBox = AABB(pos).inflate(1.0)
@@ -120,7 +120,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
             val searchBox = AABB(pos).inflate(1.0, 0.0, 1.0)
 
             val plants = level.getEntitiesOfClass(Plant::class.java, searchBox) { plant ->
-                plant.blockPosition() != pos && plant.isAlive
+                plant.blockPosition() != pos && plant.isAlive && (ogPlant == null || ogPlant != plant)
             }
 
             return plants.isNotEmpty()
@@ -644,7 +644,8 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     // if on invalid ground plant should start to suffocate
     private fun onValidGround() : Boolean {
         return (attachedEntity != null) || (canSurviveOn(getBlockBelow()) && !hasAdjacentPlant(level(), blockPosition())) || vehicle?.`is`(
-            PazEntities.PLANT_POT_MINECART) == true
+            PazEntities.PLANT_POT_MINECART) == true || (vehicle?.`is`(
+            PazTags.EntityTypes.PLANT) == true && !canBreatheUnderwater())
     }
 
     fun sunIsVisible() : Boolean {

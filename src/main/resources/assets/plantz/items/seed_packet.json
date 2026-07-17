@@ -173,6 +173,13 @@
         }
       },
       {
+        "when": { "id": "plantz:lilypad" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz:item/seed_packet/lilypad"
+        }
+      },
+      {
         "when": { "id": "plantz:seashroom" },
         "model": {
           "type": "minecraft:model",

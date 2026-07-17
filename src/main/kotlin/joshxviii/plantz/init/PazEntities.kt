@@ -36,15 +36,15 @@ object PazEntities {
 
             if (entity is Zombie) (entity as MobAccessor).targetSelector.addGoal(4, NearestAttackableTargetGoal(entity, Gnome::class.java, 5, true, false, null))
 
-            if (entity is PathfinderMob && entity.`is`(PazTags.EntityTypes.ZOMBIE_RAIDERS)) {
-                (entity as MobAccessor).goalSelector.addGoal(2, DestroyFlagGoal(entity))
-                (entity as MobAccessor).goalSelector.addGoal(3, PathfindToFlagGoal(entity))
-            }
-
             if (entity is Mob && entity.`is`(PazTags.EntityTypes.ATTACKS_PLANTS) && entity !is ZombifiedPiglin) {
                 (entity as MobAccessor).targetSelector.addGoal(0, NearestAttackableTargetGoal(entity, WallNut::class.java, 6, true, true) { target, level -> ((target as? WallNut ?: target as? ExplodeONut)?.let { it.distanceToSqr(entity) < 7 } ?: false)})
                 (entity as MobAccessor).targetSelector.addGoal(3, NearestAttackableTargetGoal(entity, Plant::class.java, 5, true, false) { target, level ->
                     target !is WallNut && !target.`is`(PazTags.EntityTypes.IGNORED_BY_PLANT_ATTACKERS) })
+            }
+
+            if (entity is PathfinderMob && entity.`is`(PazTags.EntityTypes.ZOMBIE_RAIDERS)) {
+                (entity as MobAccessor).goalSelector.addGoal(2, DestroyFlagGoal(entity))
+                (entity as MobAccessor).goalSelector.addGoal(1, PathfindToFlagGoal(entity))
             }
         }
     }
@@ -263,8 +263,9 @@ object PazEntities {
     )
     @JvmField val LILYPAD: EntityType<LilyPad> = registerPlant(
         "lilypad", EntityType.Builder.of(::LilyPad, MobCategory.CREATURE),
-        width = 0.8f,
-        height = 0.1f,
+        width = 0.875f,
+        height = 0.125f,
+        eyeHeight = 0.5f,
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 12.0,
         )

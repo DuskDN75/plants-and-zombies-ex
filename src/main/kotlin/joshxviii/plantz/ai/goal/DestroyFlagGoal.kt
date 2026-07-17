@@ -48,6 +48,11 @@ class DestroyFlagGoal(
     }
 
     override fun canContinueToUse(): Boolean {
+
+        if (this.mob.target != null && this.mob.target!!.isAlive) {
+            return false
+        }
+
         val flagPos = targetFlagPos?: return false
         val isValid = mob.level().getBlockState(flagPos).`is`(PLANTZ_FLAG)
         return isValid

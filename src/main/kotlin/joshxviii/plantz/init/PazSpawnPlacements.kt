@@ -50,7 +50,7 @@ object PazSpawnPlacements {
             weight = 25, minGroupSize = 1, maxGroupSize = 1)
         registerSpawnPlacement(PazEntities.DOOM_SHROOM, DoomShroom::checkDoomShroomSpawnRules)
 
-        addBiomeSpawn(PazTags.Biomes.HAS_LILYPAD, PazEntities.SEA_SHROOM,
+        addBiomeSpawn(PazTags.Biomes.HAS_LILYPAD, PazEntities.LILYPAD,
             weight = 2, minGroupSize = 1, maxGroupSize = 3)
         registerSpawnPlacement(PazEntities.LILYPAD, SeaShroom::checkSeaShroomSpawnRules, spawnPlacements = SpawnPlacementTypes.IN_WATER)
 

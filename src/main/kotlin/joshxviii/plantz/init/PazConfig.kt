@@ -53,6 +53,7 @@ data class ServerConfig(
         "plantz:sunshroom"              to 4,
         "plantz:hypnoshroom"            to 7,
         "plantz:doomshroom"             to 16,
+        "plantz:lilypad"                to 2,
         "plantz:seashroom"              to 0,
         "plantz:coffeebean"             to 2,
     ),

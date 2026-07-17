@@ -22,6 +22,7 @@ import joshxviii.plantz.init.PazSpawnPlacements
 import joshxviii.plantz.networking.ServerConfigResponsePayload
 import joshxviii.plantz.raid.getZombieRaids
 import joshxviii.plantz.init.PazCreativeTab
+import joshxviii.plantz.tabs.PazCreativeTabs
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents
@@ -67,7 +68,7 @@ object PazMain : ModInitializer {
 		PazItems.initialize()
 		PazLootTables.initialize()
 		PazEffects.initialize()
-		PazCreativeTab.initialize()
+		PazCreativeTabs.initialize()
 		PazEntities.initialize()
 		PazDamageTypes.initialize()
 		PazCriteria.initialize()

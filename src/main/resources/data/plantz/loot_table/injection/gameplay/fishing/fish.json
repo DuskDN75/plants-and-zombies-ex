@@ -22,6 +22,21 @@
                   }
                 }
               ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz:seed_packet",
+              "weight": 1,
+              "functions": [
+                {
+                  "function": "minecraft:set_components",
+                  "components": {
+                    "minecraft:entity_data": {
+                      "id": "plantz:lilypad"
+                    }
+                  }
+                }
+              ]
             }
           ],
           "functions": [

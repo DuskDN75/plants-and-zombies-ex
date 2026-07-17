@@ -1,6 +1,7 @@
 package joshxviii.plantz.tabs
 
 import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazCreativeTab
 import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.init.PazItems
 import joshxviii.plantz.item.SeedPacketItem
@@ -13,103 +14,52 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.ItemStack
 
-abstract class PazPlantsTab {
-    // Define the key for the custom tab
-    companion object {
-        private val paz_tab_key: ResourceKey<CreativeModeTab> =
-            ResourceKey.create(Registries.CREATIVE_MODE_TAB, pazResource("plantz_tab"))
+object PazPlantsTab : PazCreativeTab() {
+
+    override var tab_key: String = "plantz_plant_tab"
+
+    override fun initialize() {
+
+         paz_tab = Registry.register(
+            BuiltInRegistries.CREATIVE_MODE_TAB,
+             tab_key,
+            CreativeModeTab.builder(CreativeModeTab.Row.BOTTOM, 0)
+                .title(Component.translatable("itemGroup.plantz.$tab_key"))
+                .icon { ItemStack(PazItems.SUN) }
+
+                .displayItems { parameters, output ->
+
+                    // seed packets
+                    output.accept(SeedPacketItem.stackFor(PazEntities.SUNFLOWER))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.PEA_SHOOTER))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.WALL_NUT))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.EXPLODE_O_NUT))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.CHOMPER))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.CHERRY_BOMB))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.POTATO_MINE))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.REPEATER))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.ICE_PEA_SHOOTER))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.FIRE_PEA_SHOOTER))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.ELECTRIC_PEA_SHOOTER))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.CACTUS))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.LIGHTNING_REED))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.CABBAGE_PULT))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.KERNEL_PULT))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.MELON_PULT))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.BONK_CHOY))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.TANGLE_KELP))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.SUN_SHROOM))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.PUFF_SHROOM))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.FUME_SHROOM))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.SCAREDY_SHROOM))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.HYPNOSHROOM))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.DOOM_SHROOM))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.LILYPAD))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.SEA_SHROOM))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.COFFEE_BEAN))
+                }
+                .build()
+        )
+
     }
-
-    // Register the tab
-    val paz_tab: CreativeModeTab = Registry.register(
-        BuiltInRegistries.CREATIVE_MODE_TAB,
-        paz_tab_key,
-        CreativeModeTab.builder(CreativeModeTab.Row.BOTTOM, 0)
-            .title(Component.translatable("itemGroup.plantz.plantz_plant_tab"))
-            .icon { ItemStack(PazItems.SUN) }
-
-            .displayItems { parameters, output ->
-
-                // seed packets
-                output.accept(SeedPacketItem.stackFor(PazEntities.SUNFLOWER))
-                output.accept(SeedPacketItem.stackFor(PazEntities.PEA_SHOOTER))
-                output.accept(SeedPacketItem.stackFor(PazEntities.WALL_NUT))
-                output.accept(SeedPacketItem.stackFor(PazEntities.EXPLODE_O_NUT))
-                output.accept(SeedPacketItem.stackFor(PazEntities.CHOMPER))
-                output.accept(SeedPacketItem.stackFor(PazEntities.CHERRY_BOMB))
-                output.accept(SeedPacketItem.stackFor(PazEntities.POTATO_MINE))
-                output.accept(SeedPacketItem.stackFor(PazEntities.REPEATER))
-                output.accept(SeedPacketItem.stackFor(PazEntities.ICE_PEA_SHOOTER))
-                output.accept(SeedPacketItem.stackFor(PazEntities.FIRE_PEA_SHOOTER))
-                output.accept(SeedPacketItem.stackFor(PazEntities.ELECTRIC_PEA_SHOOTER))
-                output.accept(SeedPacketItem.stackFor(PazEntities.CACTUS))
-                output.accept(SeedPacketItem.stackFor(PazEntities.LIGHTNING_REED))
-                output.accept(SeedPacketItem.stackFor(PazEntities.CABBAGE_PULT))
-                output.accept(SeedPacketItem.stackFor(PazEntities.KERNEL_PULT))
-                output.accept(SeedPacketItem.stackFor(PazEntities.MELON_PULT))
-                output.accept(SeedPacketItem.stackFor(PazEntities.BONK_CHOY))
-                output.accept(SeedPacketItem.stackFor(PazEntities.TANGLE_KELP))
-                output.accept(SeedPacketItem.stackFor(PazEntities.SUN_SHROOM))
-                output.accept(SeedPacketItem.stackFor(PazEntities.PUFF_SHROOM))
-                output.accept(SeedPacketItem.stackFor(PazEntities.FUME_SHROOM))
-                output.accept(SeedPacketItem.stackFor(PazEntities.SCAREDY_SHROOM))
-                output.accept(SeedPacketItem.stackFor(PazEntities.HYPNOSHROOM))
-                output.accept(SeedPacketItem.stackFor(PazEntities.DOOM_SHROOM))
-                output.accept(SeedPacketItem.stackFor(PazEntities.SEA_SHROOM))
-                output.accept(SeedPacketItem.stackFor(PazEntities.COFFEE_BEAN))
-
-                // zombie spawn eggs
-                output.accept(PazItems.BROWN_COAT_SPAWN_EGG)
-                output.accept(PazItems.NEWSPAPER_ZOMBIE_SPAWN_EGG)
-                output.accept(PazItems.DIGGER_ZOMBIE_SPAWN_EGG)
-                output.accept(PazItems.ENGINEER_ZOMBIE_SPAWN_EGG)
-                output.accept(PazItems.ZOMBIE_YETI_SPAWN_EGG)
-                output.accept(PazItems.DISCO_ZOMBIE_SPAWN_EGG)
-                output.accept(PazItems.BACKUP_DANCER_SPAWN_EGG)
-                output.accept(PazItems.ALL_STAR_SPAWN_EGG)
-                output.accept(PazItems.SOLDIER_ZOMBIE_SPAWN_EGG)
-                output.accept(PazItems.ROBO_ZOMBIE_SPAWN_EGG)
-                output.accept(PazItems.SUPER_BRAINZ_SPAWN_EGG)
-                output.accept(PazItems.IMP_SPAWN_EGG)
-                output.accept(PazItems.GARGANTUAR_SPAWN_EGG)
-
-                // gnome
-                if (parameters.hasPermissions()) output.accept(PazItems.GNOME_SPAWN_EGG)
-
-                //music
-                output.accept(PazItems.MUSIC_DISC_GRASSY_GROOVE)
-
-                // items
-                if (parameters.hasPermissions()) output.accept(PazBlocks.TIME_MACHINE)
-                output.accept(PazItems.BRAINZ_ALLOY)
-                output.accept(PazItems.SUN_BATTERY)
-                output.accept(PazItems.SUN)
-                output.accept(PazItems.SUN_BOTTLE)
-                output.accept(PazItems.WATERING_CAN)
-                output.accept(PazBlocks.PLANT_POT)
-                output.accept(PazBlocks.WATER_POT)
-                output.accept(PazBlocks.ZEN_PLANT_POT)
-                output.accept(PazItems.PLANT_POT_MINECART)
-                output.accept(PazItems.PLANT_POT_HELMET)
-                output.accept(PazItems.DUCKY_TUBE)
-                output.accept(PazBlocks.CONE)
-                output.accept(PazItems.NEWSPAPER)
-                output.accept(PazItems.FOOTBALL_HELMET)
-                output.accept(PazItems.DYE_BLASTER)
-                output.accept(PazBlocks.BRAINZ_FLAG)
-                output.accept(PazBlocks.PLANTZ_FLAG)
-
-                // balloons
-                PazItems.balloonByColor.forEach { output.accept(it.value) }
-
-                // mailboxes
-                PazBlocks.mailboxByColor.forEach { output.accept(it.value) }
-
-                // other
-                output.accept(PazBlocks.GRAVESTONE)
-            }
-            .build()
-    )
-
-    fun initialize() {}
 }

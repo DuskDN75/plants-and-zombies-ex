@@ -20,24 +20,6 @@ interface IAquaticPlant: IPlant {
         )
     }
 
-    fun waterSurvivalCheck(block: BlockState): Boolean {
-        if (block.`is`(PazBlocks.ZEN_PLANT_POT)) {
-            return true
-        }
-
-        if (block.`is`(PazBlocks.WATER_POT)) {
-            return true
-        }
-
-        if (block.`is`(Blocks.WATER_CAULDRON)) {
-            return block.getValue(BlockStateProperties.LEVEL_CAULDRON) > 0
-        }
-
-        val fluidState = level().getFluidState(blockPosition())
-
-        return fluidState.`is`(FluidTags.WATER)
-    }
-
     fun level()
 
     fun getFluidState(blockPosition: Any) {}

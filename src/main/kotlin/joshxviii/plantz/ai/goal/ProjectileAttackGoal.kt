@@ -79,22 +79,28 @@ class ProjectileAttackGoal(
     }
 
     override fun doAction() : Boolean {// fire projectile
-       val target = usingEntity.target?: return false
+        val target = usingEntity.target?: return false
 
         val level = usingEntity.level() as ServerLevel
         val projectile = projectileFactory()
         if (projectile is Projectile) Projectile.spawnProjectile(projectile, level, ItemStack.EMPTY)
         else level.addFreshEntity(projectile)
 
+        /**
+         * Pretends that the plant is at 0, 0, 0 and gets the relative position of the target
+         */
         val targetPosNow = Vec3(
             target.x - projectile.x,
-            target.boundingBox.minY + (target.bbHeight * .5) - projectile.y,
+            target.boundingBox.minY + (target.bbHeight * .5) - projectile.y, // gets the y at the target's feet, raises it up by half the height to get it centered, and makes it relative to the plant
             target.z - projectile.z
         )
-        val distanceRatio = (targetPosNow.horizontalDistance() / attackRadius).coerceIn(0.0, 1.0)
-        val finalVel = if(useHighArc) Mth.lerp(distanceRatio, velocity * 0.45, velocity) else velocity
 
-        val targetPos = calculateMovingTargetPosition(target, projectile, finalVel)
+        val horzDistance = targetPosNow.horizontalDistance()
+
+        val distanceRatio = (horzDistance / attackRadius).coerceIn(0.0, 1.0)
+        val finalVel = if(useHighArc) Mth.lerp(distanceRatio, 0.0, velocity) else velocity
+
+        val targetPos = calculateMovingTargetPosition(targetPosNow,target, projectile, finalVel)
         val arcs = calculateProjectileArcs(targetPos, projectile.gravity, finalVel)
         if (arcs==null) {// lose target if unreachable
             projectile.discard()
@@ -121,17 +127,15 @@ class ProjectileAttackGoal(
         return true
     }
 
-    private fun calculateMovingTargetPosition(target: LivingEntity, projectile: Entity, v: Double): Vec3 {
-        val basePos = Vec3(
-            target.x - projectile.x,
-            target.boundingBox.minY + (target.bbHeight * 0.5) - projectile.y,
-            target.z - projectile.z
-        )
+    private fun calculateMovingTargetPosition(basePos: Vec3, target: LivingEntity, projectile: Entity, v: Double): Vec3 {
 
         val targetVel = Vec3(target.deltaMovement.x, 0.0, target.deltaMovement.z)
         if (targetVel.lengthSqr() <= 0.000001) return basePos
 
         val g = projectile.gravity
+
+        println(projectile.position())
+        println(usingEntity.eyePosition)
 
         var predicted = basePos
 
@@ -165,7 +169,7 @@ class ProjectileAttackGoal(
         val dy = targetPos.y
         val dz = targetPos.z
 
-        val horizDist = sqrt(dx * dx + dz * dz)
+        val horizDist = sqrt(dx * dx + dz * dz) // horizontal distance
         if (horizDist <= 0f) return null
 
         val v2: Double = velocity*velocity
@@ -173,14 +177,14 @@ class ProjectileAttackGoal(
         val horiz2_d = horizDist * horizDist
         var discriminant = v4 - g * (g * horiz2_d + 2.0 * v2 * dy)
 
-        //impossible shot
+        //impossible shot if discriminant is < 0
         if (discriminant < 0.0) discriminant = 0.0
 
         val sqrtDisc = sqrt(discriminant)
         val denom = g * horizDist
 
-        val phi1 = atan((v2 + sqrtDisc) / denom)
-        val phi2 = atan((v2 - sqrtDisc) / denom)
+        val phi1 = atan((v2 + sqrtDisc) / denom) // high arc (parabola)
+        val phi2 = atan((v2 - sqrtDisc) / denom) // low arc (straight)
 
         return phi1 to phi2
     }

@@ -147,7 +147,7 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
             val invalidSpace = !(entity.canSurviveOn(level.getBlockState(spawnPos.below())) || checkWater)
                     || !(spawnBlockCollisionShape==null || !entityBox.intersects(spawnBlockCollisionShape))
 
-            val occupiedSpace = Plant.hasAdjacentPlant(level, spawnPos)
+            val occupiedSpace = Plant.hasAdjacentPlant(level, spawnPos, entity)
 
             if (invalidSpace || occupiedSpace) {
                 player.sendOverlayMessage(
