@@ -1,7 +1,7 @@
 {
   "values": [
     "#minecraft:undead",
-    "#plantz:zombie_raider",
+    "#minecraft:raiders",
     "minecraft:blaze",
     "minecraft:warden",
     "minecraft:witch",
@@ -9,6 +9,7 @@
     "minecraft:piglin_brute",
     "minecraft:ghast",
     "minecraft:breeze",
+    "minecraft:creeper",
     "minecraft:spider",
     "minecraft:cave_spider",
     "minecraft:slime",

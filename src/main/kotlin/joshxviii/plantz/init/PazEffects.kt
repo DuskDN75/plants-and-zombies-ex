@@ -1,6 +1,8 @@
 package joshxviii.plantz.init
 
 import joshxviii.plantz.effect.ButteredMobEffect
+import joshxviii.plantz.effect.ChilledMobEffect
+import joshxviii.plantz.effect.DrenchedMobEffect
 import joshxviii.plantz.effect.ElectrifyMobEffect
 import joshxviii.plantz.effect.HypnotizedMobEffect
 import joshxviii.plantz.effect.PaintedMobEffect
@@ -11,6 +13,7 @@ import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 import net.fabricmc.fabric.impl.attachment.AttachmentRegistryImpl
 import net.minecraft.core.Holder
 import net.minecraft.core.Registry
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectCategory
@@ -24,9 +27,9 @@ import net.minecraft.world.item.alchemy.Potion
 object PazEffects {
 
     @JvmField val TOXIC: Holder<MobEffect> = register("toxic",
-        ToxicMobEffect(MobEffectCategory.HARMFUL, 10762143))
+        ToxicMobEffect(MobEffectCategory.HARMFUL, 10762143, PazServerParticles.SPORE_HIT))
     @JvmField val HYPNOTIZE: Holder<MobEffect> = register("hypnotize",
-        HypnotizedMobEffect(MobEffectCategory.NEUTRAL, 15841255))
+        HypnotizedMobEffect(MobEffectCategory.NEUTRAL, 15841255, PazServerParticles.HYPNO_SPORE))
     @JvmField val ZOMBIE_OMEN : Holder<MobEffect> = register("zombie_omen",
         ZombieOmenMobEffect(MobEffectCategory.NEUTRAL, 1297708, PazServerParticles.ZOMBIE_OMEN)
             .withSoundOnAdded(PazSounds.APPLY_ZOMBIE_OMEN))
@@ -48,6 +51,23 @@ object PazEffects {
                 pazResource("effect.buttered"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
     )
 
+    @JvmField val CHILLED: Holder<MobEffect> = register("chilled",
+        ChilledMobEffect(MobEffectCategory.HARMFUL, 0x8BC1FF)
+            .addAttributeModifier(Attributes.MOVEMENT_SPEED, pazResource("effect.chilled"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.JUMP_STRENGTH, pazResource("effect.chilled"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.ATTACK_SPEED, pazResource("effect.chilled"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.BLOCK_BREAK_SPEED, pazResource("effect.chilled"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+    )
+
+    @JvmField val DRENCHED: Holder<MobEffect> = register("drenched",
+        DrenchedMobEffect(MobEffectCategory.HARMFUL, 0x3F76E4)
+            .addAttributeModifier(Attributes.MOVEMENT_SPEED, pazResource("effect.drenched"), -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.ARMOR_TOUGHNESS, pazResource("effect.drenched"), -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.JUMP_STRENGTH, pazResource("effect.drenched"), -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.ATTACK_SPEED, pazResource("effect.drenched"), -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.BLOCK_BREAK_SPEED, pazResource("effect.drenched"), -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+    )
+
     fun register(name: String, mobEffect: MobEffect): Holder<MobEffect> {
         return Registry.registerForHolder(
             BuiltInRegistries.MOB_EFFECT,
@@ -59,6 +79,8 @@ object PazEffects {
     @JvmField val HYPNOTIZE_POTION: Holder<Potion> = registerPotion("hypnotize", MobEffectInstance(HYPNOTIZE, 3600))
     @JvmField val BUTTERED_POTION: Holder<Potion> = registerPotion("buttered", MobEffectInstance(BUTTERED, 100))
     @JvmField val ELECTRIFIED_POTION: Holder<Potion> = registerPotion("electrified", MobEffectInstance(ELECTRIFIED, 200))
+    @JvmField val CHILLED_POTION: Holder<Potion> = registerPotion("chilled", MobEffectInstance(CHILLED, 100))
+    @JvmField val DRENCHED_POTION: Holder<Potion> = registerPotion("drenched", MobEffectInstance(DRENCHED, 100))
     fun registerPotion(name: String, effects: MobEffectInstance): Holder<Potion> {
         val potion = Potion(name, effects)
         return Registry.registerForHolder(

@@ -25,10 +25,10 @@ class Butter(
     damage = Plant.PEA_DAMAGE.toFloat()*2,
     knockback = 0.2
 ) {
-    override fun getDefaultGravity(): Double = 0.03
+    override fun getDefaultGravity(): Double = 0.04
 
     override fun afterHitEntityEffect(target: LivingEntity) {
-        target.addEffect(MobEffectInstance(PazEffects.BUTTERED, 100, 0))
+        target.addEffect(MobEffectInstance(PazEffects.BUTTERED, 100, 0, false, false))
     }
 
     override fun tick() {

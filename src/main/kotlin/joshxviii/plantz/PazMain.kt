@@ -29,8 +29,10 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.minecraft.world.entity.Mob
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import java.util.UUID
 
 object PazMain : ModInitializer {
 	const val MODID = "plantz"

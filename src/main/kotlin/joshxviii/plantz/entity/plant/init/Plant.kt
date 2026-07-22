@@ -4,6 +4,7 @@ import joshxviii.plantz.ai.PlantState
 import joshxviii.plantz.ai.goal.SleepGoal
 import joshxviii.plantz.entity.Sun
 import joshxviii.plantz.entity.plant.utils.PlantGrowNeeds
+import joshxviii.plantz.entity.plant.utils.onValidGround
 import joshxviii.plantz.entity.plant.utils.processSunItem
 import joshxviii.plantz.entity.plant.utils.processWateringItem
 import joshxviii.plantz.init.PazBlocks
@@ -11,7 +12,6 @@ import joshxviii.plantz.init.PazConfig
 import joshxviii.plantz.init.PazCriteria
 import joshxviii.plantz.init.PazDamageTypes
 import joshxviii.plantz.init.PazDataSerializers
-import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.init.PazServerParticles
 import joshxviii.plantz.init.PazSounds
 import joshxviii.plantz.init.PazTags
@@ -120,7 +120,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
             val searchBox = AABB(pos).inflate(1.0, 0.0, 1.0)
 
             val plants = level.getEntitiesOfClass(Plant::class.java, searchBox) { plant ->
-                plant.blockPosition() != pos && plant.isAlive && (ogPlant == null || ogPlant != plant)
+                plant.blockPosition() != pos && plant.isAlive && (ogPlant == null || (ogPlant != plant && plant != ogPlant.vehicle))
             }
 
             return plants.isNotEmpty()
@@ -155,6 +155,16 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
                     && blockAtPos.getCollisionShape(level, pos.above()).isEmpty) && !hasAdjacentPlant(
                 level as Level, pos)
         }
+
+
+//        fun checkValidGround(level: LevelAccessor, pos: BlockPos, plant: Plant) : Boolean {
+//
+//            val belowBlock = level.getBlockState(pos.below())
+//
+//            return (plant.attachedEntity != null) || (canSurviveOn(belowBlock) && !hasAdjacentPlant(level, pos, plant)) || vehicle?.`is`(
+//                PazEntities.PLANT_POT_MINECART) == true || (vehicle?.`is`(
+//                PazTags.EntityTypes.PLANT) == true && !canBreatheUnderwater())
+//        }
 
         private const val NUTRIENT_SUPPLY_MAX = 50  // ticks before suffocating when on invalid ground
         private const val FLAG_POWER_RANGE = 3
@@ -193,7 +203,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
             val attackKnockback: Double = 0.001,
             val attackRange: Double = 2.5,
             val movementSpeed: Double = 0.0,
-            val followRange: Double = 14.0,
+            val followRange: Double = 20.0,
             val armor: Double = 0.0,
             val scale: Double = 1.0,
         ) {
@@ -477,7 +487,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
                 if (cooldown == 0) cooldownFinished()
                 cooldown--
             }
-            if (!onValidGround() || isOverlappingWithOther(blockPosition())) {
+            if (onValidGround() != null) {
                 if (--nutrientSupply <= 0) {
                     if (tickCount % 20 == 0) hurtServer(level, damageSources().dryOut(), 2.0f)
                 }
@@ -641,13 +651,6 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         return PlantGrowNeeds.SUN
     }
 
-    // if on invalid ground plant should start to suffocate
-    private fun onValidGround() : Boolean {
-        return (attachedEntity != null) || (canSurviveOn(getBlockBelow()) && !hasAdjacentPlant(level(), blockPosition())) || vehicle?.`is`(
-            PazEntities.PLANT_POT_MINECART) == true || (vehicle?.`is`(
-            PazTags.EntityTypes.PLANT) == true && !canBreatheUnderwater())
-    }
-
     fun sunIsVisible() : Boolean {
         return level().isBrightOutside && level().getBrightness(LightLayer.SKY, BlockPos.containing(x, eyeY, z)) >= 7
     }
@@ -655,24 +658,6 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     open fun sleepsDuringNight(): Boolean = false
     open fun sleepsDuringDay(): Boolean = this.`is`(PazTags.EntityTypes.MUSHROOM)
     open fun canSurviveOn(block: BlockState) : Boolean = block.`is`(PazTags.BlockTags.PLANTABLE)
-
-    open fun waterSurvivalCheck(block: BlockState): Boolean {
-        if (block.`is`(PazBlocks.ZEN_PLANT_POT)) {
-            return true
-        }
-
-        if (block.`is`(PazBlocks.WATER_POT)) {
-            return true
-        }
-
-        if (block.`is`(Blocks.WATER_CAULDRON)) {
-            return block.getValue(BlockStateProperties.LEVEL_CAULDRON) > 0
-        }
-
-        val fluidState = level().getFluidState(blockPosition())
-
-        return fluidState.`is`(FluidTags.WATER)
-    }
 
     open fun cooldownFinished() {}
 
@@ -695,7 +680,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         return level.getBlockState(flagPos).`is`(PazBlocks.PLANTZ_FLAG)
     }
 
-    fun getBlockBelow(): BlockState {
+    fun getBlockBelow(x: Double = this.x, y: Double = this.y, z: Double = this.z): BlockState {
         val feetY = y - 0.001
         val blockBelowPos = BlockPos.containing(x, feetY, z)
         val blockBelow = level().getBlockState(blockBelowPos)
@@ -707,6 +692,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         val otherPlantsAtPos = level().getEntitiesOfClass(Plant::class.java, AABB(pos)) { it != this }
         otherPlantsAtPos.forEach {
             if (!it.isAlive || it.isDeadOrDying) return false
+            if (it == this.vehicle) return false
             if(boundingBox.intersects(it.boundingBox)) return true
         }
         return false

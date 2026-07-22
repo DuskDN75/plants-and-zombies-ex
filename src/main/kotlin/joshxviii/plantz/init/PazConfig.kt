@@ -54,6 +54,7 @@ data class ServerConfig(
         "plantz:hypnoshroom"            to 7,
         "plantz:doomshroom"             to 16,
         "plantz:lilypad"                to 2,
+        "plantz:water_peashooter"       to 7,
         "plantz:seashroom"              to 0,
         "plantz:coffeebean"             to 2,
     ),

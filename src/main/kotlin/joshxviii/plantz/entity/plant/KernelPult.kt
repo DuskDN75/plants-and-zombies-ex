@@ -41,7 +41,7 @@ class KernelPult(type: EntityType<out PultPlant>, level: Level) : PultPlant(PazE
                 if (hasButterShot) Butter(level(), this, spawnOffset = Vec2(-1f, 1f))
                 else Kernel(level(), this, spawnOffset = Vec2(-1f, 1f))
             },
-            velocity = 0.92,
+            velocity = 1.0,
             useHighArc = true,
             cooldownTime = 26,
             actionDelay = 12,

@@ -1,8 +1,10 @@
 package joshxviii.plantz.entity.projectile
 
 import joshxviii.plantz.init.PazDamageTypes
+import joshxviii.plantz.init.PazEffects
 import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.init.PazServerParticles
+import joshxviii.plantz.init.PazTags
 import net.minecraft.tags.EntityTypeTags
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects
@@ -20,9 +22,8 @@ class PeaIce(
 ) {
     override fun afterHitEntityEffect(target: LivingEntity) {
         super.afterHitEntityEffect(target)
-        if (target.`is`(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES)) return
-        target.addEffect(MobEffectInstance(MobEffects.SLOWNESS, 100, 0))
-        target.addEffect(MobEffectInstance(MobEffects.WEAKNESS, 100, 0))
+        if (target.`is`(PazTags.EntityTypes.CANNOT_CHILL)) return
+        target.addEffect(MobEffectInstance(PazEffects.CHILLED, 100, 0, false, false))
     }
 
     override fun onHit(hitResult: HitResult) {

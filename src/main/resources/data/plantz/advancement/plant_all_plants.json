@@ -218,6 +218,14 @@
         }
       }
     },
+    "plantz:water_peashooter": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz:water_peashooter"
+        }
+      }
+    },
     "plantz:seashroom": {
       "trigger": "minecraft:tame_animal",
       "conditions": {

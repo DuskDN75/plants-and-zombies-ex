@@ -38,6 +38,10 @@ object PazParticles {
             PeaParticle.Provider(spriteSet)
         }
 
+        it.register(PazServerParticles.WATER_PEA_HIT) { spriteSet ->
+            PeaParticle.Provider(spriteSet)
+        }
+
         it.register(PazServerParticles.ELECTRIC_PEA_HIT) { spriteSet ->
             PeaParticle.Provider(spriteSet)
         }

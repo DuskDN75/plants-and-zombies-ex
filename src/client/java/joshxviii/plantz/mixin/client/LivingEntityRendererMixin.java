@@ -46,12 +46,25 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     private void checkForHypnoEffect(T entity, S state, float partialTicks, CallbackInfo ci) {
         boolean hasHypno = ((LivingEntityAccessor) entity).plantz$getHypnoId();
         state.setData(IS_HYPNOTIZED_KEY, hasHypno);
+
+        boolean hasChilled = ((LivingEntityAccessor) entity).plantz$getChilledId();
+        state.setData(IS_CHILLED_KEY, hasChilled);
+
+        boolean hasDrenched = ((LivingEntityAccessor) entity).plantz$getDrenchedId();
+        state.setData(IS_DRENCHED_KEY, hasDrenched);
+
         Map<Integer, Integer> paintColors = ((LivingEntityAccessor) entity).plantz$getPaintedColors();
         state.setData(PAINT_COLORS_KEY, paintColors);
     }
 
     @Unique
     private static final int PLANTZ_HYPNO_TINT = 0xFFD036FF;
+
+    @Unique
+    private static final int PLANTZ_CHILLED_TINT = 0xFF8BC1FF;
+
+    @Unique
+    private static final int PLANTZ_DRENCHED_TINT = 0xFF3F76E4;
 
     @ModifyExpressionValue(
         method = "submit*",
@@ -62,6 +75,46 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 
         if (state.getDataOrDefault(IS_HYPNOTIZED_KEY, false)) {
             finalColor.set(ARGB.multiply(finalColor.get(), PLANTZ_HYPNO_TINT));
+        }
+
+        // multiple colors end up just looking black. not gonna use this for now.
+//        Map<Integer, Integer> colors = state.getDataOrDefault(PAINT_COLORS_KEY, new HashMap<>());
+//        colors.forEach( (color, amplifier) -> {
+//            if (color != -1) finalColor.set(ARGB.multiply(finalColor.get(), ARGB.opaque(color)));
+//        });
+
+        return finalColor.get();
+    }
+
+    @ModifyExpressionValue(
+            method = "submit*",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;multiply(II)I")
+    )
+    private int plantz$applyChilledTint(int tintedColor, S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
+        AtomicInteger finalColor = new AtomicInteger(tintedColor);
+
+        if (state.getDataOrDefault(IS_CHILLED_KEY, false)) {
+            finalColor.set(ARGB.multiply(finalColor.get(), PLANTZ_CHILLED_TINT));
+        }
+
+        // multiple colors end up just looking black. not gonna use this for now.
+//        Map<Integer, Integer> colors = state.getDataOrDefault(PAINT_COLORS_KEY, new HashMap<>());
+//        colors.forEach( (color, amplifier) -> {
+//            if (color != -1) finalColor.set(ARGB.multiply(finalColor.get(), ARGB.opaque(color)));
+//        });
+
+        return finalColor.get();
+    }
+
+    @ModifyExpressionValue(
+            method = "submit*",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;multiply(II)I")
+    )
+    private int plantz$applyDrenchedTint(int tintedColor, S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
+        AtomicInteger finalColor = new AtomicInteger(tintedColor);
+
+        if (state.getDataOrDefault(IS_DRENCHED_KEY, false)) {
+            finalColor.set(ARGB.multiply(finalColor.get(), PLANTZ_DRENCHED_TINT));
         }
 
         // multiple colors end up just looking black. not gonna use this for now.

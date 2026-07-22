@@ -1,12 +1,17 @@
 package joshxviii.plantz.effect
 
+import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectCategory
 import net.minecraft.world.entity.LivingEntity
 
 
-class ToxicMobEffect(category: MobEffectCategory, color: Int) : MobEffect(category, color) {
+class ToxicMobEffect(
+    category: MobEffectCategory,
+    color: Int,
+    particleOptions: ParticleOptions
+) : MobEffect(category, color, particleOptions) {
     companion object {
         const val DAMAGE_INTERVAL: Int = 15
         const val STOP_PERCENT: Float = 0.1f

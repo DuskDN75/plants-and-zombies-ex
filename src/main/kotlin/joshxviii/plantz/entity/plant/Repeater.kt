@@ -52,6 +52,4 @@ class Repeater(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.RE
         })
     }
 
-    override fun getZenGrownSeedType(): EntityType<*> = if (random.nextFloat() < 0.6f) PazEntities.PEA_SHOOTER else super.getZenGrownSeedType()
-
 }

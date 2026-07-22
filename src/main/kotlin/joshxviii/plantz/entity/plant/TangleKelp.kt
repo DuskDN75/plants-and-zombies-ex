@@ -1,18 +1,36 @@
 package joshxviii.plantz.entity.plant
 
+import joshxviii.plantz.ai.goal.MeleeAttackActionGoal
+import joshxviii.plantz.entity.plant.Chomper.ChompAttackGoal
 import joshxviii.plantz.entity.plant.init.AttackingPlant
 import joshxviii.plantz.entity.plant.init.Plant
+import joshxviii.plantz.entity.plant.utils.waterSurvivalCheck
 import joshxviii.plantz.init.PazBlocks
+import joshxviii.plantz.init.PazDamageTypes
 import joshxviii.plantz.init.PazEntities
+import joshxviii.plantz.init.PazServerParticles
+import joshxviii.plantz.init.PazSounds
+import joshxviii.plantz.init.PazTags.EntityTypes.CANNOT_CHOMP
+import joshxviii.plantz.util.pazResource
 import net.minecraft.core.BlockPos
+import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.network.syncher.EntityDataSerializers
+import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.ai.attributes.AttributeModifier
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
+import net.minecraft.world.entity.animal.chicken.Chicken
+import net.minecraft.world.entity.animal.fish.AbstractFish
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.block.state.BlockState
@@ -34,17 +52,67 @@ class TangleKelp(type: EntityType<out AttackingPlant>, level: Level) : Attacking
             return checkValidSpawn(level, pos, spawnReason)
                     && inWater && random.nextFloat() < (0.1 * rainBonus)
         }
+
+        private val TANGLE_ATTACK_MODIFIER = AttributeModifier(
+            pazResource("tangle_attack"), 100.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+        )
     }
 
     override fun isPushable(): Boolean = false
 
     override fun registerGoals() {
         super.registerGoals()
+        this.goalSelector.addGoal(1, TangleAttackGoal(this))
+        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
+            target !is Plant
+                    && (target is Zombie
+                    || target is AbstractFish
+                    || (target is Enemy && isTame)
+                    || (target is Player && !isTame))
+        })
     }
 
     override fun canBreatheUnderwater(): Boolean = true
 
     override fun canSurviveOn(block: BlockState): Boolean {
         return waterSurvivalCheck(block)
+    }
+
+    class TangleAttackGoal(
+        val tangleKelpEntity: TangleKelp,
+    ) : MeleeAttackActionGoal(
+        usingEntity = tangleKelpEntity,
+        cooldownTime = 0,
+        actionDelay = 1,
+        damageType = PazDamageTypes.PLANT_TANGLE,
+        actionStartEffect = {
+            tangleKelpEntity.playSound(PazSounds.ZOMBIE_EATS)
+        }
+    ) {
+
+        override fun doAction() : Boolean {
+            val target = usingEntity.target?: return false
+            if(!target.`is`(CANNOT_CHOMP)) {
+                //Add modifier to increase damage for insta kills
+                usingEntity.getAttribute(Attributes.ATTACK_DAMAGE)?.addOrUpdateTransientModifier(TANGLE_ATTACK_MODIFIER)
+            }
+
+            !super.doAction()
+
+            //remove modifier if it was added
+            usingEntity.getAttribute(Attributes.ATTACK_DAMAGE)?.removeModifier(TANGLE_ATTACK_MODIFIER)
+            if (!target.isAlive) {
+                (usingEntity.level() as ServerLevel).sendParticles(
+                    ParticleTypes.BUBBLE, target.x,target.y+target.eyeHeight,target.z,
+                    30,
+                    0.2, 0.2, 0.2,
+                    0.32
+                )
+                target.discard()
+                usingEntity.discard()
+            }
+
+            return true
+        }
     }
 }

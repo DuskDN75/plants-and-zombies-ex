@@ -3,10 +3,13 @@ package joshxviii.plantz.mixin;
 import com.mojang.serialization.Codec;
 import joshxviii.plantz.effect.PaintedMobEffect;
 import joshxviii.plantz.entity.plant.init.Plant;
+import joshxviii.plantz.entity.projectile.PazProjectile;
 import joshxviii.plantz.init.PazEffects;
 import joshxviii.plantz.init.PazItems;
 import joshxviii.plantz.init.PazTags;
 import joshxviii.plantz.util.PlantHeadAttachment;
+import kotlin.Pair;
+import kotlin.jvm.internal.markers.KMutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -25,7 +28,9 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.storage.ValueInput;
@@ -36,13 +41,16 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static joshxviii.plantz.init.PazDataSerializers.DATA_PAINT_COLORS;
@@ -53,6 +61,10 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
 
     @Unique
     private static final EntityDataAccessor<Boolean> DATA_HYPNO_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
+    @Unique
+    private static final EntityDataAccessor<Boolean> DATA_CHILLED_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
+    @Unique
+    private static final EntityDataAccessor<Boolean> DATA_DRENCHED_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
     @Unique
     private static final EntityDataAccessor<Map<Integer, Integer>> DATA_PAINTED_COLORS = SynchedEntityData.defineId(LivingEntity.class, DATA_PAINT_COLORS);
 
@@ -99,6 +111,14 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     @Unique
     public boolean plantz$getHypnoId() {
         return ((Entity) (Object) this).getEntityData().get(DATA_HYPNO_ID);
+    }
+    @Unique
+    public boolean plantz$getChilledId() {
+        return ((Entity) (Object) this).getEntityData().get(DATA_CHILLED_ID);
+    }
+    @Unique
+    public boolean plantz$getDrenchedId() {
+        return ((Entity) (Object) this).getEntityData().get(DATA_DRENCHED_ID);
     }
     @Unique
     public Map<Integer, Integer> plantz$getPaintedColors() {
@@ -154,12 +174,16 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     public void defineData(SynchedEntityData.Builder entityData, CallbackInfo ci) {
         entityData.define(DATA_HYPNO_ID, false);
+        entityData.define(DATA_CHILLED_ID, false);
+        entityData.define(DATA_DRENCHED_ID, false);
         entityData.define(DATA_PAINTED_COLORS, new HashMap<>());
     }
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void saveHypnoFlag(ValueOutput output, CallbackInfo ci) {
         var self = (LivingEntity) (Object) this;
         output.putBoolean("plantz:IsHypnotized", self.getEntityData().get(DATA_HYPNO_ID));
+        output.putBoolean("plantz:IsChilled", self.getEntityData().get(DATA_CHILLED_ID));
+        output.putBoolean("plantz:IsDrenched", self.getEntityData().get(DATA_DRENCHED_ID));
         output.store("plantz:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT), self.getEntityData().get(DATA_PAINTED_COLORS));
         if (!this.plantz$getPlantData().isEmpty()) {
             output.store("plantz:AttachedPlant", CompoundTag.CODEC, this.plantz$getPlantData());
@@ -169,6 +193,8 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     private void loadHypnoFlag(ValueInput input, CallbackInfo ci) {
         var self = (LivingEntity) (Object) this;
         self.getEntityData().set(DATA_HYPNO_ID, input.getBooleanOr("plantz:IsHypnotized", false));
+        self.getEntityData().set(DATA_CHILLED_ID, input.getBooleanOr("plantz:IsChilled", false));
+        self.getEntityData().set(DATA_DRENCHED_ID, input.getBooleanOr("plantz:IsDrenched", false));
         self.getEntityData().set(DATA_PAINTED_COLORS, input.read("plantz:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT)).orElseGet(HashMap::new));
         plantz$setPlantData(input.read("plantz:AttachedPlant", CompoundTag.CODEC).orElseGet(CompoundTag::new));
         if (self instanceof PathfinderMob mob) {
@@ -193,6 +219,8 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     public void updateEffects() {
         var self = (LivingEntity) (Object) this;
         self.getEntityData().set(DATA_HYPNO_ID, this.hasEffect(PazEffects.HYPNOTIZE));
+        self.getEntityData().set(DATA_CHILLED_ID, this.hasEffect(PazEffects.CHILLED));
+        self.getEntityData().set(DATA_DRENCHED_ID, this.hasEffect(PazEffects.DRENCHED));
         self.getEntityData().set(DATA_PAINTED_COLORS, PaintedMobEffect.getPaintColors(self));
     }
 
@@ -200,6 +228,22 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     public void immuneToHypnosis(MobEffectInstance newEffect, CallbackInfoReturnable<Boolean> cir) {
         if (newEffect.is(PazEffects.HYPNOTIZE)) {
             cir.setReturnValue(!((Entity) (Object) this).is(PazTags.EntityTypes.CANNOT_HYPNOTIZE));
+        }
+        if (newEffect.is(PazEffects.CHILLED)) {
+            cir.setReturnValue(!((Entity) (Object) this).is(PazTags.EntityTypes.CANNOT_CHILL));
+
+            LivingEntity entity = (LivingEntity) (Object) this;
+
+            entity.setRemainingFireTicks(0);
+            entity.clearFire();
+        }
+        if (newEffect.is(PazEffects.DRENCHED)) {
+            cir.setReturnValue(!((Entity) (Object) this).is(PazTags.EntityTypes.CANNOT_DRENCH));
+
+            LivingEntity entity = (LivingEntity) (Object) this;
+
+            entity.setRemainingFireTicks(0);
+            entity.clearFire();
         }
         updateEffects();
     }
@@ -234,5 +278,73 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
         }
     }
 
+    @Inject(method = "tick", at = @At("HEAD"))
+    public void checkFire(CallbackInfo ci) {
+        var self = (LivingEntity) (Object) this;
+
+        if (self.isOnFire()) {
+            self.removeEffect(PazEffects.CHILLED);
+
+            if (self.hasEffect(PazEffects.DRENCHED)) {
+                self.setRemainingFireTicks(0);
+                self.clearFire();
+            }
+        }
+    }
+
+    @Unique
+    float leftoverDamage = 0;
+
+    @Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
+    public void ignoreIfArmored(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
+
+        LivingEntity self = (LivingEntity)(Object)this;
+
+        var armors = PazProjectile.Companion.checkForArmor(self);
+
+        var trueDamage = damage;
+
+        var damageMult = 1;
+
+        if (!(source.getDirectEntity() instanceof Projectile)) {
+            damageMult = 3;
+        }
+
+        leftoverDamage = trueDamage*damageMult;
+
+        if (!armors.isEmpty()) {
+
+            var accessor = ((LivingEntityAccessor)self);
+
+            for (@NotNull Pair<@NotNull EquipmentSlot, @NotNull ItemStack> armor : armors) {
+
+                if (leftoverDamage <= 0) {
+                    break;
+                }
+
+                leftoverDamage = (float) PazProjectile.Companion.damageArmor(
+                        self,
+                        armor.getFirst(),
+                        armor.getSecond(),
+                        leftoverDamage
+                );
+
+                IO.println(leftoverDamage);
+
+                accessor.invokeActuallyHurt(level, source, 0.001F);
+
+            }
+
+            accessor.invokeResolveMobResponsibleForDamage(source);
+            accessor.invokeResolvePlayerResponsibleForDamage(source);
+            ((LivingEntityAccessor)self).invokeActuallyHurt(level, source, leftoverDamage/damageMult);
+
+            cir.setReturnValue(true);
+            cir.cancel();
+            return;
+
+        }
+
+    }
 
 }

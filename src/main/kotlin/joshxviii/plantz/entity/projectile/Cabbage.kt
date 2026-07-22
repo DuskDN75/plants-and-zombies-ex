@@ -22,7 +22,7 @@ class Cabbage(
     PazDamageTypes.PLANT,
     knockback = 0.15
 ) {
-    override fun getDefaultGravity(): Double = 0.03
+    override fun getDefaultGravity(): Double = 0.05
     override fun getHitSound(): SoundEvent = SoundEvents.BIG_DRIPLEAF_BREAK
 
     override fun onHit(hitResult: HitResult) {

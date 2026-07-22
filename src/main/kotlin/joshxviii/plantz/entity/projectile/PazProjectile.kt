@@ -1,8 +1,8 @@
 package joshxviii.plantz.entity.projectile
 
-import joshxviii.plantz.init.PazConfig
-import joshxviii.plantz.init.PazDamageTypes
 import joshxviii.plantz.entity.plant.init.Plant
+import joshxviii.plantz.init.*
+import joshxviii.plantz.item.component.BlocksProjectileDamage
 import joshxviii.plantz.util.hasSameRootOwner
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ParticleOptions
@@ -23,6 +23,8 @@ import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.projectile.Projectile
 import net.minecraft.world.entity.projectile.ProjectileDeflection
 import net.minecraft.world.entity.projectile.ProjectileUtil
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
@@ -30,6 +32,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.*
 import java.util.Arrays.sort
 import java.util.function.Predicate
+import kotlin.math.ceil
 import kotlin.math.sign
 
 abstract class PazProjectile(
@@ -49,6 +52,58 @@ abstract class PazProjectile(
     companion object {
         val PIERCE_LEVEL: EntityDataAccessor<Byte> = SynchedEntityData.defineId(PazProjectile::class.java, EntityDataSerializers.BYTE)
         val IN_GROUND: EntityDataAccessor<Boolean> = SynchedEntityData.defineId(PazProjectile::class.java, EntityDataSerializers.BOOLEAN)
+
+        fun checkForArmor(entity: LivingEntity): MutableList<Pair<EquipmentSlot, ItemStack>> {
+
+            val armors = mutableListOf<Pair<EquipmentSlot, ItemStack>>()
+
+            val slots: kotlin.collections.Set<EquipmentSlot> = setOf<EquipmentSlot>(
+                EquipmentSlot.HEAD,
+                EquipmentSlot.CHEST,
+                EquipmentSlot.LEGS,
+                EquipmentSlot.FEET,
+                EquipmentSlot.MAINHAND,
+                EquipmentSlot.OFFHAND
+            )
+
+            for (slot in slots) {
+                val item: ItemStack = entity.getItemBySlot(slot)
+                val component = item.components.get<BlocksProjectileDamage>(PazComponents.BLOCKS_PROJECTILE_DAMAGE) ?: continue
+                if (component.mustBeUsing && !entity.isUsingItem) continue
+
+                val validSlot = component.slot
+                val matchesSlot = validSlot.test(slot)
+                if (!matchesSlot) continue
+
+                armors.add(slot to item)
+            }
+
+            return armors
+        }
+
+        fun damageArmor(entity: LivingEntity, slot: EquipmentSlot, armor: ItemStack, damage: Double): Double {
+
+            var curArmorHealth = armor.maxDamage - armor.damageValue
+
+            armor.hurtAndBreak(ceil(damage).toInt(), entity, slot)
+
+            if (entity.level() is ServerLevel && (curArmorHealth-damage) <= 0) {
+                armor.shrink(1)
+                entity.playSound(SoundEvents.ITEM_BREAK.value())
+            } else {
+
+                val hitSound: SoundEvent
+
+                if (armor.`is`(PazItems.NEWSPAPER)) hitSound = PazSounds.PROJECTILE_HIT_PAPER
+                else if (armor.`is`(Items.BUCKET)) hitSound = PazSounds.PROJECTILE_HIT_BUCKET
+                else hitSound = PazSounds.PROJECTILE_HIT_CONE
+
+                entity.playSound(hitSound)
+            }
+
+            return damage-curArmorHealth
+
+        }
     }
 
     init {
@@ -191,6 +246,9 @@ abstract class PazProjectile(
 
     override fun onHitEntity(hitResult: EntityHitResult) {
         super.onHitEntity(hitResult)
+
+        println("HitEntity: $hitResult")
+
         val target = hitResult.entity
         val serverLevel = this.level() as? ServerLevel
         if (serverLevel != null) {

@@ -1,10 +1,12 @@
 package joshxviii.plantz.entity.plant.init
 
 import joshxviii.plantz.entity.Sun
+import joshxviii.plantz.entity.plant.utils.onValidGround
 import joshxviii.plantz.init.PazBlocks
 import joshxviii.plantz.init.PazCriteria
 import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.init.PazItems
+import joshxviii.plantz.init.PazTags
 import joshxviii.plantz.init.PazTags.EntityTypes.WALLNUT_DEFLECTABLE
 import joshxviii.plantz.item.SeedPacketItem
 import net.minecraft.core.BlockPos
@@ -44,41 +46,18 @@ abstract class CarrierPlant(type: EntityType<out CarrierPlant>, level: Level) : 
         }
     }
 
-    override fun interact(player: Player, hand: InteractionHand, location: Vec3): InteractionResult {
-        val itemStack = player.getItemInHand(hand)
-        val serverLevel = this.level()
+    fun setRider(plant: Plant) {
 
-        if (itemStack.`is`(PazItems.SEED_PACKET)) {
+        println("SETTING RIDER")
 
-            if (passengers.isNotEmpty()) return InteractionResult.PASS
+        val pos = this.position()
 
-            val plantType = SeedPacketItem.typeFromStack(itemStack)
-
-            val entity = if (serverLevel is ServerLevel) plantType?.create(serverLevel, null, BlockPos.containing(this.position()), EntitySpawnReason.SPAWN_ITEM_USE, true, false) else null
-
-            // snap rotation
-            if (entity is Plant) {
-                entity.startRiding(this, true, true)
-                entity.snapTo(this.position())
-                val yaw = this.yRot
-                entity.yHeadRot = yaw
-                entity.yBodyRot = yaw
-                entity.yRot = yaw
-            }
-
-            if (entity != null && !serverLevel.addFreshEntity(entity)) {
-                entity.discard()
-                return InteractionResult.FAIL
-            }
-
-            itemStack.consume(1, player)
-            entity?.playSound(SoundEvents.BIG_DRIPLEAF_PLACE, 1.0f, 1.0f)
-            serverLevel.gameEvent(player, GameEvent.ENTITY_PLACE, this.position())
-
-            return InteractionResult.SUCCESS_SERVER
-        } else {
-            return super.interact(player, hand, location)
-        }
+        plant.startRiding(this, true, true)
+        plant.snapTo(pos)
+        val yaw = this.yRot
+        plant.yHeadRot = yaw
+        plant.yBodyRot = yaw
+        plant.yRot = yaw
     }
 
     override fun attackGoals() {}

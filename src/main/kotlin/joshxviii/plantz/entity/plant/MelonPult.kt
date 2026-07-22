@@ -22,7 +22,7 @@ class MelonPult(type: EntityType<out PultPlant>, level: Level) : PultPlant(PazEn
             usingEntity = this,
             projectileFactory = { Melon(level(), this, spawnOffset = Vec2(-1f, 1f))},
             useHighArc = true,
-            velocity = 1.0,
+            velocity = 1.5,
             cooldownTime = 65,
             actionDelay = 12))
     }

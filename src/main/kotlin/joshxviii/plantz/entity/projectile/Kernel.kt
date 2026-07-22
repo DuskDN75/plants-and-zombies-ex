@@ -19,7 +19,7 @@ class Kernel(
     PazEntities.KERNEL, level, owner, spawnOffset,
     PazDamageTypes.PLANT,
 ) {
-    override fun getDefaultGravity(): Double = 0.03
+    override fun getDefaultGravity(): Double = 0.04
 
     override fun onHit(hitResult: HitResult) {
         super.onHit(hitResult)

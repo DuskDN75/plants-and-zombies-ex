@@ -14,11 +14,15 @@ object PazDamageTypes {
     @JvmField
     val PLANT_FREEZE = registerDamageType("plant_freeze")
     @JvmField
+    val PLANT_DRENCH = registerDamageType("plant_drench")
+    @JvmField
     val PLANT_FIRE = registerDamageType("plant_fire")
     @JvmField
     val PLANT_ELECTRIC = registerDamageType("plant_electric")
     @JvmField
     val PLANT_CHOMP = registerDamageType("plant_chomp")
+    @JvmField
+    val PLANT_TANGLE = registerDamageType("plant_tangle")
     @JvmField
     val PLANT_FUME = registerDamageType("plant_fume")
     @JvmField

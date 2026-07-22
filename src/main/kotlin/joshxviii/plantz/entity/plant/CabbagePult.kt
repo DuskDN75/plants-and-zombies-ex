@@ -22,7 +22,7 @@ class CabbagePult(type: EntityType<out PultPlant>, level: Level) : PultPlant(Paz
             usingEntity = this,
             projectileFactory = { Cabbage(level(), this, spawnOffset = Vec2(-1f, 1f)) },
             useHighArc = true,
-            velocity = 0.85,
+            velocity = 1.0,
             cooldownTime = 30,
             actionDelay = 9))
     }

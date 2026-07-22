@@ -1,15 +1,13 @@
-package joshxviii.plantz.model.plants;
+package joshxviii.plantz.model.plants.init;
 
 import joshxviii.plantz.PlantRenderState;
 import joshxviii.plantz.ai.PlantState;
-import joshxviii.plantz.animation.plants.PlantAnimations;
+import joshxviii.plantz.animation.plants.init.PlantAnimations;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.security.Key;
 
 /**
  * @author Josh

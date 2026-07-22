@@ -25,7 +25,7 @@ object PazZombiesTab : PazCreativeTab() {
              tab_key,
             CreativeModeTab.builder(CreativeModeTab.Row.BOTTOM, 0)
                 .title(Component.translatable("itemGroup.plantz.$tab_key"))
-                .icon { ItemStack(PazItems.SUN) }
+                .icon { ItemStack(PazBlocks.BRAINZ_FLAG) }
 
                 .displayItems { parameters, output ->
 

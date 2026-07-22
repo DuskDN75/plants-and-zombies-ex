@@ -4,11 +4,15 @@ import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.init.PazTags.BlockTags.PLANTABLE
 import joshxviii.plantz.ai.goal.FurthestAttackableTargetGoal
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
+import joshxviii.plantz.entity.plant.init.AttackingPlant
 import joshxviii.plantz.entity.plant.init.Plant
+import joshxviii.plantz.entity.plant.interfaces.IAquaticPlant
+import joshxviii.plantz.entity.plant.interfaces.IPlant
 import joshxviii.plantz.entity.projectile.Needle
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.BlockTags
 import net.minecraft.util.RandomSource
+import net.minecraft.util.Unit
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
@@ -19,11 +23,11 @@ import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
 
-class Cactus(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.CACTUS, level) {
+class Cactus(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlant(PazEntities.CACTUS, level) {
 
     companion object {
         fun checkCactusSpawnRules(
-            type: EntityType<out Plant>,
+            type: EntityType<out AttackingPlant>,
             level: LevelAccessor,
             spawnReason: EntitySpawnReason,
             pos: BlockPos,
@@ -44,15 +48,6 @@ class Cactus(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.CACT
             velocity = 1.5,
             cooldownTime = 40,
             actionDelay = 6))
-        this.targetSelector.addGoal(4, FurthestAttackableTargetGoal(this, LivingEntity::class.java, 5,
-            mustSee = true,
-            mustReach = false
-        ) { target, level ->
-            target !is Plant
-                    
-                    && (target is Zombie
-                    || (target is Enemy && isTame))
-        })
     }
 
     override fun canSurviveOn(block: BlockState): Boolean {

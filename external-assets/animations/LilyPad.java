@@ -1,18 +1,18 @@
 // Save this class in your mod and generate all required imports
 
 /**
- * Made with Blockbench 5.1.4
+ * Made with Blockbench 5.1.5
  * Exported for Minecraft version 1.19 or later with Mojang mappings
  * @author Author
  */
 public class LilyPadAnimation {
 	public static final AnimationDefinition idle = AnimationDefinition.Builder.withLength(4.0F).looping()
 		.addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
-			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, -20.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(0.76F, KeyframeAnimations.degreeVec(0.6582F, -18.867F, 1.0568F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(1.76F, KeyframeAnimations.degreeVec(-0.6653F, -18.5145F, -1.0544F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(3.04F, KeyframeAnimations.degreeVec(1.0457F, -20.5925F, -1.5982F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, -20.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
+			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+			new Keyframe(0.76F, KeyframeAnimations.degreeVec(0.6582F, 2.2F, 1.0568F), AnimationChannel.Interpolations.CATMULLROM),
+			new Keyframe(1.76F, KeyframeAnimations.degreeVec(-0.6653F, 2.5F, -1.0544F), AnimationChannel.Interpolations.CATMULLROM),
+			new Keyframe(3.04F, KeyframeAnimations.degreeVec(1.0457F, -0.5F, -1.5982F), AnimationChannel.Interpolations.CATMULLROM),
+			new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
 		))
 		.addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION, 
 			new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -71,56 +71,11 @@ public class LilyPadAnimation {
 		))
 		.build();
 
-	public static final AnimationDefinition action = AnimationDefinition.Builder.withLength(4.0F).looping()
-		.addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
-			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, -20.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 160.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 340.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-		))
-		.addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION, 
-			new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(4.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-		))
-		.addAnimation("body", new AnimationChannel(AnimationChannel.Targets.SCALE, 
-			new Keyframe(0.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(2.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(4.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.CATMULLROM)
-		))
-		.addAnimation("flower", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
-			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-			new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
-		))
-		.addAnimation("eyebrow_R", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
-			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-		))
-		.addAnimation("eyebrow_R", new AnimationChannel(AnimationChannel.Targets.POSITION, 
-			new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(4.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-		))
-		.addAnimation("eyebrow_R", new AnimationChannel(AnimationChannel.Targets.SCALE, 
-			new Keyframe(0.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(4.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.CATMULLROM)
-		))
-		.addAnimation("eyebrow_L", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
-			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-		))
-		.addAnimation("eyebrow_L", new AnimationChannel(AnimationChannel.Targets.POSITION, 
-			new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(4.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-		))
-		.addAnimation("eyebrow_L", new AnimationChannel(AnimationChannel.Targets.SCALE, 
-			new Keyframe(0.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(4.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.CATMULLROM)
-		))
-		.build();
-
 	public static final AnimationDefinition init = AnimationDefinition.Builder.withLength(1.0F)
 		.addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
 			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 90.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(0.24F, KeyframeAnimations.degreeVec(-0.6361F, -19.9968F, -1.0642F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, -20.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
+			new Keyframe(0.24F, KeyframeAnimations.degreeVec(-0.6361F, 1.0F, -1.0642F), AnimationChannel.Interpolations.CATMULLROM),
+			new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
 		))
 		.addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION, 
 			new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
@@ -157,11 +112,11 @@ public class LilyPadAnimation {
 
 	public static final AnimationDefinition sleep = AnimationDefinition.Builder.withLength(4.0F).looping()
 		.addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
-			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, -20.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(0.76F, KeyframeAnimations.degreeVec(0.6582F, -18.867F, 1.0568F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(1.76F, KeyframeAnimations.degreeVec(-0.6653F, -18.5145F, -1.0544F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(3.04F, KeyframeAnimations.degreeVec(1.0457F, -20.5925F, -1.5982F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, -20.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
+			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+			new Keyframe(0.76F, KeyframeAnimations.degreeVec(0.6582F, 2.2F, 1.0568F), AnimationChannel.Interpolations.CATMULLROM),
+			new Keyframe(1.76F, KeyframeAnimations.degreeVec(-0.6653F, 2.5F, -1.0544F), AnimationChannel.Interpolations.CATMULLROM),
+			new Keyframe(3.04F, KeyframeAnimations.degreeVec(1.0457F, -0.6F, -1.5982F), AnimationChannel.Interpolations.CATMULLROM),
+			new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
 		))
 		.addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION, 
 			new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),

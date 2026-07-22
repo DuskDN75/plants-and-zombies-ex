@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.phys.Vec3
 import java.util.function.Predicate
+import kotlin.math.abs
 import kotlin.math.atan
 import kotlin.math.sqrt
 
@@ -28,13 +29,25 @@ class ProjectileAttackGoal(
     actionEndEffect: () -> Unit = {},
     actionPredicate: Predicate<PathfinderMob> = Predicate { true },
     val projectileFactory: () -> Entity,
-    val velocity : Double = 0.9,
-    val inaccuracy: Float = 0.0f,
+    val inaccuracy: Float = 0.5f,
     val attackRadius: Float = usingEntity.attributes.getValue(Attributes.FOLLOW_RANGE).toFloat(),
+    val velocity : Double = 0.9,
     val useHighArc: Boolean = false,
     val soundEvent: SoundEvent? = PazSounds.PROJECTILE_FIRE,
 ) : ActionGoal(usingEntity, cooldownTime, actionDelay, actionStartEffect, actionSuccessEffect, actionEndEffect, actionPredicate) {
     var distanceSqr: Double = 0.0
+
+    var targetMoveDirection: Vec3 = Vec3(0.0, 0.0, 0.0)
+
+    var lastTarget: LivingEntity? = null
+
+    var targetDistance: Double = 0.0
+
+    var lastTargetDistance: Double = 0.0
+
+    var updateRate: Int = 3
+
+//    var curTarget: LivingEntity? = null
 
     override fun canUse(): Boolean = (
         usingEntity.tickCount>cooldownTime
@@ -76,10 +89,16 @@ class ProjectileAttackGoal(
                 }
             }
         } else usingEntity.startUsingItem(ProjectileUtil.getWeaponHoldingHand(usingEntity, Items.BOW))
+
+        if (usingEntity.tickCount % updateRate == 0) {
+            updateTargetVelocity(usingEntity.target)
+        }
     }
 
     override fun doAction() : Boolean {// fire projectile
         val target = usingEntity.target?: return false
+
+        if (!target.isAlive) return false
 
         val level = usingEntity.level() as ServerLevel
         val projectile = projectileFactory()
@@ -93,13 +112,27 @@ class ProjectileAttackGoal(
             target.z - projectile.z
         )
 
-        val horzDistance = targetPosNow.horizontalDistance()
+        targetDistance = targetPosNow.horizontalDistance()
 
-        val distanceRatio = (horzDistance / attackRadius).coerceIn(0.0, 1.0)
-        val finalVel = if(useHighArc) Mth.lerp(distanceRatio, velocity * 0.35, velocity) else velocity
+        val sqrtDistance = sqrt(targetDistance)
+
+        val distanceRatio = (targetDistance / attackRadius).coerceIn(0.0, 1.0)
+
+        val gravity = projectile.gravity
+
+        val velocityCap = sqrt(2.0 * gravity * velocity)
+
+        println("velocity = $velocity, distance = $targetDistance")
+
+        val finalVel = if(useHighArc) {
+            maxOf((sqrtDistance/4)*velocity,0.0)
+        } else velocity
 
         val targetPos = calculateMovingTargetPosition(targetPosNow,target, projectile, finalVel)
         val arcs = calculateProjectileArcs(targetPos, projectile.gravity, finalVel)
+
+        println(arcs)
+
         if (arcs==null) {// lose target if unreachable
             projectile.discard()
             usingEntity.target = null
@@ -109,6 +142,8 @@ class ProjectileAttackGoal(
         val finalAngle = if(useHighArc) arcs.first else arcs.second
 
         val horizDist = targetPos.horizontalDistance()
+
+        lastTargetDistance = targetDistance
 
         val horizUnitX = targetPos.x / horizDist
         val horizUnitZ = targetPos.z / horizDist
@@ -130,36 +165,68 @@ class ProjectileAttackGoal(
         return true
     }
 
-    private fun calculateMovingTargetPosition(basePos: Vec3, target: LivingEntity, projectile: Entity, v: Double): Vec3 {
+    val minAngle = Math.toRadians(70.0)
+
+    fun updateTargetVelocity(target: LivingEntity?) {
+
+        val target = usingEntity.target?: return
+
+        if (!target.isAlive) return
 
         val targetVel = Vec3(
             target.x - target.xo,
             0.0,
             target.z - target.zo
         )
-        if (targetVel.lengthSqr() <= 0.000001) return basePos
+
+        var alphaMult = 0.5
+
+        if (target != lastTarget || targetDistance < lastTargetDistance) {
+            alphaMult= 5.0
+        } else {
+            alphaMult=0.5
+        }
+
+        val distanceChange = abs((lastTargetDistance - targetDistance))
+
+        val distanceAlpha = Math.clamp(distanceChange*alphaMult,0.0,1.0)
+
+        targetMoveDirection = targetMoveDirection.lerp(targetVel, distanceAlpha)
+
+
+    }
+
+    private fun calculateMovingTargetPosition(basePos: Vec3, target: LivingEntity, projectile: Entity, v: Double): Vec3 {
+
+        updateTargetVelocity(target)
+
+        if (targetMoveDirection.lengthSqr() <= 0.000001) return basePos
+
+
 
         val g = projectile.gravity
 
-        var time = basePos.horizontalDistance() / v + 1.0
+        var time = basePos.horizontalDistance() / v
 
         repeat(8) {
-            val predicted = basePos.add(targetVel.scale(time))
+            val predicted = basePos.add(targetMoveDirection.scale(time))
 
             val arcs = calculateProjectileArcs(predicted, g, v) ?: return predicted
-            val angle = if (useHighArc) arcs.first else arcs.second
+            val angle = if (useHighArc) {
+                maxOf(arcs.first)
+            } else arcs.second
 
             val horizontalSpeed = v * Mth.cos(angle)
 
             val horizontalDistance = predicted.horizontalDistance()
-            val flightTime = horizontalDistance / horizontalSpeed + 1.0
+            val flightTime = horizontalDistance / horizontalSpeed
 
             time = Mth.lerp(0.5f, time.toFloat(), flightTime.toFloat()).toDouble()
 
-            println("vel=$targetVel time=$time prediction=$predicted")
+            println("vel=$targetMoveDirection time=$time prediction=$predicted")
         }
 
-        return basePos.add(targetVel.scale(time))
+        return basePos.add(targetMoveDirection.scale(time))
     }
 
     /**
@@ -182,12 +249,13 @@ class ProjectileAttackGoal(
         val v2: Double = velocity*velocity
         val v4 = v2 * v2
         val horiz2_d = horizDist * horizDist
-        var discriminant = v4 - g * (g * horiz2_d + 2.0 * v2 * dy)
+        val discriminant = v4 - g * (g * horiz2_d + 2.0 * v2 * dy)
+
+        println(discriminant)
 
         //impossible shot if discriminant is < 0
-        if (discriminant < 0.0) return null
 
-        val sqrtDisc = sqrt(discriminant)
+        val sqrtDisc = sqrt(maxOf(0.0, discriminant))
         val denom = g * horizDist
 
         val phi1 = atan((v2 + sqrtDisc) / denom) // high arc (parabola)

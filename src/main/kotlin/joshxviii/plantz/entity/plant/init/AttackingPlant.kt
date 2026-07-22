@@ -115,11 +115,14 @@ abstract class AttackingPlant(type: EntityType<out AttackingPlant>, level: Level
     }
 
     fun registerAttackGoal() {
+
+        println("follow range = ${this.getAttributeValue(Attributes.FOLLOW_RANGE)}")
+
         this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, mustSeeTarget(), false) { target, level ->
-            target !is Plant
-            && (target is Zombie
-            || (target is Enemy && isTame)
-            || (target is Player && !isTame))
+            target !is Plant // target is not plant
+            && (target is Zombie // target is a zombie
+            || (target is Enemy && isTame) // or an enemy, IF they are tame
+            || (target is Player && !isTame)) // or a player, IF they are not tame
         })
     }
 }

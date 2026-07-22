@@ -180,6 +180,13 @@
         }
       },
       {
+        "when": { "id": "plantz:water_peashooter" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz:item/seed_packet/water_peashooter"
+        }
+      },
+      {
         "when": { "id": "plantz:seashroom" },
         "model": {
           "type": "minecraft:model",

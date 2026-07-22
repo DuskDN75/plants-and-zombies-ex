@@ -22,7 +22,7 @@ class Melon(
     damage = Plant.PEA_DAMAGE.toFloat()*4,
     knockback = 0.4
 ) {
-    override fun getDefaultGravity(): Double = 0.03
+    override fun getDefaultGravity(): Double = 0.07
 
     override fun onHit(hitResult: HitResult) {
         super.onHit(hitResult)

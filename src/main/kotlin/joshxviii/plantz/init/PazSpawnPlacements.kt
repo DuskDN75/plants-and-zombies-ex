@@ -50,9 +50,13 @@ object PazSpawnPlacements {
             weight = 25, minGroupSize = 1, maxGroupSize = 1)
         registerSpawnPlacement(PazEntities.DOOM_SHROOM, DoomShroom::checkDoomShroomSpawnRules)
 
+        addBiomeSpawn(PazTags.Biomes.HAS_WATER_PEASHOOTER, PazEntities.WATER_PEA_SHOOTER,
+            weight = 2, minGroupSize = 1, maxGroupSize = 1)
+        registerSpawnPlacement(PazEntities.WATER_PEA_SHOOTER, LilyPad::checkLilyPadSpawnRules, spawnPlacements = SpawnPlacementTypes.NO_RESTRICTIONS)
+
         addBiomeSpawn(PazTags.Biomes.HAS_LILYPAD, PazEntities.LILYPAD,
-            weight = 2, minGroupSize = 1, maxGroupSize = 3)
-        registerSpawnPlacement(PazEntities.LILYPAD, SeaShroom::checkSeaShroomSpawnRules, spawnPlacements = SpawnPlacementTypes.IN_WATER)
+            weight = 5, minGroupSize = 1, maxGroupSize = 3)
+        registerSpawnPlacement(PazEntities.LILYPAD, LilyPad::checkLilyPadSpawnRules, spawnPlacements = SpawnPlacementTypes.IN_WATER)
 
         addBiomeSpawn(PazTags.Biomes.HAS_SEA_SHROOM, PazEntities.SEA_SHROOM,
             weight = 2, minGroupSize = 1, maxGroupSize = 3)

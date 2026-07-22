@@ -7,6 +7,7 @@ import joshxviii.plantz.entity.PlantPotMinecart
 import joshxviii.plantz.entity.Sun
 import joshxviii.plantz.entity.gnome.Gnome
 import joshxviii.plantz.entity.plant.*
+import joshxviii.plantz.entity.plant.init.CarrierPlant
 import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.entity.projectile.*
 import joshxviii.plantz.entity.turret.Turret
@@ -14,21 +15,53 @@ import joshxviii.plantz.entity.zombie.*
 import joshxviii.plantz.mixin.MobAccessor
 import joshxviii.plantz.util.pazResource
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.*
 import net.minecraft.world.entity.Mob.createMobAttributes
+import net.minecraft.world.entity.ai.attributes.AttributeInstance
+import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.monster.zombie.ZombifiedPiglin
 import net.minecraft.world.entity.projectile.Projectile
+import java.util.UUID
 
 object PazEntities {
+
+    val followMultiplier = 1.0
+
+    val followModifierID: Identifier = Identifier.fromNamespaceAndPath("plantz","night_follow_multiplier")
+
+    var isNight = false
+
+    private fun applyNightFollowModifier(instance: AttributeInstance) {
+        if (instance.getModifier(followModifierID) == null) {
+
+            val newMod = AttributeModifier(
+                followModifierID,
+                5.0,
+                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+            )
+
+            instance.addPermanentModifier(newMod)
+        }
+    }
+
+    private fun removeNightFollowModifier(instance: AttributeInstance) {
+        if (instance.getModifier(followModifierID) != null) {
+
+            instance.removeModifier(followModifierID)
+
+        }
+    }
 
     fun initialize() {
 
@@ -38,15 +71,41 @@ object PazEntities {
 
             if (entity is Mob && entity.`is`(PazTags.EntityTypes.ATTACKS_PLANTS) && entity !is ZombifiedPiglin) {
                 (entity as MobAccessor).targetSelector.addGoal(0, NearestAttackableTargetGoal(entity, WallNut::class.java, 6, true, true) { target, level -> ((target as? WallNut ?: target as? ExplodeONut)?.let { it.distanceToSqr(entity) < 7 } ?: false)})
-                (entity as MobAccessor).targetSelector.addGoal(3, NearestAttackableTargetGoal(entity, Plant::class.java, 5, true, false) { target, level ->
-                    target !is WallNut && !target.`is`(PazTags.EntityTypes.IGNORED_BY_PLANT_ATTACKERS) })
+                (entity as MobAccessor).targetSelector.addGoal(0, NearestAttackableTargetGoal(entity, Plant::class.java, 2, true, false) { target, level ->
+                    target !is WallNut && target.passengers.isEmpty() && !target.`is`(PazTags.EntityTypes.IGNORED_BY_PLANT_ATTACKERS)
+                })
             }
 
             if (entity is PathfinderMob && entity.`is`(PazTags.EntityTypes.ZOMBIE_RAIDERS)) {
-                (entity as MobAccessor).goalSelector.addGoal(2, DestroyFlagGoal(entity))
-                (entity as MobAccessor).goalSelector.addGoal(1, PathfindToFlagGoal(entity))
+                (entity as MobAccessor).goalSelector.addGoal(3, DestroyFlagGoal(entity))
+                (entity as MobAccessor).goalSelector.addGoal(2, PathfindToFlagGoal(entity))
             }
         }
+
+        ServerTickEvents.END_LEVEL_TICK.register { server ->
+            val level = server.level
+
+            if (level.isDarkOutside != isNight) {
+
+                isNight = level.isDarkOutside
+
+                for (entity in level.allEntities) {
+                    if (entity is PathfinderMob && entity.`is`(PazTags.EntityTypes.ATTACKS_PLANTS)) {
+
+                        val attribute = entity.getAttribute(Attributes.FOLLOW_RANGE) ?: continue
+
+                        if (isNight) {
+                            applyNightFollowModifier(attribute)
+                        } else {
+                            removeNightFollowModifier(attribute)
+                        }
+
+                    }
+                }
+
+            }
+        }
+
     }
 
     // region Plants
@@ -157,8 +216,7 @@ object PazEntities {
         attributes = Plant.Companion.PlantAttributes(
             attackDamage = Plant.PEA_DAMAGE*2,
             attackKnockback = 0.5,
-            followRange = 45.0,
-            attackRange = 15.0,
+            followRange = 40.0,
         )
     )
     @JvmField val KERNEL_PULT: EntityType<KernelPult> = registerPlant(
@@ -169,8 +227,7 @@ object PazEntities {
         attributes = Plant.Companion.PlantAttributes(
             attackDamage = Plant.PEA_DAMAGE,
             attackKnockback = 0.5,
-            followRange = 45.0,
-            attackRange = 15.0,
+            followRange = 40.0,
         )
     )
     @JvmField val MELON_PULT: EntityType<MelonPult> = registerPlant(
@@ -181,8 +238,7 @@ object PazEntities {
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 35.0,
             attackDamage = Plant.PEA_DAMAGE*4,
-            followRange = 45.0,
-            attackRange = 15.0,
+            followRange = 40.0,
         )
     )
     @JvmField val BONK_CHOY: EntityType<BonkChoy> = registerPlant(
@@ -204,7 +260,7 @@ object PazEntities {
         eyeHeight = 0.5f,
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 14.0,
-            attackDamage = Plant.PEA_DAMAGE*120,
+            attackDamage = Plant.PEA_DAMAGE*8,
             followRange = 1.0,
             scale = 1.25
         )
@@ -268,7 +324,7 @@ object PazEntities {
         "lilypad", EntityType.Builder.of(::LilyPad, MobCategory.CREATURE),
         width = 0.875f,
         height = 0.125f,
-        eyeHeight = 0.5f,
+        eyeHeight = 0.125f,
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 12.0,
         )
@@ -281,6 +337,13 @@ object PazEntities {
             maxHealth = 12.0,
             attackDamage = Plant.PEA_DAMAGE,
             followRange = 10.0,
+        )
+    )
+    @JvmField val WATER_PEA_SHOOTER: EntityType<WaterPeaShooter> = registerPlant(
+        "water_peashooter",
+        EntityType.Builder.of(::WaterPeaShooter, MobCategory.CREATURE),
+        attributes = Plant.Companion.PlantAttributes(
+            attackDamage = Plant.PEA_DAMAGE,
         )
     )
     @JvmField val COFFEE_BEAN: EntityType<CoffeeBean> = registerPlant(
@@ -480,17 +543,18 @@ object PazEntities {
 
     //region Projectiles
     @JvmField val THROWN_SUN_BOTTLE: EntityType<ThrownSunBottle> = registerProjectile("thrown_sun_bottle", EntityType.Builder.of({ _, l->ThrownSunBottle(l)}, MobCategory.MISC))
-    @JvmField val PEA: EntityType<Pea> = registerProjectile("pea", EntityType.Builder.of({_,l->Pea(l)}, MobCategory.MISC))
-    @JvmField val PEA_ICE: EntityType<PeaIce> = registerProjectile("pea_ice", EntityType.Builder.of({_,l->PeaIce(l)}, MobCategory.MISC))
-    @JvmField val PEA_FIRE: EntityType<PeaFire> = registerProjectile("pea_fire", EntityType.Builder.of({_,l->PeaFire(l)}, MobCategory.MISC))
-    @JvmField val PEA_ELECTRIC: EntityType<PeaElectric> = registerProjectile("pea_electric", EntityType.Builder.of({_,l-> PeaElectric(l)}, MobCategory.MISC))
-    @JvmField val NEEDLE: EntityType<Needle> = registerProjectile("needle", EntityType.Builder.of({_,l->Needle(l)}, MobCategory.MISC), width = 0.42f, height = 0.42f)
-    @JvmField val SPORE: EntityType<Spore> = registerProjectile("spore", EntityType.Builder.of({_,l->Spore(l)}, MobCategory.MISC))
-    @JvmField val WATER_SPORE: EntityType<WaterSpore> = registerProjectile("water_spore", EntityType.Builder.of({_,l-> WaterSpore(l)}, MobCategory.MISC))
-    @JvmField val CABBAGE: EntityType<Cabbage> = registerProjectile("cabbage", EntityType.Builder.of({_,l->Cabbage(l)}, MobCategory.MISC), width = 0.5f, height = 0.5f)
-    @JvmField val KERNEL: EntityType<Kernel> = registerProjectile("kernel", EntityType.Builder.of({_,l->Kernel(l)}, MobCategory.MISC), width = 0.42f, height = 0.42f)
-    @JvmField val BUTTER: EntityType<Butter> = registerProjectile("butter", EntityType.Builder.of({_,l->Butter(l)}, MobCategory.MISC), width = 0.75f, height = 0.5f)
-    @JvmField val MELON: EntityType<Melon> = registerProjectile("melon", EntityType.Builder.of({_,l->Melon(l)}, MobCategory.MISC), width = 1.0f, height = 0.8f)
+    @JvmField val PEA: EntityType<Pea> = registerProjectile("pea", EntityType.Builder.of({_,l->Pea(l)}, MobCategory.MISC).sized(2.0f, 2.0f))
+    @JvmField val PEA_ICE: EntityType<PeaIce> = registerProjectile("pea_ice", EntityType.Builder.of({_,l->PeaIce(l)}, MobCategory.MISC).sized(2.0f, 2.0f))
+    @JvmField val PEA_FIRE: EntityType<PeaFire> = registerProjectile("pea_fire", EntityType.Builder.of({_,l->PeaFire(l)}, MobCategory.MISC).sized(2.0f, 2.0f))
+    @JvmField val PEA_WATER: EntityType<PeaWater> = registerProjectile("pea_water", EntityType.Builder.of({ _, l->PeaWater(l)}, MobCategory.MISC).sized(2.0f, 2.0f))
+    @JvmField val PEA_ELECTRIC: EntityType<PeaElectric> = registerProjectile("pea_electric", EntityType.Builder.of({_,l-> PeaElectric(l)}, MobCategory.MISC).sized(2.0f, 2.0f))
+    @JvmField val NEEDLE: EntityType<Needle> = registerProjectile("needle", EntityType.Builder.of({_,l->Needle(l)}, MobCategory.MISC).sized(2.0f, 2.0f), width = 0.42f, height = 0.42f)
+    @JvmField val SPORE: EntityType<Spore> = registerProjectile("spore", EntityType.Builder.of({_,l->Spore(l)}, MobCategory.MISC).sized(2.0f, 2.0f))
+    @JvmField val WATER_SPORE: EntityType<WaterSpore> = registerProjectile("water_spore", EntityType.Builder.of({_,l-> WaterSpore(l)}, MobCategory.MISC).sized(2.0f, 2.0f))
+    @JvmField val CABBAGE: EntityType<Cabbage> = registerProjectile("cabbage", EntityType.Builder.of({_,l->Cabbage(l)}, MobCategory.MISC).sized(3.0f, 3.0f), width = 1.0f, height = 1.0f)
+    @JvmField val KERNEL: EntityType<Kernel> = registerProjectile("kernel", EntityType.Builder.of({_,l->Kernel(l)}, MobCategory.MISC).sized(3.0f, 3.0f), width = 1.0f, height = 1.0f)
+    @JvmField val BUTTER: EntityType<Butter> = registerProjectile("butter", EntityType.Builder.of({_,l->Butter(l)}, MobCategory.MISC).sized(3.0f, 3.0f), width = 1.5f, height = 1.0f)
+    @JvmField val MELON: EntityType<Melon> = registerProjectile("melon", EntityType.Builder.of({_,l->Melon(l)}, MobCategory.MISC).sized(2.0f, 2.0f), width = 1.0f, height = 0.8f)
     @JvmField val PAINT_BALL: EntityType<PaintBall> = registerProjectile("paint_ball", EntityType.Builder.of({ _, l->PaintBall(l)}, MobCategory.MISC), width = 0.42f, height = 0.42f)
     @JvmField val MISSILE: EntityType<Missile> = registerProjectile("missile", EntityType.Builder.of({ _, l->Missile(l)}, MobCategory.MISC), width = 0.42f, height = 0.42f)
     // endregion

@@ -2,6 +2,7 @@ package joshxviii.plantz.model.plants;
 
 import joshxviii.plantz.PlantRenderState;
 import joshxviii.plantz.animation.plants.DoomShroomAnimation;
+import joshxviii.plantz.model.plants.init.PlantModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;

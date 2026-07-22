@@ -4,6 +4,7 @@ import joshxviii.plantz.init.PazBlocks
 import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
 import joshxviii.plantz.entity.plant.init.Plant
+import joshxviii.plantz.entity.plant.utils.waterSurvivalCheck
 import joshxviii.plantz.entity.projectile.WaterSpore
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.FluidTags

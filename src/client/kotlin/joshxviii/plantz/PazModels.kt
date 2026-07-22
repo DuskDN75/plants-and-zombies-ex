@@ -27,15 +27,17 @@ import net.fabricmc.fabric.api.client.rendering.v1.BlockColorRegistry
 import net.minecraft.client.color.block.BlockTintSource
 import net.minecraft.client.renderer.BiomeColors
 import net.minecraft.client.renderer.block.BlockAndTintGetter
-import net.minecraft.client.renderer.block.FluidRenderer
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.material.FluidState
 
 object PazModels {
 
     @JvmField
     val IS_HYPNOTIZED_KEY: RenderStateDataKey<Boolean> = RenderStateDataKey.create { "plantz:hypnotized" }
+    @JvmField
+    val IS_CHILLED_KEY: RenderStateDataKey<Boolean> = RenderStateDataKey.create { "plantz:chilled" }
+    @JvmField
+    val IS_DRENCHED_KEY: RenderStateDataKey<Boolean> = RenderStateDataKey.create { "plantz:drenched" }
     @JvmField
     val PAINT_COLORS_KEY: RenderStateDataKey<Map<Int, Int>> = RenderStateDataKey.create { "plantz:painted" }
 
@@ -165,6 +167,7 @@ object PazModels {
         EntityRenderers.register(PazEntities.HYPNOSHROOM) { PlantRenderer(HypnoShroomModel(it.bakeLayer(HypnoShroomModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.DOOM_SHROOM) { PlantRenderer(DoomShroomModel(it.bakeLayer(DoomShroomModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.LILYPAD) { PlantRenderer(LilyPadModel(it.bakeLayer(LilyPadModel.LAYER_LOCATION)), it) }
+        EntityRenderers.register(PazEntities.WATER_PEA_SHOOTER) { PlantRenderer(WaterPeaShooterModel(it.bakeLayer(WaterPeaShooterModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.SEA_SHROOM) { PlantRenderer(SeaShroomModel(it.bakeLayer(SeaShroomModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.COFFEE_BEAN) { PlantRenderer(CoffeeBeanModel(it.bakeLayer(CoffeeBeanModel.LAYER_LOCATION)), it) }
 
@@ -177,6 +180,7 @@ object PazModels {
         EntityRenderers.register(PazEntities.PEA_ICE) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.PEA_FIRE) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it, emissive = true) }
         EntityRenderers.register(PazEntities.PEA_ELECTRIC) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it, emissive = true) }
+        EntityRenderers.register(PazEntities.PEA_WATER) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.SPORE) { ProjectileRenderer(SmallProjectileModel(it.bakeLayer(SmallProjectileModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.WATER_SPORE) { ProjectileRenderer(SmallProjectileModel(it.bakeLayer(SmallProjectileModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.NEEDLE) { ProjectileRenderer(NeedleModel(it.bakeLayer(NeedleModel.LAYER_LOCATION)), it) }

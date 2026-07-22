@@ -1,11 +1,9 @@
 package joshxviii.plantz.entity.zombie
 
-import joshxviii.plantz.init.PazBlocks
-import joshxviii.plantz.init.PazDamageTypes
-import joshxviii.plantz.init.PazDataSerializers.DATA_ZOMBIE_STATE
-import joshxviii.plantz.init.PazItems
-import joshxviii.plantz.init.PazTags
 import joshxviii.plantz.ai.ZombieState
+import joshxviii.plantz.init.*
+import joshxviii.plantz.init.PazDataSerializers.DATA_ZOMBIE_STATE
+import joshxviii.plantz.item.component.BlocksProjectileDamage
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleTypes

@@ -29,7 +29,7 @@ class Spore(
     }
 
     override fun afterHitEntityEffect(target: LivingEntity) {
-        target.addEffect(MobEffectInstance(PazEffects.TOXIC, 50, 0))
+        target.addEffect(MobEffectInstance(PazEffects.TOXIC, 50, 0, false, false))
     }
 
     override fun onHit(hitResult: HitResult) {

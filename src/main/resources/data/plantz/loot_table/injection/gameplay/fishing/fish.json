@@ -11,7 +11,7 @@
             {
               "type": "minecraft:item",
               "name": "plantz:seed_packet",
-              "weight": 1,
+              "weight": 5,
               "functions": [
                 {
                   "function": "minecraft:set_components",
@@ -26,13 +26,28 @@
             {
               "type": "minecraft:item",
               "name": "plantz:seed_packet",
-              "weight": 1,
+              "weight": 3,
               "functions": [
                 {
                   "function": "minecraft:set_components",
                   "components": {
                     "minecraft:entity_data": {
                       "id": "plantz:lilypad"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz:seed_packet",
+              "weight": 1,
+              "functions": [
+                {
+                  "function": "minecraft:set_components",
+                  "components": {
+                    "minecraft:entity_data": {
+                      "id": "plantz:water_peashooter"
                     }
                   }
                 }

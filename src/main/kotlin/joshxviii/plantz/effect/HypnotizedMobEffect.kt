@@ -4,6 +4,7 @@ import joshxviii.plantz.init.PazEffects.HYPNOTIZED_GOAL_ATTACHMENT
 import joshxviii.plantz.init.PazTags
 import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.mixin.MobAccessor
+import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectCategory
@@ -17,7 +18,11 @@ import net.minecraft.world.entity.monster.Enemy
 /**
  * A [MobEffect] that causes the user to attack [PazTags.EntityTypes.ZOMBIE_RAIDERS].
  */
-class HypnotizedMobEffect(category: MobEffectCategory, color: Int) : MobEffect(category, color) {
+class HypnotizedMobEffect(
+    category: MobEffectCategory,
+    color: Int,
+    particleOptions: ParticleOptions
+) : MobEffect(category, color, particleOptions) {
     companion object {
         const val CHECK_INTERVAL: Int = 100
     }
