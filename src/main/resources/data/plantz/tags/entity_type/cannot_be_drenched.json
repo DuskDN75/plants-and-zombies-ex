@@ -1,7 +1,6 @@
 {
   "values": [
-    "plantz:ice_peashooter",
-    "plantz:zombie_yeti",
+    "plantz:water_peashooter",
     "#minecraft:aquatic",
     "minecraft:drowned"
   ]

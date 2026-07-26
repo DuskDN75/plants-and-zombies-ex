@@ -3,6 +3,7 @@ package joshxviii.plantz.entity.plant
 import joshxviii.plantz.init.PazEntities
 import joshxviii.plantz.init.PazTags.BlockTags.PLANTABLE
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
+import joshxviii.plantz.entity.plant.init.AttackingPlant
 import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.entity.projectile.PeaIce
 import net.minecraft.core.BlockPos
@@ -18,11 +19,11 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.state.BlockState
 
-class IcePeaShooter(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.ICE_PEA_SHOOTER, level) {
+class IcePeaShooter(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlant(PazEntities.ICE_PEA_SHOOTER, level) {
 
     companion object {
         fun checkIcePeaShooterSpawnRules(
-            type: EntityType<out Plant>,
+            type: EntityType<out AttackingPlant>,
             level: LevelAccessor,
             spawnReason: EntitySpawnReason,
             pos: BlockPos,
@@ -42,12 +43,6 @@ class IcePeaShooter(type: EntityType<out Plant>, level: Level) : Plant(PazEntiti
             projectileFactory =  { PeaIce(level(), this) },
             cooldownTime = 20,
             actionDelay = 3))
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
-            target !is Plant
-                    
-                    && (target is Zombie
-                    || (target is Enemy && isTame))
-        })
     }
 
     override fun canSurviveOn(block: BlockState): Boolean {

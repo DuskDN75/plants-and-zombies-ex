@@ -14,6 +14,7 @@ import net.minecraft.ChatFormatting
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.component.DataComponents
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
@@ -83,11 +84,23 @@ object PlantSpawnUtils {
             val invalidSpace = !(validGround == null || checkWater)
                     || !(spawnBlockCollisionShape==null || !entityBox.intersects(spawnBlockCollisionShape))
 
-//            println("ValidGround: $validGround, InvalidSpace: $invalidSpace")
+            println("ValidGround: $validGround, InvalidSpace: $invalidSpace")
 
             if (validGround != null) {
+
+                var messageKey = when {
+                    validGround.tooClose -> "message.plantz.too_close"
+                    validGround.invalidCarrier -> "message.plantz.cannot_be_placed"
+                    else -> {"message.plantz.cannot_survive"}
+                }
+
+                when {
+                    validGround.tooClose -> messageKey = "message.plantz.too_close"
+                    validGround.invalidCarrier -> messageKey = "message.plantz.cannot_be_placed"
+                }
+
                 player.sendOverlayMessage(
-                    Component.translatable("message.plantz.cannot_survive").withStyle(ChatFormatting.RED)
+                    Component.translatable(messageKey).withStyle(ChatFormatting.RED)
                 )
                 return InteractionResult.FAIL
             }
@@ -103,7 +116,7 @@ object PlantSpawnUtils {
 
         entity.let {
             val existingPlants = level.getEntitiesOfClass(Plant::class.java, AABB(it.blockPosition()))
-            if (existingPlants.isNotEmpty() && (carrier == null || carrier::class.java == entity::class.java)) {
+            if (existingPlants.isNotEmpty() && (carrier == null || carrier::class.java == entity::class.java || carrier.passengers.isNotEmpty())) {
                 player.sendOverlayMessage(
                     Component.translatable("message.plantz.already_planted").withStyle(ChatFormatting.RED)
                 )
@@ -131,24 +144,42 @@ object PlantSpawnUtils {
         return InteractionResult.SUCCESS
     }
 
-    fun validVehicle(type: EntityType<*>, carrier: Plant? = null): Boolean {
+    fun validVehicle(plant: Plant, carrier: Plant? = null): Boolean {
+
+        val plantType = plant.type
 
         if (carrier == null) {
 //            println("Carrier doesn't exist")
             return false
         } // if no carrier, return true
 
+        val carrierType = carrier.type
+
         if (carrier !is CarrierPlant) {
 //            println("Carrier is not a Carrier Plant")
             return false
         }
 
+        if (carrier.passengers.isNotEmpty() && carrier.firstPassenger != plant) {
+            return false
+        }
+
+        if (carrierType == plantType) {
+            return false
+        }
+
+        val plantableOnWater = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(plantType).`is`(PazTags.EntityTypes.PLANTABLE_ON_WATER)
+
+        val amphibious = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(plantType).`is`(PazTags.EntityTypes.AMPHIBIOUS)
+
+        println("PlantType: $plantType, carrier: $carrier, PlantableOnWater: $plantableOnWater, Amphibious: $amphibious")
+
         // if carrier and is not plantable on water, return true
         // else only return true if the carrier allows water plants
-        if (type == PazTags.EntityTypes.PLANTABLE_ON_WATER) {
-            val waterAllowed = carrier.`is`(PazTags.EntityTypes.CARRIER_ALLOW_WATER)
+        if (plantableOnWater && !amphibious) {
+            val waterAllowed = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(carrierType).`is`(PazTags.EntityTypes.CARRIER_ALLOW_WATER)
 
-//            println("Plant is plantable on water. Carrier allows water plants? : $waterAllowed")
+            println("Plant is plantable on water. Carrier allows water plants? : $waterAllowed")
 
             return waterAllowed
         }
@@ -173,11 +204,11 @@ fun Plant.checkValidGround(x: Double = this.x, y: Double = this.y, z: Double = t
 
     val belowBlock = getBlockBelow(x, y, z)
 
-    val hasValidVehicle = validVehicle(this.type, carrier)
+    val hasValidVehicle = validVehicle(this, carrier)
 
     val blockPosition = BlockPos.containing(x,y,z)
 
-    val canSurvive = canSurviveOn(belowBlock) || canSurviveOn(belowBlock)
+    val canSurvive = if (carrier == null) canSurviveOn(belowBlock) else false
 
     val hasAdjacent = hasAdjacentPlant(level(), blockPosition, this)
 
@@ -186,14 +217,20 @@ fun Plant.checkValidGround(x: Double = this.x, y: Double = this.y, z: Double = t
     return InvalidGroundReasons(hasAdjacent, !canSurvive, !hasValidVehicle)
 }
 
-fun Plant.onValidGround(x: Double = this.x, y: Double = this.y, z: Double = this.z, carrier: Plant? = vehicle as Plant?) : InvalidGroundReasons? {
+fun Plant.onValidGround(x: Double = this.x, y: Double = this.y, z: Double = this.z, carrier: Plant? = vehicle as Plant?, print: Boolean = false) : InvalidGroundReasons? {
     val reasons = checkValidGround(x,y,z,carrier)
 
-    val invalidGround = (reasons.invalidSpace && reasons.invalidCarrier) || reasons.tooClose
+    val validSpace = !reasons.invalidSpace
 
-//    println("Plant: ${this.type}, validGround: ${!invalidGround}, reasons: $reasons")
+    val validCarrier = !reasons.invalidCarrier
 
-    if (invalidGround) return reasons
+    val validDistance = !reasons.tooClose
+
+    val validGround = (validSpace || validCarrier) && validDistance
+
+//    println("type: ${this.type}, validSpace: $validSpace, validCarrier: $validCarrier, validDistance: $validDistance, validGround: $validGround")
+
+    if (!validGround) return reasons
 
     return null
 }

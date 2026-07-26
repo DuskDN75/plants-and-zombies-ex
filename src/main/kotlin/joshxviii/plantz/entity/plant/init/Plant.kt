@@ -221,6 +221,10 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         }
     }
 
+    override fun isInWater(): Boolean {
+        return super.isInWater() || getBlockBelow().`is`(PazBlocks.WATER_POT)
+    }
+
     private var nutrientSupply = NUTRIENT_SUPPLY_MAX
 
     val isGrowingSeeds: Boolean

@@ -108,6 +108,7 @@ object PazModels {
         ModelLayerRegistry.registerModelLayer(DoomShroomModel.LAYER_LOCATION) { DoomShroomModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(LilyPadModel.LAYER_LOCATION) { LilyPadModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(SeaShroomModel.LAYER_LOCATION) { SeaShroomModel.createBodyLayer() }
+        ModelLayerRegistry.registerModelLayer(WaterPeaShooterModel.LAYER_LOCATION) { WaterPeaShooterModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(CoffeeBeanModel.LAYER_LOCATION) { CoffeeBeanModel.createBodyLayer() }
 
         ModelLayerRegistry.registerModelLayer(PeaModel.LAYER_LOCATION) { PeaModel.createBodyLayer() }

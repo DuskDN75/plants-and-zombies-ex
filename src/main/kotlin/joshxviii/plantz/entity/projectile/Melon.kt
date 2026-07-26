@@ -19,10 +19,11 @@ class Melon(
 ) : PazProjectile(
     PazEntities.MELON, level, owner, spawnOffset,
     PazDamageTypes.PLANT,
-    damage = Plant.PEA_DAMAGE.toFloat()*4,
-    knockback = 0.4
+    damage = Plant.PEA_DAMAGE.toFloat()*4
 ) {
     override fun getDefaultGravity(): Double = 0.07
+
+    override fun getKnockback(): Float = 0.4f
 
     override fun onHit(hitResult: HitResult) {
         super.onHit(hitResult)

@@ -73,7 +73,7 @@ class LilyPad(type: EntityType<out CarrierPlant>, level: Level) : CarrierPlant(P
                 return
             }
 
-            val waterSurfaceY = blockPos.y.toDouble() + fluidHeight.toDouble()
+            val waterSurfaceY = blockPos.y.toDouble() + fluidHeight.toDouble() - 0.01
 
             val distance = waterSurfaceY - this.y
 

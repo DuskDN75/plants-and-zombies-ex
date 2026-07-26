@@ -15,7 +15,7 @@ import java.util.function.Predicate
  */
 abstract class ActionGoal(
     val usingEntity: PathfinderMob,
-    val cooldownTime: Int = 20,
+    var cooldownTime: Int = 20,
     val actionDelay: Int = 0,
     val actionStartEffect: () -> Unit = {},
     val actionSuccessEffect: () -> Unit = {},

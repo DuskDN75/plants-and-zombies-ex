@@ -41,8 +41,7 @@ abstract class PazProjectile(
     val entityOwner: LivingEntity? = null,
     val spawnOffset: Vec2 = Vec2.ZERO,
     val damageType: ResourceKey<DamageType> = PazDamageTypes.PLANT,
-    var damage : Float = entityOwner?.attributes?.getValue(Attributes.ATTACK_DAMAGE)?.toFloat()?:1.0f,
-    var knockback : Double = entityOwner?.attributes?.getValue(Attributes.ATTACK_KNOCKBACK)?:0.0
+    var damage : Float = entityOwner?.attributes?.getValue(Attributes.ATTACK_DAMAGE)?.toFloat()?:1.0f
 ) : Projectile(type, level) {
 
     protected var inGroundTime: Int = 0
@@ -51,6 +50,7 @@ abstract class PazProjectile(
 
     companion object {
         val PIERCE_LEVEL: EntityDataAccessor<Byte> = SynchedEntityData.defineId(PazProjectile::class.java, EntityDataSerializers.BYTE)
+        val KNOCKBACK: EntityDataAccessor<Float> = SynchedEntityData.defineId(PazProjectile::class.java, EntityDataSerializers.FLOAT)
         val IN_GROUND: EntityDataAccessor<Boolean> = SynchedEntityData.defineId(PazProjectile::class.java, EntityDataSerializers.BOOLEAN)
 
         fun checkForArmor(entity: LivingEntity): MutableList<Pair<EquipmentSlot, ItemStack>> {
@@ -179,6 +179,20 @@ abstract class PazProjectile(
         super.tick()
     }
 
+    private fun projectileBoundingBox(pos: Vec3): AABB {
+        val width = type.dimensions.width.toDouble()
+        val height = type.dimensions.height.toDouble()
+
+        return AABB(
+            pos.x - width/2,
+            pos.y,
+            pos.z - width/2,
+            pos.x + width/2,
+            pos.y + height,
+            pos.z + width/2
+        )
+    }
+
     private fun stepMoveAndHit(blockHitResult: BlockHitResult) {
         val pierceLevel = this.getPierceLevel().toInt()
         while (this.isAlive) {
@@ -197,13 +211,21 @@ abstract class PazProjectile(
                     arr.asList()
                 }
             } else {
+
+                val movement = blockHitLoc.subtract(initialPosition)
+
+                val searchArea = projectileBoundingBox(this.position())
+
                 val nearest = ProjectileUtil.getEntityHitResult(
                     this.level(), this, initialPosition, blockHitLoc,
-                    this.boundingBox.expandTowards(this.deltaMovement),
+                    searchArea.expandTowards(movement).inflate(0.3),
                     canHitPredicate, ProjectileUtil.computeMargin(this)
                 )
+//                println("RESULT CHECK: $nearest, $initialPosition, $blockHitLoc, $deltaMovement")
                 if (nearest == null) emptyList() else listOf(nearest)
             }
+
+            println(entitiesHit)
 
             val firstEntityHit = if (entitiesHit.isEmpty()) null else entitiesHit[0]
             val nextLocation = (firstEntityHit ?: blockHitResult).location
@@ -237,9 +259,12 @@ abstract class PazProjectile(
     }
 
     protected open fun findHitEntities(from: Vec3, to: Vec3): MutableCollection<EntityHitResult> {
+
+        val box = this.boundingBox.expandTowards(this.deltaMovement)
+
         return ProjectileUtil.getManyEntityHitResult(
             this.level(), this, from, to,
-            this.boundingBox.expandTowards(this.deltaMovement),
+            box,
             canHitPredicate, false
         )
     }
@@ -248,6 +273,10 @@ abstract class PazProjectile(
         super.onHitEntity(hitResult)
 
         println("HitEntity: $hitResult")
+
+        val knockback = getKnockback().toDouble()
+
+        println("KNOCKBACK ENTITY: $knockback")
 
         val target = hitResult.entity
         val serverLevel = this.level() as? ServerLevel
@@ -262,8 +291,13 @@ abstract class PazProjectile(
             val source = this.damageSources().source(damageType, this)
             if(target.hurtServer(serverLevel, source, damage)) {
                 if (target is LivingEntity) {
-                    val knockbackDirection = calculateHorizontalHurtKnockbackDirection(target, source)
-                    target.knockback(knockback, -knockbackDirection.leftDouble(), -knockbackDirection.rightDouble())
+
+                    if (knockback > 0.0) {
+                        println("KNOCKBACK ACTIVATED")
+                        val knockbackDirection = calculateHorizontalHurtKnockbackDirection(target, source)
+                        target.knockback(knockback, -knockbackDirection.leftDouble(), -knockbackDirection.rightDouble())
+                    }
+
                     playSound(getHitSound(), 0.3f, 1.8f)
                     afterHitEntityEffect(target)
                 }
@@ -299,18 +333,26 @@ abstract class PazProjectile(
     }
     open fun afterHitBlockEffect(target: BlockPos) {}
 
+    fun waterCheck(): Boolean {
+        return entityOwner?.isInWater == true
+    }
+
     override fun getDefaultGravity(): Double { return 0.03 }
 
     override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
         entityData.define(IN_GROUND, false)
         entityData.define(PIERCE_LEVEL, 0.toByte())
+        entityData.define(KNOCKBACK, 0F)
     }
 
     fun setInGround(inGround: Boolean) = this.entityData.set(IN_GROUND, inGround)
     fun isInGround(): Boolean = this.entityData.get(IN_GROUND)
 
-    private fun setPierceLevel(pieceLevel: Byte) = this.entityData.set(PIERCE_LEVEL, pieceLevel)
+    private fun setPierceLevel(pierceLevel: Byte) = this.entityData.set(PIERCE_LEVEL, pierceLevel)
     open fun getPierceLevel(): Byte = this.entityData.get(PIERCE_LEVEL)
+
+    private fun setKnockback(knockback: Float) = this.entityData.set(KNOCKBACK, knockback)
+    open fun getKnockback(): Float = this.entityData.get(KNOCKBACK)
 
     open fun getHitSound(): SoundEvent = SoundEvents.HONEY_BLOCK_BREAK
     open fun stickInGroundTime(): Int = 0
@@ -330,6 +372,11 @@ abstract class PazProjectile(
     }
 
     protected fun knockbackNearby(damage: Float = this.damage, distance: Double = 1.0) {
+
+        val knockback = getKnockback().toDouble()
+
+        println("KNOCKBACK NEARBY: $knockback")
+
         val serverLevel = this.level() as? ServerLevel?: return
         serverLevel.getEntitiesOfClass(
             LivingEntity::class.java,
@@ -339,13 +386,16 @@ abstract class PazProjectile(
             val direction = nearby.position().subtract(this.position())
             val knockbackVector = direction.normalize().scale(knockback)
             if (knockback > 0.0) {
+                println("KNOCKBACK ACTIVATED")
                 nearby.push(knockbackVector.x, 0.03, knockbackVector.z)
-                val source = this.damageSources().source(damageType, this, getOwner())
-                if(nearby.hurtServer(serverLevel, source, (damage/direction.length()*distance).toFloat())) {
-                    val knockbackDirection = calculateHorizontalHurtKnockbackDirection(nearby, source)
-                    nearby.knockback(knockback, -knockbackDirection.leftDouble(), -knockbackDirection.rightDouble())
-                    if (nearby is ServerPlayer) nearby.connection.send(ClientboundSetEntityMotionPacket(nearby))
-                }
+            }
+
+            val source = this.damageSources().source(damageType, this, getOwner())
+
+            if(nearby.hurtServer(serverLevel, source, (damage/direction.length()*distance).toFloat())) {
+                val knockbackDirection = calculateHorizontalHurtKnockbackDirection(nearby, source)
+                nearby.knockback(knockback, -knockbackDirection.leftDouble(), -knockbackDirection.rightDouble())
+                if (nearby is ServerPlayer) nearby.connection.send(ClientboundSetEntityMotionPacket(nearby))
             }
         }
     }
@@ -387,11 +437,22 @@ abstract class PazProjectile(
     }
 
     override fun canHitEntity(entity: Entity): Boolean {
-        if (entity is Projectile) return false
-        if (piercingIgnoreEntityIds.contains(entity.id)) return false
+        println("FOUND ENTITY!!!")
+        if (entity is Projectile) {
+            println("ENTITY IS PROJECTILE")
+            return false
+        }
+        if (piercingIgnoreEntityIds.contains(entity.id)) {
+            println("ENTITY HAS BEEN PIERCED ALREADY")
+            return false
+        }
         val owner = entityOwner
         if ((entity is Plant && owner is Plant) || (entity is Enemy && owner is Enemy)) return false
-        if (this.hasSameRootOwner(entity)) return false
+        if (this.hasSameRootOwner(entity)) {
+//            println("SAME ROOT OWNER")
+            return false
+        }
+        println("CAN HIT ENTITY!")
         return super.canHitEntity(entity)
     }
 

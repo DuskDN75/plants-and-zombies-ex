@@ -2,7 +2,10 @@ package joshxviii.plantz.model.plants;
 
 import joshxviii.plantz.PlantRenderState;
 import joshxviii.plantz.animation.plants.PeaShooterAnimation;
+import joshxviii.plantz.animation.plants.SeaShroomAnimation;
+import joshxviii.plantz.animation.plants.WaterPeaAnimation;
 import joshxviii.plantz.model.plants.init.PlantModel;
+import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -29,13 +32,16 @@ public class WaterPeaShooterModel extends PlantModel {
 	private final ModelPart leaf_tip_3;
 	private final ModelPart leaf_4;
 	private final ModelPart leaf_tip_4;
+	private final KeyframeAnimation initLandAnimation;
+	private final KeyframeAnimation idleLandAnimation;
+	private final KeyframeAnimation sleepLandAnimation;
 
 	public WaterPeaShooterModel(ModelPart root) {
 		super(
-			PeaShooterAnimation.init.bake(root),
-			PeaShooterAnimation.idle.bake(root),
-			PeaShooterAnimation.action.bake(root),
-			PeaShooterAnimation.sleep.bake(root),
+			WaterPeaAnimation.init.bake(root),
+			WaterPeaAnimation.idle.bake(root),
+			WaterPeaAnimation.action.bake(root),
+			WaterPeaAnimation.sleep.bake(root),
 			null,
 			root
 		);
@@ -56,6 +62,9 @@ public class WaterPeaShooterModel extends PlantModel {
 		this.leaf_tip_3 = this.leaf_3.getChild("leaf_tip_3");
 		this.leaf_4 = this.leaves.getChild("leaf_4");
 		this.leaf_tip_4 = this.leaf_4.getChild("leaf_tip_4");
+		this.initLandAnimation = WaterPeaAnimation.init_land.bake(root);
+		this.idleLandAnimation = WaterPeaAnimation.idle_land.bake(root);
+		this.sleepLandAnimation = WaterPeaAnimation.sleep_land.bake(root);
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -105,6 +114,24 @@ public class WaterPeaShooterModel extends PlantModel {
 		PartDefinition leaf_tip_4 = leaf_4.addOrReplaceChild("leaf_tip_4", CubeListBuilder.create().texOffs(30, 16).addBox(-4.0F, 0.0F, -6.0F, 8.0F, 0.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, -6.0F));
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
+	}
+
+	@Override
+	public KeyframeAnimation getProcessedInit(PlantRenderState state) {
+		return state.isInWater ? super.getProcessedInit(state) :
+				this.initLandAnimation;
+	}
+
+	@Override
+	public KeyframeAnimation getProcessedIdle(PlantRenderState state) {
+		return state.isInWater ? super.getProcessedIdle(state) :
+				this.idleLandAnimation;
+	}
+
+	@Override
+	public KeyframeAnimation getProcessedSleep(PlantRenderState state) {
+		return state.isInWater ? super.getProcessedSleep(state) :
+				this.sleepLandAnimation;
 	}
 
 	@Override

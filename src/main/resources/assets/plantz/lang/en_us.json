@@ -29,6 +29,7 @@
   "message.plantz.already_planted": "There's already a plant here!",
   "message.plantz.cannot_survive": "This plant cannot survive here!",
   "message.plantz.too_close": "This plant is too close to nearby plants!",
+  "message.plantz.cannot_be_placed": "This plant cannot be placed here!",
   "message.plantz.not_yours": "You do not own this plant!",
   "message.plantz.not_enough_sun": "Not enough sun (%s/%s)",
   "message.plantz.growing": "This plant is growing seeds!",

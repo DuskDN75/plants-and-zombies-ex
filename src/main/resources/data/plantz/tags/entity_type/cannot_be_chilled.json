@@ -1,6 +1,7 @@
 {
   "values": [
     "plantz:ice_peashooter",
-    "plantz:zombie_yeti"
+    "plantz:zombie_yeti",
+    "#minecraft:freeze_immune_entity_types"
   ]
 }

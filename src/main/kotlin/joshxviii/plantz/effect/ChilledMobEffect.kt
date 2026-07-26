@@ -2,12 +2,14 @@ package joshxviii.plantz.effect
 
 import joshxviii.plantz.effect.ElectrifyMobEffect.Companion.ZAP_DAMAGE
 import joshxviii.plantz.effect.ElectrifyMobEffect.Companion.ZAP_INTERVAL
+import joshxviii.plantz.entity.plant.init.Plant
 import joshxviii.plantz.init.PazDamageTypes
 import joshxviii.plantz.init.PazEffects
 import joshxviii.plantz.init.PazServerParticles
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.tags.EntityTypeTags
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectCategory
 import net.minecraft.world.effect.MobEffectInstance
@@ -43,6 +45,17 @@ class ChilledMobEffect(
         return true
     }
 
+    override fun onEffectStarted(mob: LivingEntity, amplifier: Int) {
+
+        val level = mob.level()
+
+        if (!level.isClientSide && level is ServerLevel) {
+            particles(level, mob)
+        }
+
+        super.onEffectStarted(mob, amplifier)
+    }
+
     private fun particles(level: ServerLevel, target: LivingEntity) {
         level.sendParticles(
             ParticleTypes.SNOWFLAKE,
@@ -52,5 +65,10 @@ class ChilledMobEffect(
             target.boundingBox.zsize*0.55,
             0.0
         )
+
+        if (target.type == EntityTypeTags.FREEZE_HURTS_EXTRA_TYPES) {
+            val source = target.damageSources().source(PazDamageTypes.PLANT_FREEZE,null)
+            target.hurtServer(level, source, (Plant.PEA_DAMAGE).toFloat())
+        }
     }
 }

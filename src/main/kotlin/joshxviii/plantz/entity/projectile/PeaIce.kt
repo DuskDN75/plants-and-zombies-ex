@@ -22,7 +22,9 @@ class PeaIce(
 ) {
     override fun afterHitEntityEffect(target: LivingEntity) {
         super.afterHitEntityEffect(target)
-        if (target.`is`(PazTags.EntityTypes.CANNOT_CHILL)) return
+        val cannotChill = (target.`is`(PazTags.EntityTypes.CANNOT_CHILL))
+        println("APPLYING ENTITY AFFECT. $cannotChill")
+        if (cannotChill) return
         target.addEffect(MobEffectInstance(PazEffects.CHILLED, 100, 0, false, false))
     }
 

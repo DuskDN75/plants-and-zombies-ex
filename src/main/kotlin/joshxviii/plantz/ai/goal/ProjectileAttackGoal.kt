@@ -28,11 +28,11 @@ class ProjectileAttackGoal(
     actionSuccessEffect: () -> Unit = {},
     actionEndEffect: () -> Unit = {},
     actionPredicate: Predicate<PathfinderMob> = Predicate { true },
-    val projectileFactory: () -> Entity,
-    val inaccuracy: Float = 0.5f,
-    val attackRadius: Float = usingEntity.attributes.getValue(Attributes.FOLLOW_RANGE).toFloat(),
-    val velocity : Double = 0.9,
-    val useHighArc: Boolean = false,
+    var projectileFactory: () -> Entity,
+    var inaccuracy: Float = 0.0f,
+    var attackRadius: Float = usingEntity.attributes.getValue(Attributes.FOLLOW_RANGE).toFloat(),
+    var velocity : Double = 0.9,
+    var useHighArc: Boolean = false,
     val soundEvent: SoundEvent? = PazSounds.PROJECTILE_FIRE,
 ) : ActionGoal(usingEntity, cooldownTime, actionDelay, actionStartEffect, actionSuccessEffect, actionEndEffect, actionPredicate) {
     var distanceSqr: Double = 0.0

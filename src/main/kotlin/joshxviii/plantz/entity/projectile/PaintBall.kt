@@ -22,11 +22,13 @@ class PaintBall(
     spawnOffset: Vec2 = Vec2.ZERO,
     color: DyeColor = DyeColor.WHITE
 ) : PazProjectile(PazEntities.PAINT_BALL, level, owner, spawnOffset,
-    PazDamageTypes.PAINT, damage = 0.5f, knockback = 0.01
+    PazDamageTypes.PAINT, damage = 0.5f
 ) {
     companion object {
         val COLOR: EntityDataAccessor<Int> = SynchedEntityData.defineId(PaintBall::class.java, EntityDataSerializers.INT)
     }
+
+    override fun getKnockback(): Float = 0.01f
 
     var dyeColor: DyeColor
         get() = DyeColor.byId(entityData.get(COLOR))

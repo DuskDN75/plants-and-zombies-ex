@@ -22,14 +22,15 @@ class Butter(
 ) : PazProjectile(
     PazEntities.BUTTER, level, owner, spawnOffset,
     PazDamageTypes.PLANT,
-    damage = Plant.PEA_DAMAGE.toFloat()*2,
-    knockback = 0.2
+    damage = Plant.PEA_DAMAGE.toFloat()*2
 ) {
     override fun getDefaultGravity(): Double = 0.04
 
     override fun afterHitEntityEffect(target: LivingEntity) {
         target.addEffect(MobEffectInstance(PazEffects.BUTTERED, 100, 0, false, false))
     }
+
+    override fun getKnockback(): Float = 0.2f
 
     override fun tick() {
         super.tick()

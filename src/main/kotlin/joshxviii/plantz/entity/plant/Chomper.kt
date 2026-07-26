@@ -43,6 +43,10 @@ class Chomper(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.CHO
         entityData.define(CHEW_TIME_ID, 0)
     }
 
+    open fun attacksPlayers(): Boolean {
+        return true
+    }
+
     override fun registerGoals() {
         super.registerGoals()
         this.goalSelector.addGoal(1, ChompAttackGoal(this))

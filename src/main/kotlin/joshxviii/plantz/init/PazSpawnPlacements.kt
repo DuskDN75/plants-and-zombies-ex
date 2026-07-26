@@ -117,9 +117,9 @@ object PazSpawnPlacements {
         registerSpawnPlacement(PazEntities.WALL_NUT, Plant::checkPlantSpawnRules)
 
         addBiomeSpawn(PazTags.Biomes.HAS_SUNSHROOM, PazEntities.SUN_SHROOM,
-            weight = 16, minGroupSize = 1, maxGroupSize = 3)
-        addBiomeSpawn(PazTags.Biomes.HAS_SUNFLOWER, PazEntities.SUN_SHROOM,
-            weight = 1, minGroupSize = 1, maxGroupSize = 4)
+            weight = 1, minGroupSize = 1, maxGroupSize = 3)
+        addBiomeSpawn(PazTags.Biomes.HAS_SUNSHROOM_ALT, PazEntities.SUN_SHROOM,
+            weight = 16, minGroupSize = 1, maxGroupSize = 4)
         registerSpawnPlacement(PazEntities.SUN_SHROOM, Plant::checkPlantSpawnRules)
 
         addBiomeSpawn(PazTags.Biomes.HAS_COFFEE_BEAN, PazEntities.COFFEE_BEAN,

@@ -114,7 +114,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
         AtomicInteger finalColor = new AtomicInteger(tintedColor);
 
         if (state.getDataOrDefault(IS_DRENCHED_KEY, false)) {
-            finalColor.set(ARGB.multiply(finalColor.get(), PLANTZ_DRENCHED_TINT));
+            finalColor.set(ARGB.average(finalColor.get(), PLANTZ_DRENCHED_TINT));
         }
 
         // multiple colors end up just looking black. not gonna use this for now.

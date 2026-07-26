@@ -6,15 +6,15 @@
       "required": false
     },
     {
+      "id": "#c:is_mushroom",
+      "required": false
+    },
+    {
       "id": "#c:is_nether_forest",
       "required": false
     },
     {
       "id": "#terralith:cave/underground_jungle",
-      "required": false
-    },
-    {
-      "id": "#c:is_mushroom",
       "required": false
     },
     {

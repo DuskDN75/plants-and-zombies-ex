@@ -1,5 +1,6 @@
 package joshxviii.plantz.entity.projectile
 
+import joshxviii.plantz.entity.plant.WaterPeaShooter
 import joshxviii.plantz.init.PazDamageTypes
 import joshxviii.plantz.init.PazEffects
 import joshxviii.plantz.init.PazEntities
@@ -12,7 +13,9 @@ import net.minecraft.tags.EntityTypeTags
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.TamableAnimal
 import net.minecraft.world.level.Level
+import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
@@ -31,13 +34,19 @@ class PeaWater(
     override fun afterHitEntityEffect(target: LivingEntity) {
         super.afterHitEntityEffect(target)
         if (target.`is`(PazTags.EntityTypes.CANNOT_DRENCH)) return
-        target.addEffect(MobEffectInstance(PazEffects.DRENCHED, 100, 0, false, false))
+
+        if (!waterCheck() && !isInWater) target.addEffect(MobEffectInstance(PazEffects.DRENCHED, 100, 0, false, false))
     }
 
+    override fun getKnockback(): Float = if (waterCheck()) 0.0f else 0.3f
+
+    override fun getPierceLevel(): Byte = if (waterCheck()) 2 else 0
+
     override fun tick() {
-        super.tick()
+    super.tick()
         spawnParticle(
             ParticleTypes.BUBBLE_POP,
+            amount = 5,
             spread = Vec3(0.01,0.01,0.01),
             speed = 0.1
         )

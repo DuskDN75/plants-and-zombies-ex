@@ -58,6 +58,15 @@ class SeaShroom(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.S
         })
     }
 
+    override fun tick() {
+        super.tick()
+
+        if (this.isInWater) {
+
+            this.setDeltaMovement(this.deltaMovement.x, 0.0, this.deltaMovement.z)
+        }
+    }
+
     override fun canBreatheUnderwater(): Boolean = true
 
     override fun canSurviveOn(block: BlockState): Boolean {

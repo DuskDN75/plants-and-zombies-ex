@@ -19,11 +19,12 @@ class Cabbage(
     spawnOffset: Vec2 = Vec2.ZERO,
 ) : PazProjectile(
     PazEntities.CABBAGE, level, owner, spawnOffset,
-    PazDamageTypes.PLANT,
-    knockback = 0.15
+    PazDamageTypes.PLANT
 ) {
     override fun getDefaultGravity(): Double = 0.05
     override fun getHitSound(): SoundEvent = SoundEvents.BIG_DRIPLEAF_BREAK
+
+    override fun getKnockback(): Float = 0.15f
 
     override fun onHit(hitResult: HitResult) {
         super.onHit(hitResult)

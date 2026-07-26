@@ -114,6 +114,10 @@ abstract class AttackingPlant(type: EntityType<out AttackingPlant>, level: Level
         registerAttackGoal();
     }
 
+    open fun attacksPlayers(): Boolean {
+        return false
+    }
+
     fun registerAttackGoal() {
 
         println("follow range = ${this.getAttributeValue(Attributes.FOLLOW_RANGE)}")
@@ -122,7 +126,7 @@ abstract class AttackingPlant(type: EntityType<out AttackingPlant>, level: Level
             target !is Plant // target is not plant
             && (target is Zombie // target is a zombie
             || (target is Enemy && isTame) // or an enemy, IF they are tame
-            || (target is Player && !isTame)) // or a player, IF they are not tame
+            || (target is Player && !isTame && attacksPlayers())) // or a player, IF they are not tame
         })
     }
 }
