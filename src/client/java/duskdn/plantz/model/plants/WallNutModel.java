@@ -1,0 +1,51 @@
+package duskdn.plantz.model.plants;
+
+import duskdn.plantz.PlantRenderState;
+import duskdn.plantz.animation.plants.WallNutAnimation;
+import duskdn.plantz.model.plants.init.PazPlantModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import org.jetbrains.annotations.NotNull;
+import static duskdn.plantz.util.UtilsKt.pazResource;
+
+public class WallNutModel extends PazPlantModel {
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("wallnut"), "main");
+	private final ModelPart body;
+	private final ModelPart inner;
+
+	public WallNutModel(ModelPart root) {
+		super(
+			WallNutAnimation.init.bake(root),
+			WallNutAnimation.idle.bake(root),
+			WallNutAnimation.action.bake(root),
+			WallNutAnimation.sleep.bake(root),
+			null,
+			root
+		);
+		this.body = root.getChild("body");
+		this.inner = this.body.getChild("inner");
+	}
+
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+
+		PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(3, 5).addBox(-7.0F, -15.0F, -7.0F, 14.0F, 13.0F, 14.0F, new CubeDeformation(0.0F))
+				.texOffs(59, 37).addBox(-6.0F, -18.0F, -6.0F, 12.0F, 3.0F, 12.0F, new CubeDeformation(0.0F))
+				.texOffs(59, 54).addBox(-6.0F, -2.0F, -6.0F, 12.0F, 2.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
+
+		PartDefinition inner = body.addOrReplaceChild("inner", CubeListBuilder.create().texOffs(3, 37).addBox(-6.0F, -15.0F, -6.0F, 12.0F, 12.0F, 12.0F, new CubeDeformation(0.0F))
+				.texOffs(67, 2).addBox(-5.0F, -17.0F, -5.0F, 10.0F, 2.0F, 10.0F, new CubeDeformation(0.0F))
+				.texOffs(67, 16).addBox(-5.0F, -3.0F, -5.0F, 10.0F, 2.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+		return LayerDefinition.create(meshdefinition, 128, 128);
+	}
+
+	@Override
+	public void setupAnim(@NotNull PlantRenderState state) {
+		super.setupAnim(state);
+		body.yRot = 0.0F;
+	}
+}

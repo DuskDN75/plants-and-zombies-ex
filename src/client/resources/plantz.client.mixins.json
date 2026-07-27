@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "joshxviii.plantz.mixin.client",
+  "package": "duskdn.plantz.mixin.client",
   "compatibilityLevel": "JAVA_25",
   "client": [
     "ExampleClientMixin"

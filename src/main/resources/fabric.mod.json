@@ -5,7 +5,7 @@
 	"name": "Plants & Zombies",
 	"description": "Find and grow helpful Plants that can defend your base.",
 	"authors": [
-		"joshxviii"
+		"duskdn"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
@@ -17,19 +17,19 @@
 	"entrypoints": {
 		"main": [
 			{
-				"value": "joshxviii.plantz.PazMain",
+				"value": "duskdn.plantz.PazMain",
 				"adapter": "kotlin"
 			}
 		],
 		"client": [
 			{
-				"value": "joshxviii.plantz.PazClient",
+				"value": "duskdn.plantz.PazClient",
 				"adapter": "kotlin"
 			}
 		],
 		"terrablender": [
 			{
-				"value": "joshxviii.plantz.init.PazWorldGen",
+				"value": "duskdn.plantz.init.PazWorldGen",
 				"adapter": "kotlin"
 			}
 		]

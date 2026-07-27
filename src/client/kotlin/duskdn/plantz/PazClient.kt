@@ -1,0 +1,20 @@
+package duskdn.plantz
+
+import duskdn.plantz.init.PazConfig
+import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLevelEvents
+
+object PazClient : ClientModInitializer {
+	override fun onInitializeClient() {
+		PazConfig.load()
+		PazModels.registerAll()
+		PazParticles.registerAll()
+		PazScreens.registerAll()
+		PazClientNetwork.initialize()
+		PazRenderPipelines.initialize()
+
+		ClientLevelEvents.AFTER_CLIENT_LEVEL_CHANGE.register { minecraft, level ->
+			//MailboxManager.clearMailboxes()
+		}
+	}
+}

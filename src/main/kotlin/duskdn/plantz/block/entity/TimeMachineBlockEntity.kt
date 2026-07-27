@@ -1,0 +1,58 @@
+package duskdn.plantz.block.entity
+
+import duskdn.plantz.init.PazBlocks
+import duskdn.plantz.init.TimeMachineData
+import duskdn.plantz.inventory.TimeMachineMenu
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider
+import net.minecraft.core.BlockPos
+import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.AbstractContainerMenu
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
+import net.minecraft.world.ticks.ContainerSingleItem.BlockContainerSingleItem
+
+class TimeMachineBlockEntity(
+    worldPosition: BlockPos,
+    blockState: BlockState
+) : BlockEntity(PazBlocks.TIME_MACHINE_ENTITY, worldPosition, blockState), BlockContainerSingleItem, ExtendedMenuProvider<TimeMachineData> {
+
+    companion object {
+
+    }
+
+    var item: ItemStack = ItemStack.EMPTY
+
+    fun tick(level: Level, pos: BlockPos, state: BlockState) {
+        
+    }
+
+    override fun saveAdditional(output: ValueOutput) {
+        super.saveAdditional(output)
+        if (!item.isEmpty) output.store("Item", ItemStack.CODEC, this.item)
+    }
+
+    override fun loadAdditional(input: ValueInput) {
+        super.loadAdditional(input)
+        this.item = input.read("Item", ItemStack.CODEC).orElse(ItemStack.EMPTY)?: ItemStack.EMPTY
+    }
+
+    override fun getContainerBlockEntity(): BlockEntity = this
+
+
+    override fun getScreenOpeningData(player: ServerPlayer): TimeMachineData = TimeMachineData(blockPos)
+    override fun getDisplayName(): Component  = Component.translatable("block.plantz.time_machine")
+    override fun createMenu(containerId: Int, inventory: Inventory, player: Player): AbstractContainerMenu = TimeMachineMenu(containerId, inventory, blockPos, this)
+
+
+    override fun getTheItem(): ItemStack = item
+    override fun setTheItem(itemStack: ItemStack) {
+        item = itemStack
+    }
+}

@@ -1,0 +1,885 @@
+package duskdn.plantz.entity.plant.init
+
+import duskdn.plantz.ai.PlantState
+import duskdn.plantz.ai.goal.SleepGoal
+import duskdn.plantz.entity.Sun
+import duskdn.plantz.entity.plant.utils.PlantGrowNeeds
+import duskdn.plantz.entity.plant.utils.onValidGround
+import duskdn.plantz.entity.plant.utils.processSunItem
+import duskdn.plantz.entity.plant.utils.processWateringItem
+import duskdn.plantz.init.PazBlocks
+import duskdn.plantz.init.PazConfig
+import duskdn.plantz.init.PazCriteria
+import duskdn.plantz.init.PazDamageTypes
+import duskdn.plantz.init.PazDataSerializers
+import duskdn.plantz.init.PazServerParticles
+import duskdn.plantz.init.PazSounds
+import duskdn.plantz.init.PazTags
+import duskdn.plantz.item.SeedPacketItem
+import duskdn.plantz.util.PlantHeadAttachment
+import duskdn.plantz.util.canWearPlant
+import duskdn.plantz.util.hasSameRootOwner
+import duskdn.plantz.util.pazResource
+import duskdn.plantz.util.positionPlant
+import duskdn.plantz.util.tryToSetPlantOnHead
+import net.minecraft.ChatFormatting
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.core.component.DataComponents
+import net.minecraft.core.particles.BlockParticleOption
+import net.minecraft.core.particles.ParticleOptions
+import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.chat.Component
+import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.network.syncher.EntityDataSerializers
+import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.resources.Identifier
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.tags.ItemTags
+import net.minecraft.util.Mth
+import net.minecraft.util.ProblemReporter
+import net.minecraft.util.RandomSource
+import net.minecraft.world.DifficultyInstance
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.damagesource.DamageTypes
+import net.minecraft.world.entity.AgeableMob
+import net.minecraft.world.entity.AnimationState
+import net.minecraft.world.entity.ConversionParams
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EntityReference
+import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.SpawnGroupData
+import net.minecraft.world.entity.TamableAnimal
+import net.minecraft.world.entity.ai.attributes.AttributeModifier
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier
+import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.entity.ai.control.BodyRotationControl
+import net.minecraft.world.entity.ai.control.LookControl
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal
+import net.minecraft.world.entity.ai.village.poi.PoiManager
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.entity.monster.Enemy
+import net.minecraft.world.entity.monster.zombie.Zombie
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelAccessor
+import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.LightLayer
+import net.minecraft.world.level.ServerLevelAccessor
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.portal.TeleportTransition
+import net.minecraft.world.level.storage.TagValueOutput
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
+import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.Vec3
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import java.util.Optional
+import kotlin.jvm.optionals.getOrElse
+import kotlin.jvm.optionals.getOrNull
+
+/**
+ * Base class for all the other plant entities.
+ * Provides basic behavior for the plants.
+ */
+abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableAnimal(type, level) {
+    companion object {
+        val LOGGER: Logger = LoggerFactory.getLogger(PazPlant::class.java)
+
+        /**
+         * The default damage of a single pea
+         */
+        const val PEA_DAMAGE = 2.5
+
+        /**
+         * Checks for nearby plants in a 3x3 radius, and excludes itself.
+         */
+        fun hasAdjacentPlant(level: Level, pos: BlockPos, ogPlant: PazPlant? = null) : Boolean {
+
+//            for (direction in Direction.entries) {
+//                val searchBox = AABB(pos).inflate(1.0)
+//            }
+
+            val searchBox = AABB(pos).inflate(1.0, 0.0, 1.0)
+
+            val plants = level.getEntitiesOfClass(PazPlant::class.java, searchBox) { plant ->
+                plant.blockPosition() != pos && plant.isAlive && (ogPlant == null || (ogPlant != plant && plant != ogPlant.vehicle))
+            }
+
+            return plants.isNotEmpty()
+        }
+
+        /**
+         * Default plant spawn rules
+         */
+        fun checkPlantSpawnRules(
+            type: EntityType<out PazPlant>,
+            level: LevelAccessor,
+            spawnReason: EntitySpawnReason,
+            pos: BlockPos,
+            random: RandomSource
+        ): Boolean {
+            val blockBelow = level.getBlockState(pos.below())
+            val isValid = checkValidSpawn(level, pos, spawnReason) && blockBelow.`is`(PazTags.BlockTags.PLANTABLE) && pos.y > level.seaLevel - 8 && !hasAdjacentPlant(
+                level as Level, pos)
+            return isValid
+        }
+
+        /**
+         * General Plant spawn rules. Should use this is for other plants custom spawn rules.
+         * Ensure plant groups are spread out and not clumped too close together.
+         */
+        fun checkValidSpawn(level: LevelAccessor, pos: BlockPos, spawnReason: EntitySpawnReason): Boolean {
+            val blockAtPos = level.getBlockState(pos)
+
+            if (EntitySpawnReason.isSpawner(spawnReason)) return true
+
+            return (level.getEntitiesOfClass(PazPlant::class.java, AABB(pos).inflate(38.0)) { it.tickCount > 0 }.isEmpty()
+                    && blockAtPos.getCollisionShape(level, pos.above()).isEmpty) && !hasAdjacentPlant(
+                level as Level, pos)
+        }
+
+
+//        fun checkValidGround(level: LevelAccessor, pos: BlockPos, plant: Plant) : Boolean {
+//
+//            val belowBlock = level.getBlockState(pos.below())
+//
+//            return (plant.attachedEntity != null) || (canSurviveOn(belowBlock) && !hasAdjacentPlant(level, pos, plant)) || vehicle?.`is`(
+//                PazEntities.PLANT_POT_MINECART) == true || (vehicle?.`is`(
+//                PazTags.EntityTypes.PLANT) == true && !canBreatheUnderwater())
+//        }
+
+        private const val NUTRIENT_SUPPLY_MAX = 50  // ticks before suffocating when on invalid ground
+        private const val FLAG_POWER_RANGE = 3
+
+        val PLANT_STATE: EntityDataAccessor<PlantState> = SynchedEntityData.defineId<PlantState>(PazPlant::class.java,
+            PazDataSerializers.DATA_PLANT_STATE
+        )
+        val COOLDOWN: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(PazPlant::class.java,
+            PazDataSerializers.DATA_COOLDOWN
+        )
+        val COFFEE_BUFF: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(PazPlant::class.java,
+            PazDataSerializers.DATA_COFFEE_BUFF
+        )
+        val RECEIVED_SUN: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(PazPlant::class.java,
+            PazDataSerializers.DATA_RECEIVED_SUN
+        )
+        val RECEIVED_WATER: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(PazPlant::class.java,
+            PazDataSerializers.DATA_RECEIVED_WATER
+        )
+        val SEED_GROW_COOLDOWN: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(PazPlant::class.java,
+            PazDataSerializers.DATA_SEED_GROW_COOLDOWN
+        )
+        val ATTACHED_PLAYER: EntityDataAccessor<Optional<EntityReference<LivingEntity>>> = SynchedEntityData.defineId(PazPlant::class.java, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE)
+        val SLEEPING: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(PazPlant::class.java,
+            PazDataSerializers.DATA_SLEEPING
+        )
+        val POWERED_UP: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(PazPlant::class.java,
+            PazDataSerializers.DATA_POWERED_UP
+        )
+
+        val ON_PLAYER_HEAD_EFFECTS: Identifier = pazResource("on_player_head_effects")
+
+        data class PlantAttributes(
+            val maxHealth: Double = 20.0,
+            val attackDamage: Double = PEA_DAMAGE,
+            val attackKnockback: Double = 0.0,
+            val attackRange: Double = 2.5,
+            val movementSpeed: Double = 0.0,
+            val followRange: Double = 20.0,
+            val armor: Double = 0.0,
+            val scale: Double = 1.0,
+        ) {
+            fun apply(builder: AttributeSupplier.Builder): AttributeSupplier.Builder {
+                return builder
+                    .add(Attributes.MAX_HEALTH, maxHealth)
+                    .add(Attributes.FOLLOW_RANGE, followRange)
+                    .add(Attributes.ATTACK_DAMAGE, attackDamage)
+                    .add(Attributes.ATTACK_KNOCKBACK, attackKnockback)
+                    .add(Attributes.ENTITY_INTERACTION_RANGE, attackRange)
+                    .add(Attributes.MOVEMENT_SPEED, movementSpeed)
+                    .add(Attributes.ARMOR, armor)
+                    .add(Attributes.SCALE, scale)
+            }
+        }
+    }
+
+    override fun isInWater(): Boolean {
+        return super.isInWater() || getBlockBelow().`is`(PazBlocks.WATER_POT)
+    }
+
+    private var nutrientSupply = NUTRIENT_SUPPLY_MAX
+
+    val isGrowingSeeds: Boolean
+        get() = testGrowConditions() != PlantGrowNeeds.SOIL
+
+    var isAsleep: Boolean
+        get() = this.entityData.get(SLEEPING)
+        set(value) = this.entityData.set(SLEEPING, value)
+
+    var poweredUp: Boolean
+        get() = this.entityData.get(POWERED_UP)
+        set(value) = this.entityData.set(POWERED_UP, value)
+
+    val damagedPercent: Float
+        get() { return 1.0f - (this.health / this.maxHealth); }
+
+    var state: PlantState
+        get() = this.entityData.get(PLANT_STATE)
+        set(value) {
+            stateUpdated(value)
+            this.entityData.set(PLANT_STATE, value)
+        }
+
+    var cooldown: Int
+        get() = this.entityData.get(COOLDOWN)
+        set(value) = this.entityData.set(COOLDOWN, value.coerceAtLeast(-1))
+
+    var receivedSun: Int
+        get() = this.entityData.get(RECEIVED_SUN)
+        set(value) = this.entityData.set(RECEIVED_SUN, value.coerceAtLeast(0))
+    var receivedWater: Int
+        get() = this.entityData.get(RECEIVED_WATER)
+        set(value) {
+            if (value>0) seedGrowCooldown = timeRequiredForSeeds()
+            this.entityData.set(RECEIVED_WATER, value.coerceAtLeast(0))
+        }
+
+    var seedGrowCooldown: Int
+        get() = this.entityData.get(SEED_GROW_COOLDOWN)
+        set(value) = this.entityData.set(SEED_GROW_COOLDOWN, value.coerceAtLeast(0))
+
+    var coffeeBuff: Int
+        get() = this.entityData.get(COFFEE_BUFF)
+        set(value) = this.entityData.set(COFFEE_BUFF, value.coerceAtLeast(0))
+
+    private var attachedPlayerReference: EntityReference<LivingEntity>?
+        get() = this.entityData.get(ATTACHED_PLAYER).getOrNull()
+        set(value) = this.entityData.set(ATTACHED_PLAYER, Optional.ofNullable(value))
+
+    var attachedEntity: LivingEntity? = null
+        get() = EntityReference.getLivingEntity(attachedPlayerReference, this.level())
+        private set(value) {
+            if (value==null && field!=null) removeOnHeadEffects()
+            else if (value!=null && field==null) applyOnHeadEffects()
+            attachedPlayerReference = EntityReference.of(value)
+        }
+
+    fun applyOnHeadEffects() {
+        if(getAttribute(Attributes.SCALE)?.hasModifier(ON_PLAYER_HEAD_EFFECTS)==false) getAttribute(Attributes.SCALE)!!.addPermanentModifier(
+            AttributeModifier(ON_PLAYER_HEAD_EFFECTS, -0.25, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+        )
+        noPhysics = true
+    }
+    fun removeOnHeadEffects() {
+        if(getAttribute(Attributes.SCALE)?.hasModifier(ON_PLAYER_HEAD_EFFECTS)==true) getAttribute(Attributes.SCALE)!!.removeModifier(ON_PLAYER_HEAD_EFFECTS)
+        noPhysics = false
+    }
+
+    var idleAnimationStartTick: Int = 0
+    val initAnimationState = AnimationState()
+    val idleAnimationState = AnimationState()
+    val actionAnimationState = AnimationState()
+    val coolDownAnimationState = AnimationState()
+    val sleepAnimationState = AnimationState()
+    val specialAnimation = AnimationState()
+    val bounceAnimation = AnimationState()
+
+    init {
+        cooldown = -1
+        this.lookControl = object : LookControl(this) {
+            override fun clampHeadRotationToBody() {}
+            override fun tick() { if (!isAsleep) super.tick() }
+        }
+        idleAnimationStartTick = this.random.nextInt(200, 240)
+    }
+
+    // disables body control
+    override fun createBodyControl(): BodyRotationControl = object : BodyRotationControl(this) { override fun clientTick() {} }
+
+    // only apply up/down movement
+    override fun getDeltaMovement(): Vec3 = Vec3(0.0, super.deltaMovement.y, 0.0)
+    override fun setDeltaMovement(deltaMovement: Vec3) {
+        if (!onGround() || isInWater) return super.setDeltaMovement(deltaMovement)
+    }
+
+    override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
+        super.defineSynchedData(entityData)
+        entityData.define(PLANT_STATE, PlantState.IDLE)
+        entityData.define(COOLDOWN, 0)
+        entityData.define(RECEIVED_SUN, 0)
+        entityData.define(RECEIVED_WATER, 0)
+        entityData.define(SEED_GROW_COOLDOWN, 0)
+        entityData.define(COFFEE_BUFF, 0)
+        entityData.define(SLEEPING, false)
+        entityData.define(POWERED_UP, false)
+        entityData.define(ATTACHED_PLAYER, Optional.empty())
+    }
+
+    override fun onSyncedDataUpdated(accessor: EntityDataAccessor<*>) {
+        super.onSyncedDataUpdated(accessor)
+        if ((accessor == POWERED_UP && poweredUp) || accessor == RECEIVED_SUN || accessor == RECEIVED_WATER && level().isClientSide) {
+            funnyBounce()
+        }
+    }
+
+    override fun addAdditionalSaveData(output: ValueOutput) {
+        super.addAdditionalSaveData(output)
+        output.putInt("plantz:ReceivedSun", receivedSun)
+        output.putInt("plantz:ReceivedWater", receivedWater)
+        output.putInt("plantz:SeedGrowTime", seedGrowCooldown)
+        output.putInt("plantz:CoffeeBuff", coffeeBuff)
+        output.putInt("plantz:Cooldown", cooldown)
+        output.putBoolean("plantz:IsPoweredUp", poweredUp)
+        attachedPlayerReference.let { EntityReference.store(it, output, "plantz:AttachedPlayer") }
+    }
+
+    override fun readAdditionalSaveData(input: ValueInput) {
+        super.readAdditionalSaveData(input)
+        receivedSun = input.getInt("plantz:ReceivedSun").getOrElse { 0 }
+        receivedWater = input.getInt("plantz:ReceivedWater").getOrElse { 0 }
+        seedGrowCooldown = input.getInt("plantz:SeedGrowTime").getOrElse { 0 }
+        coffeeBuff = input.getInt("plantz:CoffeeBuff").getOrElse { 0 }
+        cooldown = input.getInt("plantz:Cooldown").getOrElse { -1 }
+        poweredUp = input.getBooleanOr("plantz:IsPoweredUp", false)
+        attachedPlayerReference = Optional.ofNullable((EntityReference.read<LivingEntity>(input, "plantz:AttachedPlayer"))).getOrNull()
+    }
+
+    override fun getAmbientSound(): SoundEvent? = super.getAmbientSound()// TODO make custom sounds
+    override fun getHurtSound(source: DamageSource): SoundEvent? {
+        if (source.`is`(PazDamageTypes.ZOMBIE_EAT)) return PazSounds.ZOMBIE_EATS
+        return SoundEvents.ROOTED_DIRT_HIT// TODO make custom sounds
+    }
+    override fun getDeathSound(): SoundEvent? = SoundEvents.ROOTED_DIRT_BREAK// TODO make custom sounds
+    open fun getActionSound(): SoundEvent? = null// TODO make custom sounds
+
+    override fun registerGoals() {
+        this.goalSelector.addGoal(1, SleepGoal(
+            this,
+            sleepDuringDay = sleepsDuringDay(),
+            sleepDuringNight = sleepsDuringNight()
+        )
+        )
+        this.goalSelector.addGoal(3, RandomLookAroundGoal(this))
+        this.goalSelector.addGoal(3, LookAtPlayerGoal(this, Player::class.java, 8.0f))
+        attackGoals()
+    }
+    open fun attackGoals() {
+        this.targetSelector.addGoal(1, HurtByTargetGoal(this, PazPlant::class.java).setAlertOthers())
+        this.targetSelector.addGoal(1, OwnerHurtByTargetGoal(this))
+        this.targetSelector.addGoal(2, OwnerHurtTargetGoal(this))
+    }
+
+    open fun stateUpdated(state: PlantState) {}
+
+    override fun getBreedOffspring(
+        level: ServerLevel,
+        partner: AgeableMob
+    ): AgeableMob? { return this }
+    override fun checkSpawnObstruction(level: LevelReader): Boolean {
+        return if (canBreatheUnderwater()) level.isUnobstructed(this)
+        else super.checkSpawnObstruction(level)
+    }
+
+    override fun canRide(vehicle: Entity): Boolean = false
+    override fun isFood(itemStack: ItemStack): Boolean = false
+    override fun getLeashOffset(): Vec3 = Vec3.ZERO
+    override fun getPickResult(): ItemStack = SeedPacketItem.stackFor(this.type)
+    override fun wantsToAttack(target: LivingEntity, owner: LivingEntity): Boolean {
+        return if (this.hasSameOwner(target)) false
+        else (target !is PazPlant && super.wantsToAttack(target, owner))
+    }
+    override fun canAttack(target: LivingEntity): Boolean = super.canAttack(target) && !this.hasSameOwner(target)
+    override fun canUsePortal(ignorePassenger: Boolean): Boolean = super.canUsePortal(ignorePassenger) && !isAttached()
+    fun isAttached(): Boolean = attachedEntity!=null
+
+    override fun hurtServer(level: ServerLevel, source: DamageSource, damage: Float): Boolean {
+        if (source.directEntity != owner) source.entity?.let { if (hasSameOwner(it)) return false }
+        if ( attachedEntity.let { it!=null && source.entity?.`is`(it)==true } ) return false
+        if (source.`is`(DamageTypes.CACTUS)) return false
+        return super.hurtServer(
+            level,
+            if (source.entity is Zombie && source.`is`(DamageTypes.MOB_ATTACK)) DamageSource(
+                level.registryAccess().get(PazDamageTypes.ZOMBIE_EAT).get(),
+                source.directEntity,
+                source.entity
+            ) else source,
+            damage
+        )
+    }
+
+    override fun hurtClient(source: DamageSource): Boolean {
+        return super.hurtClient(source)
+    }
+
+    override fun actuallyHurt(level: ServerLevel, source: DamageSource, damage: Float) {
+        if (source.directEntity != owner) source.entity?.let { if (hasSameOwner(it)) return }
+        val potProtection: Boolean = hasPlantPotProtection() && source.entity is Enemy
+        super.actuallyHurt(
+            level,
+            source,
+            if (potProtection) (damage * PazConfig.PLANT_POT_DAMAGE_REDUCTION).toFloat() else damage
+        )
+    }
+
+    protected fun <T: PazPlant> convertToPlantType(
+        plantType: EntityType<T>,
+        afterConversion: (plantEntity: PazPlant) -> Unit = {}) {
+        convertTo(plantType, ConversionParams.single(this, true, true)) { newPlant ->
+            owner?.let {
+                if (it is Player) newPlant.tame(it)
+                else newPlant.owner = it
+            }
+            // TODO custom sounds
+            playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED)
+            afterConversion(newPlant)
+        }
+    }
+
+    fun hasPlantPotProtection(): Boolean= getBlockBelow().`is`(PazTags.BlockTags.PLANT_POT) || isAttached()
+
+    override fun setPos(x: Double, y: Double, z: Double) {
+        if (this.isPassenger || isAttached()) super.setPos(x, y, z)
+        else super.setPos(Mth.floor(x) + 0.5, y, Mth.floor(z) + 0.5)
+    }
+
+    override fun teleport(transition: TeleportTransition): Entity? {
+        val result = super.teleport(transition)
+        val oldLevel = this.level() as? ServerLevel ?: return result
+        val newLevel = transition.newLevel
+
+        if (!isRemoved) {
+            val otherDimension = newLevel.dimension() != oldLevel.dimension()
+        }
+
+        return result
+    }
+
+    override fun getDefaultGravity(): Double = if (isAttached()) 0.0 else super.getDefaultGravity()
+    override fun doPush(entity: Entity) {}
+    override fun isAffectedByBlocks(): Boolean = if (isAttached()) !isRemoved else super.isAffectedByBlocks()
+
+    override fun tick() {
+        super.tick()
+        attachedEntity?.positionPlant(this)
+        if (attachedEntity?.canWearPlant() == false) {
+            if(dropAsSeedPacketItem(force = true)) playSound(SoundEvents.ROOTED_DIRT_BREAK)
+        }
+        val level = this.level()
+
+        if (level is ServerLevel) {
+            updatePlantPower(level)
+
+            if (cooldown > -1) {
+                if (cooldown == 0) cooldownFinished()
+                cooldown--
+            }
+            if (onValidGround() != null) {
+                if (--nutrientSupply <= 0) {
+                    if (tickCount % 20 == 0) hurtServer(level, damageSources().dryOut(), 2.0f)
+                }
+                //panic particles when low on nutrients
+                if (nutrientSupply < 100 && random.nextInt(10) == 0) addParticlesAroundSelf(level)
+            } else nutrientSupply = NUTRIENT_SUPPLY_MAX
+        }
+
+        if (!this.isNoAi) { updateAnimationState() }
+
+        val target = this.target
+        if (target != null) getLookControl().setLookAt(target, 180.0F, 180.0F);
+
+        if (isAsleep && tickCount % 12 == 0 && random.nextFloat()>0.7 && tickCount > 18 && isAlive) {
+            val direction = calculateViewVector(xRot, yHeadRot).scale(boundingBox.xsize)
+            level.addParticle(
+                PazServerParticles.SLEEP,
+                direction.x + getRandomX(0.2),
+                direction.y.toFloat() + y + eyeHeight.toDouble() - 0.1,
+                direction.z + getRandomZ(0.2),
+                0.0, 0.0, 0.0,
+            )
+        }
+
+        if (coffeeBuff > 0) {
+            coffeeBuff--
+            if (level().isClientSide && getRandom().nextInt(35) == 0) {
+                addParticlesAroundSelf(
+                    level,
+                    PazServerParticles.ENERGIZED,
+                    horizontalSpreadScale = 0.0,
+                    amount = 1..2,
+                )
+            }
+        }
+
+        if (poweredUp)  {
+            if (level().isClientSide && getRandom().nextInt(16) == 0) {
+                addParticlesAroundSelf(
+                    level,
+                    PazServerParticles.POWERED_UP,
+                    amount = 1..1,
+                )
+            }
+        }
+
+        val needs = testGrowConditions()
+        if (tickCount%25==0) {
+            when (needs) {
+                PlantGrowNeeds.SUN -> PazServerParticles.NEEDS_SUN
+                PlantGrowNeeds.WATER -> PazServerParticles.NEEDS_WATER
+                else -> null
+            }?.let { level.addParticle(it, x, y+eyeHeight+0.55, z, 0.0, 0.0, 0.0) }
+        }
+    }
+
+
+    /**
+     * State machine for plant animations
+     */
+    private fun updateAnimationState() {
+        when (state) {
+            PlantState.INIT -> {
+                initAnimationState.startIfStopped(tickCount)
+                if (tickCount >= 19) {
+                    state = PlantState.IDLE
+                    idleAnimationStartTick = 0
+                }
+            }
+            PlantState.IDLE -> {
+                idleAnimationState.startIfStopped(tickCount - idleAnimationStartTick)
+                initAnimationState.stop()
+                actionAnimationState.stop()
+                coolDownAnimationState.stop()
+                specialAnimation.stop()
+                sleepAnimationState.stop()
+                if (isAsleep) state = PlantState.SLEEP
+                if (cooldown > -1) {
+                    state = PlantState.ACTION
+                }
+            }
+            PlantState.ACTION -> {
+                actionAnimationState.startIfStopped(tickCount)
+                state = PlantState.COOLDOWN
+            }
+            PlantState.COOLDOWN -> {
+                idleAnimationState.startIfStopped(tickCount)
+                if (cooldown < 0) {
+                    state = PlantState.IDLE
+                }
+                if (isAsleep) state = PlantState.SLEEP
+            }
+            PlantState.RECHARGE -> state = PlantState.IDLE
+            PlantState.SLEEP -> {
+                sleepAnimationState.startIfStopped(tickCount)
+                idleAnimationState.stop()
+                //initAnimationState.stop()
+                actionAnimationState.stop()
+                coolDownAnimationState.stop()
+                specialAnimation.stop()
+                if (!isAsleep) state = PlantState.IDLE
+            }
+            PlantState.GROWING -> {}
+        }
+    }
+    fun funnyBounce() {
+        bounceAnimation.stop()
+        bounceAnimation.startIfStopped(tickCount)
+    }
+
+    /**
+     * @param sunAmount the amount of sun used to heal.
+     * @return the amount of unused sun.
+     */
+    fun sunHeal(sunAmount: Int = 1): Boolean {
+        val healingMultiplier = 4f
+        val healingAmount = sunAmount * healingMultiplier
+        val success = health < maxHealth
+        if (success) addParticlesAroundSelf(particle = ParticleTypes.HAPPY_VILLAGER)
+        heal(healingAmount)
+        return success
+    }
+
+    open fun getZenGrownSeedType(): EntityType<*> = type
+    fun awardSeedPacket(player: Player) {
+        val level = level() as? ServerLevel ?: return
+        receivedSun = 0
+        receivedWater = 0
+        val stack = SeedPacketItem.stackFor(getZenGrownSeedType())
+        val itemEntity = ItemEntity(level, x, y + 0.5, z, stack)
+        level.addFreshEntity(itemEntity)
+        playSound(SoundEvents.ROOTED_DIRT_BREAK)
+        if (player is ServerPlayer) PazCriteria.GROW_SEEDS.trigger(player, 1)
+    }
+
+    fun sunRequiredForSeeds(): Int {
+        return Mth.floor(
+            Mth.floor(PazConfig.getSunCost(type)*2f).coerceAtLeast(4) *
+            if (receivedWater > 1) PazConfig.HYDRATION_SUN_REDUCTION.toFloat() else 1f// receive a bonus for larger water sources that reduces the sun needed by half.
+        )
+    }
+
+    fun timeRequiredForSeeds() : Int {
+        val sunCost = PazConfig.getSunCost(type)
+        val zenBuff = level().hasChunkAt(blockPosition()) && getBlockBelow().`is`(PazBlocks.ZEN_PLANT_POT)
+        return PazConfig.getGrowTime(sunCost, zenBuff)
+    }
+
+    fun testGrowConditions(): PlantGrowNeeds {
+        val farmBlock = getBlockBelow()
+        if (!farmBlock.`is`(PazTags.BlockTags.FARMABLE) || !isTame) return PlantGrowNeeds.SOIL
+        if (receivedWater <= 0) {
+            if (exposedToRain()) receivedWater+=1
+            return PlantGrowNeeds.WATER
+        }
+        if (seedGrowCooldown > 0) {
+            --seedGrowCooldown
+            if (coffeeBuff>0) coffeeBuff = 0
+            return PlantGrowNeeds.TIME
+        }
+        return PlantGrowNeeds.SUN
+    }
+
+    fun sunIsVisible() : Boolean {
+        return level().isBrightOutside && level().getBrightness(LightLayer.SKY, BlockPos.containing(x, eyeY, z)) >= 7
+    }
+    fun exposedToRain(): Boolean = level().isRainingAt(blockPosition().above())
+    open fun sleepsDuringNight(): Boolean = false
+    open fun sleepsDuringDay(): Boolean = this.`is`(PazTags.EntityTypes.MUSHROOM)
+    open fun canSurviveOn(block: BlockState) : Boolean = block.`is`(PazTags.BlockTags.PLANTABLE)
+
+    open fun cooldownFinished() {}
+
+    private fun updatePlantPower(level: ServerLevel) {
+        val nearFlag = hasNearbyPlantzFlag(level)
+        if (nearFlag != poweredUp) {
+            poweredUp = nearFlag
+            if (poweredUp) addParticlesAroundSelf(particle = PazServerParticles.POWERED_UP)
+        }
+    }
+
+    private fun hasNearbyPlantzFlag(level: ServerLevel): Boolean {
+        val flagPos = level.poiManager.findClosest(
+            { it.value() == PazBlocks.PLANTZ_FLAG_POI },
+            blockPosition(),
+            FLAG_POWER_RANGE,
+            PoiManager.Occupancy.ANY
+        ).orElse(null) ?: return false
+
+        return level.getBlockState(flagPos).`is`(PazBlocks.PLANTZ_FLAG)
+    }
+
+    fun getBlockBelow(x: Double = this.x, y: Double = this.y, z: Double = this.z): BlockState {
+        val feetY = y - 0.001
+        val blockBelowPos = BlockPos.containing(x, feetY, z)
+        val blockBelow = level().getBlockState(blockBelowPos)
+        return blockBelow
+    }
+
+    // whether another plant is overlapping with this one
+    private fun isOverlappingWithOther(pos: BlockPos): Boolean {
+        val otherPlantsAtPos = level().getEntitiesOfClass(PazPlant::class.java, AABB(pos)) { it != this }
+        otherPlantsAtPos.forEach {
+            if (!it.isAlive || it.isDeadOrDying) return false
+            if (it == this.vehicle) return false
+            if(boundingBox.intersects(it.boundingBox)) return true
+        }
+        return false
+    }
+
+    override fun finalizeSpawn(
+        level: ServerLevelAccessor,
+        difficulty: DifficultyInstance,
+        spawnReason: EntitySpawnReason,
+        groupData: SpawnGroupData?
+    ): SpawnGroupData? {
+        state = PlantState.INIT
+        if (spawnReason == EntitySpawnReason.NATURAL) {
+            val yaw = Direction.getRandom(random).toYRot()
+            yHeadRot = yaw
+            yBodyRot = yaw
+            yRot = yaw
+        }
+
+        return groupData
+    }
+
+    override fun checkDespawn() {
+        super.checkDespawn()
+    }
+
+    override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
+        val itemStack = player.getItemInHand(hand)
+        val level = level()
+        val growNeeds = testGrowConditions()
+
+        if (level is ServerLevel) {
+            // shovel interaction
+            if (itemStack.`is`(ItemTags.SHOVELS)) {
+                if (!verifyOwner(player)) return InteractionResult.FAIL
+                val success = dropAsSeedPacketItem(force = !player.isCreative)
+                if (success) {
+                    // apply tool damage base on how damaged the plant was
+                    itemStack.hurtAndBreak(4, player, hand.asEquipmentSlot())
+                    playSound(if (getBlockBelow().fluidState.isFull) SoundEvents.BUCKET_FILL
+                    else SoundEvents.ROOTED_DIRT_BREAK)
+                    level.sendParticles(
+                        BlockParticleOption(
+                            ParticleTypes.BLOCK, getBlockBelow()
+                        ),
+                        x, y+0.05, z, 16, 0.25,0.0,0.25, 0.4)
+                }
+                if (player is ServerPlayer) PazCriteria.RELOCATION.trigger(player, success)
+                return InteractionResult.SUCCESS_SERVER
+            }
+
+            // sun iteration
+            if (processSunItem(player, itemStack, hand, growNeeds)) return InteractionResult.SUCCESS_SERVER
+
+            // water interaction
+            if (processWateringItem(player, itemStack, hand, growNeeds)) return InteractionResult.SUCCESS_SERVER
+
+            //pot helmet interaction
+            if (
+                hand == InteractionHand.MAIN_HAND
+                && itemStack.isEmpty
+                && player is ServerPlayer
+                && player.canWearPlant()
+                && player.isCrouching
+            ) {
+                if (!verifyOwner(player)) return InteractionResult.FAIL
+                if (attachToEntity(player)) {
+                    playSound(SoundEvents.ARMOR_EQUIP_TURTLE.value())// TODO custom sounds
+                    return InteractionResult.SUCCESS_SERVER
+                }
+            }
+        }
+        return super.mobInteract(player, hand)
+    }
+
+    fun applyCoffeeBuff() {
+        val level = level() as? ServerLevel ?: return
+        coffeeBuff = PazConfig.COFFEE_BUFF_DURATION
+        playSound(SoundEvents.WITCH_DRINK, 1f, 1.5f)
+        addParticlesAroundSelf(level,
+            PazServerParticles.ENERGIZED,
+            amount = 16..18
+        )
+    }
+
+    fun attachToEntity(entity: LivingEntity): Boolean {
+        ProblemReporter.ScopedCollector(this.problemPath(), LOGGER).use { reporter ->
+            val output = TagValueOutput.createWithContext(reporter, this.registryAccess())
+            this.saveWithoutId(output)
+            output.putString("id", this.encodeId!!)
+            if (entity.tryToSetPlantOnHead(output.buildResult())) {
+                (entity as PlantHeadAttachment).`plantz$setPlant`(this)
+                attachedEntity = entity
+                return true
+            }
+        }
+        return false
+    }
+
+    fun detachFromEntity() {
+        if (attachedEntity!=null) {
+            (attachedEntity as PlantHeadAttachment).`plantz$setPlantData`(CompoundTag())
+            (attachedEntity as PlantHeadAttachment).`plantz$setPlant`(null)
+            attachedEntity = null
+        }
+    }
+
+    override fun remove(reason: RemovalReason) {
+        super.remove(reason)
+        if (reason != RemovalReason.UNLOADED_WITH_PLAYER) detachFromEntity()
+    }
+
+    override fun die(source: DamageSource) {
+        super.die(source)
+        if (source.entity is Player) {
+            val sunCost = PazConfig.getSunCost(type)
+            val level = level() as? ServerLevel
+            if (level!=null) Sun.award(level, position(), (sunCost/2) - random.nextInt(0,1))
+        }
+    }
+
+    fun verifyOwner(player: Player): Boolean {
+        if (!isTame || (player != owner && !PazConfig.COOP_PLANTING)) {
+            player.sendOverlayMessage(
+                Component.translatable("message.plantz.not_yours", this.name).withStyle(
+                    ChatFormatting.RED))
+            return false
+        }
+        return true
+    }
+
+    fun hasSameOwner(target: Entity): Boolean {
+        return this.hasSameRootOwner(target)
+    }
+
+    fun dropAsSeedPacketItem(force: Boolean = false): Boolean {
+        val level = level() as? ServerLevel ?: return false
+        if (force || customName!=null) {// Spawn a seed packet item containing this plant's data
+            val stack = SeedPacketItem.stackFor(this.type)
+            if (customName!=null) stack.set(DataComponents.CUSTOM_NAME, customName)
+            val itemEntity = ItemEntity(level, x, y + 0.5, z, stack)
+            if(level.addFreshEntity(itemEntity)){
+                this.discard()
+                return true
+            }
+            else return false
+        }
+        this.discard()
+        return true
+    }
+
+    fun addParticlesAroundSelf(
+        level: Level = level(),
+        particle: ParticleOptions = ParticleTypes.SPLASH,
+        amount: IntRange = 8..9,
+        horizontalSpreadScale: Double = 1.0,
+        verticalSpreadScale: Double = 1.0,
+        height: Float = 0.2f,
+        speed: Double = 0.0,
+    ) {
+        if (level is ServerLevel) {
+            val px = getRandomX(horizontalSpreadScale)
+            val py = y + height + random.nextDouble() * bbHeight * verticalSpreadScale
+            val pz = getRandomZ(horizontalSpreadScale)
+            level.sendParticles(
+                particle,
+                px, py, pz,
+                amount.random(),
+                0.0, 0.0, 0.0,
+                speed
+            )
+        }
+        else repeat(amount.random()) {
+            val px = getRandomX(horizontalSpreadScale)
+            val py = y + height + random.nextDouble() * bbHeight * verticalSpreadScale
+            val pz = getRandomZ(horizontalSpreadScale)
+            // Random offsets for velocity
+            val xa = random.nextGaussian() * 0.02
+            val ya = random.nextGaussian() * 0.02
+            val za = random.nextGaussian() * 0.02
+
+            level.addParticle(
+                particle,
+                px, py, pz,
+                xa, ya, za,
+            )
+        }
+    }
+}

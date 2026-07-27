@@ -1,0 +1,68 @@
+package duskdn.plantz.entity.plant
+
+import duskdn.plantz.init.PazEntities
+import duskdn.plantz.init.PazTags.EntityTypes.WALLNUT_DEFLECTABLE
+import duskdn.plantz.entity.Sun
+import duskdn.plantz.entity.plant.init.PazPlant
+import duskdn.plantz.init.PazBlocks
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.entity.monster.zombie.Zombie
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.Fluids
+
+class WallNut(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntities.WALL_NUT, level) {
+
+    companion object {
+        fun wallNutCollision(wallnut: PazPlant, other: Entity?): Boolean {
+            if (other is Zombie && other.swingTime == 0) {// when colliding with a zombie, the zombie will attack the wallnut
+                val level = other.level() as? ServerLevel
+                if (level != null && other.isAlive) {
+                    val damage = other.getAttribute(Attributes.ATTACK_DAMAGE)?.value?.toFloat() ?: 1f
+                    if (wallnut.hurtServer(level, other.damageSources().mobAttack(other), damage)) {
+                        other.swing(InteractionHand.MAIN_HAND)
+                    }
+                }
+            }
+            if (other is Sun) return false
+            return wallnut.isAlive && other != wallnut.attachedEntity
+        }
+    }
+
+    override fun attackGoals() {}
+
+    override fun getZenGrownSeedType(): EntityType<*> = if (random.nextFloat() < 0.05f) PazEntities.EXPLODE_O_NUT else super.getZenGrownSeedType()
+
+    override fun canBeCollidedWith(other: Entity?): Boolean = wallNutCollision(this, other)
+
+    override fun hurtServer(level: ServerLevel, source: DamageSource, damage: Float): Boolean {
+        source.directEntity?.let {
+            if (it.`is`(WALLNUT_DEFLECTABLE)) return false
+        }
+        return super.hurtServer(level, source, damage)
+    }
+
+    override fun actuallyHurt(level: ServerLevel, source: DamageSource, damage: Float) {
+        val reducedDamage = if (source.entity is Zombie) damage*0.25f else damage
+        super.actuallyHurt(level, source, reducedDamage)
+    }
+
+    override fun canSurviveOn(block: BlockState): Boolean {
+
+        val isWater = block.`is`(Blocks.WATER) || block.fluidState.`is`(Fluids.WATER) || block.`is`(PazBlocks.WATER_POT)
+
+        val isLava = block.`is`(Blocks.LAVA) || block.fluidState.`is`(Fluids.LAVA)
+
+        if (isWater || isLava) return false
+
+        val solidFloor = !block.getCollisionShape(level(), blockPosition().below()).isEmpty
+
+        return super.canSurviveOn(block) || solidFloor
+    }
+}

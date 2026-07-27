@@ -1,0 +1,63 @@
+package duskdn.plantz.ai.goal
+
+import duskdn.plantz.entity.plant.init.PazPlant
+import net.minecraft.util.Mth
+import net.minecraft.world.entity.PathfinderMob
+import net.minecraft.world.entity.ai.goal.Goal
+import java.util.function.Predicate
+
+/**
+ * Defines an action goal for plants.
+ * Used for triggering animations and action timing
+ * @param actionDelay amount of time in ticks before [doAction] is called from when the action started.
+ * @param actionStartEffect Callback function used to add effects at the start of the action
+ * @param actionSuccessEffect Callback function used to add effects at the end of the action
+ */
+abstract class ActionGoal(
+    val usingEntity: PathfinderMob,
+    var cooldownTime: Int = 20,
+    val actionDelay: Int = 0,
+    val actionStartEffect: () -> Unit = {},
+    val actionSuccessEffect: () -> Unit = {},
+    val actionEndEffect: () -> Unit = {},
+    val actionPredicate: Predicate<PathfinderMob> = Predicate { true },
+    val cooldownVariationRange: IntRange = 0..0
+): Goal() {
+    var isDoingAction = false
+    var actionTimer = -1
+
+    override fun stop() {
+        isDoingAction = false
+        actionTimer = -1
+    }
+
+    final override fun requiresUpdateEveryTick(): Boolean = true
+    final override fun canContinueToUse(): Boolean = canUse()
+
+    override fun tick() {
+        if (
+            canDoAction()
+            && !(usingEntity is PazPlant && usingEntity.cooldown > -1)
+            && actionTimer == -1
+        ) {
+            (usingEntity as? PazPlant)?.cooldown = Mth.floor(
+                (cooldownTime+cooldownVariationRange.random()) *
+                        if (usingEntity.poweredUp) 0.8 else 1.0
+            ).coerceAtLeast(actionDelay)
+            actionTimer = actionDelay.coerceAtLeast(0)
+            actionStartEffect()
+            isDoingAction = true
+        }
+
+        if (actionTimer > 0) --actionTimer
+        if (actionTimer == 0) {// do action
+            if (actionPredicate.test(usingEntity)) if (doAction()) actionSuccessEffect()
+            isDoingAction = false
+            actionTimer = -1
+            actionEndEffect()
+        }
+    }
+
+    abstract fun canDoAction() : Boolean
+    abstract fun doAction() : Boolean
+}

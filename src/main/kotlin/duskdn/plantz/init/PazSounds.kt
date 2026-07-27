@@ -1,0 +1,96 @@
+package duskdn.plantz.init
+
+import duskdn.plantz.entity.gnome.GnomeSoundVariant
+import duskdn.plantz.util.pazResource
+import net.minecraft.core.Holder
+import net.minecraft.core.Registry
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
+
+object PazSounds {
+
+    @JvmField val WATERING_CAN = register("item.watering_can")
+
+    @JvmField val PROJECTILE_FIRE = register("entity.projectile.fire")
+    @JvmField val PROJECTILE_HIT_CONE = register("entity.projectile.hit_cone")
+    @JvmField val PROJECTILE_HIT_BUCKET = register("entity.projectile.hit_bucket")
+    @JvmField val PROJECTILE_HIT_PAPER = register("entity.projectile.hit_paper")
+
+    @JvmField val CHOMPER_ATTACK = register("entity.chomper.attack")
+    @JvmField val SCAREDYSHROOM_HIDE = register("entity.scaredyshroom.hide")
+    @JvmField val SCAREDYSHROOM_PEEK = register("entity.scaredyshroom.peek")
+
+    @JvmField val ZOMBIE_EATS = register("entity.zombie.eat")
+
+    @JvmField val BROWNCOAT_AMBIENT = register("entity.browncoat.ambient")
+    @JvmField val BROWNCOAT_HURT = register("entity.browncoat.hurt")
+    @JvmField val BROWNCOAT_DEATH = register("entity.browncoat.death")
+    @JvmField val NEWSPAPER_ZOMBIE_AMBIENT = register("entity.newspaper_zombie.ambient")
+    @JvmField val NEWSPAPER_ZOMBIE_HURT = register("entity.newspaper_zombie.hurt")
+    @JvmField val NEWSPAPER_ZOMBIE_DEATH = register("entity.newspaper_zombie.death")
+    @JvmField val DIGGER_ZOMBIE_AMBIENT = register("entity.digger_zombie.ambient")
+    @JvmField val DIGGER_ZOMBIE_HURT = register("entity.digger_zombie.hurt")
+    @JvmField val DIGGER_ZOMBIE_DEATH = register("entity.digger_zombie.death")
+    @JvmField val ZOMBIE_YETI_AMBIENT = register("entity.zombie_yeti.ambient")
+    @JvmField val ZOMBIE_YETI_HURT = register("entity.zombie_yeti.hurt")
+    @JvmField val ZOMBIE_YETI_DEATH = register("entity.zombie_yeti.death")
+    @JvmField val BACKUP_DANCER_AMBIENT = register("entity.backup_dancer.ambient")
+    @JvmField val BACKUP_DANCER_HURT = register("entity.backup_dancer.hurt")
+    @JvmField val BACKUP_DANCER_DEATH = register("entity.backup_dancer.death")
+    @JvmField val DISCO_ZOMBIE_AMBIENT = register("entity.disco_zombie.ambient")
+    @JvmField val DISCO_ZOMBIE_HURT = register("entity.disco_zombie.hurt")
+    @JvmField val DISCO_ZOMBIE_DEATH = register("entity.disco_zombie.death")
+    @JvmField val DISCO_ZOMBIE_BOOGIE = register("entity.disco_zombie.boogie")
+    @JvmField val DISCO_ZOMBIE_SUMMON = register("entity.disco_zombie.summon")
+    @JvmField val IMP_AMBIENT = register("entity.imp.ambient")
+    @JvmField val IMP_HURT = register("entity.imp.hurt")
+    @JvmField val IMP_DEATH = register("entity.imp.death")
+    @JvmField val ALL_STAR_AMBIENT = register("entity.all_star.ambient")
+    @JvmField val ALL_STAR_HURT = register("entity.all_star.hurt")
+    @JvmField val ALL_STAR_DEATH = register("entity.all_star.death")
+    @JvmField val ALL_STAR_WHISTLE = register("entity.all_star.whistle")
+    @JvmField val GARGANTUAR_AMBIENT = register("entity.gargantuar.ambient")
+    @JvmField val GARGANTUAR_HURT = register("entity.gargantuar.hurt")
+    @JvmField val GARGANTUAR_DEATH = register("entity.gargantuar.death")
+    @JvmField val GARGANTUAR_DIG = register("entity.gargantuar.dig")
+
+    @JvmField var GNOME_SOUNDS: Map<GnomeSoundVariant, GnomeSoundVariant.GnomeSoundSet> = registerGnomeSoundVariants()
+    @JvmField var GNOME_JUMP = register("entity.gnome.jump")
+
+    @JvmField val HYPNOTIZED = register("event.mob_effect.hypnotized")
+    @JvmField val APPLY_ZOMBIE_OMEN = register("event.mob_effect.zombie_omen")
+
+    @JvmField val PLANT_EXPLODE = registerForHolder("entity.plant_explode")
+    @JvmField val POTATOMINE_EXPLODE = registerForHolder("entity.potatomine.explode")
+    @JvmField val SNOWCHUNK_HIT = registerForHolder("entity.snowchunk")
+
+    @JvmField val MUSIC_DISC_GRASSY_GROOVE = registerForHolder("music_disc.grassy_groove")
+
+    private fun registerGnomeSoundVariants(): Map<GnomeSoundVariant, GnomeSoundVariant.GnomeSoundSet> {
+        return GnomeSoundVariant.entries.associateWith { soundVariant ->
+            val id = soundVariant.serializedName
+            GnomeSoundVariant.GnomeSoundSet(
+                ambientSound = registerForHolder("entity.gnome.$id.ambient"),
+                deathSound   = registerForHolder("entity.gnome.$id.death"),
+                hurtSound    = registerForHolder("entity.gnome.$id.hurt"),
+                jumpSound    = registerForHolder("entity.gnome.$id.jump"),
+                stepSound    = SoundEvents.WOLF_STEP
+            )
+        }
+    }
+
+    fun register(name: String): SoundEvent {
+        val soundId = pazResource(name)
+        return Registry.register(BuiltInRegistries.SOUND_EVENT, soundId, SoundEvent.createVariableRangeEvent(soundId))
+    }
+
+    fun registerForHolder(name: String): Holder.Reference<SoundEvent> {
+        val soundId = pazResource(name)
+        return Registry.registerForHolder(BuiltInRegistries.SOUND_EVENT, soundId, SoundEvent.createVariableRangeEvent(soundId))
+    }
+
+    fun initialize() {
+
+    }
+}
