@@ -27,7 +27,9 @@ import net.minecraft.world.item.Rarity
 import net.minecraft.world.item.component.ItemAttributeModifiers
 import net.minecraft.world.item.equipment.Equippable
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.SlabBlock
 import net.minecraft.world.level.block.SoundType
+import net.minecraft.world.level.block.StairBlock
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockBehaviour
@@ -168,6 +170,34 @@ object PazBlocks {
                         EquipmentSlotGroup.HEAD
                     ).build()
             )
+    )
+
+    @JvmField val BRAINZ_ALLOY_BLOCK: Block = registerBlock(
+        "brainz_alloy_block",
+        BlockBehaviour.Properties.of().sound(SoundType.COPPER).requiresCorrectToolForDrops().strength(2.0F),
+
+    )
+    @JvmField val BRAINZ_ALLOY_STAIRS: Block = registerBlock(
+        "brainz_alloy_stairs",
+        BlockBehaviour.Properties.of().sound(SoundType.COPPER).requiresCorrectToolForDrops().strength(2.0F),
+        { StairBlock(BRAINZ_ALLOY_BLOCK.defaultBlockState(), it) }
+    )
+    @JvmField val BRAINZ_ALLOY_SLAB: Block = registerBlock(
+        "brainz_alloy_slab",
+        BlockBehaviour.Properties.of().sound(SoundType.COPPER).requiresCorrectToolForDrops().strength(2.0F),
+        ::SlabBlock
+    )
+    @JvmField val SMOOTH_BRAINZ_ALLOY_BLOCK: Block = registerBlock(
+        "smooth_brainz_alloy_block",
+        BlockBehaviour.Properties.of().sound(SoundType.COPPER).requiresCorrectToolForDrops().strength(2.0F),
+    )
+    @JvmField val TREADED_BRAINZ_ALLOY_BLOCK: Block = registerBlock(
+        "treaded_brainz_alloy_block",
+        BlockBehaviour.Properties.of().sound(SoundType.COPPER).requiresCorrectToolForDrops().strength(2.0F),
+    )
+    @JvmField val REINFORCED_BRAINZ_ALLOY_BLOCK: Block = registerBlock(
+        "reinforced_brainz_alloy_block",
+        BlockBehaviour.Properties.of().sound(SoundType.COPPER).requiresCorrectToolForDrops().strength(3.5F),
     )
 
     @JvmField val BRAINZ_FLAG: Block = registerBlock(

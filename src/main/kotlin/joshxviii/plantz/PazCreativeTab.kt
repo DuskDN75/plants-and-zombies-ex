@@ -99,6 +99,11 @@ object PazCreativeTab {
                 PazBlocks.mailboxByColor.forEach { output.accept(it.value) }
 
                 // other
+                output.accept(PazBlocks.BRAINZ_ALLOY_BLOCK)
+                output.accept(PazBlocks.BRAINZ_ALLOY_STAIRS)
+                output.accept(PazBlocks.BRAINZ_ALLOY_SLAB)
+                output.accept(PazBlocks.TREADED_BRAINZ_ALLOY_BLOCK)
+                output.accept(PazBlocks.REINFORCED_BRAINZ_ALLOY_BLOCK)
                 output.accept(PazBlocks.GRAVESTONE)
             }
             .build()
