@@ -1,20 +1,17 @@
 package joshxviii.plantz.block
 
 import com.mojang.serialization.MapCodec
+import joshxviii.plantz.PazBlocks
 import joshxviii.plantz.PazComponents
-import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazItems
 import joshxviii.plantz.block.entity.MailboxBlockEntity
-import joshxviii.plantz.block.entity.SunBatteryBlockEntity
 import joshxviii.plantz.block.entity.TimeMachineBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
 import net.minecraft.util.Util
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
@@ -24,6 +21,8 @@ import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.ScheduledTickAccess
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityTicker
+import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
@@ -33,6 +32,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.level.pathfinder.PathComputationType
+import net.minecraft.world.level.redstone.Orientation
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
@@ -43,15 +43,36 @@ class TimeMachineBlock(properties: Properties) : BaseEntityBlock(properties), Si
     companion object {
         val CODEC: MapCodec<TimeMachineBlock> = simpleCodec(::TimeMachineBlock)
         val SHAPE: VoxelShape = Util.make {
+            Shapes.or(column(16.0, 0.0, 6.0))
+        }
+        val BATTERY_SHAPE: VoxelShape = Util.make {
             Shapes.or(
-                column(16.0, 0.0, 5.0),
+                column(16.0, 0.0, 6.0),
+                column(8.0, 0.0, 11.0).move(0.0, 0.125, 0.25),
             )
         }
+        var SHAPES: MutableMap<Direction.Axis, VoxelShape> = Shapes.rotateHorizontalAxis(SHAPE)
+        var BATTERY_SHAPES: MutableMap<Direction.Axis, VoxelShape> = Shapes.rotateHorizontalAxis(BATTERY_SHAPE)
+
         val FACING: EnumProperty<Direction> = HorizontalDirectionalBlock.FACING
         val WATERLOGGED: BooleanProperty = BlockStateProperties.WATERLOGGED
+        val LEVEL: IntegerProperty = BlockStateProperties.LEVEL
+
         val STATE: EnumProperty<TimeMachineState> = EnumProperty.create<TimeMachineState>("time_machine_state", TimeMachineState::class.java)
 
-        val LIGHT_EMISSION: ToIntFunction<BlockState> = { if ( it.getValue(STATE) == TimeMachineState.ACTIVE) 4 else 0 }
+        val LIGHT_EMISSION: ToIntFunction<BlockState> = { if ( it.getValue(STATE) == TimeMachineState.ACTIVE) 10 else 0 }
+    }
+
+    override fun <T : BlockEntity> getTicker(
+        level: Level,
+        blockState: BlockState,
+        type: BlockEntityType<T>
+    ): BlockEntityTicker<T>? {
+        return if (type == PazBlocks.TIME_MACHINE_ENTITY) {
+            BlockEntityTicker { level, pos, state, blockEntity ->
+                TimeMachineBlockEntity.tick(level, pos, state, blockEntity as TimeMachineBlockEntity)
+            }
+        } else null
     }
 
     init {
@@ -73,8 +94,52 @@ class TimeMachineBlock(properties: Properties) : BaseEntityBlock(properties), Si
         return InteractionResult.SUCCESS
     }
 
+    override fun useItemOn(
+        itemStack: ItemStack,
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        player: Player,
+        hand: InteractionHand,
+        hitResult: BlockHitResult
+    ): InteractionResult {
+        if (player.isCrouching && itemStack.`is`(PazItems.SUN_BATTERY)) {
+            val blockEntity = level.getBlockEntity(pos)
+            (blockEntity as? TimeMachineBlockEntity)?.let {
+                if (!it.isEmpty) return InteractionResult.FAIL
+                it.item = itemStack
+                itemStack.consume(1, player)
+                return InteractionResult.SUCCESS
+            }
+        }
+        return super.useItemOn(itemStack, state, level, pos, player, hand, hitResult)
+    }
+
     override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
-        return SHAPE
+        val facing = state.getValue(FACING)
+        return if (state.getValue(STATE) == TimeMachineState.INACTIVE)
+            SHAPES[facing.axis] as VoxelShape
+        else
+            BATTERY_SHAPES[facing.axis] as VoxelShape
+    }
+
+    override fun neighborChanged(
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        block: Block,
+        orientation: Orientation?,
+        movedByPiston: Boolean
+    ) {
+        val signal = level.hasNeighborSignal(pos)
+
+        val blockEntity = level.getBlockEntity(pos)
+        val sunLevel = (blockEntity as? TimeMachineBlockEntity)?.let {
+            it.item.get(PazComponents.STORED_SUN)?.storedSun
+        }?: 0
+
+        if (state.getValue(STATE) != TimeMachineState.INACTIVE) level.setBlock(pos, (state.setValue(STATE, if(signal && sunLevel > 0) TimeMachineState.ACTIVE else TimeMachineState.BATTERY ) as BlockState?)!!, 3)
+        else level.setBlock(pos, (state.setValue(STATE, TimeMachineState.INACTIVE) as BlockState?)!!, 3)
     }
 
     override fun rotate(state: BlockState, rotation: Rotation): BlockState {
@@ -82,7 +147,7 @@ class TimeMachineBlock(properties: Properties) : BaseEntityBlock(properties), Si
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
-        builder.add(FACING, WATERLOGGED, STATE)
+        builder.add(FACING, WATERLOGGED, STATE, LEVEL)
     }
 
     override fun getFluidState(state: BlockState): FluidState {
@@ -92,8 +157,9 @@ class TimeMachineBlock(properties: Properties) : BaseEntityBlock(properties), Si
     override fun getStateForPlacement(context: BlockPlaceContext): BlockState {
         val replacedFluidState = context.level.getFluidState(context.clickedPos)
         return defaultBlockState()
-            .setValue(FACING, context.horizontalDirection.opposite)
+            .setValue(FACING, context.horizontalDirection)
             .setValue(WATERLOGGED, replacedFluidState.`is`(Fluids.WATER))
+            .setValue(LEVEL, 0)
     }
 
     override fun newBlockEntity(worldPosition: BlockPos, blockState: BlockState): BlockEntity {

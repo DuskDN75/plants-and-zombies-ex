@@ -6,6 +6,7 @@ import joshxviii.plantz.PaintLayer.Companion.PAINT_TEXTURE_3
 import joshxviii.plantz.PaintLayer.Companion.PAINT_TEXTURE_4
 import joshxviii.plantz.block.entity.FlagBlockEntity
 import joshxviii.plantz.block.entity.SunBatteryBlockEntity
+import joshxviii.plantz.block.entity.TimeMachineBlockEntity
 import joshxviii.plantz.model.BalloonModel
 import joshxviii.plantz.model.FlagBlockModel
 import joshxviii.plantz.model.GnomeArmorModel
@@ -131,7 +132,6 @@ object PazModels {
         ModelLayerRegistry.registerModelLayer(FlagBlockModel.LAYER_LOCATION) { FlagBlockModel.createBodyLayer() }
 
 
-
         // REGISTER ENTITY RENDERERS
         EntityRenderers.register(PazEntities.PEA_SHOOTER) { PlantRenderer(PeaShooterModel(it.bakeLayer(PeaShooterModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.SUNFLOWER) { PlantRenderer(SunflowerModel(it.bakeLayer(SunflowerModel.LAYER_LOCATION)), it) }
@@ -201,5 +201,6 @@ object PazModels {
 
         BlockEntityRenderers.register<FlagBlockEntity, FlagRenderState>(PazBlocks.FLAG_BLOCK_ENTITY) { FlagRenderer(FlagBlockModel(it.bakeLayer(FlagBlockModel.LAYER_LOCATION))) }
         BlockEntityRenderers.register<SunBatteryBlockEntity, SunBatteryRenderSate>(PazBlocks.SUN_BATTERY_BLOCK_ENTITY) { SunBatteryRenderer() }
+        BlockEntityRenderers.register<TimeMachineBlockEntity, TimeMachineRenderSate>(PazBlocks.TIME_MACHINE_ENTITY) { TimeMachineRenderer() }
     }
 }

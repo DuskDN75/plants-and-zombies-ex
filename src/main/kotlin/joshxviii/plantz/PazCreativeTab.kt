@@ -74,8 +74,8 @@ object PazCreativeTab {
                 output.accept(PazItems.MUSIC_DISC_GRASSY_GROOVE)
 
                 // items
-                if (parameters.hasPermissions()) output.accept(PazBlocks.TIME_MACHINE)
                 output.accept(PazItems.BRAINZ_ALLOY)
+                output.accept(PazBlocks.TIME_MACHINE)
                 output.accept(PazItems.SUN_BATTERY)
                 output.accept(PazItems.SUN)
                 output.accept(PazItems.SUN_BOTTLE)

@@ -1,8 +1,15 @@
 package joshxviii.plantz.block.entity
 
 import joshxviii.plantz.PazBlocks
+import joshxviii.plantz.PazComponents
+import joshxviii.plantz.PazItems
 import joshxviii.plantz.TimeMachineData
+import joshxviii.plantz.block.MailboxState
+import joshxviii.plantz.block.SunBatteryBlock
+import joshxviii.plantz.block.TimeMachineBlock.Companion.STATE
+import joshxviii.plantz.block.TimeMachineState
 import joshxviii.plantz.inventory.TimeMachineMenu
+import joshxviii.plantz.item.SunBatteryItem
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
@@ -22,15 +29,25 @@ class TimeMachineBlockEntity(
     worldPosition: BlockPos,
     blockState: BlockState
 ) : BlockEntity(PazBlocks.TIME_MACHINE_ENTITY, worldPosition, blockState), BlockContainerSingleItem, ExtendedMenuProvider<TimeMachineData> {
+    var item: ItemStack = ItemStack.EMPTY
+    var tickCount: Int = 0
 
     companion object {
+        fun tick(level: Level, pos: BlockPos, state: BlockState, blockEntity: TimeMachineBlockEntity) {
+            blockEntity.tickCount++
 
-    }
-
-    var item: ItemStack = ItemStack.EMPTY
-
-    fun tick(level: Level, pos: BlockPos, state: BlockState) {
-        
+            if (level.isClientSide) return
+            blockEntity.item.get(PazComponents.STORED_SUN)?.let {
+                if (it.hasSun() && level.hasNeighborSignal(pos)) {
+                    blockEntity.updateTimeMachineState(TimeMachineState.ACTIVE)
+                    if (blockEntity.tickCount % 50 == 0) {
+                        val newSun = it.removeSun()
+                        blockEntity.item.set(PazComponents.STORED_SUN, newSun)
+                    }
+                }
+                else blockEntity.updateTimeMachineState(TimeMachineState.BATTERY)
+            } ?: blockEntity.updateTimeMachineState(TimeMachineState.INACTIVE)
+        }
     }
 
     override fun saveAdditional(output: ValueOutput) {
@@ -54,5 +71,9 @@ class TimeMachineBlockEntity(
     override fun getTheItem(): ItemStack = item
     override fun setTheItem(itemStack: ItemStack) {
         item = itemStack
+    }
+
+    fun updateTimeMachineState(newState: TimeMachineState) {
+        level!!.setBlock(blockPos, blockState.setValue(STATE, newState), 3)
     }
 }

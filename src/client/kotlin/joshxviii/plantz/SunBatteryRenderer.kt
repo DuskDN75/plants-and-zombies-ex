@@ -52,7 +52,7 @@ class SunBatteryRenderer() : BlockEntityRenderer<SunBatteryBlockEntity, SunBatte
                     .createRenderSetup()
             )
 
-        private fun vertex(
+        fun vertex(
             buffer: VertexConsumer,
             pose: PoseStack.Pose,
             x: Float,
@@ -72,6 +72,22 @@ class SunBatteryRenderer() : BlockEntityRenderer<SunBatteryBlockEntity, SunBatte
                 .setNormal(pose, 0.0f, 1.0f, 0.0f)
         }
 
+        fun submitSunShine(
+            state: BlockEntityRenderState,
+            poseStack: PoseStack,
+            collector: SubmitNodeCollector,
+            color: Int = 0xFFFFFF
+        ) {
+            collector.submitCustomGeometry(
+                poseStack,
+                EMISSIVE_SUN,
+            ) { pose: PoseStack.Pose, buffer: VertexConsumer ->
+                vertex(buffer, pose, -0.5f, -0.5f, color, color, 0, 0f, 1f, state.lightCoords)
+                vertex(buffer, pose, 0.5f, -0.5f, color, color, 0, 1f, 1f, state.lightCoords)
+                vertex(buffer, pose, 0.5f, 0.5f, color, color, 0, 1f, 0f, state.lightCoords)
+                vertex(buffer, pose, -0.5f, 0.5f, color, color, 0, 0f, 0f, state.lightCoords)
+            }
+        }
     }
     override fun createRenderState(): SunBatteryRenderSate {
         return SunBatteryRenderSate()
@@ -104,23 +120,6 @@ class SunBatteryRenderer() : BlockEntityRenderer<SunBatteryBlockEntity, SunBatte
         submitSunShine(state, poseStack, collector)
         poseStack.mulPose(Axis.YP.rotation(Mth.PI*0.5f))
         submitSunShine(state, poseStack, collector)
-    }
-
-    fun submitSunShine(
-        state: SunBatteryRenderSate,
-        poseStack: PoseStack,
-        collector: SubmitNodeCollector,
-        color: Int = 0xFFFFFF
-    ) {
-        collector.submitCustomGeometry(
-            poseStack,
-            EMISSIVE_SUN,
-        ) { pose: PoseStack.Pose, buffer: VertexConsumer ->
-            vertex(buffer, pose, -0.5f, -0.5f, color, color, 0, 0f, 1f, state.lightCoords)
-            vertex(buffer, pose, 0.5f, -0.5f, color, color, 0, 1f, 1f, state.lightCoords)
-            vertex(buffer, pose, 0.5f, 0.5f, color, color, 0, 1f, 0f, state.lightCoords)
-            vertex(buffer, pose, -0.5f, 0.5f, color, color, 0, 0f, 0f, state.lightCoords)
-        }
     }
 }
 
