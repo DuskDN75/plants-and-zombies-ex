@@ -40,7 +40,7 @@ class TimeMachineBlockEntity(
             blockEntity.item.get(PazComponents.STORED_SUN)?.let {
                 if (it.hasSun() && level.hasNeighborSignal(pos)) {
                     blockEntity.updateTimeMachineState(TimeMachineState.ACTIVE)
-                    if (blockEntity.tickCount % 50 == 0) {
+                    if (blockEntity.tickCount % 38 == 0) {
                         val newSun = it.removeSun()
                         blockEntity.item.set(PazComponents.STORED_SUN, newSun)
                     }

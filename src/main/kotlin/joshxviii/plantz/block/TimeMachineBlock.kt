@@ -48,11 +48,11 @@ class TimeMachineBlock(properties: Properties) : BaseEntityBlock(properties), Si
         val BATTERY_SHAPE: VoxelShape = Util.make {
             Shapes.or(
                 column(16.0, 0.0, 6.0),
-                column(8.0, 0.0, 11.0).move(0.0, 0.125, 0.25),
+                column(8.0, 0.0, 11.0).move(0.0, 0.125, -0.25),
             )
         }
-        var SHAPES: MutableMap<Direction.Axis, VoxelShape> = Shapes.rotateHorizontalAxis(SHAPE)
-        var BATTERY_SHAPES: MutableMap<Direction.Axis, VoxelShape> = Shapes.rotateHorizontalAxis(BATTERY_SHAPE)
+        var SHAPES: MutableMap<Direction, VoxelShape> = Shapes.rotateHorizontal(SHAPE)
+        var BATTERY_SHAPES: MutableMap<Direction, VoxelShape> = Shapes.rotateHorizontal(BATTERY_SHAPE)
 
         val FACING: EnumProperty<Direction> = HorizontalDirectionalBlock.FACING
         val WATERLOGGED: BooleanProperty = BlockStateProperties.WATERLOGGED
@@ -118,9 +118,9 @@ class TimeMachineBlock(properties: Properties) : BaseEntityBlock(properties), Si
     override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         val facing = state.getValue(FACING)
         return if (state.getValue(STATE) == TimeMachineState.INACTIVE)
-            SHAPES[facing.axis] as VoxelShape
+            SHAPES[facing] as VoxelShape
         else
-            BATTERY_SHAPES[facing.axis] as VoxelShape
+            BATTERY_SHAPES[facing] as VoxelShape
     }
 
     override fun neighborChanged(
