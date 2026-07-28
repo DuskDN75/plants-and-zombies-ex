@@ -137,6 +137,13 @@
   "item.plantz.magenta_mailbox": "Magenta Mailbox",
   "item.plantz.pink_mailbox": "Pink Mailbox",
 
+
+  "item.plantz.brainz_alloy_block": "Brainz Alloy Block",
+  "item.plantz.brainz_alloy_stairs": "Brainz Alloy Stairs",
+  "item.plantz.brainz_alloy_slab": "Brainz Alloy Slab",
+  "item.plantz.treaded_brainz_alloy_block": "Treaded Brainz Alloy Block",
+  "item.plantz.reinforced_brainz_alloy_block": "Reinforced Brainz Alloy Block",
+
   "item.plantz.time_machine": "Time Machine",
   "item.plantz.gravestone": "Gravestone",
 
