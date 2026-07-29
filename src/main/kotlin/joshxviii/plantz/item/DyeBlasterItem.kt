@@ -42,11 +42,10 @@ class DyeBlasterItem(properties: Properties) : ProjectileWeaponItem(properties) 
             1.0f,
             1.0f / (level.getRandom().nextFloat() * 0.4f + 1.2f) + 4.5f
         )
-        if (level.random.nextFloat() < 0.5f) draw(itemStack, ammo, livingEntity)
+        itemStack.hurtAndBreak(1, livingEntity, livingEntity.usedItemHand)
+        if (level.random.nextFloat() < 0.4f) draw(itemStack, ammo, livingEntity)
         if (level is ServerLevel) shoot(level, livingEntity, livingEntity.usedItemHand, itemStack, listOf(ammo), 1.2f, 8.0f, false, null)
     }
-
-
 
     override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResult {
         val itemStack: ItemStack = player.getItemInHand(hand)

@@ -77,13 +77,14 @@ class GravestoneBlockEntity(
     private fun canSpawn(level: ServerLevel, pos: BlockPos): Boolean {
         if ( !isDarkEnough(level) && !level.getBiome(pos).`is`(PazTags.Biomes.GRAVESTONE_IGNORE_BRIGHTNESS) ) return false
 
-        val nearbyPlayer = level.hasNearbyAlivePlayer(
+        val nearbyPlayer = level.getNearestPlayer(
             pos.center.x,
             pos.center.y,
             pos.center.z,
-            PLAYER_RANGE.toDouble()
+            PLAYER_RANGE.toDouble(),
+            true
         )
-        if (!nearbyPlayer) return false
+        if (nearbyPlayer == null) return false
 
         val aabb = AABB.ofSize(pos.center, 32.0, 16.0, 32.0)
         val nearbyZombies = level.getEntitiesOfClass(Zombie::class.java, aabb) { zombie ->

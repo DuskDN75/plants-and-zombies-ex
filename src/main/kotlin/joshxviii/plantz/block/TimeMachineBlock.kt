@@ -103,15 +103,6 @@ class TimeMachineBlock(properties: Properties) : BaseEntityBlock(properties), Si
         hand: InteractionHand,
         hitResult: BlockHitResult
     ): InteractionResult {
-        if (player.isCrouching && itemStack.`is`(PazItems.SUN_BATTERY)) {
-            val blockEntity = level.getBlockEntity(pos)
-            (blockEntity as? TimeMachineBlockEntity)?.let {
-                if (!it.isEmpty) return InteractionResult.FAIL
-                it.item = itemStack
-                itemStack.consume(1, player)
-                return InteractionResult.SUCCESS
-            }
-        }
         return super.useItemOn(itemStack, state, level, pos, player, hand, hitResult)
     }
 
@@ -131,15 +122,7 @@ class TimeMachineBlock(properties: Properties) : BaseEntityBlock(properties), Si
         orientation: Orientation?,
         movedByPiston: Boolean
     ) {
-        val signal = level.hasNeighborSignal(pos)
 
-        val blockEntity = level.getBlockEntity(pos)
-        val sunLevel = (blockEntity as? TimeMachineBlockEntity)?.let {
-            it.item.get(PazComponents.STORED_SUN)?.storedSun
-        }?: 0
-
-        if (state.getValue(STATE) != TimeMachineState.INACTIVE) level.setBlock(pos, (state.setValue(STATE, if(signal && sunLevel > 0) TimeMachineState.ACTIVE else TimeMachineState.BATTERY ) as BlockState?)!!, 3)
-        else level.setBlock(pos, (state.setValue(STATE, TimeMachineState.INACTIVE) as BlockState?)!!, 3)
     }
 
     override fun rotate(state: BlockState, rotation: Rotation): BlockState {

@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.client.renderer.state.level.CameraRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.client.resources.model.sprite.SpriteId
+import net.minecraft.core.Direction
 import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
@@ -51,6 +52,9 @@ class TimeMachineRenderer() : BlockEntityRenderer<TimeMachineBlockEntity, TimeMa
     ) {
         state.time = blockEntity.getLevel()!!.gameTime.toFloat()
         state.sunPercent = blockEntity.blockState.getValue(TimeMachineBlock.LEVEL).toFloat() / 15.0f
+        state.facing = blockEntity.blockState.getValue(TimeMachineBlock.FACING)
+        if (blockEntity.blockState.getValue(TimeMachineBlock.STATE) == TimeMachineState.ACTIVE) state.activePortalTime++
+        else state.activePortalTime = 0
         super.extractRenderState(blockEntity, state, partialTicks, cameraPosition, breakProgress)
     }
 
@@ -61,7 +65,8 @@ class TimeMachineRenderer() : BlockEntityRenderer<TimeMachineBlockEntity, TimeMa
         camera: CameraRenderState
     ) {
         val s = (state.sunPercent).pow(0.5f) * 0.9f
-        poseStack.translate(0.5f, 0.33f, 0.5f)
+        val d = .25f
+        poseStack.translate(state.facing.stepX.toFloat()*d+0.5f, 0.45f, state.facing.stepZ.toFloat()*d+0.5f)
         poseStack.scale(s, s, s)
         poseStack.mulPose(camera.orientation)
         poseStack.mulPose(Axis.YP.rotation(state.time*0.04f))
@@ -75,5 +80,6 @@ class TimeMachineRenderer() : BlockEntityRenderer<TimeMachineBlockEntity, TimeMa
 class TimeMachineRenderSate : BlockEntityRenderState() {
     var time: Float = 0f
     var sunPercent: Float = 0f
-    var sprite: SpriteId? = null
+    var facing: Direction = Direction.NORTH
+    var activePortalTime: Int = 0
 }

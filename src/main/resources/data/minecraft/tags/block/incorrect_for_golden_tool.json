@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "plantz:gravestone",
     "#plantz:brainz_alloy_blocks"
   ]
 }

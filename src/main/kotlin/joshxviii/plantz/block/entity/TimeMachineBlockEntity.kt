@@ -2,18 +2,18 @@ package joshxviii.plantz.block.entity
 
 import joshxviii.plantz.PazBlocks
 import joshxviii.plantz.PazComponents
-import joshxviii.plantz.PazItems
 import joshxviii.plantz.TimeMachineData
-import joshxviii.plantz.block.MailboxState
-import joshxviii.plantz.block.SunBatteryBlock
+import joshxviii.plantz.block.TimeMachineBlock
 import joshxviii.plantz.block.TimeMachineBlock.Companion.STATE
 import joshxviii.plantz.block.TimeMachineState
 import joshxviii.plantz.inventory.TimeMachineMenu
-import joshxviii.plantz.item.SunBatteryItem
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.AbstractContainerMenu
@@ -38,6 +38,7 @@ class TimeMachineBlockEntity(
 
             if (level.isClientSide) return
             blockEntity.item.get(PazComponents.STORED_SUN)?.let {
+                level.setBlock(pos, state.setValue(TimeMachineBlock.LEVEL, it.getLevel()), 3)
                 if (it.hasSun() && level.hasNeighborSignal(pos)) {
                     blockEntity.updateTimeMachineState(TimeMachineState.ACTIVE)
                     if (blockEntity.tickCount % 38 == 0) {
@@ -74,6 +75,20 @@ class TimeMachineBlockEntity(
     }
 
     fun updateTimeMachineState(newState: TimeMachineState) {
-        level!!.setBlock(blockPos, blockState.setValue(STATE, newState), 3)
+        val oldState = blockState.getValue(STATE)
+        val level = level!!
+        if (oldState == newState) return
+        if (oldState == TimeMachineState.INACTIVE && newState == TimeMachineState.BATTERY) playSound(SoundEvents.COPPER_BULB_PLACE)
+        else if (oldState == TimeMachineState.ACTIVE) playSound(SoundEvents.RESPAWN_ANCHOR_DEPLETE.value(), 1.7f)
+        else if (newState == TimeMachineState.ACTIVE) playSound(SoundEvents.BEACON_ACTIVATE, 1.9f)
+        else if (oldState == TimeMachineState.BATTERY && newState == TimeMachineState.INACTIVE) playSound(SoundEvents.CRAFTER_CRAFT, 1.2f)
+
+        if (newState == TimeMachineState.INACTIVE) level.setBlock(blockPos, blockState.setValue(TimeMachineBlock.LEVEL, 0), 3)
+
+        level.setBlock(blockPos, blockState.setValue(STATE, newState), 3)
+    }
+
+    fun playSound(event: SoundEvent, pitch: Float = 1.0f) {
+        level?.playSound(null, blockPos, event, SoundSource.BLOCKS, 1.0f, pitch)
     }
 }

@@ -74,8 +74,6 @@ object PazCreativeTab {
                 output.accept(PazItems.MUSIC_DISC_GRASSY_GROOVE)
 
                 // items
-                output.accept(PazItems.BRAINZ_ALLOY)
-                output.accept(PazBlocks.TIME_MACHINE)
                 output.accept(PazItems.SUN_BATTERY)
                 output.accept(PazItems.SUN)
                 output.accept(PazItems.SUN_BOTTLE)
@@ -99,12 +97,14 @@ object PazCreativeTab {
                 PazBlocks.mailboxByColor.forEach { output.accept(it.value) }
 
                 // other
+                output.accept(PazItems.BRAINZ_ALLOY)
                 output.accept(PazBlocks.BRAINZ_ALLOY_BLOCK)
                 output.accept(PazBlocks.BRAINZ_ALLOY_STAIRS)
                 output.accept(PazBlocks.BRAINZ_ALLOY_SLAB)
                 output.accept(PazBlocks.TREADED_BRAINZ_ALLOY_BLOCK)
                 output.accept(PazBlocks.REINFORCED_BRAINZ_ALLOY_BLOCK)
                 output.accept(PazBlocks.GRAVESTONE)
+                output.accept(PazBlocks.TIME_MACHINE)
             }
             .build()
     )

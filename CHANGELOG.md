@@ -2,9 +2,13 @@
 ### Additions
 #### General:   
 - Plantz Flag now reduces the cooldown of nearby plants by 20%.
-- Added Brainz Metal.
+- Added Brainz Alloy.
   - Drops from the Rob Zombie, Super Brainz, and Zombie Bots built by the engineer.
-  - Used for crafting special zombie tech.
+  - Used for crafting blocks and special zombie tech.
+- Added Brainz Alloy block set.
+  - Blocks include: Brainz Alloy Block, Stairs, Slab, Treaded Brainz Alloy Block, and Reinforced Brainz Alloy Block.
+- Added Time Machine.
+  - ***Currently not obtainable outside of Creative mode.***
 - Added Dye Blaster
 - The dye blaster consumes dye as ammo.
 - Players and mobs shot with the blaster will be given the "painted" mob effect.

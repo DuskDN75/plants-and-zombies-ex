@@ -31,8 +31,7 @@
       "plantz:brainz_alloy_slab",
       "plantz:reinforced_brainz_alloy_block",
       "plantz:treaded_brainz_alloy_block",
-      "plantz:sun_battery",
-      "plantz:time_machine"
+      "plantz:sun_battery"
     ]
   }
 }

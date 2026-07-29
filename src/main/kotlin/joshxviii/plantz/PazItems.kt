@@ -153,6 +153,8 @@ object PazItems {
     val DYE_BLASTER: Item = registerItem(
         "dye_blaster", ::DyeBlasterItem,
         properties = Item.Properties()
+            .durability(435)
+            .repairable(BRAINZ_ALLOY)
             .stacksTo(1)
     )
     @JvmField

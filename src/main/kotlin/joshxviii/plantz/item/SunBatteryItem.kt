@@ -6,6 +6,7 @@ import joshxviii.plantz.PazCriteria
 import joshxviii.plantz.PazItems
 import joshxviii.plantz.block.entity.MailboxBlockEntity
 import joshxviii.plantz.block.entity.SunBatteryBlockEntity
+import joshxviii.plantz.block.entity.TimeMachineBlockEntity
 import joshxviii.plantz.item.component.StoredSun
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerPlayer
@@ -26,8 +27,19 @@ import net.minecraft.world.level.block.state.BlockState
 
 class SunBatteryItem(properties: Properties) : BlockItem(PazBlocks.SUN_BATTERY_BLOCK, properties) {
 
+
     override fun useOn(context: UseOnContext): InteractionResult {
         val player = context.player
+        val blockState = context.level.getBlockState(context.clickedPos)
+        if (blockState.`is`(PazBlocks.TIME_MACHINE)) {
+            val blockEntity = context.level.getBlockEntity(context.clickedPos)
+            (blockEntity as? TimeMachineBlockEntity)?.let {
+                if (!it.item.isEmpty) return InteractionResult.FAIL
+                it.item = context.itemInHand.copy()
+                context.itemInHand.shrink(1)
+                return InteractionResult.SUCCESS_SERVER
+            }
+        }
         if (player?.isShiftKeyDown==true) return super.useOn(context)
         return InteractionResult.PASS
     }
