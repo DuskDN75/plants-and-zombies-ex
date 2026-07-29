@@ -116,7 +116,7 @@ object PazSpawnPlacements {
 
         // region ZOMBIES
         addBiomeSpawn(PazTags.Biomes.HAS_BROWNCOAT, PazEntities.BROWN_COAT, category = MobCategory.MONSTER,
-            weight = 60, minGroupSize = 1, maxGroupSize = 4)
+            weight = 100, minGroupSize = 1, maxGroupSize = 5)
         addBiomeSpawn(PazTags.Biomes.WATER_SPAWNS, PazEntities.BROWN_COAT, category = MobCategory.MONSTER,
             weight = 10, minGroupSize = 1, maxGroupSize = 2)
         registerSpawnPlacement(PazEntities.BROWN_COAT, PazZombie::checkPazZombieSpawnRules, spawnPlacements = SpawnPlacementTypes.NO_RESTRICTIONS)

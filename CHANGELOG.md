@@ -1,7 +1,7 @@
 # Changelog 1.5
 ### Additions
 #### General:   
-- Plantz Flag now reduces the cooldown of nearby plants by 20%.
+- Plantz Flag now reduces the cooldown of nearby plants by 20%. This effect does not stack.
 - Added Brainz Alloy.
   - Drops from the Rob Zombie, Super Brainz, and Zombie Bots built by the engineer.
   - Used for crafting blocks and special zombie tech.
@@ -10,14 +10,14 @@
 - Added Time Machine.
   - ***Currently not obtainable outside of Creative mode.***
 - Added Dye Blaster
-- The dye blaster consumes dye as ammo.
-- Players and mobs shot with the blaster will be given the "painted" mob effect.
+  - Has a 40% chance to consume dye as ammo.
+  - Players and mobs shot with the blaster will be given the "painted" mob effect.
 - Added Balloons
-    - Balloons are attached to leads by default and can be tied to other mobs and fences.
-    - Balloons pull the holder upward slightly. By carrying enough balloons, you can negate fall damage or even begin to float.
+  - Balloons are attached to leads by default and can be tied to other mobs and fences.
+  - Balloons pull the holder upward slightly. By carrying enough balloons, you can negate fall damage or even begin to float.
 - Added Gravestone Block
-    - Zombies will emerge from the ground near the gravestone during the night.
-- Added The Graveyard biome
+  - Zombies will emerge from the ground near the gravestone during the night.
+- Added The Graveyard biome.
 - The Football Helmet now gives increased speed and step height while sprinting. Nearby Mobs will also be knocked back.
 #### Plants:
 - Added Electric Peashooter

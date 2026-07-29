@@ -90,12 +90,6 @@ object PazCreativeTab {
                 output.accept(PazBlocks.BRAINZ_FLAG)
                 output.accept(PazBlocks.PLANTZ_FLAG)
 
-                // balloons
-                PazItems.balloonByColor.forEach { output.accept(it.value) }
-
-                // mailboxes
-                PazBlocks.mailboxByColor.forEach { output.accept(it.value) }
-
                 // other
                 output.accept(PazItems.BRAINZ_ALLOY)
                 output.accept(PazBlocks.BRAINZ_ALLOY_BLOCK)
@@ -105,6 +99,12 @@ object PazCreativeTab {
                 output.accept(PazBlocks.REINFORCED_BRAINZ_ALLOY_BLOCK)
                 output.accept(PazBlocks.GRAVESTONE)
                 output.accept(PazBlocks.TIME_MACHINE)
+
+                // balloons
+                PazItems.balloonByColor.forEach { output.accept(it.value) }
+
+                // mailboxes
+                PazBlocks.mailboxByColor.forEach { output.accept(it.value) }
             }
             .build()
     )
