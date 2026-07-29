@@ -173,7 +173,7 @@ class TangleKelp(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.
             val success = super.doAction()
             if (success) {
                 tangleKelp.tangleTime = TANGLE_TIME + tangleKelp.random.nextInt(-10,20)
-                tangleKelp.target?.addEffect(MobEffectInstance(PazEffects.TANGLED, 60, 0), tangleKelp)
+                tangleKelp.target?.addEffect(MobEffectInstance(PazEffects.TANGLED, 80, 0), tangleKelp)
             }
             return success
         }

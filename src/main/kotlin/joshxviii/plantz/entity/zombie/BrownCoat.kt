@@ -1,7 +1,11 @@
 package joshxviii.plantz.entity.zombie
 
 import joshxviii.plantz.PazBlocks
+import joshxviii.plantz.PazDataSerializers.BROWN_COAT_VARIANT
 import joshxviii.plantz.PazSounds
+import joshxviii.plantz.PazTags
+import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
@@ -12,8 +16,23 @@ import net.minecraft.world.entity.*
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
+import kotlin.jvm.optionals.getOrDefault
 
 class BrownCoat(type: EntityType<out BrownCoat>, level: Level) : PazZombie(type, level) {
+    companion object {
+        val DATA_VARIANT_ID: EntityDataAccessor<BrownCoatVariant> = SynchedEntityData.defineId(BrownCoat::class.java, BROWN_COAT_VARIANT)
+    }
+
+    var variant: BrownCoatVariant
+        get() = this.entityData.get(DATA_VARIANT_ID)
+        set(value) = this.entityData.set(DATA_VARIANT_ID, value)
+
+    override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
+        super.defineSynchedData(entityData)
+        entityData.define(DATA_VARIANT_ID, BrownCoatVariant.getDefault())
+    }
 
     override fun getAmbientSound(): SoundEvent {
         return PazSounds.BROWNCOAT_AMBIENT
@@ -38,6 +57,16 @@ class BrownCoat(type: EntityType<out BrownCoat>, level: Level) : PazZombie(type,
         randomEquip(random, difficulty)
     }
 
+    override fun addAdditionalSaveData(output: ValueOutput) {
+        super.addAdditionalSaveData(output)
+        output.store("variant", BrownCoatVariant.CODEC, variant)
+    }
+
+    override fun readAdditionalSaveData(input: ValueInput) {
+        super.readAdditionalSaveData(input)
+        variant = input.read<BrownCoatVariant>("variant", BrownCoatVariant.CODEC).getOrDefault(BrownCoatVariant.getDefault())
+    }
+
     override fun finalizeSpawn(
         level: ServerLevelAccessor,
         difficulty: DifficultyInstance,
@@ -49,6 +78,11 @@ class BrownCoat(type: EntityType<out BrownCoat>, level: Level) : PazZombie(type,
         val difficultyModifier = difficulty.specialMultiplier
         setCanPickUpLoot(true)
         setCanBreakDoors(true)
+        variant = BrownCoatVariant.pickForBiome(
+            level.getBiome(blockPosition()).`is`(PazTags.Biomes.HAS_BROWNCOAT_SNOW),
+            level.getBiome(blockPosition()).`is`(PazTags.Biomes.HAS_BROWNCOAT_DESERT),
+            random
+        )
 
         if (getItemBySlot(EquipmentSlot.HEAD).isEmpty){
             if (random.nextFloat() < 0.25) {

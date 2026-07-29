@@ -83,6 +83,8 @@ object PazTags {
         val WATER_SPAWNS = tag("zombie/water_spawns")
         val DAY_SPAWNS = tag("zombie/day_spawns")
         val HAS_BROWNCOAT = tag("zombie/has_browncoat")
+        val HAS_BROWNCOAT_SNOW = tag("zombie/has_browncoat_snow")
+        val HAS_BROWNCOAT_DESERT = tag("zombie/has_browncoat_desert")
         val HAS_NEWSPAPER_ZOMBIE = tag("zombie/has_newspaper_zombie")
         val HAS_DIGGER = tag("zombie/has_digger")
         val HAS_DIGGER_ALT = tag("zombie/has_digger_alt")

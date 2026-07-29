@@ -39,6 +39,7 @@
     - Repeater has a 60% chance to produce Peashooter seeds.
 - Repeaters no longer spawn naturally.
 #### Zombies:
+- Added Desert and Snow Variants for the Browncoat Zombie.
 - Added Soldier Zombie
   - Spawns during a zombie raid.
   - Uses the dye blaster.
