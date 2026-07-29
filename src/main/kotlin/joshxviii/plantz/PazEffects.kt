@@ -4,12 +4,17 @@ import joshxviii.plantz.effect.ButteredMobEffect
 import joshxviii.plantz.effect.ElectrifyMobEffect
 import joshxviii.plantz.effect.HypnotizedMobEffect
 import joshxviii.plantz.effect.PaintedMobEffect
+import joshxviii.plantz.effect.TangledMobEffect
 import joshxviii.plantz.effect.ToxicMobEffect
 import joshxviii.plantz.effect.ZombieOmenMobEffect
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 import net.fabricmc.fabric.impl.attachment.AttachmentRegistryImpl
 import net.minecraft.core.Holder
 import net.minecraft.core.Registry
+import net.minecraft.core.particles.ColorParticleOption
+import net.minecraft.core.particles.ParticleOptions
+import net.minecraft.core.particles.ParticleType
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectCategory
@@ -41,10 +46,21 @@ object PazEffects {
     @JvmField val BUTTERED: Holder<MobEffect> = register("buttered",
         ButteredMobEffect(MobEffectCategory.HARMFUL, 13416767, PazServerParticles.BUTTER_DRIP)
             .addAttributeModifier(Attributes.MOVEMENT_SPEED, pazResource("effect.buttered"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.WATER_MOVEMENT_EFFICIENCY, pazResource("effect.buttered"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
             .addAttributeModifier(Attributes.JUMP_STRENGTH, pazResource("effect.buttered"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
             .addAttributeModifier(Attributes.ATTACK_DAMAGE, pazResource("effect.buttered"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
             .addAttributeModifier(Attributes.ENTITY_INTERACTION_RANGE, pazResource("effect.buttered"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
             .addAttributeModifier(Attributes.BLOCK_INTERACTION_RANGE, pazResource("effect.buttered"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+    )
+    @JvmField val TANGLED: Holder<MobEffect> = register("tangled",
+        TangledMobEffect(MobEffectCategory.HARMFUL, 0x354023, ColorParticleOption.create(ParticleTypes.TINTED_LEAVES, 0x87FFFB))
+            .addAttributeModifier(Attributes.MOVEMENT_SPEED, pazResource("effect.tangled"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.WATER_MOVEMENT_EFFICIENCY, pazResource("effect.tangled"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.JUMP_STRENGTH, pazResource("effect.tangled"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.ATTACK_DAMAGE, pazResource("effect.tangled"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.FOLLOW_RANGE, pazResource("effect.tangled"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.ENTITY_INTERACTION_RANGE, pazResource("effect.tangled"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.BLOCK_INTERACTION_RANGE, pazResource("effect.tangled"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
     )
 
     fun register(name: String, mobEffect: MobEffect): Holder<MobEffect> {
