@@ -22,7 +22,7 @@ object PazSpawnPlacements {
         registerSpawnPlacement(PazEntities.CACTUS, Cactus::checkCactusSpawnRules)
 
         addBiomeSpawn(PazTags.Biomes.HAS_LIGHTNING_REED, PazEntities.LIGHTNING_REED,
-            weight = 10, minGroupSize = 1, maxGroupSize = 2)
+            weight = 12, minGroupSize = 2, maxGroupSize = 3)
         registerSpawnPlacement(PazEntities.LIGHTNING_REED, LightningReed::checkLightningReedSpawnRules)
 
         addBiomeSpawn(PazTags.Biomes.HAS_CHERRYBOMB, PazEntities.CHERRY_BOMB,
@@ -74,7 +74,7 @@ object PazSpawnPlacements {
         registerSpawnPlacement(PazEntities.BONK_CHOY, Plant::checkPlantSpawnRules)
 
         addBiomeSpawn(PazTags.Biomes.HAS_TANGLE_KELP, PazEntities.TANGLE_KELP,
-            weight = 6, minGroupSize = 2, maxGroupSize = 5)
+            weight = 9, minGroupSize = 3, maxGroupSize = 5)
         registerSpawnPlacement(PazEntities.TANGLE_KELP, TangleKelp::checkTangleKelpSpawnRules, spawnPlacements = SpawnPlacementTypes.IN_WATER)
 
         addBiomeSpawn(PazTags.Biomes.HAS_PEASHOOTER, PazEntities.PEA_SHOOTER,

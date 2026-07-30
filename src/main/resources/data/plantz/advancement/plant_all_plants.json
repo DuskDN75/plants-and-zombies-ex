@@ -225,6 +225,14 @@
           "type": "plantz:coffeebean"
         }
       }
+    },
+    "plantz:grave_buster": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz:grave_buster"
+        }
+      }
     }
   },
   "sends_telemetry_event": false

@@ -20,7 +20,6 @@ import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
-import net.minecraft.world.damagesource.DamageSources
 import net.minecraft.world.entity.*
 import net.minecraft.world.entity.Mob.createMobAttributes
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
@@ -214,7 +213,7 @@ object PazEntities {
             maxHealth = 25.0,
             attackDamage = 0.75,
             attackKnockback = 0.0,
-            attackRange = 5.25,
+            attackRange = 4.5,
             followRange = 5.75,
             scale = 1.25
         )
@@ -290,6 +289,15 @@ object PazEntities {
         height = 0.5f,
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 4.0,
+            followRange = 1.0
+        )
+    )
+    @JvmField val GRAVE_BUSTER: EntityType<GraveBuster> = registerPlant(
+        "grave_buster", EntityType.Builder.of(::GraveBuster, MobCategory.CREATURE),
+        width = 1.0f,
+        height = 1.0f,
+        attributes = Plant.Companion.PlantAttributes(
+            maxHealth = 5.0,
             followRange = 1.0
         )
     )

@@ -113,11 +113,15 @@ class TangleKelp(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.
     override fun canBreatheUnderwater(): Boolean = true
 
     private fun canTargetBePulled(target: LivingEntity): Boolean {
+        if (this.hurtTime > 0) return false
         if (target is Plant) return false
         if (target is Player && isTame) return false
         if (hasSameRootOwner(target)) return false
         val targetAttacker: LivingEntity? = target.lastHurtByMob
-        if (targetAttacker?.`is`(PazEntities.TANGLE_KELP) == true && targetAttacker != this) return false
+        if (targetAttacker?.`is`(PazEntities.TANGLE_KELP) == true && targetAttacker != this) {
+            this.target = null
+            return false
+        }
 
         val pullRange = getAttribute(Attributes.FOLLOW_RANGE)?.value ?: 4.75
         return distanceToSqr(target) <= pullRange * pullRange && distanceToSqr(target) > 1
@@ -161,9 +165,7 @@ class TangleKelp(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.
         cooldownTime = 60,
         actionDelay = 10,
         damageType = PazDamageTypes.PLANT_CHOMP,
-        actionStartEffect = {
-            tangleKelp.playSound(SoundEvents.CREAKING_ACTIVATE, 1f, 1f)
-        },
+        actionStartEffect = {},
         actionPredicate = { tangleKelp.tangleTime <= 0 }
     ) {
         companion object {
@@ -173,6 +175,7 @@ class TangleKelp(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.
         override fun doAction() : Boolean {
             val success = super.doAction()
             if (success) {
+                tangleKelp.playSound(SoundEvents.CREAKING_ACTIVATE, 1f, 1f)
                 tangleKelp.tangleTime = TANGLE_TIME + tangleKelp.random.nextInt(-10,20)
                 tangleKelp.target?.addEffect(MobEffectInstance(PazEffects.TANGLED, 80, 0), tangleKelp)
             }

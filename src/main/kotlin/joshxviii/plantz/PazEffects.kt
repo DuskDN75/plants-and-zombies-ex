@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 import net.fabricmc.fabric.impl.attachment.AttachmentRegistryImpl
 import net.minecraft.core.Holder
 import net.minecraft.core.Registry
+import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ColorParticleOption
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleType
@@ -25,6 +26,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.alchemy.Potion
+import net.minecraft.world.level.block.Blocks
 import org.jetbrains.annotations.Nullable
 
 object PazEffects {
@@ -53,7 +55,7 @@ object PazEffects {
             .addAttributeModifier(Attributes.BLOCK_INTERACTION_RANGE, pazResource("effect.buttered"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
     )
     @JvmField val TANGLED: Holder<MobEffect> = register("tangled",
-        TangledMobEffect(MobEffectCategory.HARMFUL, 0x354023, ColorParticleOption.create(ParticleTypes.TINTED_LEAVES, 0x87FFFB))
+        TangledMobEffect(MobEffectCategory.HARMFUL, 0x354023, BlockParticleOption(ParticleTypes.BLOCK, Blocks.SWEET_BERRY_BUSH.defaultBlockState()))
             .addAttributeModifier(Attributes.MOVEMENT_SPEED, pazResource("effect.tangled"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
             .addAttributeModifier(Attributes.WATER_MOVEMENT_EFFICIENCY, pazResource("effect.tangled"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
             .addAttributeModifier(Attributes.JUMP_STRENGTH, pazResource("effect.tangled"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)

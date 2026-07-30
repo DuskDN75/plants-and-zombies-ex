@@ -185,6 +185,13 @@
           "type": "minecraft:model",
           "model": "plantz:item/seed_packet/coffeebean"
         }
+      },
+      {
+        "when": { "id": "plantz:grave_buster" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz:item/seed_packet/grave_buster"
+        }
       }
     ],
     "fallback": {
