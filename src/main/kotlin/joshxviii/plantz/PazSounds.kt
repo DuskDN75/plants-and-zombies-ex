@@ -64,6 +64,9 @@ object PazSounds {
     @JvmField val POTATOMINE_EXPLODE = registerForHolder("entity.potatomine.explode")
     @JvmField val SNOWCHUNK_HIT = registerForHolder("entity.snowchunk")
 
+    @JvmField val SPECIAL_WAVE = registerForHolder("event.raid.special_wave")
+
+
     @JvmField val MUSIC_DISC_GRASSY_GROOVE = registerForHolder("music_disc.grassy_groove")
 
     private fun registerGnomeSoundVariants(): Map<GnomeSoundVariant, GnomeSoundVariant.GnomeSoundSet> {

@@ -267,6 +267,13 @@
     "sounds": [{ "name": "random/burp", "volume": 1.0, "pitch": 0.9 }], "subtitle": "plantz.subtitles.entity.zombie.eat"
   },
 
+  "event.raid.special_wave": {
+    "sounds": [
+      { "name": "block/trial_spawner/ambient_ominous1", "volume": 6.0, "pitch": 1.0 },
+      { "name": "block/trial_spawner/ambient_ominous2", "volume": 6.0, "pitch": 1.0 },
+      { "name": "block/trial_spawner/ambient_ominous3", "volume": 6.0, "pitch": 1.0 }
+    ], "subtitle": "plantz.subtitles.event.raid.special_wave"
+  },
   "event.mob_effect.hypnotized": {
     "sounds": [{ "name": "enchant/thorns/hit1", "volume": 1.0, "pitch": 1.3 }], "subtitle": "plantz.subtitles.event.mob_effect.hypnotized"
   },

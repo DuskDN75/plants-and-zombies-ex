@@ -351,6 +351,7 @@ object PazEntities {
             .sized(1.25f, 2.6f)
             .clientTrackingRange(8),
         attributes = Zombie.createAttributes()
+            .add(Attributes.WATER_MOVEMENT_EFFICIENCY, 2.0)
             .add(Attributes.ATTACK_DAMAGE, 13.0)
             .add(Attributes.MAX_HEALTH, 120.0)
             .add(Attributes.MOVEMENT_SPEED, 0.27)

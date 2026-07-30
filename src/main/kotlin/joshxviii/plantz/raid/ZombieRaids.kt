@@ -81,11 +81,12 @@ class ZombieRaids(
             if (!level.gameRules.get<Boolean>(GameRules.RAIDS)) return null
 
             val raid = getOrCreateRaid(level, flagPosition)
+            if (raid.startedBy == null) raid.startedBy = player.uuid
 
             if (!raid.started && !zombieRaidMap.containsValue(raid)) {
                 zombieRaidMap.put(uniqueId, raid)
                 level.players().filter { it.blockPosition().distSqr(flagPosition) < 96 } .forEach {
-                    it.sendSystemMessage(ZombieRaid.ZOMBIE_RAID_BAR_START)
+                    it.sendSystemMessage(ZombieRaid.getStartMessage(player.seenCredits))
                     raid.zombieRaidEvent.addPlayer(it)
                 }
             }
@@ -94,6 +95,7 @@ class ZombieRaids(
                 raid.absorbRaidOmen(player)
             }
 
+            raid.starterHasSeenCredits = raid.starterHasSeenCredits || player.seenCredits
             setDirty()
             return raid
         }
