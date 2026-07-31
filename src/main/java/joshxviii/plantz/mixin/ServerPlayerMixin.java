@@ -51,20 +51,21 @@ public abstract class ServerPlayerMixin {
     //TODO probably should move to a EntityMixin instead
     @Inject(method = "teleport(Lnet/minecraft/world/level/portal/TeleportTransition;)Lnet/minecraft/server/level/ServerPlayer;", at = @At(value = "RETURN"))
     public void teleportAttachedPlant(TeleportTransition transition, CallbackInfoReturnable<ServerPlayer> cir) {
+        ServerPlayer targetPlayer = cir.getReturnValue() != null ? cir.getReturnValue() : (ServerPlayer) (Object) this;
         if ( ((PlantHeadAttachment) this).plantz$getPlant() instanceof Plant plantAttachment ) {
                 plantAttachment.detachFromEntity();
                 plantAttachment.teleport(
                     new TeleportTransition(
                             transition.newLevel(),
-                            plantAttachment.position(),
-                            plantAttachment.getDeltaMovement(),
-                            plantAttachment.yRotO,
-                            plantAttachment.xRotO,
+                            transition.position(),
+                            transition.deltaMovement(),
+                            transition.yRot(),
+                            transition.xRot(),
                             TeleportTransition.DO_NOTHING.then( entity -> {
                                 if (entity instanceof Plant plantEntity) {
                                     plantEntity.setYRot(plantAttachment.yRotO);
                                     plantEntity.setXRot(plantAttachment.xRotO);
-                                    plantEntity.attachToEntity( (ServerPlayer) (Object) this);
+                                    plantEntity.attachToEntity(targetPlayer);
                                 }
                             })
                     )
