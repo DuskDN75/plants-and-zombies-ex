@@ -66,9 +66,7 @@ class FlagBlockEntity(
         players?.forEach { player ->
             val amplification = player.getEffect(MobEffects.BAD_OMEN)?.amplifier ?: 0
             player.removeEffect(MobEffects.BAD_OMEN)
-            val effectInstance = MobEffectInstance(PazEffects.ZOMBIE_OMEN, 600, amplification).apply { effect.value().let {
-                if (it is ZombieOmenMobEffect) it.flagPoi = blockPos
-            } }
+            val effectInstance = MobEffectInstance(PazEffects.ZOMBIE_OMEN, 600, amplification)
             player.addEffect(effectInstance)
         }
     }
