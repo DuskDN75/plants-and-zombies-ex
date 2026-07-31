@@ -324,11 +324,13 @@ class ZombieRaid(
     }
 
     fun removeFromRaid(level: ServerLevel, zombie: Zombie, removeFromTotalHealth: Boolean = true) {
-        val zombies: MutableSet<Zombie>? = waveZombieMap[wavesSpawned]
-        if (zombies != null && (zombies.remove(zombie))) {
-            if (removeFromTotalHealth) totalHealth -= zombie.health
-            updateBossbar()
-            setDirty(level)
+        for (zombies in waveZombieMap.values) {
+            if (zombies.remove(zombie)) {
+                if (removeFromTotalHealth) totalHealth -= zombie.health
+                updateBossbar()
+                setDirty(level)
+                break
+            }
         }
     }
     private fun setDirty(level: ServerLevel) { level.getZombieRaids().setDirty() }
