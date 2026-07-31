@@ -195,7 +195,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         get() = this.entityData.get(ATTACHED_PLAYER).getOrNull()
         set(value) = this.entityData.set(ATTACHED_PLAYER, Optional.ofNullable(value))
 
-    var attachedEntity: LivingEntity? = null
+    var attachedEntity: LivingEntity?
         get() = EntityReference.getLivingEntity(attachedPlayerReference, this.level())
         private set(value) {
             val current = attachedEntity
