@@ -16,8 +16,7 @@ import net.minecraft.world.entity.ai.village.poi.PoiType
 class ZombieOmenMobEffect(
     category: MobEffectCategory,
     color: Int,
-    particleOptions: ParticleOptions,
-    var flagPoi: BlockPos? = null
+    particleOptions: ParticleOptions
 ) : MobEffect(category, color, particleOptions) {
     companion object {
         const val MAX_FLAG_DISTANCE = 24
@@ -30,16 +29,14 @@ class ZombieOmenMobEffect(
     override fun applyEffectTick(level: ServerLevel, mob: LivingEntity, amplification: Int): Boolean {
         if (mob !is ServerPlayer || mob.isSpectator) return false
 
-        if (flagPoi == null) {
-            flagPoi = level.poiManager.findClosest(
-                { p: Holder<PoiType> -> p.value() == PLANTZ_FLAG_POI },
-                mob.blockPosition(),
-                MAX_FLAG_DISTANCE,
-                PoiManager.Occupancy.HAS_SPACE
-            ).orElse(null)
-        }
+        val targetFlagPos = level.poiManager.findClosest(
+            { p: Holder<PoiType> -> p.value() == PLANTZ_FLAG_POI },
+            mob.blockPosition(),
+            MAX_FLAG_DISTANCE,
+            PoiManager.Occupancy.HAS_SPACE
+        ).orElse(null)
 
-        level.getZombieRaids().createOrExtendZombieRaid(mob, flagPoi)
+        level.getZombieRaids().createOrExtendZombieRaid(mob, targetFlagPos)
 
         return true
     }
