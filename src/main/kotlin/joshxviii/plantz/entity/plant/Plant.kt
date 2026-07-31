@@ -198,8 +198,9 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     var attachedEntity: LivingEntity? = null
         get() = EntityReference.getLivingEntity(attachedPlayerReference, this.level())
         private set(value) {
-            if (value==null && field!=null) removeOnHeadEffects()
-            else if (value!=null && field==null) applyOnHeadEffects()
+            val current = attachedEntity
+            if (value == null && current != null) removeOnHeadEffects()
+            else if (value != null && current == null) applyOnHeadEffects()
             attachedPlayerReference = EntityReference.of(value)
         }
 
