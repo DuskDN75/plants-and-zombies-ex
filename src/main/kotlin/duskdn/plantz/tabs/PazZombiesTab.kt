@@ -38,6 +38,7 @@ object PazZombiesTab : PazCreativeTab() {
                     output.accept(PazItems.SUPER_BRAINZ_SPAWN_EGG)
                     output.accept(PazItems.IMP_SPAWN_EGG)
                     output.accept(PazItems.GARGANTUAR_SPAWN_EGG)
+                    output.accept(PazItems.BALLOON_ZOMBIE_SPAWN_EGG)
 
                     // gnome
                     if (parameters.hasPermissions()) output.accept(PazItems.GNOME_SPAWN_EGG)

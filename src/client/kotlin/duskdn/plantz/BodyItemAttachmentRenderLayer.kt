@@ -9,6 +9,7 @@ import duskdn.plantz.util.pazResource
 import net.minecraft.client.Minecraft
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.model.HumanoidModel
+import net.minecraft.client.model.monster.piglin.ZombifiedPiglinModel
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.entity.RenderLayerParent
@@ -135,7 +136,7 @@ abstract class BodyItemAttachmentRenderLayer<S : LivingEntityRenderState, M : En
             poseStack.scale(0.55f, 0.55f, 0.55f)
         }
 
-        if (humanoidModel is PazZombieModel) humanoidModel.body
+        if (humanoidModel is PazZombieModel || humanoidModel is ZombifiedPiglinModel) humanoidModel.body
         else humanoidModel.body.translateAndRotate(poseStack)
 
         poseStack.mulPose(Axis.ZP.rotationDegrees(180.0f))

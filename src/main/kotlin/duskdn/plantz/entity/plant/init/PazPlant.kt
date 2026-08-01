@@ -3,6 +3,7 @@ package duskdn.plantz.entity.plant.init
 import duskdn.plantz.ai.PlantState
 import duskdn.plantz.ai.goal.SleepGoal
 import duskdn.plantz.entity.Sun
+import duskdn.plantz.entity.plant.WaterPot
 import duskdn.plantz.entity.plant.utils.PlantGrowNeeds
 import duskdn.plantz.entity.plant.utils.onValidGround
 import duskdn.plantz.entity.plant.utils.processSunItem
@@ -134,7 +135,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
             random: RandomSource
         ): Boolean {
             val blockBelow = level.getBlockState(pos.below())
-            val isValid = checkValidSpawn(level, pos, spawnReason) && blockBelow.`is`(PazTags.BlockTags.PLANTABLE) && pos.y > level.seaLevel - 8 && !hasAdjacentPlant(
+            val isValid = checkValidSpawn(level, pos, spawnReason) && blockBelow.`is`(PazTags.BlockTags.PLANTABLE) && !hasAdjacentPlant(
                 level as Level, pos)
             return isValid
         }
@@ -149,8 +150,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
             if (EntitySpawnReason.isSpawner(spawnReason)) return true
 
             return (level.getEntitiesOfClass(PazPlant::class.java, AABB(pos).inflate(38.0)) { it.tickCount > 0 }.isEmpty()
-                    && blockAtPos.getCollisionShape(level, pos.above()).isEmpty) && !hasAdjacentPlant(
-                level as Level, pos)
+                    && blockAtPos.getCollisionShape(level, pos.above()).isEmpty)
         }
 
 
@@ -219,7 +219,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
     }
 
     override fun isInWater(): Boolean {
-        return super.isInWater() || getBlockBelow().`is`(PazBlocks.WATER_POT)
+        return super.isInWater() || vehicle is WaterPot
     }
 
     private var nutrientSupply = NUTRIENT_SUPPLY_MAX
@@ -633,7 +633,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
 
     fun timeRequiredForSeeds() : Int {
         val sunCost = PazConfig.getSunCost(type)
-        val zenBuff = level().hasChunkAt(blockPosition()) && getBlockBelow().`is`(PazBlocks.ZEN_PLANT_POT)
+        val zenBuff = level().hasChunkAt(blockPosition()) && getBlockBelow().`is`(PazBlocks.ZEN_POT)
         return PazConfig.getGrowTime(sunCost, zenBuff)
     }
 
@@ -720,6 +720,10 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
         super.checkDespawn()
     }
 
+    fun tryShovel(force: Boolean): Boolean {
+        return if (firstPassenger != null && firstPassenger is PazPlant) (firstPassenger as PazPlant).tryShovel(force) else dropAsSeedPacketItem(force = force)
+    }
+
     override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
         val itemStack = player.getItemInHand(hand)
         val level = level()
@@ -729,7 +733,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
             // shovel interaction
             if (itemStack.`is`(ItemTags.SHOVELS)) {
                 if (!verifyOwner(player)) return InteractionResult.FAIL
-                val success = dropAsSeedPacketItem(force = !player.isCreative)
+                val success = tryShovel(!player.isCreative)
                 if (success) {
                     // apply tool damage base on how damaged the plant was
                     itemStack.hurtAndBreak(4, player, hand.asEquipmentSlot())
@@ -768,6 +772,31 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
         }
         return super.mobInteract(player, hand)
     }
+
+    fun forceAttack(plant: PazPlant, other: Entity?) {
+        if (other is Zombie && other.swingTime == 0) {
+            val level = other.level() as? ServerLevel
+            if (level != null && other.isAlive && plant.passengers.isEmpty()) {
+                val damage = other.getAttribute(Attributes.ATTACK_DAMAGE)?.value?.toFloat() ?: 1f
+                if (plant.hurtServer(level, other.damageSources().mobAttack(other), damage)) {
+                    other.swing(InteractionHand.MAIN_HAND)
+                }
+            }
+        }
+    }
+
+    open fun allowPlayerCollision(): Boolean {
+        return false
+    }
+
+    fun plantCollision(plant: PazPlant, other: Entity?): Boolean {
+        forceAttack(plant, other)
+        if (other is Sun) return false
+
+        return plant.isAlive && other != plant.attachedEntity && !(allowPlayerCollision() && other is Player)
+    }
+
+    override fun canBeCollidedWith(other: Entity?): Boolean = plantCollision(this, other)
 
     fun applyCoffeeBuff() {
         val level = level() as? ServerLevel ?: return
@@ -813,6 +842,17 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
             val level = level() as? ServerLevel
             if (level!=null) Sun.award(level, position(), (sunCost/2) - random.nextInt(0,1))
         }
+    }
+
+    override fun isInvulnerableTo(level: ServerLevel, source: DamageSource): Boolean {
+
+        val fireSource = source.`is`(DamageTypes.LAVA) || source.`is`(DamageTypes.IN_FIRE)
+
+        if (fireSource && vehicle != null && vehicle?.type?.fireImmune() == true) {
+            return true
+        }
+
+        return super.isInvulnerableTo(level, source)
     }
 
     fun verifyOwner(player: Player): Boolean {

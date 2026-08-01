@@ -2,7 +2,7 @@
   "replace": false,
   "values": [
     "minecraft:farmland",
-    "plantz:zen_plant_pot",
+    "plantz:zen_pot",
     {
       "id": "farmersdelight:rich_soil_farmland",
       "required": false

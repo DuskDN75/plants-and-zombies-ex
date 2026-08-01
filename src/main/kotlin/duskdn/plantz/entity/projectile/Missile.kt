@@ -1,5 +1,6 @@
 package duskdn.plantz.entity.projectile
 
+import duskdn.plantz.entity.projectile.init.PazProjectile
 import duskdn.plantz.init.PazDamageTypes
 import duskdn.plantz.init.PazEntities
 import net.minecraft.world.entity.LivingEntity

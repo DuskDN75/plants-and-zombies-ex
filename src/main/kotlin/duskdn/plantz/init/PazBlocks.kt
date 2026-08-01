@@ -4,12 +4,10 @@ import duskdn.plantz.block.ConeBlock
 import duskdn.plantz.block.FlagBlock
 import duskdn.plantz.block.GravestoneBlock
 import duskdn.plantz.block.MailboxBlock
-import duskdn.plantz.block.PlantPotBlock
 import duskdn.plantz.block.SunBatteryBlock
 import duskdn.plantz.block.TimeMachineBlock
-import duskdn.plantz.block.WaterPotBlock
 import duskdn.plantz.block.WateringCanBlock
-import duskdn.plantz.block.ZenPlantPotBlock
+import duskdn.plantz.block.ZenPotBlock
 import duskdn.plantz.block.entity.FlagBlockEntity
 import duskdn.plantz.block.entity.GravestoneBlockEntity
 import duskdn.plantz.block.entity.MailboxBlockEntity
@@ -52,32 +50,32 @@ object PazBlocks {
     @JvmField val HAS_WATER = BooleanProperty.create("has_water");
     @JvmField val STORED_WATER = IntegerProperty.create("stored_water", 0, 9999);
 
-    @JvmField val PLANT_POT: Block = registerBlock(
-        "plant_pot",
-        BlockBehaviour.Properties.of()
-            .sound(SoundType.STONE)
-            .strength(0.2F)
-            .noOcclusion()
-            .pushReaction(PushReaction.NORMAL),
-        ::PlantPotBlock
-    )
-    @JvmField val WATER_POT: Block = registerBlock(
-        "water_pot",
-        BlockBehaviour.Properties.of()
-            .sound(SoundType.STONE)
-            .strength(0.2F)
-            .noOcclusion()
-            .pushReaction(PushReaction.NORMAL),
-        ::WaterPotBlock
-    )
-    @JvmField val ZEN_PLANT_POT: Block = registerBlock(
-        "zen_plant_pot",
+//    @JvmField val PLANT_POT: Block = registerBlock(
+//        "plant_pot",
+//        BlockBehaviour.Properties.of()
+//            .sound(SoundType.STONE)
+//            .strength(0.2F)
+//            .noOcclusion()
+//            .pushReaction(PushReaction.NORMAL),
+//        ::PlantPotBlock
+//    )
+//    @JvmField val WATER_POT: Block = registerBlock(
+//        "water_pot",
+//        BlockBehaviour.Properties.of()
+//            .sound(SoundType.STONE)
+//            .strength(0.2F)
+//            .noOcclusion()
+//            .pushReaction(PushReaction.NORMAL),
+//        ::WaterPotBlock
+//    )
+    @JvmField val ZEN_POT: Block = registerBlock(
+        "zen_pot",
         BlockBehaviour.Properties.of()
             .sound(SoundType.WOOD)
             .strength(0.2F)
             .noOcclusion()
             .pushReaction(PushReaction.NORMAL),
-        ::ZenPlantPotBlock
+        ::ZenPotBlock
     )
     @JvmField val WATERING_CAN_BLOCK: Block = registerBlock(
         "watering_can",
@@ -171,7 +169,7 @@ object PazBlocks {
             .pushReaction(PushReaction.DESTROY),
         ::ConeBlock,
         Item.Properties()
-            .component(DataComponents.MAX_DAMAGE, (PazPlant.PEA_DAMAGE*18).toInt())
+            .component(DataComponents.MAX_DAMAGE, (PazPlant.PEA_DAMAGE*15).toInt())
             .component(DataComponents.MAX_STACK_SIZE, 1)
             .component(DataComponents.DAMAGE, 0)
             .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage(breakChance = 0.12f))

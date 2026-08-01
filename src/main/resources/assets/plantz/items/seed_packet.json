@@ -199,6 +199,27 @@
           "type": "minecraft:model",
           "model": "plantz:item/seed_packet/coffeebean"
         }
+      },
+      {
+        "when": { "id": "plantz:flower_pot" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz:item/seed_packet/flower_pot"
+        }
+      },
+      {
+        "when": { "id": "plantz:water_pot" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz:item/seed_packet/water_pot"
+        }
+      },
+      {
+        "when": { "id": "plantz:lavalily" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz:item/seed_packet/lavalily"
+        }
       }
     ],
     "fallback": {

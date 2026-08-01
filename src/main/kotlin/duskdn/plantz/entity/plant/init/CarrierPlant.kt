@@ -21,7 +21,7 @@ abstract class CarrierPlant(type: EntityType<out CarrierPlant>, level: Level) : 
         }
     }
 
-    fun setRider(plant: PazPlant) {
+    open fun setRider(plant: PazPlant) {
 
         println("SETTING RIDER")
 

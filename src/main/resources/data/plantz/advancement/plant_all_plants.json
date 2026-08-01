@@ -241,6 +241,22 @@
           "type": "plantz:coffeebean"
         }
       }
+    },
+    "plantz:flower_pot": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz:flower_pot"
+        }
+      }
+    },
+    "plantz:water_pot": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz:water_pot"
+        }
+      }
     }
   },
   "sends_telemetry_event": false

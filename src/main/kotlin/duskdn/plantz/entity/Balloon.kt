@@ -37,8 +37,8 @@ class Balloon(
         private const val PITCH_LERP_SPEED = 0.25f
         private const val YAW_LERP_SPEED = 0.5f
         private const val MIN_ROTATION_SPEED = 0.001f
-        private const val HOLDER_GRAVITY_LIFT_MULTIPLIER = 0.4
         private const val HOLDER_PULL_STIFFNESS = 0.0075
+        private const val HOLDER_GRAVITY_LIFT_MULTIPLIER = 1-HOLDER_PULL_STIFFNESS
         private const val MAX_HOLDER_PULL_FORCE = 0.16
         private const val MAX_HOLDER_UPWARD_VELOCITY = 0.5
     }

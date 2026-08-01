@@ -2,7 +2,7 @@ package duskdn.plantz.model.plants.init;
 
 import duskdn.plantz.PlantRenderState;
 import duskdn.plantz.ai.PlantState;
-import duskdn.plantz.animation.plants.init.PlantAnimations;
+import duskdn.plantz.animation.plants.init.PazPlantAnimations;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -35,7 +35,7 @@ public class PazPlantModel extends EntityModel<@NotNull PlantRenderState> {
         this.initAnimation = initAnimation;
         this.sleepAnimation = sleepAnimation;
         this.cooldownAnimation = cooldownAnimation;
-        bounceAnimation = PlantAnimations.bounce.bake(root);
+        bounceAnimation = PazPlantAnimations.bounce.bake(root);
     }
 
     public KeyframeAnimation getProcessedInit(PlantRenderState state) {

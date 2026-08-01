@@ -1,6 +1,7 @@
 package duskdn.plantz.entity.projectile
 
 import duskdn.plantz.entity.plant.init.PazPlant
+import duskdn.plantz.entity.projectile.init.PazProjectile
 import duskdn.plantz.init.PazDamageTypes
 import duskdn.plantz.init.PazEntities
 import net.minecraft.core.particles.ItemParticleOption
@@ -19,7 +20,7 @@ class Melon(
 ) : PazProjectile(
     PazEntities.MELON, level, owner, spawnOffset,
     PazDamageTypes.PLANT,
-    damage = PazPlant.PEA_DAMAGE.toFloat()*4
+    damage = PazPlant.PEA_DAMAGE.toFloat()*2
 ) {
     override fun getDefaultGravity(): Double = 0.07
 

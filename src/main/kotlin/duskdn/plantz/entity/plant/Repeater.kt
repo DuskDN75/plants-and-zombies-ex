@@ -3,7 +3,7 @@ package duskdn.plantz.entity.plant
 import duskdn.plantz.init.PazEntities
 import duskdn.plantz.ai.goal.ProjectileAttackGoal
 import duskdn.plantz.entity.plant.init.PazPlant
-import duskdn.plantz.entity.projectile.Pea
+import duskdn.plantz.entity.projectile.peas.Pea
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
@@ -34,7 +34,7 @@ class Repeater(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntit
 
         this.goalSelector.addGoal(2, ProjectileAttackGoal(
             usingEntity = this,
-            projectileFactory = { Pea(level(), this) },
+            projectileFactory = { Pea(level(), this)},
             cooldownTime = 4,
             actionDelay = 3,
             actionEndEffect = {

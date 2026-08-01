@@ -3,7 +3,7 @@ package duskdn.plantz.mixin;
 import com.mojang.serialization.Codec;
 import duskdn.plantz.effect.PaintedMobEffect;
 import duskdn.plantz.entity.plant.init.PazPlant;
-import duskdn.plantz.entity.projectile.PazProjectile;
+import duskdn.plantz.entity.projectile.init.PazProjectile;
 import duskdn.plantz.init.PazEffects;
 import duskdn.plantz.init.PazItems;
 import duskdn.plantz.init.PazTags;
@@ -145,16 +145,16 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
         LivingEntity entity = (LivingEntity) (Object) this;
 
         var item = entity.getItemBySlot(EquipmentSlot.LEGS);
-        if (!item.is(PazItems.DUCKY_TUBE) && !entity.is(PazTags.EntityTypes.PLANTABLE_ON_WATER)) return;
+        if (!item.is(PazItems.DUCKY_TUBE) && !entity.is(PazTags.EntityTypes.PLANTABLE_ON_WATER) && !entity.is(PazTags.EntityTypes.PLANTABLE_ON_LAVA) && !entity.fireImmune()) return;
         if (entity instanceof Player player && player.getAbilities().flying) return;
         var fluidType = entity.level().getBlockState(BlockPos.containing(entity.position().relative(Direction.UP, entity.getBbHeight()*.5))).getFluidState().getType();
         if (fluidType == Fluids.EMPTY ) return;
 
         //base
-        double upwardForce = fluidType == Fluids.LAVA ? 0.1 : 0.015;
+        double upwardForce = (fluidType == Fluids.LAVA && item.is(PazItems.DUCKY_TUBE)) ? 0.15 : 0.015;
         // submerged
-        if (entity.isEyeInFluid(FluidTags.WATER)) upwardForce = 0.135;
-        if (entity.isEyeInFluid(FluidTags.LAVA)) upwardForce = 0.15;
+        if (entity.isEyeInFluid(FluidTags.WATER)) upwardForce += 0.135;
+        if (entity.isEyeInFluid(FluidTags.LAVA)) upwardForce += 0.15;
         // sneaking
         if (entity.isShiftKeyDown()) upwardForce *= fluidType == Fluids.LAVA? 0.0 : 0.2;
 
@@ -164,6 +164,28 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
 
         if (!entity.level().isClientSide() && entity.tickCount % DUCKY_TUBE_DAMAGE_INTERVAL==0 && entity.getRandom().nextFloat() > 0.5f)
             item.hurtAndBreak(1, entity, EquipmentSlot.LEGS);
+    }
+
+    @Inject(method = "aiStep", at = @At("TAIL"))
+    private void plantz$applyDuckyTubeSpeed(CallbackInfo ci) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+
+        var item = entity.getItemBySlot(EquipmentSlot.LEGS);
+        if (!item.is(PazItems.DUCKY_TUBE)) return;
+
+        if (entity.isInLava()) {
+            var speedMult = 1.8;
+
+            var dm = entity.getDeltaMovement();
+
+            entity.setDeltaMovement(
+                    new Vec3(
+                            dm.x*speedMult,
+                            dm.y,
+                            dm.z*speedMult
+                    )
+            );
+        }
     }
 
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
@@ -285,6 +307,22 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
                 self.clearFire();
             }
         }
+    }
+
+    int waterTime = -1;
+
+    @Inject(method = "tick", at = @At(value = "TAIL"))
+    private void plantz$addDuckyTube(CallbackInfo ci) {
+        var self = (LivingEntity) (Object) this;
+
+        boolean inFluid = self.isEyeInFluid(FluidTags.WATER) || self.isEyeInFluid(FluidTags.LAVA);
+
+        if (inFluid && self.is(PazTags.EntityTypes.GETS_DUCKY_TUBE)) {
+            waterTime++;
+            if (waterTime>=250 && self.getItemBySlot(EquipmentSlot.LEGS).isEmpty()) {
+                self.setItemSlot(EquipmentSlot.LEGS, PazItems.DUCKY_TUBE.getDefaultInstance());
+            }
+        } else waterTime = -1;
     }
 
     @Unique

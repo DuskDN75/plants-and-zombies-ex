@@ -4,6 +4,8 @@ import duskdn.plantz.init.PazEntities
 import duskdn.plantz.init.PazTags.EntityTypes.WALLNUT_DEFLECTABLE
 import duskdn.plantz.entity.Sun
 import duskdn.plantz.entity.plant.init.PazPlant
+import duskdn.plantz.entity.plant.utils.PlantSpawnUtils
+import duskdn.plantz.entity.plant.utils.PlantUtils
 import duskdn.plantz.init.PazBlocks
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
@@ -19,27 +21,13 @@ import net.minecraft.world.level.material.Fluids
 
 class WallNut(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntities.WALL_NUT, level) {
 
-    companion object {
-        fun wallNutCollision(wallnut: PazPlant, other: Entity?): Boolean {
-            if (other is Zombie && other.swingTime == 0) {// when colliding with a zombie, the zombie will attack the wallnut
-                val level = other.level() as? ServerLevel
-                if (level != null && other.isAlive) {
-                    val damage = other.getAttribute(Attributes.ATTACK_DAMAGE)?.value?.toFloat() ?: 1f
-                    if (wallnut.hurtServer(level, other.damageSources().mobAttack(other), damage)) {
-                        other.swing(InteractionHand.MAIN_HAND)
-                    }
-                }
-            }
-            if (other is Sun) return false
-            return wallnut.isAlive && other != wallnut.attachedEntity
-        }
-    }
-
     override fun attackGoals() {}
 
     override fun getZenGrownSeedType(): EntityType<*> = if (random.nextFloat() < 0.05f) PazEntities.EXPLODE_O_NUT else super.getZenGrownSeedType()
 
-    override fun canBeCollidedWith(other: Entity?): Boolean = wallNutCollision(this, other)
+    override fun allowPlayerCollision(): Boolean {
+        return true
+    }
 
     override fun hurtServer(level: ServerLevel, source: DamageSource, damage: Float): Boolean {
         source.directEntity?.let {
@@ -54,15 +42,6 @@ class WallNut(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntiti
     }
 
     override fun canSurviveOn(block: BlockState): Boolean {
-
-        val isWater = block.`is`(Blocks.WATER) || block.fluidState.`is`(Fluids.WATER) || block.`is`(PazBlocks.WATER_POT)
-
-        val isLava = block.`is`(Blocks.LAVA) || block.fluidState.`is`(Fluids.LAVA)
-
-        if (isWater || isLava) return false
-
-        val solidFloor = !block.getCollisionShape(level(), blockPosition().below()).isEmpty
-
-        return super.canSurviveOn(block) || solidFloor
+        return super.canSurviveOn(block) || PlantSpawnUtils.solidFloorCheck(level(), blockPosition().below(), block)
     }
 }

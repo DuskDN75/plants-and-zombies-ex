@@ -1,5 +1,6 @@
 package duskdn.plantz.entity.plant.utils
 
+import duskdn.plantz.entity.Sun
 import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.init.PazComponents
 import duskdn.plantz.init.PazConfig
@@ -9,6 +10,9 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ItemUtils

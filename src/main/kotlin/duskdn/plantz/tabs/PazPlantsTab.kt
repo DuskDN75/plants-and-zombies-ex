@@ -54,6 +54,9 @@ object PazPlantsTab : PazCreativeTab() {
                     output.accept(SeedPacketItem.stackFor(PazEntities.WATER_PEA_SHOOTER))
                     output.accept(SeedPacketItem.stackFor(PazEntities.SEA_SHROOM))
                     output.accept(SeedPacketItem.stackFor(PazEntities.COFFEE_BEAN))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.FLOWER_POT))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.WATER_POT))
+                    output.accept(SeedPacketItem.stackFor(PazEntities.LAVALILY))
                 }
                 .build()
         )

@@ -3,7 +3,7 @@ package duskdn.plantz.entity.plant
 import duskdn.plantz.init.PazEntities
 import duskdn.plantz.ai.goal.ProjectileAttackGoal
 import duskdn.plantz.entity.plant.init.AttackingPlant
-import duskdn.plantz.entity.projectile.Pea
+import duskdn.plantz.entity.projectile.peas.Pea
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes

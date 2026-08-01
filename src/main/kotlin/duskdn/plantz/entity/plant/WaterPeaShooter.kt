@@ -5,7 +5,7 @@ import duskdn.plantz.ai.goal.ProjectileAttackGoal
 import duskdn.plantz.entity.plant.init.AttackingPlant
 import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.entity.plant.utils.waterSurvivalCheck
-import duskdn.plantz.entity.projectile.PeaWater
+import duskdn.plantz.entity.projectile.peas.PeaWater
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.BlockTags

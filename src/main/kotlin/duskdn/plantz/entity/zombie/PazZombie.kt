@@ -91,6 +91,7 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
             val stepHeight: Double = 0.6,
             val interactionRange: Double = 1.7,
             val scale: Double = 1.0,
+            val flyingSpeed: Double = 0.0,
         ) {
             fun apply(builder: AttributeSupplier.Builder): AttributeSupplier.Builder {
                 return builder
@@ -107,6 +108,7 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
                     .add(Attributes.STEP_HEIGHT, stepHeight)
                     .add(Attributes.ENTITY_INTERACTION_RANGE, interactionRange)
                     .add(Attributes.SCALE, scale)
+                    .add(Attributes.FLYING_SPEED, flyingSpeed)
             }
         }
 
@@ -147,18 +149,9 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
         this.targetSelector.addGoal(5, NearestAttackableTargetGoal(this, Turtle::class.java, 10, true, false, Turtle.BABY_ON_LAND_SELECTOR))
     }
 
-    var waterTime = -1
     override fun tick() {
         super.tick()
         val level = level()
-
-        if (isEyeInFluid(FluidTags.WATER)) {
-            waterTime++
-            if (waterTime>=250 && canEquipDuckyInWater() && getItemBySlot(EquipmentSlot.LEGS).isEmpty) {
-                setItemSlot(EquipmentSlot.LEGS, PazItems.DUCKY_TUBE.defaultInstance)
-                setDropChance(EquipmentSlot.LEGS, 0.0f)
-            }
-        } else waterTime = -1
 
         when (state) {
             ZombieState.EMERGING -> {
@@ -232,7 +225,11 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
         val data = super.finalizeSpawn(level, difficulty, spawnReason, groupData)
         if (spawnReason == EntitySpawnReason.REINFORCEMENT) state = ZombieState.EMERGING
 
-        if (canEquipDuckyInWater() && level.getBlockState(blockPosition()).fluidState.type == Fluids.WATER) {
+        val fluidType = level.getBlockState(blockPosition()).fluidState.type
+
+        val inFluid = fluidType == Fluids.WATER || fluidType == Fluids.LAVA
+
+        if (canEquipDuckyInWater() && inFluid) {
             setItemSlot(EquipmentSlot.LEGS, PazItems.DUCKY_TUBE.defaultInstance)
             if (spawnReason != EntitySpawnReason.NATURAL) setDropChance(EquipmentSlot.LEGS, 0.0f)
             else setDropChance(EquipmentSlot.LEGS, 0.15f)

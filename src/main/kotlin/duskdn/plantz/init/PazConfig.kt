@@ -53,10 +53,12 @@ data class ServerConfig(
         "plantz:sunshroom"              to 4,
         "plantz:hypnoshroom"            to 7,
         "plantz:doomshroom"             to 16,
-        "plantz:lilypad"                to 2,
+        "plantz:lilypad"                to 1,
         "plantz:water_peashooter"       to 6,
         "plantz:seashroom"              to 0,
         "plantz:coffeebean"             to 2,
+        "plantz:flower_pot"             to 2,
+        "plantz:water_pot"              to 2,
     ),
 )
 data class ClientConfig(

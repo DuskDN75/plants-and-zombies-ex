@@ -19,6 +19,11 @@
   ],
   "result": {
     "count": 1,
-    "id": "plantz:water_pot"
+    "id": "plantz:seed_packet",
+    "components": {
+      "minecraft:entity_data": {
+        "id": "plantz:water_pot"
+      }
+    }
   }
 }

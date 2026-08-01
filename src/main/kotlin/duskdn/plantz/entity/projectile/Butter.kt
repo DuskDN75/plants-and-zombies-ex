@@ -1,6 +1,7 @@
 package duskdn.plantz.entity.projectile
 
 import duskdn.plantz.entity.plant.init.PazPlant
+import duskdn.plantz.entity.projectile.init.PazProjectile
 import duskdn.plantz.init.PazDamageTypes
 import duskdn.plantz.init.PazEffects
 import duskdn.plantz.init.PazEntities

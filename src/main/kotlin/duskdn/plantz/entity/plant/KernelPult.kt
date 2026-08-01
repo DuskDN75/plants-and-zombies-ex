@@ -38,7 +38,7 @@ class KernelPult(type: EntityType<out PultPlant>, level: Level) : PultPlant(PazE
             },
             velocity = 1.0,
             useHighArc = true,
-            cooldownTime = 26,
+            cooldownTime = 45,
             actionDelay = 12,
             actionStartEffect = { hasButterShot = random.nextFloat() < 0.25 }))
     }

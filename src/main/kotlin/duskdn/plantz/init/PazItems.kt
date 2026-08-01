@@ -214,6 +214,7 @@ object PazItems {
     @JvmField val SUPER_BRAINZ_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.SUPER_BRAINZ)
     @JvmField val IMP_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.IMP)
     @JvmField val GARGANTUAR_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.GARGANTUAR)
+    @JvmField val BALLOON_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.BALLOON_ZOMBIE)
 
     @JvmField val GNOME_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.GNOME)
 
@@ -274,7 +275,7 @@ object PazItems {
 
                 builder.set(DataComponents.ATTRIBUTE_MODIFIERS, armorModifier)
 
-                builder.set(DataComponents.MAX_DAMAGE, (PazPlant.PEA_DAMAGE*55).toInt())
+                builder.set(DataComponents.MAX_DAMAGE, (PazPlant.PEA_DAMAGE*42).toInt())
 
                 builder.set(DataComponents.MAX_STACK_SIZE, 1)
 

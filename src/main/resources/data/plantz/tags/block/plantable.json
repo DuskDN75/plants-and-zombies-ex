@@ -12,8 +12,7 @@
     "#minecraft:grass_blocks",
     "#minecraft:nylium",
     "#minecraft:moss_blocks",
-    "plantz:plant_pot",
-    "plantz:zen_plant_pot",
+    "plantz:zen_pot",
     "#plantz:farmable"
   ]
 }

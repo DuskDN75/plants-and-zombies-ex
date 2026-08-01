@@ -2,7 +2,7 @@ package duskdn.plantz.model.zombies.init;
 
 import duskdn.plantz.init.PazEntities;
 import duskdn.plantz.PazZombieRenderState;
-import duskdn.plantz.animation.zombies.PazZombieAnimations;
+import duskdn.plantz.animation.zombies.init.PazZombieAnimations;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;

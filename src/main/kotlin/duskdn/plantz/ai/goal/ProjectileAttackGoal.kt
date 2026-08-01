@@ -20,7 +20,7 @@ import kotlin.math.abs
 import kotlin.math.atan
 import kotlin.math.sqrt
 
-class ProjectileAttackGoal(
+open class ProjectileAttackGoal(
     usingEntity: PathfinderMob,
     cooldownTime: Int = 20,
     actionDelay: Int = 0,
@@ -95,9 +95,7 @@ class ProjectileAttackGoal(
         }
     }
 
-    override fun doAction() : Boolean {// fire projectile
-        val target = usingEntity.target?: return false
-
+    fun fire(target: Entity = usingEntity.target as Entity) : Boolean {
         if (!target.isAlive) return false
 
         val level = usingEntity.level() as ServerLevel
@@ -114,19 +112,21 @@ class ProjectileAttackGoal(
 
         targetDistance = targetPosNow.horizontalDistance()
 
-        val sqrtDistance = sqrt(targetDistance)
-
-        val distanceRatio = (targetDistance / attackRadius).coerceIn(0.0, 1.0)
+//        val fullDistance = targetPosNow.distanceTo(Vec3(0.0, 0.0, 0.0))
+//
+////        val sqrtDistance = sqrt(fullDistance)
 
         val gravity = projectile.gravity
 
-        val velocityCap = sqrt(2.0 * gravity * velocity)
+        val velocityRequired = sqrt(
+            gravity*(targetDistance+(targetPosNow.y * 1.2))
+        )
 
-        println("velocity = $velocity, distance = $targetDistance")
+        println("velocity = $velocity, distance = $targetDistance, velocityRequired = $velocityRequired")
 
         val finalVel = if(useHighArc) {
-            maxOf((sqrtDistance/4)*velocity,0.0)
-        } else velocity
+            velocityRequired*velocity*1.2
+        } else velocityRequired*velocity
 
         val targetPos = calculateMovingTargetPosition(targetPosNow,target, projectile, finalVel)
         val arcs = calculateProjectileArcs(targetPos, projectile.gravity, finalVel)
@@ -165,9 +165,15 @@ class ProjectileAttackGoal(
         return true
     }
 
+    override fun doAction() : Boolean {// fire projectile
+        val target = usingEntity.target?: return false
+
+        return fire()
+    }
+
     val minAngle = Math.toRadians(70.0)
 
-    fun updateTargetVelocity(target: LivingEntity?) {
+    fun updateTargetVelocity(target: Entity?) {
 
         val target = usingEntity.target?: return
 
@@ -196,7 +202,7 @@ class ProjectileAttackGoal(
 
     }
 
-    private fun calculateMovingTargetPosition(basePos: Vec3, target: LivingEntity, projectile: Entity, v: Double): Vec3 {
+    private fun calculateMovingTargetPosition(basePos: Vec3, target: Entity, projectile: Entity, v: Double): Vec3 {
 
         updateTargetVelocity(target)
 
@@ -213,7 +219,7 @@ class ProjectileAttackGoal(
 
             val arcs = calculateProjectileArcs(predicted, g, v) ?: return predicted
             val angle = if (useHighArc) {
-                maxOf(arcs.first)
+                arcs.first
             } else arcs.second
 
             val horizontalSpeed = v * Mth.cos(angle)

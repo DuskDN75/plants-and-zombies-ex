@@ -1,13 +1,10 @@
 package duskdn.plantz.entity
 
-import duskdn.plantz.block.BasePotBlock
-import duskdn.plantz.init.PazBlocks
 import duskdn.plantz.init.PazCriteria
 import duskdn.plantz.init.PazItems
 import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.item.SeedPacketItem
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
@@ -21,7 +18,6 @@ import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.Vec3
 
@@ -65,8 +61,8 @@ class PlantPotMinecart(type: EntityType<out AbstractMinecart>, level: Level) : A
     override fun isRideable(): Boolean = false
     override fun getPickResult(): ItemStack = ItemStack(PazItems.PLANT_POT_MINECART)
     override fun getDropItem(): Item = PazItems.PLANT_POT_MINECART
-
-    override fun getDefaultDisplayBlockState(): BlockState {
-        return PazBlocks.PLANT_POT.defaultBlockState().setValue<Direction, Direction>(BasePotBlock.FACING, Direction.NORTH)
-    }
+//
+//    override fun getDefaultDisplayBlockState(): BlockState {
+//        return PazBlocks.PLANT_POT.defaultBlockState().setValue<Direction, Direction>(BasePotBlock.FACING, Direction.NORTH)
+//    }
 }

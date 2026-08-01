@@ -4,7 +4,7 @@ import duskdn.plantz.init.PazEntities
 import duskdn.plantz.init.PazServerParticles
 import duskdn.plantz.ai.goal.ProjectileAttackGoal
 import duskdn.plantz.entity.plant.init.PazPlant
-import duskdn.plantz.entity.projectile.PeaFire
+import duskdn.plantz.entity.projectile.peas.PeaFire
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal

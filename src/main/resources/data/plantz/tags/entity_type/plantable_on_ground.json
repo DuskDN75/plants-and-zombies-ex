@@ -1,0 +1,30 @@
+{
+  "values": [
+    "plantz:peashooter",
+    "plantz:sunflower",
+    "plantz:chomper",
+    "plantz:wallnut",
+    "plantz:explode_o_nut",
+    "plantz:cherrybomb",
+    "plantz:potatomine",
+    "plantz:repeater",
+    "plantz:ice_peashooter",
+    "plantz:fire_peashooter",
+    "plantz:electric_peashooter",
+    "plantz:cactus",
+    "plantz:cabbagepult",
+    "plantz:kernelpult",
+    "plantz:melonpult",
+    "plantz:coffeebean",
+    "plantz:bonkchoy",
+    "plantz:water_peashooter",
+    "plantz:puffshroom",
+    "plantz:fumeshroom",
+    "plantz:scaredyshroom",
+    "plantz:sunshroom",
+    "plantz:hypnoshroom",
+    "plantz:doomshroom",
+    "plantz:flower_pot",
+    "plantz:water_pot"
+  ]
+}

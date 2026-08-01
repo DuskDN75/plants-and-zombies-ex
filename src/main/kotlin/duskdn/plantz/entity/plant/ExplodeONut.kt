@@ -1,5 +1,7 @@
 package duskdn.plantz.entity.plant
 
+import duskdn.plantz.entity.plant.utils.PlantSpawnUtils
+import duskdn.plantz.entity.plant.utils.PlantUtils
 import duskdn.plantz.init.NukeBlastParticleOptions
 import duskdn.plantz.init.NukeSmokeParticleOptions
 import duskdn.plantz.init.NukeWaveParticleOptions
@@ -21,7 +23,9 @@ class ExplodeONut(type: EntityType<out Explosive>, level: Level) : Explosive(Paz
 
     override fun attackGoals() {}
 
-    override fun canBeCollidedWith(other: Entity?): Boolean = WallNut.wallNutCollision(this, other)
+    override fun allowPlayerCollision(): Boolean {
+        return true
+    }
 
     override fun hurtServer(level: ServerLevel, source: DamageSource, damage: Float): Boolean {
         source.directEntity?.let {

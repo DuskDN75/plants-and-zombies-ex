@@ -4,7 +4,7 @@ import duskdn.plantz.init.PazEntities
 import duskdn.plantz.init.PazTags.BlockTags.PLANTABLE
 import duskdn.plantz.ai.goal.ProjectileAttackGoal
 import duskdn.plantz.entity.plant.init.AttackingPlant
-import duskdn.plantz.entity.projectile.PeaIce
+import duskdn.plantz.entity.projectile.peas.PeaIce
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.BlockTags
 import net.minecraft.util.RandomSource

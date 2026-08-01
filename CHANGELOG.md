@@ -1,3 +1,28 @@
+# Changelog (EX) 1.1
+### Additions
+#### General:
+- Trying to shovel a carrier plant that has a plant ontop of itself will now shovel the plant first.
+- Seashrooms and other aquatic plants can no longer be placed on lilypads.
+- Zombified Piglins now float in lava.
+- Using the Ducky Tube while in lava will allow you to move faster.
+- Ice Peas now turn into Water Peas when burned.
+- Water Peas turn into steam and disintegrate when burned.
+#### Plants:
+- Added Sea Pea
+  - A amphibious peashooter, found in any warm ocean or wet biome, shoots piercing peas in water and splashing peas on land
+- Added Flower Pot
+  - Now an actual plant
+- Added Water Pot
+  - Now an actual plant
+- Added Lava Lily (WIP)
+  - Lilypad but for lava, simple enough. Any plants on it will be immune to fire.
+#### Zombies:
+- Zombies and other mobs that attack plants get doubled follow range at night.
+### Technical Changes
+- Improved the math for projectiles. 
+- Organized the file structure more.
+- Created base classes for Peas, Attacking Plants
+
 # Changelog (EX) 1.0
 ### Additions
 #### General:

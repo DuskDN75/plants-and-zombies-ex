@@ -21,6 +21,14 @@
     "plantz:lilypad",
     "plantz:water_peashooter",
     "plantz:tanglekelp",
-    "#plantz:mushroom"
+    "plantz:puffshroom",
+    "plantz:fumeshroom",
+    "plantz:scaredyshroom",
+    "plantz:sunshroom",
+    "plantz:hypnoshroom",
+    "plantz:doomshroom",
+    "plantz:seashroom",
+    "plantz:flower_pot",
+    "plantz:water_pot"
   ]
 }

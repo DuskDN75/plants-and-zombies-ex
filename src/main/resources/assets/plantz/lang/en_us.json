@@ -101,9 +101,7 @@
   "item.plantz.brainz_alloy": "Brainz Alloy",
   "item.plantz.brainz_flag": "Brainz Flag",
   "item.plantz.plantz_flag": "Plantz Flag",
-  "item.plantz.water_pot": "Water Pot",
-  "item.plantz.plant_pot": "Plant Pot",
-  "item.plantz.zen_plant_pot": "Zen Plant Pot",
+  "item.plantz.zen_pot": "Zen Pot",
   "item.plantz.plant_pot_minecart": "Minecart with Plant Pot",
   "item.plantz.plant_pot_helmet": "Plant Pot Helmet",
   "item.plantz.seed_packet": "Empty Seed Packet",
@@ -175,6 +173,7 @@
   "item.plantz.super_brainz_spawn_egg": "Super Brainz Spawn Egg",
   "item.plantz.imp_spawn_egg": "Imp Spawn Egg",
   "item.plantz.gargantuar_spawn_egg": "Gargantuar Spawn Egg",
+  "item.plantz.balloon_zombie_spawn_egg": "Balloon Zombie Spawn Egg",
 
   "item.plantz.gnome_spawn_egg": "Gnome Spawn Egg",
 
@@ -210,8 +209,8 @@
   "entity.plantz.potatomine": "Potatomine",
   "entity.plantz.repeater": "Repeater",
   "entity.plantz.ice_peashooter": "Snow Pea",
-  "entity.plantz.fire_peashooter": "Fire Peashooter",
-  "entity.plantz.electric_peashooter": "Electric Peashooter",
+  "entity.plantz.fire_peashooter": "Fire Pea",
+  "entity.plantz.electric_peashooter": "Electric Pea",
   "entity.plantz.cactus": "Cactus",
   "entity.plantz.lightning_reed": "Lightning Reed",
   "entity.plantz.cabbagepult": "Cabbage Pult",
@@ -229,6 +228,9 @@
   "entity.plantz.water_peashooter": "Sea Pea",
   "entity.plantz.seashroom": "Sea Shroom",
   "entity.plantz.coffeebean": "Coffee Bean",
+  "entity.plantz.flower_pot": "Flower Pot",
+  "entity.plantz.water_pot": "Water Pot",
+  "entity.plantz.lavalily": "Lava Lily",
 
   "entity.plantz.browncoat": "Browncoat",
   "entity.plantz.newspaper_zombie": "Newspaper Zombie",
@@ -243,6 +245,7 @@
   "entity.plantz.super_brainz": "Super Brainz",
   "entity.plantz.imp": "Imp",
   "entity.plantz.gargantuar": "Gargantuar",
+  "entity.plantz.balloon_zombie": "Balloon Zombie",
 
   "entity.plantz.gnome": "Garden Gnome",
   "entity.plantz.plant_pot_minecart": "Minecart with Plant Pot",

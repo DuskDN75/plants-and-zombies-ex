@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "plantz:plant_pot_minecart",
-    "plantz:lilypad"
+    "plantz:lilypad",
+    "plantz:flower_pot",
+    "plantz:water_pot"
   ]
 }

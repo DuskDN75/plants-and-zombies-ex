@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "@": [
+      "plantz:sun"
+    ],
+    "#": [
+      "minecraft:bamboo_slab"
+    ],
+    "*": [
+      "minecraft:bamboo"
+    ],
+    "$": [
+      "minecraft:brick"
+    ],
+    "%": [
+      "minecraft:dirt"
+    ]
+  },
+  "pattern": [
+    "$%$",
+    "@$@",
+    "*#*"
+  ],
+  "result": {
+    "count": 1,
+    "id": "plantz:zen_pot"
+  }
+}

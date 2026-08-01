@@ -2,6 +2,7 @@ package duskdn.plantz
 
 import duskdn.plantz.block.entity.FlagBlockEntity
 import duskdn.plantz.block.entity.SunBatteryBlockEntity
+import duskdn.plantz.entity.plant.LavaLily
 import duskdn.plantz.init.PazBlocks
 import duskdn.plantz.init.PazEntities
 import duskdn.plantz.model.BalloonModel
@@ -111,6 +112,9 @@ object PazModels {
         ModelLayerRegistry.registerModelLayer(SeaShroomModel.LAYER_LOCATION) { SeaShroomModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(WaterPeaShooterModel.LAYER_LOCATION) { WaterPeaShooterModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(CoffeeBeanModel.LAYER_LOCATION) { CoffeeBeanModel.createBodyLayer() }
+        ModelLayerRegistry.registerModelLayer(FlowerPotModel.LAYER_LOCATION) { FlowerPotModel.createBodyLayer() }
+        ModelLayerRegistry.registerModelLayer(WaterPotModel.LAYER_LOCATION) { WaterPotModel.createBodyLayer() }
+        ModelLayerRegistry.registerModelLayer(LavaLilyModel.LAYER_LOCATION) { LavaLilyModel.createBodyLayer() }
 
         ModelLayerRegistry.registerModelLayer(PeaModel.LAYER_LOCATION) { PeaModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(NeedleModel.LAYER_LOCATION) { NeedleModel.createBodyLayer() }
@@ -132,6 +136,7 @@ object PazModels {
         ModelLayerRegistry.registerModelLayer(SuperBrainzModel.LAYER_LOCATION) { SuperBrainzModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(ImpModel.LAYER_LOCATION) { ImpModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(GargantuarModel.LAYER_LOCATION) { GargantuarModel.createBodyLayer() }
+        ModelLayerRegistry.registerModelLayer(BalloonZombieModel.LAYER_LOCATION) { BalloonZombieModel.createBodyLayer() }
 
         ModelLayerRegistry.registerModelLayer(GnomeModel.LAYER_LOCATION) { GnomeModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(ARMOR_LAYER_LOCATION.head)  { GnomeArmorModel.createHeadLayer() }
@@ -172,6 +177,9 @@ object PazModels {
         EntityRenderers.register(PazEntities.WATER_PEA_SHOOTER) { PlantRenderer(WaterPeaShooterModel(it.bakeLayer(WaterPeaShooterModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.SEA_SHROOM) { PlantRenderer(SeaShroomModel(it.bakeLayer(SeaShroomModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.COFFEE_BEAN) { PlantRenderer(CoffeeBeanModel(it.bakeLayer(CoffeeBeanModel.LAYER_LOCATION)), it) }
+        EntityRenderers.register(PazEntities.FLOWER_POT) { PlantRenderer(FlowerPotModel(it.bakeLayer(FlowerPotModel.LAYER_LOCATION)), it) }
+        EntityRenderers.register(PazEntities.WATER_POT) { PlantRenderer(WaterPotModel(it.bakeLayer(WaterPotModel.LAYER_LOCATION)), it) }
+        EntityRenderers.register(PazEntities.LAVALILY) { PlantRenderer(LavaLilyModel(it.bakeLayer(LavaLilyModel.LAYER_LOCATION)), it) }
 
         EntityRenderers.register(PazEntities.SUN_SHROOM) { PlantRenderer(
             SunShroomModel(it.bakeLayer(SunShroomModel.LAYER_LOCATION)), it,
@@ -206,6 +214,7 @@ object PazModels {
         EntityRenderers.register(PazEntities.SUPER_BRAINZ) { PazZombieRenderer(it, SuperBrainzModel(it.bakeLayer(SuperBrainzModel.LAYER_LOCATION)), SuperBrainzModel(it.bakeLayer(SuperBrainzModel.LAYER_LOCATION))) }
         EntityRenderers.register(PazEntities.IMP) { PazZombieRenderer(it, ImpModel(it.bakeLayer(ImpModel.LAYER_LOCATION)), ImpModel(it.bakeLayer(ImpModel.LAYER_LOCATION))) }
         EntityRenderers.register(PazEntities.GARGANTUAR) { PazZombieRenderer(it, GargantuarModel(it.bakeLayer(GargantuarModel.LAYER_LOCATION))) }
+        EntityRenderers.register(PazEntities.BALLOON_ZOMBIE) { PazZombieRenderer(it, BalloonZombieModel(it.bakeLayer(BalloonZombieModel.LAYER_LOCATION))) }
 
         EntityRenderers.register(PazEntities.GNOME) { GnomeRenderer(it, GnomeModel(it.bakeLayer(GnomeModel.LAYER_LOCATION)))}
 
@@ -219,16 +228,16 @@ object PazModels {
 
         // REGISTER BLOCK COLORS
 
-        BlockColorRegistry.register(
-            listOf(object : BlockTintSource {
-                override fun color(state: BlockState): Int {
-                    return 0x3F76E4
-                }
-
-                override fun colorInWorld(state: BlockState, level: BlockAndTintGetter, pos: BlockPos): Int {
-                    return BiomeColors.getAverageWaterColor(level, pos)
-                }
-            }), PazBlocks.WATER_POT
-        )
+//        BlockColorRegistry.register(
+//            listOf(object : BlockTintSource {
+//                override fun color(state: BlockState): Int {
+//                    return 0x3F76E4
+//                }
+//
+//                override fun colorInWorld(state: BlockState, level: BlockAndTintGetter, pos: BlockPos): Int {
+//                    return BiomeColors.getAverageWaterColor(level, pos)
+//                }
+//            }), PazBlocks.WATER_POT
+//        )
     }
 }

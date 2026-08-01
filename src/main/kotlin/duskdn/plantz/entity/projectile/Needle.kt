@@ -1,5 +1,7 @@
 package duskdn.plantz.entity.projectile
 
+import duskdn.plantz.entity.plant.init.PazPlant
+import duskdn.plantz.entity.projectile.init.PazProjectile
 import duskdn.plantz.init.PazDamageTypes
 import duskdn.plantz.init.PazEntities
 import net.minecraft.world.entity.LivingEntity
@@ -12,7 +14,8 @@ class Needle(
     owner: LivingEntity? = null,
     spawnOffset: Vec2 = Vec2.ZERO,
 ) : PazProjectile(PazEntities.NEEDLE, level, owner, spawnOffset,
-    PazDamageTypes.PLANT
+    PazDamageTypes.PLANT,
+    (PazPlant.PEA_DAMAGE).toFloat()*2
 ) {
     override fun stickInGroundTime(): Int = 100
     override fun getPierceLevel(): Byte = 4

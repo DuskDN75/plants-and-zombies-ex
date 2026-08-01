@@ -31,6 +31,21 @@
             {
               "type": "minecraft:item",
               "name": "plantz:seed_packet",
+              "weight": 7,
+              "functions": [
+                {
+                  "function": "minecraft:set_components",
+                  "components": {
+                    "minecraft:entity_data": {
+                      "id": "plantz:flower_pot"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz:seed_packet",
               "weight": 6,
               "functions": [
                 {

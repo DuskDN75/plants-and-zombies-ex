@@ -1,8 +1,6 @@
 {
   "replace": false,
   "values": [
-    "plantz:plant_pot",
-    "plantz:water_pot",
     "minecraft:pointed_dripstone",
     "minecraft:bricks",
     "#minecraft:stone_bricks",

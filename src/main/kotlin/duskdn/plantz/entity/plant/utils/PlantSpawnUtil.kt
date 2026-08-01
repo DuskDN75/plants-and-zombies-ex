@@ -1,5 +1,6 @@
 package duskdn.plantz.entity.plant.utils
 
+import duskdn.plantz.entity.Sun
 import duskdn.plantz.entity.plant.init.CarrierPlant
 import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.entity.plant.init.PazPlant.Companion.hasAdjacentPlant
@@ -18,10 +19,14 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.FluidTags
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.TamableAnimal
+import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
@@ -29,6 +34,7 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.gameevent.GameEvent
+import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.AABB
 
 object PlantSpawnUtils {
@@ -41,6 +47,7 @@ object PlantSpawnUtils {
         face: Direction? = null,
         horizontalDir: Direction? = null,
         checkWater: Boolean = false,
+        checkLava: Boolean = false,
         carrier: PazPlant? = null
     ): InteractionResult {
 
@@ -68,7 +75,7 @@ object PlantSpawnUtils {
             EntityType.createDefaultStackConfig(level, itemStack, player),
             spawnPos,
             EntitySpawnReason.SPAWN_ITEM_USE,
-            !checkWater,
+            !checkWater && !checkLava,
             face == Direction.UP
         )?: return InteractionResult.FAIL
 
@@ -78,7 +85,7 @@ object PlantSpawnUtils {
 
             val validGround = entity.onValidGround(spawnPos.x.toDouble(), spawnPos.y.toDouble(), spawnPos.z.toDouble(), carrier)
 
-            val invalidSpace = !(validGround == null || checkWater)
+            val invalidSpace = !(validGround == null || checkWater || checkLava)
                     || !(spawnBlockCollisionShape==null || !entityBox.intersects(spawnBlockCollisionShape))
 
             println("ValidGround: $validGround, InvalidSpace: $invalidSpace")
@@ -171,20 +178,34 @@ object PlantSpawnUtils {
 
         println("PlantType: $plantType, carrier: $carrier, PlantableOnWater: $plantableOnWater, Amphibious: $amphibious")
 
+        val waterAllowed = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(carrierType).`is`(PazTags.EntityTypes.CARRIER_ALLOW_WATER)
+
         // if carrier and is not plantable on water, return true
         // else only return true if the carrier allows water plants
         if (plantableOnWater && !amphibious) {
-            val waterAllowed = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(carrierType).`is`(PazTags.EntityTypes.CARRIER_ALLOW_WATER)
-
             println("Plant is plantable on water. Carrier allows water plants? : $waterAllowed")
 
             return waterAllowed
+        }
+
+        if (waterAllowed && !plantableOnWater) {
+            return false
         }
 
 //        println("Plant is normal")
 
         return true
 
+    }
+
+    fun solidFloorCheck(level: Level, belowPos: BlockPos, block: BlockState): Boolean {
+        val isWater = block.`is`(Blocks.WATER) || block.fluidState.`is`(Fluids.WATER)
+
+        val isLava = block.`is`(Blocks.LAVA) || block.fluidState.`is`(Fluids.LAVA)
+
+        if (isWater || isLava) return false
+
+        return !block.getCollisionShape(level, belowPos).isEmpty
     }
 
 }
@@ -233,11 +254,7 @@ fun PazPlant.onValidGround(x: Double = this.x, y: Double = this.y, z: Double = t
 }
 
 fun PazPlant.waterSurvivalCheck(block: BlockState): Boolean {
-    if (block.`is`(PazBlocks.ZEN_PLANT_POT)) {
-        return true
-    }
-
-    if (block.`is`(PazBlocks.WATER_POT)) {
+    if (block.`is`(PazBlocks.ZEN_POT)) {
         return true
     }
 
@@ -248,4 +265,18 @@ fun PazPlant.waterSurvivalCheck(block: BlockState): Boolean {
     val fluidState = level().getFluidState(blockPosition())
 
     return fluidState.`is`(FluidTags.WATER)
+}
+
+fun PazPlant.lavaSurvivalCheck(block: BlockState): Boolean {
+    if (block.`is`(PazBlocks.ZEN_POT)) {
+        return true
+    }
+
+    if (block.`is`(Blocks.LAVA_CAULDRON)) {
+        return block.getValue(BlockStateProperties.LEVEL_CAULDRON) > 0
+    }
+
+    val fluidState = level().getFluidState(blockPosition())
+
+    return fluidState.`is`(FluidTags.LAVA)
 }
