@@ -29,6 +29,8 @@ object PazDamageTypes {
     @JvmField
     val PAINT = registerDamageType("paint")
     @JvmField
+    val TOXIC = registerDamageType("toxic")
+    @JvmField
     val ZAP = registerDamageType("electric_zap")
 
     private fun registerDamageType(

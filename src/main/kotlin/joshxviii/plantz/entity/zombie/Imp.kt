@@ -42,8 +42,8 @@ class Imp(type: EntityType<out Imp> = PazEntities.IMP, level: Level) : PazZombie
     override fun actuallyHurt(level: ServerLevel, source: DamageSource, damage: Float) {
         super.actuallyHurt(level, source, damage)
         val entity = source.entity
-        if (source.`is`(PazDamageTypes.PLANT_CHOMP)) {// apply toxic effect when eaten
-            if (entity is LivingEntity) entity.addEffect(MobEffectInstance(PazEffects.TOXIC, 300, 0), this)
+        if (source.directEntity == entity) {// apply toxic effect attacked directly
+            if (entity is LivingEntity && entity.weaponItem.isEmpty && !entity.hasInfiniteMaterials()) entity.addEffect(MobEffectInstance(PazEffects.TOXIC, 200, 0), this)
         }
     }
 

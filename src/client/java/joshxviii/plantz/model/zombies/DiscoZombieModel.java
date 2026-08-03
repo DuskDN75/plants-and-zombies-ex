@@ -69,7 +69,7 @@ public class DiscoZombieModel extends PazZombieModel {
 	@Override
 	public void setupAnim(@NotNull ZombieRenderState state) {
 		super.setupAnim(state);
-		afro.visible = state.headEquipment.isEmpty();
+		afro.visible = state.headItem.isEmpty();
 		PazZombieRenderState pazState = (PazZombieRenderState) state;
 		actionAnimation.apply(pazState.getActionAnimationState(), pazState.ageInTicks);
 	}
