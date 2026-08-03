@@ -98,7 +98,7 @@ class Chomper(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.CHO
         actionPredicate = { chomperEntity.chewTime <= 0 }
     ) {
         companion object {
-            const val CHEW_TIME = 300
+            const val CHEW_TIME = 600
         }
 
         override fun doAction() : Boolean {

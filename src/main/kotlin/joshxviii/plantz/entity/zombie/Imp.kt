@@ -1,6 +1,7 @@
 package joshxviii.plantz.entity.zombie
 
 import joshxviii.plantz.PazBlocks
+import joshxviii.plantz.PazDamageTypes
 import joshxviii.plantz.PazEffects
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazSounds
@@ -38,6 +39,14 @@ class Imp(type: EntityType<out Imp> = PazEntities.IMP, level: Level) : PazZombie
     override fun isBaby(): Boolean = true
     override fun canPickUpLoot(): Boolean = false
 
+    override fun actuallyHurt(level: ServerLevel, source: DamageSource, damage: Float) {
+        super.actuallyHurt(level, source, damage)
+        val entity = source.entity
+        if (source.`is`(PazDamageTypes.PLANT_CHOMP)) {// apply toxic effect when eaten
+            if (entity is LivingEntity) entity.addEffect(MobEffectInstance(PazEffects.TOXIC, 300, 0), this)
+        }
+    }
+
     override fun doHurtTarget(level: ServerLevel, target: Entity): Boolean {
         val wasHurt = super.doHurtTarget(level, target)
         if (wasHurt && target is LivingEntity) {
@@ -57,14 +66,11 @@ class Imp(type: EntityType<out Imp> = PazEntities.IMP, level: Level) : PazZombie
         spawnReason: EntitySpawnReason,
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
-        val data = super.finalizeSpawn(level, difficulty, spawnReason, groupData)
+        val data = super.finalizeSpawn(level, difficulty, spawnReason, ZombieGroupData(true, false))
         val random = level.random
-        val difficultyModifier = difficulty.specialMultiplier
         if (spawnReason != EntitySpawnReason.CONVERSION) {
             setCanPickUpLoot(false)
             setCanBreakDoors(true)
-
-            //getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE)?.addPermanentModifier(AttributeModifier(pazResource("browncoat"), this.random.nextDouble() * 10.25 + 0.5, AttributeModifier.Operation.ADD_VALUE))
 
             if (getItemBySlot(EquipmentSlot.HEAD).isEmpty){
                 if (random.nextFloat() < 0.05) {

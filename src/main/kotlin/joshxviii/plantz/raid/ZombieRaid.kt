@@ -20,22 +20,27 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket
 import net.minecraft.network.protocol.game.ClientboundSoundPacket
+import net.minecraft.core.component.DataComponents
 import net.minecraft.server.level.ServerBossEvent
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
+import net.minecraft.tags.FluidTags
 import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.BossEvent
 import net.minecraft.world.Difficulty
+import net.minecraft.core.registries.Registries
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.SpawnGroupData
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.world.item.component.DyedItemColor
 import net.minecraft.world.level.levelgen.Heightmap
 import java.util.function.Predicate
 import java.util.Optional
@@ -446,7 +451,11 @@ class ZombieRaid(
             val angle = startAngle + Math.PI.toFloat() * i / 8.0f
             val spawnX = center.x + Mth.floor(Mth.cos(angle.toDouble()) * 32.0f * howFar) + random.nextInt(3) * Mth.floor(howFar)
             val spawnZ = center.z + Mth.floor(Mth.sin(angle.toDouble()) * 32.0f * howFar) + random.nextInt(3) * Mth.floor(howFar)
-            val spawnY = level.getHeight(Heightmap.Types.WORLD_SURFACE, spawnX, spawnZ)
+            var spawnY = level.getHeight(Heightmap.Types.WORLD_SURFACE, spawnX, spawnZ)
+            if (level.getFluidState(BlockPos(spawnX, spawnY + 1, spawnZ)).`is`(FluidTags.WATER)) {
+                while (level.getFluidState(BlockPos(spawnX, spawnY + 1, spawnZ)).`is`(FluidTags.WATER)) spawnY++
+                spawnY++
+            }
             spawnPos.set(spawnX, spawnY, spawnZ)
             if (level.isPositionEntityTicking(spawnPos)) return spawnPos
         }
@@ -496,10 +505,44 @@ class ZombieRaid(
     private fun spawnBucketHead(zombie: Zombie) {
         zombie.setItemSlot(EquipmentSlot.HEAD, Items.BUCKET.defaultInstance)
         zombie.setDropChance(EquipmentSlot.HEAD, 0.0f)
+        if (zombie.random.nextFloat() < 0.7f) {
+            zombie.setItemSlot(EquipmentSlot.CHEST, Items.IRON_LEGGINGS.defaultInstance)
+            zombie.setDropChance(EquipmentSlot.CHEST, 0.0f)
+        }
+        if (zombie.random.nextFloat() < 0.7f) {
+            zombie.setItemSlot(EquipmentSlot.LEGS, Items.IRON_LEGGINGS.defaultInstance)
+            zombie.setDropChance(EquipmentSlot.LEGS, 0.0f)
+        }
+        if (zombie.random.nextFloat() < 0.7f) {
+            zombie.setItemSlot(EquipmentSlot.FEET, Items.IRON_BOOTS.defaultInstance)
+            zombie.setDropChance(EquipmentSlot.FEET, 0.0f)
+        }
+    }
+
+    private fun spawnFootBallHelmet(zombie: Zombie) {
+        zombie.setItemSlot(EquipmentSlot.HEAD, PazItems.FOOTBALL_HELMET.defaultInstance)
+        zombie.setDropChance(EquipmentSlot.HEAD, 0.0f)
     }
 
     private fun spawnSnowCoat(zombie: Zombie) {
-        if (zombie is BrownCoat) zombie.variant = BrownCoatVariant.SNOW
+        if (zombie is BrownCoat) {
+            zombie.variant = BrownCoatVariant.SNOW
+            val boots = Items.LEATHER_BOOTS.defaultInstance
+            boots.set(DataComponents.DYED_COLOR, DyedItemColor(0xFFFFFF))
+            if (zombie.random.nextFloat() < 0.7f) {
+                val frostWalker = zombie.level()
+                    .registryAccess()
+                    .lookupOrThrow(Registries.ENCHANTMENT)
+                    .getOrThrow(Enchantments.FROST_WALKER)
+                boots.enchant(frostWalker, 2)
+                zombie.setItemSlot(EquipmentSlot.FEET, boots)
+                zombie.setDropChance(EquipmentSlot.FEET, 0.0f)
+            }
+            if (zombie.random.nextFloat() < 0.4f) {
+                zombie.setItemSlot(EquipmentSlot.MAINHAND, Items.IRON_SHOVEL.defaultInstance)
+                zombie.setDropChance(EquipmentSlot.MAINHAND, 0.0f)
+            }
+        }
     }
 
     enum class SpecialWave(
@@ -517,24 +560,32 @@ class ZombieRaid(
                 0.11f + (raid.zombieRaidOmenLevel * 0.02f)
             },
             spawnFn = { raid, _ ->
-                val count = 4 + raid.wavesSpawned / 2 + (raid.zombieRaidOmenLevel / 2)
-                listOf(WaveSpawnEntry(ZombieRaiderType.BROWN_COAT, count.coerceAtLeast(3), raid::spawnBucketHead))
+                val brownCoatCount = 4 + raid.wavesSpawned / 2 + (raid.zombieRaidOmenLevel / 2)
+                val newspaperZombie = 1 + raid.wavesSpawned / 3 + (raid.zombieRaidOmenLevel / 2)
+                listOf(
+                    WaveSpawnEntry(ZombieRaiderType.BROWN_COAT, brownCoatCount.coerceAtLeast(3), raid::spawnBucketHead),
+                    WaveSpawnEntry(ZombieRaiderType.NEWSPAPER_ZOMBIE, newspaperZombie.coerceAtLeast(1), raid::spawnBucketHead),
+                )
             }
         ),
         ALL_FOOTBALL(
             minWave = 2,
-            maxWave = 4,
+            maxWave = 5,
             creditsRequired = false,
             weightFn = { raid, credits ->
                 0.11f + (raid.zombieRaidOmenLevel * 0.03f) + if (credits) 0.04f else 0f
             },
             spawnFn = { raid, _ ->
-                val count = 3 + raid.wavesSpawned / 2 + (raid.zombieRaidOmenLevel / 2)
-                listOf(WaveSpawnEntry(ZombieRaiderType.ALL_STAR, count.coerceAtLeast(2)))
+                val allStarCount = 3 + raid.wavesSpawned / 2 + (raid.zombieRaidOmenLevel / 2)
+                val impCount = 2 + raid.wavesSpawned / 3 + (raid.zombieRaidOmenLevel / 3)
+                listOf(
+                    WaveSpawnEntry(ZombieRaiderType.ALL_STAR, allStarCount.coerceAtLeast(2)),
+                    WaveSpawnEntry(ZombieRaiderType.IMP, impCount.coerceAtLeast(1), raid::spawnFootBallHelmet)
+                )
             }
         ),
         WINTER_WONDERLAND(
-            minWave = 3,
+            minWave = 4,
             maxWave = 9,
             creditsRequired = false,
             weightFn = { raid, credits ->

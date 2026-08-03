@@ -67,6 +67,11 @@ class BrownCoat(type: EntityType<out BrownCoat>, level: Level) : PazZombie(type,
         variant = input.read<BrownCoatVariant>("variant", BrownCoatVariant.CODEC).getOrDefault(BrownCoatVariant.getDefault())
     }
 
+    override fun canFreeze(): Boolean {
+        return if (variant == BrownCoatVariant.SNOW) false
+        else super.canFreeze()
+    }
+
     override fun finalizeSpawn(
         level: ServerLevelAccessor,
         difficulty: DifficultyInstance,

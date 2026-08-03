@@ -20,6 +20,7 @@ import static joshxviii.plantz.UtilsKt.pazResource;
 
 public class DiscoZombieModel extends PazZombieModel {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("disco_zombie"), "main");
+	private final ModelPart afro;
 	private final KeyframeAnimation actionAnimation;
 
 	public DiscoZombieModel(final ModelPart root) {
@@ -27,6 +28,7 @@ public class DiscoZombieModel extends PazZombieModel {
 			DiscoZombieAnimation.init.bake(root.getChild("root")),
 			root
 		);
+		this.afro = this.head.getChild("afro");
 		this.actionAnimation = DiscoZombieAnimation.dance.bake(root.getChild("root"));
 	}
 
@@ -40,9 +42,10 @@ public class DiscoZombieModel extends PazZombieModel {
 
 		PartDefinition head = root.addOrReplaceChild("head", CubeListBuilder.create().texOffs(2, 42).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
 				.texOffs(0, 74).addBox(-4.5F, -8.5F, -4.5F, 9.0F, 9.0F, 9.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 22).addBox(-7.0F, -12.0F, -2.5F, 14.0F, 10.0F, 10.0F, new CubeDeformation(0.0F))
-				.texOffs(34, 50).addBox(-6.0F, -8.0F, -4.25F, 12.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 0).addBox(-7.5F, -12.5F, -3.0F, 15.0F, 11.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -24.0F, 0.0F));
+				.texOffs(34, 50).addBox(-6.0F, -8.0F, -4.25F, 12.0F, 8.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -24.0F, 0.0F));
+
+		PartDefinition afro = head.addOrReplaceChild("afro", CubeListBuilder.create().texOffs(0, 22).addBox(-7.0F, -5.0F, -5.0F, 14.0F, 10.0F, 10.0F, new CubeDeformation(0.0F))
+				.texOffs(0, 0).addBox(-7.5F, -5.5F, -5.5F, 15.0F, 11.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -7.0F, 2.5F));
 
 		PartDefinition hat = head.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.offset(0.0F, -8.0F, 0.0F));
 
@@ -66,6 +69,7 @@ public class DiscoZombieModel extends PazZombieModel {
 	@Override
 	public void setupAnim(@NotNull ZombieRenderState state) {
 		super.setupAnim(state);
+		afro.visible = state.headEquipment.isEmpty();
 		PazZombieRenderState pazState = (PazZombieRenderState) state;
 		actionAnimation.apply(pazState.getActionAnimationState(), pazState.ageInTicks);
 	}

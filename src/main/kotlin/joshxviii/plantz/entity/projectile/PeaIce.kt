@@ -20,7 +20,7 @@ class PeaIce(
 ) {
     override fun afterHitEntityEffect(target: LivingEntity) {
         super.afterHitEntityEffect(target)
-        if (target.`is`(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES)) return
+        if (!target.canFreeze()) return
         target.addEffect(MobEffectInstance(MobEffects.SLOWNESS, 100, 0))
         target.addEffect(MobEffectInstance(MobEffects.WEAKNESS, 100, 0))
     }

@@ -36,6 +36,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.material.Fluids
+import kotlin.math.max
 
 abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie(type, level) {
 
@@ -111,11 +112,18 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
     var waterTime = -1
     override fun tick() {
         super.tick()
-        val level = level()
+        val level = level() as? ServerLevel ?: return
 
         if (isEyeInFluid(FluidTags.WATER)) {
             waterTime++
-            if (waterTime>=250 && canEquipDuckyInWater() && getItemBySlot(EquipmentSlot.LEGS).isEmpty) {
+            if (waterTime>=250 && canEquipDuckyInWater()) {
+                if(!getItemBySlot(EquipmentSlot.LEGS).isEmpty) {
+                    val currentLegs = getItemBySlot(EquipmentSlot.LEGS)
+                    val dropChance = dropChances.byEquipment(EquipmentSlot.LEGS)
+                    if (!currentLegs.isEmpty && max(this.random.nextFloat() - 0.1f, 0.0f).toDouble() < dropChance) {
+                        spawnAtLocation(level, currentLegs)
+                    }
+                }
                 setItemSlot(EquipmentSlot.LEGS, PazItems.DUCKY_TUBE.defaultInstance)
                 setDropChance(EquipmentSlot.LEGS, 0.0f)
             }
