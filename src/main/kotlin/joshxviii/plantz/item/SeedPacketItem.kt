@@ -30,10 +30,13 @@ import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.LiquidBlock
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.Property
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.HitResult
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
 class SeedPacketItem(properties: Properties) : Item(properties) {
 
@@ -94,8 +97,8 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
             val itemStack = context.itemInHand
             val type = itemStack.get(DataComponents.ENTITY_DATA)?.type()
             val pos: BlockPos = context.clickedPos
-            val clickedFace: Direction = context.clickedFace
             val blockState = level.getBlockState(pos)
+            val clickedFace: Direction = if (blockState.`is`(PazTags.BlockTags.PLANT_POT)) Direction.UP else context.clickedFace
             val spawnPos = if (blockState.getCollisionShape(level, pos).isEmpty) pos
                             else if (blockState.`is`(PazBlocks.GRAVESTONE) && type == PazEntities.GRAVE_BUSTER) pos.above()
                             else pos.relative(clickedFace)
@@ -142,8 +145,9 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
         if (entity is Plant) {
             val spawnBlockCollisionShape = level.getBlockState(spawnPos).getCollisionShape(level, spawnPos).let { if (it.isEmpty.not()) it.bounds() else null }
             val entityBox = entity.boundingBox.move(spawnPos.multiply(-1))
+            val blockBelow = level.getBlockState(spawnPos.below())
             if (
-                !(entity.canSurviveOn(level.getBlockState(spawnPos.below())) || checkWater)
+                !(entity.canSurviveOn(blockBelow) || checkWater)
                 || !(spawnBlockCollisionShape==null || !entityBox.intersects(spawnBlockCollisionShape))
             ) {
                 player.sendOverlayMessage(
@@ -151,7 +155,13 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
                 )
                 return InteractionResult.FAIL
             }
-            val yaw = horizontalDir.opposite.toYRot()
+            val yaw =
+                if (blockBelow.`is`(PazTags.BlockTags.PLANT_POT) || (blockBelow.`is`(PazBlocks.GRAVESTONE) && entity is GraveBuster))
+                    blockBelow.getOptionalValue(BlockStateProperties.HORIZONTAL_FACING).getOrNull()?.toYRot()
+                        ?:
+                        horizontalDir.opposite.toYRot()
+                else
+                    horizontalDir.opposite.toYRot()
             entity.yHeadRot = yaw
             entity.yBodyRot = yaw
             entity.yRot = yaw

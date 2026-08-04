@@ -296,6 +296,7 @@ object PazEntities {
         "grave_buster", EntityType.Builder.of(::GraveBuster, MobCategory.CREATURE),
         width = 1.0f,
         height = 1.0f,
+        eyeHeight = 0.6f,
         attributes = Plant.Companion.PlantAttributes(
             maxHealth = 5.0,
             followRange = 1.0
@@ -414,7 +415,7 @@ object PazEntities {
     @JvmField val ROBO_ZOMBIE: EntityType<RoboZombie> =  registerZombie(
         "robo_zombie",
         EntityType.Builder.of(::RoboZombie, MobCategory.MONSTER)
-            .sized(1.0f, 2.2f)
+            .sized(1.3f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
         attributes = Zombie.createAttributes()
@@ -422,7 +423,7 @@ object PazEntities {
             .add(Attributes.MAX_HEALTH, 100.0)
             .add(Attributes.STEP_HEIGHT, 1.0)
             .add(Attributes.MOVEMENT_SPEED, 0.23)
-            .add(Attributes.KNOCKBACK_RESISTANCE, 1.5)
+            .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 1.5)
     )
     @JvmField val SUPER_BRAINZ: EntityType<SuperBrainz> =  registerZombie(
@@ -436,7 +437,7 @@ object PazEntities {
             .add(Attributes.MAX_HEALTH, 100.0)
             .add(Attributes.STEP_HEIGHT, 1.0)
             .add(Attributes.MOVEMENT_SPEED, 0.23)
-            .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)
+            .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 1.5)
     )
     @JvmField val IMP: EntityType<Imp> =  registerZombie(

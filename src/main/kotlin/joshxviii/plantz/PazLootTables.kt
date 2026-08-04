@@ -16,6 +16,9 @@ object PazLootTables {
     @JvmField
     val SUN = registerLootTable("sun")
 
+    @JvmField
+    val GRAVESTONE_TREASURE = registerLootTable("chests/gravestone_treasure")
+
     private fun registerLootTable(
         name: String
     ) : ResourceKey<LootTable> {

@@ -158,7 +158,7 @@ class PlantRenderState : net.minecraft.client.renderer.entity.state.LivingEntity
     }
     var rotations: Quaternionf = Quaternionf()
     var swelling: Float = 0f
-    var lastCooldownTime: Int = 0
+    var partialTick: Float = 0f
     var cooldown: Int = 0
     var damagedAmount: Float = 0.0f
     var isAsleep: Boolean = false

@@ -215,6 +215,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     }
 
     var idleAnimationStartTick: Int = 0
+    var cooldownO: Int = 0
     val initAnimationState = AnimationState()
     val idleAnimationState = AnimationState()
     val actionAnimationState = AnimationState()
@@ -397,6 +398,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
 
     override fun tick() {
         super.tick()
+        cooldownO = cooldown
         attachedEntity?.positionPlant(this)
         if (attachedEntity?.canWearPlant() == false) {
             if(dropAsSeedPacketItem(force = true)) playSound(SoundEvents.ROOTED_DIRT_BREAK)

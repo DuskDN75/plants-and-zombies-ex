@@ -54,6 +54,7 @@ data class ServerConfig(
         "plantz:doomshroom"             to 16,
         "plantz:seashroom"              to 0,
         "plantz:coffeebean"             to 2,
+        "plantz:grave_buster"           to 3,
     ),
 )
 data class ClientConfig(
