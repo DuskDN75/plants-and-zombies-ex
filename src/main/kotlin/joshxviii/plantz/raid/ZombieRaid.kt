@@ -506,7 +506,7 @@ class ZombieRaid(
         zombie.setItemSlot(EquipmentSlot.HEAD, Items.BUCKET.defaultInstance)
         zombie.setDropChance(EquipmentSlot.HEAD, 0.0f)
         if (zombie.random.nextFloat() < 0.7f) {
-            zombie.setItemSlot(EquipmentSlot.CHEST, Items.IRON_LEGGINGS.defaultInstance)
+            zombie.setItemSlot(EquipmentSlot.CHEST, Items.IRON_CHESTPLATE.defaultInstance)
             zombie.setDropChance(EquipmentSlot.CHEST, 0.0f)
         }
         if (zombie.random.nextFloat() < 0.7f) {
@@ -569,8 +569,8 @@ class ZombieRaid(
             }
         ),
         ALL_FOOTBALL(
-            minWave = 2,
-            maxWave = 5,
+            minWave = 3,
+            maxWave = 6,
             creditsRequired = false,
             weightFn = { raid, credits ->
                 0.11f + (raid.zombieRaidOmenLevel * 0.03f) + if (credits) 0.04f else 0f

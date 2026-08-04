@@ -1,13 +1,11 @@
 package joshxviii.plantz.model.plants;
 
-import joshxviii.plantz.PlantRenderState;
+import joshxviii.plantz.renderer.entity.PlantRenderState;
 import joshxviii.plantz.animation.plants.ElectricPeaAnimation;
-import joshxviii.plantz.animation.plants.IcePeaAnimation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import static joshxviii.plantz.UtilsKt.pazResource;
 

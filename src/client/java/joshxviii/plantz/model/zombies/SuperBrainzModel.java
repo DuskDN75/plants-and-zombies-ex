@@ -1,16 +1,14 @@
 package joshxviii.plantz.model.zombies;
 
-import joshxviii.plantz.PazZombieRenderState;
+import joshxviii.plantz.renderer.entity.PazZombieRenderState;
+import joshxviii.plantz.renderer.entity.SuperBrainzRenderState;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.entity.state.ZombieRenderState;
-import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
-
-import java.util.Objects;
 
 import static joshxviii.plantz.UtilsKt.pazResource;
 
@@ -82,14 +80,14 @@ public class SuperBrainzModel extends PazZombieModel {
     @Override
     public void setupAnim(@NotNull ZombieRenderState state) {
         super.setupAnim(state);
-        PazZombieRenderState pazState = (PazZombieRenderState) state;
+        SuperBrainzRenderState superBrainzState = (SuperBrainzRenderState) state;
         cape.resetPose();
         cape.rotateBy(
                 new Quaternionf()
                         .rotateY((float) -Math.PI)
-                        .rotateX((6.0F + pazState.getCapeLean() / 2.0F + pazState.getCapeFlap()) * (float) -(Math.PI / 180.0))
-                        .rotateZ(pazState.getCapeLean2() / 2.0F * (float) -(Math.PI / 180.0))
-                        .rotateY((180.0F - pazState.getCapeLean2() / 2.0F) * (float) -(Math.PI / 180.0))
+                        .rotateX((6.0F + superBrainzState.getCapeLean() / 2.0F + superBrainzState.getCapeFlap()) * (float) -(Math.PI / 180.0))
+                        .rotateZ(superBrainzState.getCapeLean2() / 2.0F * (float) -(Math.PI / 180.0))
+                        .rotateY((180.0F - superBrainzState.getCapeLean2() / 2.0F) * (float) -(Math.PI / 180.0))
         );
     }
 }

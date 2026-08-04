@@ -2,9 +2,9 @@ package joshxviii.plantz.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.blaze3d.vertex.PoseStack;
-import joshxviii.plantz.DuckyTubeRenderLayer;
-import joshxviii.plantz.DyeVatRenderLayer;
-import joshxviii.plantz.PaintLayer;
+import joshxviii.plantz.renderer.DuckyTubeRenderLayer;
+import joshxviii.plantz.renderer.DyeVatRenderLayer;
+import joshxviii.plantz.renderer.PaintLayer;
 import joshxviii.plantz.mixin.LivingEntityAccessor;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -23,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 

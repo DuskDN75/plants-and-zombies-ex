@@ -2,10 +2,8 @@ package joshxviii.plantz.model.plants;// Made with Blockbench 5.0.7
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
 
-import joshxviii.plantz.PlantRenderState;
+import joshxviii.plantz.renderer.entity.PlantRenderState;
 import joshxviii.plantz.animation.plants.CactusAnimation;
-import net.minecraft.client.animation.KeyframeAnimation;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;

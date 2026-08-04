@@ -1,6 +1,6 @@
 package joshxviii.plantz.model;
 
-import joshxviii.plantz.FlagRenderState;
+import joshxviii.plantz.renderer.FlagRenderState;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -8,7 +8,6 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.util.Mth;
-import net.minecraft.util.Unit;
 
 import static joshxviii.plantz.UtilsKt.pazResource;
 

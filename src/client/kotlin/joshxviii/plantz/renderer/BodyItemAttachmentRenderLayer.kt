@@ -1,9 +1,11 @@
-package joshxviii.plantz
+package joshxviii.plantz.renderer
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
+import joshxviii.plantz.PazItems
 import joshxviii.plantz.PazModels.PAINT_COLORS_KEY
 import joshxviii.plantz.model.zombies.PazZombieModel
+import joshxviii.plantz.pazResource
 import net.minecraft.client.Minecraft
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.model.HumanoidModel

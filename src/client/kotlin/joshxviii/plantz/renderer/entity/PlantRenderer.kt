@@ -1,6 +1,7 @@
-package joshxviii.plantz
+package joshxviii.plantz.renderer.entity
 
 import com.mojang.blaze3d.vertex.PoseStack
+import joshxviii.plantz.PazConfig
 import joshxviii.plantz.ai.PlantState
 import joshxviii.plantz.entity.plant.BonkChoy
 import joshxviii.plantz.entity.plant.ExplodeONut
@@ -8,6 +9,9 @@ import joshxviii.plantz.entity.plant.Explosive
 import joshxviii.plantz.entity.plant.KernelPult
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.entity.plant.WallNut
+import joshxviii.plantz.renderer.getEmissiveTextureLocation
+import joshxviii.plantz.renderer.getTextureLocation
+import joshxviii.plantz.renderer.isMagicName
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.entity.EntityRendererProvider
@@ -31,7 +35,7 @@ class PlantRenderer(
     private val defaultModel: EntityModel<PlantRenderState>,
     context: EntityRendererProvider.Context,
     private val babyModel: EntityModel<PlantRenderState>? = null,
-) : MobRenderer<Plant, PlantRenderState, EntityModel<PlantRenderState>>(
+) : net.minecraft.client.renderer.entity.MobRenderer<Plant, PlantRenderState, EntityModel<PlantRenderState>>(
     context,
     defaultModel,
     0.5f
@@ -129,7 +133,7 @@ class PlantRenderer(
 
 class EmissivePlantLayer<M : EntityModel<PlantRenderState>>(
     renderer: RenderLayerParent<PlantRenderState, M>,
-) : EyesLayer<PlantRenderState, M>(renderer) {
+) : net.minecraft.client.renderer.entity.layers.EyesLayer<PlantRenderState, M>(renderer) {
 
     override fun submit(
         poseStack: PoseStack,
@@ -148,7 +152,7 @@ class EmissivePlantLayer<M : EntityModel<PlantRenderState>>(
 }
 
 
-class PlantRenderState : LivingEntityRenderState() {
+class PlantRenderState : net.minecraft.client.renderer.entity.state.LivingEntityRenderState() {
     companion object {
         const val TEXTURE_PATH = "textures/entity/plant"
     }

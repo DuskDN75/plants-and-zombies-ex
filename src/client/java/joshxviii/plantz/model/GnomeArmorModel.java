@@ -1,6 +1,6 @@
 package joshxviii.plantz.model;
 
-import joshxviii.plantz.GnomeRenderState;
+import joshxviii.plantz.renderer.entity.GnomeRenderState;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;

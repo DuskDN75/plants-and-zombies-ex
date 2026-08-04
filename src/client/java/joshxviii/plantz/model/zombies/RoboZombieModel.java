@@ -1,6 +1,9 @@
 package joshxviii.plantz.model.zombies;
 
-import joshxviii.plantz.PazZombieRenderState;
+import joshxviii.plantz.renderer.entity.PazZombieRenderState;
+import joshxviii.plantz.animation.zombies.RoboZombieAnimation;
+import joshxviii.plantz.renderer.entity.RoboZombieRenderState;
+import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -12,9 +15,19 @@ import static joshxviii.plantz.UtilsKt.pazResource;
 
 public class RoboZombieModel extends PazZombieModel {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("robo_zombie"), "main");
+    private final KeyframeAnimation meleeAttackAnimation;
+    private final KeyframeAnimation shootAnimation;
+    private final KeyframeAnimation walkAnimation;
+    private final KeyframeAnimation idleAnimation;
+    private final KeyframeAnimation tankIdleAnimation;
 
     public RoboZombieModel(final ModelPart root) {
         super(null, root);
+        this.meleeAttackAnimation = RoboZombieAnimation.attack.bake(root.getChild("root"));
+        this.shootAnimation = RoboZombieAnimation.missile.bake(root.getChild("root"));
+        this.walkAnimation = RoboZombieAnimation.walk.bake(root.getChild("root"));
+        this.idleAnimation = RoboZombieAnimation.idle.bake(root.getChild("root"));
+        this.tankIdleAnimation = RoboZombieAnimation.tank_idle.bake(root.getChild("root"));
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -68,7 +81,16 @@ public class RoboZombieModel extends PazZombieModel {
     @Override
     public void setupAnim(@NotNull ZombieRenderState state) {
         //super.setupAnim(state);
-        PazZombieRenderState pazState = (PazZombieRenderState) state;
+        this.resetPose();
+        this.head.xRot = state.xRot * (float) (Math.PI / 180.0);
+        this.head.yRot = state.yRot * (float) (Math.PI / 180.0);
 
+        RoboZombieRenderState roboState = (RoboZombieRenderState) state;
+        float animationPos = state.walkAnimationPos;
+        float animationSpeed = state.walkAnimationSpeed;
+        walkAnimation.applyWalk(animationPos, animationSpeed, 2f, 2f);
+
+        if (roboState.isTankTransformation()) tankIdleAnimation.apply(roboState.getIdleAnimationState(), roboState.ageInTicks);
+        else idleAnimation.apply(roboState.getIdleAnimationState(), roboState.ageInTicks);
     }
 }

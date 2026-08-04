@@ -1,6 +1,7 @@
-package joshxviii.plantz
+package joshxviii.plantz.renderer.entity
 
 import com.mojang.blaze3d.vertex.PoseStack
+import joshxviii.plantz.GnomeArmorSet
 import joshxviii.plantz.PazModels.ARMOR_LAYER_LOCATION
 import joshxviii.plantz.entity.gnome.Gnome
 import joshxviii.plantz.entity.gnome.GnomeVariant
@@ -33,7 +34,7 @@ import net.minecraft.world.item.component.SwingAnimation
 class GnomeRenderer(
     context: EntityRendererProvider.Context,
     defaultModel: GnomeModel<GnomeRenderState>,
-) : MobRenderer<Gnome, GnomeRenderState, GnomeModel<GnomeRenderState>>(
+) : net.minecraft.client.renderer.entity.MobRenderer<Gnome, GnomeRenderState, GnomeModel<GnomeRenderState>>(
     context,
     defaultModel,
     0.2f
@@ -96,7 +97,7 @@ class GnomeArmorLayer(
     renderer: RenderLayerParent<GnomeRenderState, GnomeModel<GnomeRenderState>>,
     private val armorModels: GnomeArmorSet<GnomeArmorModel<GnomeRenderState>>,
     private val equipmentRenderer: EquipmentLayerRenderer
-) : RenderLayer<GnomeRenderState, GnomeModel<GnomeRenderState>>(renderer) {
+) : net.minecraft.client.renderer.entity.layers.RenderLayer<GnomeRenderState, GnomeModel<GnomeRenderState>>(renderer) {
 
     override fun submit(
         poseStack: PoseStack, submitNodeCollector: SubmitNodeCollector, lightCoords: Int, state: GnomeRenderState, yRot: Float, xRot: Float
@@ -152,7 +153,7 @@ class GnomeArmorLayer(
     }
 }
 
-class GnomeRenderState : ArmedEntityRenderState() {
+class GnomeRenderState : net.minecraft.client.renderer.entity.state.ArmedEntityRenderState() {
     var isPassenger: Boolean = false
     var isUsingItem: Boolean = false
     var variant: GnomeVariant = GnomeVariant.BLUE

@@ -1,9 +1,10 @@
-package joshxviii.plantz
+package joshxviii.plantz.renderer.entity
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import joshxviii.plantz.entity.Balloon
 import joshxviii.plantz.model.BalloonModel
+import joshxviii.plantz.pazResource
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.EntityRendererProvider
@@ -17,7 +18,7 @@ import net.minecraft.world.item.DyeColor
 class BalloonRenderer(
     context: EntityRendererProvider.Context,
     val model: BalloonModel<BalloonRenderState>
-) : EntityRenderer<Balloon, BalloonRenderState>(context) {
+) : net.minecraft.client.renderer.entity.EntityRenderer<Balloon, BalloonRenderState>(context) {
 
     override fun submit(
         state: BalloonRenderState,
@@ -58,7 +59,7 @@ class BalloonRenderer(
     }
 }
 
-class BalloonRenderState : EntityRenderState() {
+class BalloonRenderState : net.minecraft.client.renderer.entity.state.EntityRenderState() {
     var color: DyeColor = DyeColor.WHITE
     @JvmField
     var yRot: Float = 0f

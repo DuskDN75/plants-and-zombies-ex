@@ -52,7 +52,6 @@ class Gargantuar(type: EntityType<out Gargantuar>, level: Level) : PazZombie(typ
     var throwTime: Int
         get() = this.entityData.get(THROW_TIME_ID)
         set(value) = this.entityData.set(THROW_TIME_ID, value)
-
     var hasImp: Boolean
         get() = this.entityData.get(HAS_IMP_ID)
         set(value) = this.entityData.set(HAS_IMP_ID, value)

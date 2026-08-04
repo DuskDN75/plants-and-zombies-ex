@@ -1,9 +1,9 @@
-package joshxviii.plantz
+package joshxviii.plantz.renderer.entity
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import joshxviii.plantz.entity.projectile.PaintBall
-import joshxviii.plantz.entity.projectile.PeaFire
+import joshxviii.plantz.pazResource
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.SubmitNodeCollector
@@ -78,7 +78,7 @@ class ProjectileRenderer(
     }
 }
 
-class ProjectileRenderState : EntityRenderState() {
+class ProjectileRenderState : net.minecraft.client.renderer.entity.state.EntityRenderState() {
     var xRot: Float = 0f
     var yRot: Float = 0f
     var texturePath: String = "default"

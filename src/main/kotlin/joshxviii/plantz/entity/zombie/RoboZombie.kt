@@ -26,15 +26,24 @@ import net.minecraft.world.level.ServerLevelAccessor
 class RoboZombie(type: EntityType<out RoboZombie>, level: Level) : PazZombie(type, level) {
 
     companion object {
-
+        val TANK_TRANSFORMATION: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(RoboZombie::class.java, EntityDataSerializers.BOOLEAN)
     }
 
     init {
-        xpReward = 20
+        xpReward = 30
     }
+
+    var isTransformed: Boolean
+        get() = this.entityData.get(TANK_TRANSFORMATION)
+        set(value) = this.entityData.set(TANK_TRANSFORMATION, value)
+
+    val idleAnimation : AnimationState = AnimationState()
+    val meleeAttackAnimation : AnimationState = AnimationState()
+    val shootAnimation : AnimationState = AnimationState()
 
     override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
         super.defineSynchedData(entityData)
+        entityData.define(TANK_TRANSFORMATION, false)
     }
 
     override fun registerGoals() {
@@ -52,6 +61,18 @@ class RoboZombie(type: EntityType<out RoboZombie>, level: Level) : PazZombie(typ
 
     override fun addBehaviourGoals() {
         behaviourGoalsNoMelee()
+    }
+
+    override fun canEquipDuckyInWater(): Boolean = false
+    override fun canPickUpLoot(): Boolean = false
+
+    override fun tick() {
+        super.tick()
+        if (!this.isNoAi) { updateAnimationState() }
+    }
+
+    fun updateAnimationState() {
+        idleAnimation.startIfStopped(0)
     }
 
     //TODO custom sounds

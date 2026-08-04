@@ -1,9 +1,7 @@
 package joshxviii.plantz.model.plants;
 
-import joshxviii.plantz.PlantRenderState;
+import joshxviii.plantz.renderer.entity.PlantRenderState;
 import joshxviii.plantz.animation.plants.ChomperAnimation;
-import net.minecraft.client.animation.KeyframeAnimation;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;

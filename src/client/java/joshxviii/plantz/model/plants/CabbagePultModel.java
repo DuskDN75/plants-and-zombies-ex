@@ -1,6 +1,6 @@
 package joshxviii.plantz.model.plants;
 
-import joshxviii.plantz.PlantRenderState;
+import joshxviii.plantz.renderer.entity.PlantRenderState;
 import joshxviii.plantz.animation.plants.CabbagePultAnimation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;

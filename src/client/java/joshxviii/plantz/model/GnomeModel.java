@@ -2,11 +2,10 @@ package joshxviii.plantz.model;
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import joshxviii.plantz.GnomeRenderState;
+import joshxviii.plantz.renderer.entity.GnomeRenderState;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HeadedModel;
-import net.minecraft.client.model.effects.SpearAnimations;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import org.jetbrains.annotations.NotNull;

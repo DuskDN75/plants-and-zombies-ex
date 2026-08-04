@@ -1,10 +1,7 @@
 package joshxviii.plantz.model.plants;
 
-import joshxviii.plantz.PlantRenderState;
-import joshxviii.plantz.ai.PlantState;
+import joshxviii.plantz.renderer.entity.PlantRenderState;
 import joshxviii.plantz.animation.plants.BonkChoyAnimation;
-import joshxviii.plantz.animation.plants.PotatoMineAnimation;
-import joshxviii.plantz.animation.plants.ScaredyShroomAnimation;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;

@@ -1,6 +1,6 @@
 package joshxviii.plantz.model.plants;
 
-import joshxviii.plantz.PlantRenderState;
+import joshxviii.plantz.renderer.entity.PlantRenderState;
 import joshxviii.plantz.animation.plants.TangleKelpAnimation;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.geom.ModelLayerLocation;

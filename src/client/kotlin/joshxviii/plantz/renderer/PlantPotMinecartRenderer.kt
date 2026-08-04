@@ -1,4 +1,4 @@
-package joshxviii.plantz
+package joshxviii.plantz.renderer
 
 import com.mojang.blaze3d.vertex.PoseStack
 import joshxviii.plantz.entity.PlantPotMinecart
@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.block.BlockModelRenderState
 import net.minecraft.client.renderer.entity.AbstractMinecartRenderer
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.state.MinecartRenderState
-import net.minecraft.world.level.block.state.BlockState
 
 class PlantPotMinecartRenderer(
     context: EntityRendererProvider.Context,
