@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.tags.StructureTags
 import net.minecraft.util.RandomSource
 import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.damagesource.DamageSource
@@ -83,9 +84,13 @@ class BrownCoat(type: EntityType<out BrownCoat>, level: Level) : PazZombie(type,
         val difficultyModifier = difficulty.specialMultiplier
         setCanPickUpLoot(true)
         setCanBreakDoors(true)
+        val structureManager = (level as ServerLevel).structureManager()
+        val isShipwreckSpawn = structureManager.getStructureWithPieceAt(blockPosition(), StructureTags.SHIPWRECK).isValid
         variant = BrownCoatVariant.pickForBiome(
             level.getBiome(blockPosition()).`is`(PazTags.Biomes.HAS_BROWNCOAT_SNOW),
             level.getBiome(blockPosition()).`is`(PazTags.Biomes.HAS_BROWNCOAT_DESERT),
+            level.getBiome(blockPosition()).`is`(PazTags.Biomes.HAS_BROWNCOAT_BEACH),
+            isShipwreckSpawn,
             random
         )
 

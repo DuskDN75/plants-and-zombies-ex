@@ -12,7 +12,8 @@ import java.util.function.IntFunction
 enum class BrownCoatVariant(val suffix: String, val id: Int) : StringRepresentable {
     BROWN("", 0),
     SNOW("snow", 1),
-    DESERT("desert", 2);
+    DESERT("desert", 2),
+    BUCCANEER("buccaneer", 3);
 
     override fun getSerializedName(): String = suffix
 
@@ -21,11 +22,12 @@ enum class BrownCoatVariant(val suffix: String, val id: Int) : StringRepresentab
 
         fun pickRandomVariant(): BrownCoatVariant = entries.random()
 
-        fun pickForBiome(isSnowy: Boolean, isDesert: Boolean, random: RandomSource): BrownCoatVariant {
+        fun pickForBiome(isSnowy: Boolean, isDesert: Boolean, isBeach: Boolean, isShipwreck: Boolean, random: RandomSource): BrownCoatVariant {
             return when {
-                isSnowy && isDesert -> if (random.nextBoolean()) SNOW else DESERT
+                isShipwreck -> BUCCANEER
                 isSnowy -> if (random.nextFloat() < 0.7f) SNOW else BROWN
                 isDesert -> if (random.nextFloat() < 0.7f) DESERT else BROWN
+                isBeach -> if (random.nextFloat() < 0.7f) BUCCANEER else BROWN
                 else -> BROWN
             }
         }

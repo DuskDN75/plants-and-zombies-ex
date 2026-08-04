@@ -98,7 +98,7 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
         super.registerGoals()
     }
 
-    fun behaviourGoalsNoMelee() {
+    fun addBehaviourGoalsNoMelee() {
         this.goalSelector.addGoal(2, SpearUseGoal<Zombie>(this, 1.0, 1.0, 10.0f, 2.0f))
         this.goalSelector.addGoal(6, MoveThroughVillageGoal(this, 1.0, true, 4) { this.canBreakDoors() })
         this.goalSelector.addGoal(7, WaterAvoidingRandomStrollGoal(this, 1.0))

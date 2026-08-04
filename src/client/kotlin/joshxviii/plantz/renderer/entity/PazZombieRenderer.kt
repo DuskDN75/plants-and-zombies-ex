@@ -96,7 +96,8 @@ open class PazZombieRenderer(
 
     override fun getTextureLocation(state: ZombieRenderState): Identifier {
         (state as PazZombieRenderState)
-        return state.getTextureLocation(PazZombieRenderState.TEXTURE_PATH, state.getSuffixes())
+        val texture = state.getTextureLocation(PazZombieRenderState.TEXTURE_PATH, state.getSuffixes())
+        return texture
     }
 }
 
@@ -139,9 +140,9 @@ open class PazZombieRenderState : ZombieRenderState() {
     fun getSuffixes(): MutableList<String> {
         val magicName = this.isMagicName(customName)
         val suffixes = mutableListOf<String>().apply {
+            if (textureExtra.isNotEmpty()) add(textureExtra)
             if (isBaby)                         add("baby")
             else if (magicName.isNotEmpty())    add(magicName)
-            else if (textureExtra.isNotEmpty()) add(textureExtra)
         }
         return suffixes
     }

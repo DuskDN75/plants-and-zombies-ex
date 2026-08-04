@@ -80,7 +80,7 @@ public class RoboZombieModel extends PazZombieModel {
 
     @Override
     public void setupAnim(@NotNull ZombieRenderState state) {
-        //super.setupAnim(state);
+        super.setupAnim(state);
         this.resetPose();
         this.head.xRot = state.xRot * (float) (Math.PI / 180.0);
         this.head.yRot = state.yRot * (float) (Math.PI / 180.0);

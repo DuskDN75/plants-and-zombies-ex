@@ -4,13 +4,8 @@ import joshxviii.plantz.PazDataSerializers.DATA_DYE_COLOR
 import joshxviii.plantz.PazItems
 import joshxviii.plantz.PazSounds
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
-import joshxviii.plantz.entity.plant.Repeater
 import joshxviii.plantz.entity.projectile.PaintBall
-import joshxviii.plantz.entity.zombie.Gargantuar.Companion.HAS_IMP_ID
-import joshxviii.plantz.entity.zombie.Gargantuar.Companion.SMASH_ATTACK_TIME_ID
-import joshxviii.plantz.entity.zombie.Gargantuar.Companion.THROW_TIME_ID
 import net.minecraft.network.syncher.EntityDataAccessor
-import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
@@ -55,7 +50,7 @@ class SoldierZombie(type: EntityType<out SoldierZombie>, level: Level) : PazZomb
     }
 
     override fun addBehaviourGoals() {
-        behaviourGoalsNoMelee()
+        addBehaviourGoalsNoMelee()
     }
 
     override fun getAmbientSound(): SoundEvent {
