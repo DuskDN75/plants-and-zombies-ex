@@ -19,6 +19,7 @@
 - Added Gravestone Block
   - Zombies will emerge from the ground near the gravestone during the night.
 - Added The Graveyard biome.
+- Added Garden Gnome Blocks.
 - The Football Helmet now gives increased speed and step height while sprinting. Nearby Mobs will also be knocked back.
 #### Plants:
 - Added Electric Peashooter

@@ -6,6 +6,35 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "name": "plantz:brainz_alloy",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0,
+                "max": 2
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1,
+      "functions": [
+        {
+          "function": "minecraft:set_count",
+          "count": {
+            "min": 1,
+            "max": 2
+          }
+        }
+      ]
+    },
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
           "functions": [
             {
               "add": false,
@@ -34,7 +63,7 @@
             }
           ],
           "name": "minecraft:gold_ingot",
-          "weight": 10
+          "weight": 20
         },
         {
           "type": "minecraft:item",
@@ -51,16 +80,11 @@
           ],
           "name": "minecraft:emerald",
           "weight": 30
-        },
-        {
-          "type": "minecraft:item",
-          "name": "plantz:brainz_alloy",
-          "weight": 60
         }
       ],
       "rolls": {
         "type": "minecraft:uniform",
-        "max": 3,
+        "max": 2,
         "min": 1
       }
     },
@@ -97,12 +121,12 @@
             }
           ],
           "name": "minecraft:gold_nugget",
-          "weight": 10
+          "weight": 30
         }
       ],
       "rolls": {
         "type": "minecraft:uniform",
-        "max": 2,
+        "max": 3,
         "min": 1
       }
     }

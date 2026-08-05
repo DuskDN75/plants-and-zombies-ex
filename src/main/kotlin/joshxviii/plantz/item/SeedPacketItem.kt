@@ -151,7 +151,7 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
                 || !(spawnBlockCollisionShape==null || !entityBox.intersects(spawnBlockCollisionShape))
             ) {
                 player.sendOverlayMessage(
-                    Component.translatable("message.plantz.cannot_place").withStyle(ChatFormatting.RED)
+                    Component.translatable("message.plantz.cannot_place", entity.name.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED)
                 )
                 return InteractionResult.FAIL
             }
@@ -205,7 +205,7 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
                 when {
                     plant == null -> PacketInteractionResult.FAIL
                     plant.isGrowingSeeds -> {
-                        player.sendOverlayMessage(Component.translatable("message.plantz.growing").withStyle(ChatFormatting.RED))
+                        player.sendOverlayMessage(Component.translatable("message.plantz.growing", plant.name.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED))
                         PacketInteractionResult.FAIL
                     }
                     cantAfford -> PacketInteractionResult.CANT_AFFORD
