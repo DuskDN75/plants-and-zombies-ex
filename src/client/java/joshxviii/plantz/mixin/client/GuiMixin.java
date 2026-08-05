@@ -3,6 +3,7 @@ package joshxviii.plantz.mixin.client;
 import com.google.common.hash.HashCode;
 import joshxviii.plantz.PazEffects;
 import joshxviii.plantz.PazModels;
+import joshxviii.plantz.effect.FreezeMobEffect;
 import joshxviii.plantz.effect.PaintedMobEffect;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -32,6 +33,9 @@ public abstract class GuiMixin {
     @Shadow
     protected abstract void extractTextureOverlay(GuiGraphicsExtractor graphics, Identifier texture, float alpha);
 
+    @Unique
+    private final Identifier FREEZE_OUTLINE_LOCATION = Identifier.withDefaultNamespace("textures/misc/powder_snow_outline.png");
+
     @Shadow
     @Final
     private Minecraft minecraft;
@@ -42,10 +46,13 @@ public abstract class GuiMixin {
         if (player == null) return;
         var effects = PaintedMobEffect.getPaintEffects(player, null);
         effects.forEach( it -> {
-            if (it.getEffect().value() instanceof PaintedMobEffect paintedMobEffect) {
+            var effect = it.getEffect().value();
+            if (effect instanceof PaintedMobEffect paintedMobEffect) {
                 extractPaintOverlay(graphics, paintedMobEffect.getRandomness(), paintedMobEffect.getPaintColor(), it.getAmplifier(), (it.getDuration()/80f));
             }
         });
+        var freezeEffect = player.getEffect(PazEffects.FREEZE);
+        if (freezeEffect != null) extractTextureOverlay(graphics, FREEZE_OUTLINE_LOCATION, freezeEffect.getDuration() / 20f);
     }
 
     @Unique

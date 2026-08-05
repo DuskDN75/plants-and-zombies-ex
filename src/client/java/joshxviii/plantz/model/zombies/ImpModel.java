@@ -41,6 +41,7 @@ public class ImpModel extends PazZombieModel {
 
     @Override
     public void setupAnim(@NotNull ZombieRenderState state) {
+        state.isBaby = true;
         super.setupAnim(state);
     }
 }

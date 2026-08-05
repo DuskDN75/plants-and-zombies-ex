@@ -21,6 +21,7 @@
 - Added The Graveyard biome.
 - Added Garden Gnome Blocks.
 - The Football Helmet now gives increased speed and step height while sprinting. Nearby Mobs will also be knocked back.
+- Added Freeze Mob Effect.
 #### Plants:
 - Added Electric Peashooter
   - Acquired by striking a peashooter with lightning.
@@ -33,6 +34,7 @@
 - Added Grave Buster
   - Found in the Graveyard and Pale Garden biomes.
   - Can be used on Gravestones to acquire Grave Loot.
+- Snow Peas will now apply the Freeze effect rather than Slowness and Weakness.
 - Added plant transformations
   - Some plants can be transformed into other plants under certain conditions.
 - Added Seed Packet Mutations
@@ -45,7 +47,9 @@
 - Repeaters no longer spawn naturally.
 #### Zombies:
 - Added Desert, Snow, and Pirate Variants for the Browncoat Zombie.
-- Added a Yeti and Barrel Variant for the Imp,
+- Added a Yeti and Pirate Variant for the Imp,
+  - Yeti Imps apply the Freeze effect.
+  - Pirate Imps spawn in an explosive barrel.
 - Added Soldier Zombie
   - Spawns during a zombie raid.
   - Uses the dye blaster.

@@ -2,6 +2,7 @@ package joshxviii.plantz
 
 import joshxviii.plantz.effect.ButteredMobEffect
 import joshxviii.plantz.effect.ElectrifyMobEffect
+import joshxviii.plantz.effect.FreezeMobEffect
 import joshxviii.plantz.effect.HypnotizedMobEffect
 import joshxviii.plantz.effect.PaintedMobEffect
 import joshxviii.plantz.effect.TangledMobEffect
@@ -33,6 +34,11 @@ object PazEffects {
 
     @JvmField val TOXIC: Holder<MobEffect> = register("toxic",
         ToxicMobEffect(MobEffectCategory.HARMFUL, 10762143))
+    @JvmField val FREEZE: Holder<MobEffect> = register("freeze",
+        FreezeMobEffect(MobEffectCategory.HARMFUL, 0x74F0FF, PazServerParticles.FROZEN)
+            .addAttributeModifier(Attributes.MOVEMENT_SPEED, pazResource("effect.freeze"), -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.ATTACK_DAMAGE, pazResource("effect.freeze"), -0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+    )
     @JvmField val HYPNOTIZE: Holder<MobEffect> = register("hypnotize",
         HypnotizedMobEffect(MobEffectCategory.NEUTRAL, 15841255))
     @JvmField val ZOMBIE_OMEN : Holder<MobEffect> = register("zombie_omen",

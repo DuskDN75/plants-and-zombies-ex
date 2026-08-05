@@ -52,6 +52,8 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     @Unique
     private static final EntityDataAccessor<Boolean> DATA_HYPNO_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
     @Unique
+    private static final EntityDataAccessor<Boolean> DATA_FREEZE_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
+    @Unique
     private static final EntityDataAccessor<Map<Integer, Integer>> DATA_PAINTED_COLORS = SynchedEntityData.defineId(LivingEntity.class, DATA_PAINT_COLORS);
 
     @Shadow
@@ -97,6 +99,10 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     @Unique
     public boolean plantz$getHypnoId() {
         return ((Entity) (Object) this).getEntityData().get(DATA_HYPNO_ID);
+    }
+    @Unique
+    public boolean plantz$getFreezeId() {
+        return ((Entity) (Object) this).getEntityData().get(DATA_FREEZE_ID);
     }
     @Unique
     public Map<Integer, Integer> plantz$getPaintedColors() {
@@ -152,12 +158,14 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     public void defineData(SynchedEntityData.Builder entityData, CallbackInfo ci) {
         entityData.define(DATA_HYPNO_ID, false);
+        entityData.define(DATA_FREEZE_ID, false);
         entityData.define(DATA_PAINTED_COLORS, new HashMap<>());
     }
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void saveHypnoFlag(ValueOutput output, CallbackInfo ci) {
         var self = (LivingEntity) (Object) this;
         output.putBoolean("plantz:IsHypnotized", self.getEntityData().get(DATA_HYPNO_ID));
+        output.putBoolean("plantz:IsFrozen", self.getEntityData().get(DATA_FREEZE_ID));
         output.store("plantz:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT), self.getEntityData().get(DATA_PAINTED_COLORS));
         if (!this.plantz$getPlantData().isEmpty()) {
             output.store("plantz:AttachedPlant", CompoundTag.CODEC, this.plantz$getPlantData());
@@ -167,6 +175,7 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     private void loadHypnoFlag(ValueInput input, CallbackInfo ci) {
         var self = (LivingEntity) (Object) this;
         self.getEntityData().set(DATA_HYPNO_ID, input.getBooleanOr("plantz:IsHypnotized", false));
+        self.getEntityData().set(DATA_FREEZE_ID, input.getBooleanOr("plantz:IsFrozen", false));
         self.getEntityData().set(DATA_PAINTED_COLORS, input.read("plantz:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT)).orElseGet(HashMap::new));
         plantz$setPlantData(input.read("plantz:AttachedPlant", CompoundTag.CODEC).orElseGet(CompoundTag::new));
         if (self instanceof PathfinderMob mob) {
@@ -191,13 +200,18 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     public void updateEffects() {
         var self = (LivingEntity) (Object) this;
         self.getEntityData().set(DATA_HYPNO_ID, this.hasEffect(PazEffects.HYPNOTIZE));
+        self.getEntityData().set(DATA_FREEZE_ID, this.hasEffect(PazEffects.FREEZE));
         self.getEntityData().set(DATA_PAINTED_COLORS, PaintedMobEffect.getPaintColors(self));
     }
 
     @Inject(method = "canBeAffected", at = @At(value = "RETURN"), cancellable = true)
-    public void immuneToHypnosis(MobEffectInstance newEffect, CallbackInfoReturnable<Boolean> cir) {
+    public void immuneToHypnosisOrFreeze(MobEffectInstance newEffect, CallbackInfoReturnable<Boolean> cir) {
+        var entity = (LivingEntity) (Object) this;
         if (newEffect.is(PazEffects.HYPNOTIZE)) {
-            cir.setReturnValue(!((Entity) (Object) this).is(PazTags.EntityTypes.CANNOT_HYPNOTIZE));
+            cir.setReturnValue(!entity.is(PazTags.EntityTypes.CANNOT_HYPNOTIZE));
+        }
+        if (newEffect.is(PazEffects.FREEZE)) {
+            cir.setReturnValue(entity.canFreeze());
         }
         updateEffects();
     }

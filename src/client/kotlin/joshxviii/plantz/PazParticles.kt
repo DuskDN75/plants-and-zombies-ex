@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleGroupRegistry
 import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry
 import net.minecraft.client.particle.CritParticle
 import net.minecraft.client.particle.ParticleRenderType
+import net.minecraft.client.particle.SnowflakeParticle
 import net.minecraft.client.particle.SpellParticle
 import net.minecraft.client.particle.SplashParticle
 
@@ -21,6 +22,10 @@ object PazParticles {
         // particle providers
         val it = ParticleProviderRegistry.getInstance()
         it.register(PazServerParticles.BUTTER_DRIP) { sprite ->
+            SplashParticle.Provider(sprite)
+        }
+
+        it.register(PazServerParticles.FROZEN) { sprite ->
             SplashParticle.Provider(sprite)
         }
 

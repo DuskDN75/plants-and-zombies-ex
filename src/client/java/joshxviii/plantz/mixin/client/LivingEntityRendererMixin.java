@@ -44,13 +44,17 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     @Inject(method = "extractRenderState*", at = @At("TAIL"))
     private void checkForHypnoEffect(T entity, S state, float partialTicks, CallbackInfo ci) {
         boolean hasHypno = ((LivingEntityAccessor) entity).plantz$getHypnoId();
-        state.setData(IS_HYPNOTIZED_KEY, hasHypno);
+        state.setData(HAS_HYPNO_KEY, hasHypno);
+        boolean hasFreeze = ((LivingEntityAccessor) entity).plantz$getFreezeId();
+        state.setData(HAS_FREEZE_KEY, hasFreeze);
         Map<Integer, Integer> paintColors = ((LivingEntityAccessor) entity).plantz$getPaintedColors();
         state.setData(PAINT_COLORS_KEY, paintColors);
     }
 
     @Unique
     private static final int PLANTZ_HYPNO_TINT = 0xFFD036FF;
+    @Unique
+    private static final int PLANTZ_FREEZE_TINT = 0xFF0098DC;
 
     @ModifyExpressionValue(
         method = "submit*",
@@ -59,8 +63,11 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     private int plantz$applyHypnoTint(int tintedColor, S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
         AtomicInteger finalColor = new AtomicInteger(tintedColor);
 
-        if (state.getDataOrDefault(IS_HYPNOTIZED_KEY, false)) {
+        if (state.getDataOrDefault(HAS_HYPNO_KEY, false)) {
             finalColor.set(ARGB.multiply(finalColor.get(), PLANTZ_HYPNO_TINT));
+        }
+        if (state.getDataOrDefault(HAS_FREEZE_KEY, false)) {
+            finalColor.set(ARGB.multiply(finalColor.get(), PLANTZ_FREEZE_TINT));
         }
 
         // multiple colors end up just looking black. not gonna use this for now.

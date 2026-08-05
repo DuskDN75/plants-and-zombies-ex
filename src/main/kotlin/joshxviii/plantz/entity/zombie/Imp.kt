@@ -80,15 +80,15 @@ class Imp(type: EntityType<out Imp> = PazEntities.IMP, level: Level) : PazZombie
     override fun doHurtTarget(level: ServerLevel, target: Entity): Boolean {
         val wasHurt = super.doHurtTarget(level, target)
         if (wasHurt && target is LivingEntity) {
+            val effectTime = when (level().difficulty) {
+                Difficulty.NORMAL -> 5
+                Difficulty.HARD -> 12
+                else -> 0
+            }
+            val chance = random.nextFloat()
             when (variant) {
-                ImpVariant.IMP -> {
-                    val toxicTime = when (level().difficulty) {
-                        Difficulty.NORMAL -> 8
-                        Difficulty.HARD -> 15
-                        else -> 0
-                    }
-                    if (random.nextFloat() > 0.25) target.addEffect(MobEffectInstance(PazEffects.TOXIC, toxicTime * 20, 0), this)
-                }
+                ImpVariant.IMP -> if (chance < 0.2f) target.addEffect(MobEffectInstance(PazEffects.TOXIC, effectTime * 20, 0), this)
+                ImpVariant.YETI -> if (chance < 0.5f) target.addEffect(MobEffectInstance(PazEffects.FREEZE, (effectTime * 30).coerceAtLeast(20), 1), this)
                 else -> {}
             }
         }

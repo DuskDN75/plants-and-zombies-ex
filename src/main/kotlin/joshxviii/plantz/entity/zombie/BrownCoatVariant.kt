@@ -25,9 +25,9 @@ enum class BrownCoatVariant(val suffix: String, val id: Int) : StringRepresentab
         fun pickForBiome(isSnowy: Boolean, isDesert: Boolean, isBeach: Boolean, isShipwreck: Boolean, random: RandomSource): BrownCoatVariant {
             return when {
                 isShipwreck -> BUCCANEER
-                isSnowy -> if (random.nextFloat() < 0.7f) SNOW else BROWN
-                isDesert -> if (random.nextFloat() < 0.7f) DESERT else BROWN
-                isBeach -> if (random.nextFloat() < 0.7f) BUCCANEER else BROWN
+                isSnowy -> if (random.nextFloat() < 0.75f) SNOW else BROWN
+                isDesert -> if (random.nextFloat() < 0.75f) DESERT else BROWN
+                isBeach -> if (random.nextFloat() < 0.6f) BUCCANEER else BROWN
                 else -> BROWN
             }
         }

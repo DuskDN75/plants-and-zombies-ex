@@ -35,6 +35,7 @@ object PazServerParticles {
     @JvmField val EMBER: SimpleParticleType = registerSimple("ember")
     @JvmField val ELECTRIFIED: SimpleParticleType = registerSimple("electrified")
     @JvmField val ENERGIZED: SimpleParticleType = registerSimple("energized")
+    @JvmField val FROZEN: SimpleParticleType = registerSimple("frozen")
     @JvmField val POWERED_UP: SimpleParticleType = registerSimple("powered_up")
     @JvmField val POP: SimpleParticleType = registerSimple("pop")
     @JvmField val SLEEP: SimpleParticleType = registerSimple("sleep")

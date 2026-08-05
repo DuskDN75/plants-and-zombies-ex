@@ -40,7 +40,9 @@ import net.minecraft.resources.Identifier
 object PazModels {
 
     @JvmField
-    val IS_HYPNOTIZED_KEY: RenderStateDataKey<Boolean> = RenderStateDataKey.create { "plantz:hypnotized" }
+    val HAS_HYPNO_KEY: RenderStateDataKey<Boolean> = RenderStateDataKey.create { "plantz:hypnotized" }
+    @JvmField
+    val HAS_FREEZE_KEY: RenderStateDataKey<Boolean> = RenderStateDataKey.create { "plantz:frozen" }
     @JvmField
     val PAINT_COLORS_KEY: RenderStateDataKey<Map<Int, Int>> = RenderStateDataKey.create { "plantz:painted" }
 
