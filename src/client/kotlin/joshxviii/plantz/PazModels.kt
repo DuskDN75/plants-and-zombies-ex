@@ -22,6 +22,7 @@ import joshxviii.plantz.renderer.SunBatteryRenderer
 import joshxviii.plantz.renderer.entity.SunRenderer
 import joshxviii.plantz.renderer.TimeMachineRenderSate
 import joshxviii.plantz.renderer.TimeMachineRenderer
+import joshxviii.plantz.renderer.entity.PirateCaptainRenderer
 import joshxviii.plantz.renderer.entity.PlantRenderer
 import joshxviii.plantz.renderer.entity.RoboZombieRenderer
 import joshxviii.plantz.renderer.entity.SuperBrainzRenderer
@@ -131,6 +132,7 @@ object PazModels {
         ModelLayerRegistry.registerModelLayer(DiscoZombieModel.LAYER_LOCATION) { DiscoZombieModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(AllStarModel.LAYER_LOCATION) { AllStarModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(SoldierZombieModel.LAYER_LOCATION) { SoldierZombieModel.createBodyLayer() }
+        ModelLayerRegistry.registerModelLayer(PirateCaptainModel.LAYER_LOCATION) { PirateCaptainModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(RoboZombieModel.LAYER_LOCATION) { RoboZombieModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(SuperBrainzModel.LAYER_LOCATION) { SuperBrainzModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(ImpModel.LAYER_LOCATION) { ImpModel.createBodyLayer() }
@@ -210,6 +212,7 @@ object PazModels {
         EntityRenderers.register(PazEntities.DISCO_ZOMBIE) { PazZombieRenderer(it, DiscoZombieModel(it.bakeLayer(DiscoZombieModel.LAYER_LOCATION))) }
         EntityRenderers.register(PazEntities.ALL_STAR) { PazZombieRenderer(it, AllStarModel(it.bakeLayer(AllStarModel.LAYER_LOCATION)), AllStarModel(it.bakeLayer(AllStarModel.LAYER_LOCATION))) }
         EntityRenderers.register(PazEntities.SOLDIER_ZOMBIE) { PazZombieRenderer(it, SoldierZombieModel(it.bakeLayer(SoldierZombieModel.LAYER_LOCATION)), SoldierZombieModel(it.bakeLayer(SoldierZombieModel.LAYER_LOCATION))) }
+        EntityRenderers.register(PazEntities.PIRATE_CAPTAIN) { PirateCaptainRenderer(it) }
         EntityRenderers.register(PazEntities.ROBO_ZOMBIE) { RoboZombieRenderer(it) }
         EntityRenderers.register(PazEntities.SUPER_BRAINZ) { SuperBrainzRenderer(it) }
         EntityRenderers.register(PazEntities.IMP) { PazZombieRenderer(it, ImpModel(it.bakeLayer(ImpModel.LAYER_LOCATION)), ImpModel(it.bakeLayer(ImpModel.LAYER_LOCATION))) }

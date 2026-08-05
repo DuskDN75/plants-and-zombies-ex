@@ -1,0 +1,55 @@
+package joshxviii.plantz.entity.zombie
+
+import joshxviii.plantz.PazSounds
+import joshxviii.plantz.ai.ZombieState
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.world.DifficultyInstance
+import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.SpawnGroupData
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.ServerLevelAccessor
+
+class PirateCaptain(type: EntityType<out PirateCaptain>, level: Level) : PazZombie(type, level) {
+
+    override fun getAmbientSound(): SoundEvent {
+        return SoundEvents.EMPTY
+    }
+    override fun getHurtSound(source: DamageSource): SoundEvent {
+        return SoundEvents.EMPTY
+    }
+    override fun getDeathSound(): SoundEvent {
+        return SoundEvents.EMPTY
+    }
+    override fun getStepSound(): SoundEvent {
+        return SoundEvents.EMPTY
+    }
+
+    override fun handleAttributes(difficultyModifier: Float, spawnReason: EntitySpawnReason) {}
+
+    override fun doHurtTarget(level: ServerLevel, target: Entity): Boolean {
+        val result = super.doHurtTarget(level, target)
+        return result
+    }
+
+    override fun canPickUpLoot(): Boolean = false
+
+    override fun tick() {
+        super.tick()
+    }
+
+    override fun finalizeSpawn(
+        level: ServerLevelAccessor,
+        difficulty: DifficultyInstance,
+        spawnReason: EntitySpawnReason,
+        groupData: SpawnGroupData?
+    ): SpawnGroupData? {
+        val data = super.finalizeSpawn(level, difficulty, spawnReason, ZombieGroupData(false, false))
+
+        return data
+    }
+}

@@ -412,6 +412,18 @@ object PazEntities {
             .add(Attributes.MOVEMENT_SPEED, 0.237)
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 2.0)
     )
+    @JvmField val PIRATE_CAPTAIN: EntityType<PirateCaptain> =  registerZombie(
+        "pirate_captain",
+        EntityType.Builder.of(::PirateCaptain, MobCategory.MONSTER)
+            .sized(0.6f, 1.95f)
+            .eyeHeight(1.74f)
+            .clientTrackingRange(8),
+        attributes = Zombie.createAttributes()
+            .add(Attributes.ATTACK_DAMAGE, 10.0)
+            .add(Attributes.MAX_HEALTH, 120.0)
+            .add(Attributes.MOVEMENT_SPEED, 0.21)
+            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0)
+    )
     @JvmField val ROBO_ZOMBIE: EntityType<RoboZombie> =  registerZombie(
         "robo_zombie",
         EntityType.Builder.of(::RoboZombie, MobCategory.MONSTER)
@@ -424,7 +436,7 @@ object PazEntities {
             .add(Attributes.STEP_HEIGHT, 1.0)
             .add(Attributes.MOVEMENT_SPEED, 0.23)
             .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)
-            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 1.5)
+            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0)
     )
     @JvmField val SUPER_BRAINZ: EntityType<SuperBrainz> =  registerZombie(
         "super_brainz",
@@ -438,7 +450,7 @@ object PazEntities {
             .add(Attributes.STEP_HEIGHT, 1.0)
             .add(Attributes.MOVEMENT_SPEED, 0.23)
             .add(Attributes.KNOCKBACK_RESISTANCE, 0.6)
-            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 1.5)
+            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0)
     )
     @JvmField val IMP: EntityType<Imp> =  registerZombie(
         "imp",
@@ -450,7 +462,7 @@ object PazEntities {
         attributes = Zombie.createAttributes()
             .add(Attributes.ATTACK_DAMAGE, 1.5)
             .add(Attributes.MAX_HEALTH, 15.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.3)
+            .add(Attributes.MOVEMENT_SPEED, 0.32)
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.3)
     )
     @JvmField val GARGANTUAR: EntityType<Gargantuar> =  registerZombie(

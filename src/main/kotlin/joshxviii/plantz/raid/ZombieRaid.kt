@@ -10,6 +10,8 @@ import joshxviii.plantz.advancement.ZombieRaidContext
 import joshxviii.plantz.block.entity.FlagBlockEntity
 import joshxviii.plantz.entity.zombie.BrownCoat
 import joshxviii.plantz.entity.zombie.BrownCoatVariant
+import joshxviii.plantz.entity.zombie.Imp
+import joshxviii.plantz.entity.zombie.ImpVariant
 import net.minecraft.SharedConstants
 import net.minecraft.ChatFormatting
 import net.minecraft.core.BlockPos
@@ -494,15 +496,17 @@ class ZombieRaid(
             ZombieRaiderType.IMP -> bonusSpawns = if (wave > 2) random.nextInt(wave + (zombieRaidOmenLevel / 2)) else 0
             ZombieRaiderType.GARGANTUAR -> bonusSpawns = if (creditsUnlocked && wave > 4) 1 else 0
             ZombieRaiderType.ENGINEER_ZOMBIE -> bonusSpawns = if (creditsUnlocked && wave > 1) 1 + (zombieRaidOmenLevel / 3) else 0
-            ZombieRaiderType.SUPER_BRAINZ -> bonusSpawns = if (creditsUnlocked && wave > 3) 1 else 0
-            ZombieRaiderType.ROBO_ZOMBIE -> bonusSpawns = if (creditsUnlocked && wave > 4) 1 else 0
             ZombieRaiderType.SOLDIER_ZOMBIE -> bonusSpawns = if (creditsUnlocked && wave > 2) 1 + random.nextInt(2) else 0
+            ZombieRaiderType.ROBO_ZOMBIE -> bonusSpawns = if (creditsUnlocked && wave > 4) 1 else 0
+            ZombieRaiderType.PIRATE_CAPTAIN -> bonusSpawns = if (creditsUnlocked && wave > 3) 1 else 0
+            ZombieRaiderType.SUPER_BRAINZ -> bonusSpawns = if (creditsUnlocked && wave > 5) 1 else 0
+            else -> return 0
         }
 
         return if (bonusSpawns > 0) random.nextInt(bonusSpawns + 1) else 0
     }
 
-    private fun spawnBucketHead(zombie: Zombie) {
+    private fun spawnBucketHeads(zombie: Zombie) {
         zombie.setItemSlot(EquipmentSlot.HEAD, Items.BUCKET.defaultInstance)
         zombie.setDropChance(EquipmentSlot.HEAD, 0.0f)
         if (zombie.random.nextFloat() < 0.7f) {
@@ -519,12 +523,13 @@ class ZombieRaid(
         }
     }
 
-    private fun spawnFootBallHelmet(zombie: Zombie) {
+    private fun spawnFootBallHelmets(zombie: Zombie) {
         zombie.setItemSlot(EquipmentSlot.HEAD, PazItems.FOOTBALL_HELMET.defaultInstance)
         zombie.setDropChance(EquipmentSlot.HEAD, 0.0f)
     }
 
-    private fun spawnSnowCoat(zombie: Zombie) {
+    private fun spawnSnowZombies(zombie: Zombie) {
+        if (zombie is Imp) zombie.variant = ImpVariant.YETI
         if (zombie is BrownCoat) {
             zombie.variant = BrownCoatVariant.SNOW
             val boots = Items.LEATHER_BOOTS.defaultInstance
@@ -543,6 +548,10 @@ class ZombieRaid(
                 zombie.setDropChance(EquipmentSlot.MAINHAND, 0.0f)
             }
         }
+    }
+    private fun spawnPirateZombies(zombie: Zombie) {
+        if (zombie is Imp) zombie.variant = ImpVariant.PIRATE
+        if (zombie is BrownCoat) zombie.variant = BrownCoatVariant.BUCCANEER
     }
 
     enum class SpecialWave(
@@ -563,8 +572,8 @@ class ZombieRaid(
                 val brownCoatCount = 4 + raid.wavesSpawned / 2 + (raid.zombieRaidOmenLevel / 2)
                 val newspaperZombie = 1 + raid.wavesSpawned / 3 + (raid.zombieRaidOmenLevel / 2)
                 listOf(
-                    WaveSpawnEntry(ZombieRaiderType.BROWN_COAT, brownCoatCount.coerceAtLeast(3), raid::spawnBucketHead),
-                    WaveSpawnEntry(ZombieRaiderType.NEWSPAPER_ZOMBIE, newspaperZombie.coerceAtLeast(1), raid::spawnBucketHead),
+                    WaveSpawnEntry(ZombieRaiderType.BROWN_COAT, brownCoatCount.coerceAtLeast(3), raid::spawnBucketHeads),
+                    WaveSpawnEntry(ZombieRaiderType.NEWSPAPER_ZOMBIE, newspaperZombie.coerceAtLeast(1), raid::spawnBucketHeads),
                 )
             }
         ),
@@ -580,7 +589,7 @@ class ZombieRaid(
                 val impCount = 2 + raid.wavesSpawned / 3 + (raid.zombieRaidOmenLevel / 3)
                 listOf(
                     WaveSpawnEntry(ZombieRaiderType.ALL_STAR, allStarCount.coerceAtLeast(2)),
-                    WaveSpawnEntry(ZombieRaiderType.IMP, impCount.coerceAtLeast(1), raid::spawnFootBallHelmet)
+                    WaveSpawnEntry(ZombieRaiderType.IMP, impCount.coerceAtLeast(1), raid::spawnFootBallHelmets)
                 )
             }
         ),
@@ -593,10 +602,29 @@ class ZombieRaid(
             },
             spawnFn = { raid, _ ->
                 val browncoatCount = 6 + raid.wavesSpawned / 2 + (raid.zombieRaidOmenLevel / 2)
-                val yetiCount = 2 + raid.wavesSpawned / 3 + (raid.zombieRaidOmenLevel / 2)
+                val impCount = 2 + raid.wavesSpawned + (raid.zombieRaidOmenLevel / 2)
+                val yetiCount = 1 + raid.wavesSpawned / 3 + (raid.zombieRaidOmenLevel / 3)
                 listOf(
-                    WaveSpawnEntry(ZombieRaiderType.BROWN_COAT, browncoatCount.coerceAtLeast(5), raid::spawnSnowCoat),
+                    WaveSpawnEntry(ZombieRaiderType.BROWN_COAT, browncoatCount.coerceAtLeast(5), raid::spawnSnowZombies),
+                    WaveSpawnEntry(ZombieRaiderType.IMP, impCount.coerceAtLeast(2), raid::spawnSnowZombies),
                     WaveSpawnEntry(ZombieRaiderType.ZOMBIE_YETI, yetiCount.coerceAtLeast(2))
+                )
+            }
+        ),
+        PIRATE_INVASION(
+            minWave = 5,
+            maxWave = 10,
+            creditsRequired = false,
+            weightFn = { raid, credits ->
+                0.12f + (raid.zombieRaidOmenLevel * 0.04f) + if (credits) 0.05f else 0f
+            },
+            spawnFn = { raid, _ ->
+                val browncoatCount = 6 + raid.wavesSpawned / 2 + (raid.zombieRaidOmenLevel / 2)
+                val impCount = 3 + raid.wavesSpawned / 2 + (raid.zombieRaidOmenLevel / 2)
+                val captainCount = 1 + raid.wavesSpawned / 3 + (raid.zombieRaidOmenLevel / 3)
+                listOf(
+                    WaveSpawnEntry(ZombieRaiderType.BROWN_COAT, browncoatCount.coerceAtLeast(5), raid::spawnPirateZombies),
+                    WaveSpawnEntry(ZombieRaiderType.IMP, impCount.coerceAtLeast(2), raid::spawnPirateZombies),
                 )
             }
         ),
@@ -650,17 +678,18 @@ class ZombieRaid(
         private val requiresCredits: Boolean = false,
     ) {
         // default spawns per wave
-        BROWN_COAT(PazEntities.BROWN_COAT,             intArrayOf(2,      5,      7,      9,      9,      12,     19,     20,     30,   25)),
+        BROWN_COAT(PazEntities.BROWN_COAT,             intArrayOf(3,      6,      8,      10,     11,     16,     20,     20,     30,   25)),
         NEWSPAPER_ZOMBIE(PazEntities.NEWSPAPER_ZOMBIE, intArrayOf(0,      1,      0,      1,      0,      1,      2,      1,      3,    2 )),
         DIGGER_ZOMBIE(PazEntities.DIGGER_ZOMBIE,       intArrayOf(0,      0,      1,      0,      4,      1,      1,      2,      3,    3 )),
         DISCO_ZOMBIE(PazEntities.DISCO_ZOMBIE,         intArrayOf(0,      0,      1,      2,      3,      3,      4,      2,      3,    5 )),
         ALL_STAR(PazEntities.ALL_STAR,                 intArrayOf(0,      0,      1,      3,      2,      4,      5,      3,      5,    5 )),
         ZOMBIE_YETI(PazEntities.ZOMBIE_YETI,           intArrayOf(0,      0,      0,      1,      2,      0,      3,      1,      2,    3 )),
-        IMP(PazEntities.IMP,                           intArrayOf(0,      0,      0,      0,      2,      4,      5,      5,      4,    8 )),
+        IMP(PazEntities.IMP,                           intArrayOf(0,      1,      1,      0,      2,      4,      5,      5,      4,    8 )),
         GARGANTUAR(PazEntities.GARGANTUAR,             intArrayOf(0,      0,      0,      0,      0,      1,      0,      2,      1,    3 )),
         ENGINEER_ZOMBIE(PazEntities.ENGINEER_ZOMBIE,   intArrayOf(2,      1,      1,      3,      1,      1,      2,      2,      3,    4 ), true),
         SUPER_BRAINZ(PazEntities.SUPER_BRAINZ,         intArrayOf(0,      0,      0,      0,      0,      1,      1,      1,      2,    4 ), true),
         ROBO_ZOMBIE(PazEntities.ROBO_ZOMBIE,           intArrayOf(0,      0,      1,      0,      1,      2,      1,      2,      2,    4 ), true),
+        PIRATE_CAPTAIN(PazEntities.PIRATE_CAPTAIN,     intArrayOf(0,      0,      0,      1,      0,      1,      3,      1,      2,    1 ), true),
         SOLDIER_ZOMBIE(PazEntities.SOLDIER_ZOMBIE,     intArrayOf(0,      2,      1,      1,      2,      4,      6,      5,      8,    10), true);
 
         companion object {
