@@ -21,6 +21,9 @@ import net.minecraft.world.entity.*
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
+import kotlin.jvm.optionals.getOrDefault
 
 class Imp(type: EntityType<out Imp> = PazEntities.IMP, level: Level) : PazZombie(type, level) {
 
@@ -39,6 +42,16 @@ class Imp(type: EntityType<out Imp> = PazEntities.IMP, level: Level) : PazZombie
     override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
         super.defineSynchedData(entityData)
         entityData.define(DATA_VARIANT_ID, ImpVariant.getDefault())
+    }
+
+    override fun addAdditionalSaveData(output: ValueOutput) {
+        super.addAdditionalSaveData(output)
+        output.store("variant", ImpVariant.CODEC, variant)
+    }
+
+    override fun readAdditionalSaveData(input: ValueInput) {
+        super.readAdditionalSaveData(input)
+        variant = input.read<ImpVariant>("variant", ImpVariant.CODEC).getOrDefault(ImpVariant.getDefault())
     }
 
     override fun getAmbientSound(): SoundEvent {

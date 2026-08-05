@@ -81,7 +81,9 @@ import kotlin.jvm.optionals.getOrNull
 abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(type, level) {
     companion object {
         val LOGGER: Logger = LoggerFactory.getLogger(Plant::class.java)
-
+        private const val NUTRIENT_SUPPLY_MAX = 160  // ticks before suffocating when on invalid ground
+        private const val FLAG_POWER_RANGE = 5
+        
         /**
          * Default plant spawn rules
          */
@@ -106,9 +108,6 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
             return (level.getEntitiesOfClass(Plant::class.java, AABB(pos).inflate(38.0)) { it.tickCount > 0 }.isEmpty()
                     && blockAtPos.getCollisionShape(level, pos.above()).isEmpty) || EntitySpawnReason.isSpawner(spawnReason)
         }
-
-        private const val NUTRIENT_SUPPLY_MAX = 160  // ticks before suffocating when on invalid ground
-        private const val FLAG_POWER_RANGE = 3
 
         val PLANT_STATE: EntityDataAccessor<PlantState> = SynchedEntityData.defineId<PlantState>(Plant::class.java, DATA_PLANT_STATE)
         val COOLDOWN: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Plant::class.java, DATA_COOLDOWN)

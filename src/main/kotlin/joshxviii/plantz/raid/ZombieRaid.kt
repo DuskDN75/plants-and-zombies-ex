@@ -551,7 +551,13 @@ class ZombieRaid(
     }
     private fun spawnPirateZombies(zombie: Zombie) {
         if (zombie is Imp) zombie.variant = ImpVariant.PIRATE
-        if (zombie is BrownCoat) zombie.variant = BrownCoatVariant.BUCCANEER
+        if (zombie is BrownCoat) {
+            zombie.variant = BrownCoatVariant.BUCCANEER
+            if (zombie.random.nextFloat() < 0.4f) {
+                zombie.setItemSlot(EquipmentSlot.MAINHAND, Items.IRON_SWORD.defaultInstance)
+                zombie.setDropChance(EquipmentSlot.MAINHAND, 0.0f)
+            }
+        }
     }
 
     enum class SpecialWave(
@@ -569,8 +575,8 @@ class ZombieRaid(
                 0.11f + (raid.zombieRaidOmenLevel * 0.02f)
             },
             spawnFn = { raid, _ ->
-                val brownCoatCount = 4 + raid.wavesSpawned / 2 + (raid.zombieRaidOmenLevel / 2)
-                val newspaperZombie = 1 + raid.wavesSpawned / 3 + (raid.zombieRaidOmenLevel / 2)
+                val brownCoatCount = 5 + raid.wavesSpawned * 2 + (raid.zombieRaidOmenLevel * 2)
+                val newspaperZombie = 1 + raid.wavesSpawned + (raid.zombieRaidOmenLevel / 2)
                 listOf(
                     WaveSpawnEntry(ZombieRaiderType.BROWN_COAT, brownCoatCount.coerceAtLeast(3), raid::spawnBucketHeads),
                     WaveSpawnEntry(ZombieRaiderType.NEWSPAPER_ZOMBIE, newspaperZombie.coerceAtLeast(1), raid::spawnBucketHeads),
@@ -585,8 +591,8 @@ class ZombieRaid(
                 0.11f + (raid.zombieRaidOmenLevel * 0.03f) + if (credits) 0.04f else 0f
             },
             spawnFn = { raid, _ ->
-                val allStarCount = 3 + raid.wavesSpawned / 2 + (raid.zombieRaidOmenLevel / 2)
-                val impCount = 2 + raid.wavesSpawned / 3 + (raid.zombieRaidOmenLevel / 3)
+                val allStarCount = 3 + raid.wavesSpawned + (raid.zombieRaidOmenLevel / 2)
+                val impCount = 4 + raid.wavesSpawned / 2 + (raid.zombieRaidOmenLevel / 2)
                 listOf(
                     WaveSpawnEntry(ZombieRaiderType.ALL_STAR, allStarCount.coerceAtLeast(2)),
                     WaveSpawnEntry(ZombieRaiderType.IMP, impCount.coerceAtLeast(1), raid::spawnFootBallHelmets)
@@ -601,7 +607,7 @@ class ZombieRaid(
                 0.12f + (raid.zombieRaidOmenLevel * 0.04f) + if (credits) 0.05f else 0f
             },
             spawnFn = { raid, _ ->
-                val browncoatCount = 6 + raid.wavesSpawned / 2 + (raid.zombieRaidOmenLevel / 2)
+                val browncoatCount = 5 + raid.wavesSpawned * 2 + (raid.zombieRaidOmenLevel / 2)
                 val impCount = 2 + raid.wavesSpawned + (raid.zombieRaidOmenLevel / 2)
                 val yetiCount = 1 + raid.wavesSpawned / 3 + (raid.zombieRaidOmenLevel / 3)
                 listOf(
@@ -616,15 +622,16 @@ class ZombieRaid(
             maxWave = 10,
             creditsRequired = false,
             weightFn = { raid, credits ->
-                0.12f + (raid.zombieRaidOmenLevel * 0.04f) + if (credits) 0.05f else 0f
+                0.13f + (raid.zombieRaidOmenLevel * 0.04f) + if (credits) 0.1f else 0f
             },
-            spawnFn = { raid, _ ->
-                val browncoatCount = 6 + raid.wavesSpawned / 2 + (raid.zombieRaidOmenLevel / 2)
+            spawnFn = { raid, credits ->
+                val browncoatCount = 6 + raid.wavesSpawned * 2 + (raid.zombieRaidOmenLevel / 2)
                 val impCount = 3 + raid.wavesSpawned / 2 + (raid.zombieRaidOmenLevel / 2)
-                val captainCount = 1 + raid.wavesSpawned / 3 + (raid.zombieRaidOmenLevel / 3)
+                val captainCount = if (credits) 1 + raid.wavesSpawned / 3 + (raid.zombieRaidOmenLevel / 3) else 0
                 listOf(
                     WaveSpawnEntry(ZombieRaiderType.BROWN_COAT, browncoatCount.coerceAtLeast(5), raid::spawnPirateZombies),
                     WaveSpawnEntry(ZombieRaiderType.IMP, impCount.coerceAtLeast(2), raid::spawnPirateZombies),
+                    WaveSpawnEntry(ZombieRaiderType.PIRATE_CAPTAIN, captainCount)
                 )
             }
         ),
@@ -685,12 +692,12 @@ class ZombieRaid(
         ALL_STAR(PazEntities.ALL_STAR,                 intArrayOf(0,      0,      1,      3,      2,      4,      5,      3,      5,    5 )),
         ZOMBIE_YETI(PazEntities.ZOMBIE_YETI,           intArrayOf(0,      0,      0,      1,      2,      0,      3,      1,      2,    3 )),
         IMP(PazEntities.IMP,                           intArrayOf(0,      1,      1,      0,      2,      4,      5,      5,      4,    8 )),
-        GARGANTUAR(PazEntities.GARGANTUAR,             intArrayOf(0,      0,      0,      0,      0,      1,      0,      2,      1,    3 )),
         ENGINEER_ZOMBIE(PazEntities.ENGINEER_ZOMBIE,   intArrayOf(2,      1,      1,      3,      1,      1,      2,      2,      3,    4 ), true),
-        SUPER_BRAINZ(PazEntities.SUPER_BRAINZ,         intArrayOf(0,      0,      0,      0,      0,      1,      1,      1,      2,    4 ), true),
+        SOLDIER_ZOMBIE(PazEntities.SOLDIER_ZOMBIE,     intArrayOf(0,      2,      1,      1,      2,      4,      6,      5,      8,    10), true),
         ROBO_ZOMBIE(PazEntities.ROBO_ZOMBIE,           intArrayOf(0,      0,      1,      0,      1,      2,      1,      2,      2,    4 ), true),
         PIRATE_CAPTAIN(PazEntities.PIRATE_CAPTAIN,     intArrayOf(0,      0,      0,      1,      0,      1,      3,      1,      2,    1 ), true),
-        SOLDIER_ZOMBIE(PazEntities.SOLDIER_ZOMBIE,     intArrayOf(0,      2,      1,      1,      2,      4,      6,      5,      8,    10), true);
+        SUPER_BRAINZ(PazEntities.SUPER_BRAINZ,         intArrayOf(0,      0,      0,      0,      0,      1,      1,      1,      2,    4 ), true),
+        GARGANTUAR(PazEntities.GARGANTUAR,             intArrayOf(0,      0,      0,      0,      0,      1,      0,      2,      1,    3 ));
 
         companion object {
             val VALUES = entries.toTypedArray()
