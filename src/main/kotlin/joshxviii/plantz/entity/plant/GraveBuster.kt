@@ -29,7 +29,7 @@ class GraveBuster(type: EntityType<out Plant>, level: Level) : Plant(PazEntities
     }
     override fun attackGoals() {}
 
-    override fun canSurviveOn(block: BlockState): Boolean {
+    override fun canPlaceOn(block: BlockState): Boolean {
         return block.`is`(PazBlocks.ZEN_PLANT_POT) || block.`is`(PazBlocks.GRAVESTONE)
     }
 
@@ -72,8 +72,6 @@ class GraveBuster(type: EntityType<out Plant>, level: Level) : Plant(PazEntities
                 // spawn loot
                 val params: LootParams = LootParams.Builder(level)
                     .withParameter(LootContextParams.ORIGIN, graveBuster.position())
-//                    .withParameter(LootContextParams.THIS_ENTITY, graveBuster)
-//                    .withLuck(graveBuster.owner!!.luck)
                     .create(LootContextParamSets.CHEST)
                 val lootTable: LootTable =
                     level.server.reloadableRegistries().getLootTable(PazLootTables.GRAVESTONE_TREASURE)

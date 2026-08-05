@@ -298,7 +298,7 @@ object PazEntities {
         height = 1.0f,
         eyeHeight = 0.6f,
         attributes = Plant.Companion.PlantAttributes(
-            maxHealth = 5.0,
+            maxHealth = 10.0,
             followRange = 1.0
         )
     )
@@ -437,7 +437,7 @@ object PazEntities {
             .add(Attributes.MAX_HEALTH, 100.0)
             .add(Attributes.STEP_HEIGHT, 1.0)
             .add(Attributes.MOVEMENT_SPEED, 0.23)
-            .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
+            .add(Attributes.KNOCKBACK_RESISTANCE, 0.6)
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 1.5)
     )
     @JvmField val IMP: EntityType<Imp> =  registerZombie(

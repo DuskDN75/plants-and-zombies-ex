@@ -106,8 +106,12 @@ public class GraveBusterModel extends PlantModel{
 				Mth.clamp((BODY_DROP_DURATION - state.getCooldown()) / (float) BODY_DROP_DURATION, 0.0F, 1.0F)
 			);
 			body.y = bodyStartY + progress * BODY_DROP_DISTANCE;
+			body.xRot = 0f;
+			body.yRot = 0f;
 		} else {
 			body.y = bodyStartY;
+			body.xRot = state.xRot * (float) (Math.PI / 180.0) * 0.25f;
+			body.yRot = state.yRot * (float) (Math.PI / 180.0);
 		}
 	}
 }

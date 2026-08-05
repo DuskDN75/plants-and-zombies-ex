@@ -112,6 +112,10 @@ object PazSpawnPlacements {
         addBiomeSpawn(PazTags.Biomes.HAS_COFFEE_BEAN, PazEntities.COFFEE_BEAN,
             weight = 5, minGroupSize = 2, maxGroupSize = 5)
         registerSpawnPlacement(PazEntities.COFFEE_BEAN, CoffeeBean::checkCoffeeBeanSpawnRules, Heightmap.Types.MOTION_BLOCKING)
+
+        addBiomeSpawn(PazTags.Biomes.HAS_GRAVE_BUSTER, PazEntities.GRAVE_BUSTER,
+            weight = 15, minGroupSize = 1, maxGroupSize = 3)
+        registerSpawnPlacement(PazEntities.GRAVE_BUSTER, Plant::checkPlantSpawnRules)
         // endregion
 
         // region ZOMBIES

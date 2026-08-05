@@ -266,9 +266,9 @@ object PazBlocks {
         "gravestone",
         BlockBehaviour.Properties.of()
             .sound(SoundType.TUFF_BRICKS)
-            .strength(2.25F)
-            .requiresCorrectToolForDrops()
-            .pushReaction(PushReaction.BLOCK),
+            .strength(20.0F)
+            .pushReaction(PushReaction.BLOCK)
+            .requiresCorrectToolForDrops(),
         ::GravestoneBlock,
     )
     val GRAVESTONE_BLOCK_ENTITY: BlockEntityType<GravestoneBlockEntity> = registerBlockEntity(

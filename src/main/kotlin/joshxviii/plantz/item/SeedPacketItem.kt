@@ -147,11 +147,11 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
             val entityBox = entity.boundingBox.move(spawnPos.multiply(-1))
             val blockBelow = level.getBlockState(spawnPos.below())
             if (
-                !(entity.canSurviveOn(blockBelow) || checkWater)
+                !(entity.canPlaceOn(blockBelow) || checkWater)
                 || !(spawnBlockCollisionShape==null || !entityBox.intersects(spawnBlockCollisionShape))
             ) {
                 player.sendOverlayMessage(
-                    Component.translatable("message.plantz.cannot_survive").withStyle(ChatFormatting.RED)
+                    Component.translatable("message.plantz.cannot_place").withStyle(ChatFormatting.RED)
                 )
                 return InteractionResult.FAIL
             }

@@ -11,14 +11,14 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 5,
+                "max": 2,
                 "min": 1
               },
               "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:iron_ingot",
-          "weight": 90
+          "weight": 40
         },
         {
           "type": "minecraft:item",
@@ -27,7 +27,7 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 5,
+                "max": 2,
                 "min": 1
               },
               "function": "minecraft:set_count"
@@ -43,30 +43,25 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 5,
+                "max": 3,
                 "min": 1
               },
               "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:emerald",
-          "weight": 40
+          "weight": 30
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:diamond",
-          "weight": 5
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:experience_bottle",
-          "weight": 5
+          "name": "plantz:brainz_alloy",
+          "weight": 60
         }
       ],
       "rolls": {
         "type": "minecraft:uniform",
-        "max": 6,
-        "min": 3
+        "max": 3,
+        "min": 1
       }
     },
     {
@@ -79,14 +74,14 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 10,
+                "max": 3,
                 "min": 1
               },
               "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:iron_nugget",
-          "weight": 50
+          "weight": 46
         },
         {
           "type": "minecraft:item",
@@ -95,7 +90,7 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 10,
+                "max": 2,
                 "min": 1
               },
               "function": "minecraft:set_count"
@@ -103,108 +98,13 @@
           ],
           "name": "minecraft:gold_nugget",
           "weight": 10
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 10,
-                "min": 1
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "minecraft:lapis_lazuli",
-          "weight": 20
         }
       ],
       "rolls": {
         "type": "minecraft:uniform",
-        "max": 5,
-        "min": 2
+        "max": 2,
+        "min": 1
       }
-    },
-    {
-      "bonus_rolls": 0,
-      "entries": [
-        {
-          "type": "minecraft:empty",
-          "weight": 5
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": 2,
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "minecraft:coast_armor_trim_smithing_template"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "bonus_rolls": 0,
-      "entries": [
-        {
-          "type": "minecraft:empty",
-          "weight": 148
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": 1,
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "minecraft:copper_nautilus_armor",
-          "weight": 20
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": 1,
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "minecraft:iron_nautilus_armor",
-          "weight": 10
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": 1,
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "minecraft:golden_nautilus_armor",
-          "weight": 5
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": 1,
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "minecraft:diamond_nautilus_armor",
-          "weight": 2
-        }
-      ],
-      "rolls": 1
     }
   ],
   "random_sequence": "minecraft:chests/gravestone_treasure"

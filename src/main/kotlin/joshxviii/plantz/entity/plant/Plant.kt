@@ -588,6 +588,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     open fun sleepsDuringNight(): Boolean = false
     open fun sleepsDuringDay(): Boolean = this.`is`(PazTags.EntityTypes.MUSHROOM)
     open fun canSurviveOn(block: BlockState) : Boolean = block.`is`(PLANTABLE)
+    open fun canPlaceOn(block: BlockState) : Boolean = canSurviveOn(block)
     open fun cooldownFinished() {}
 
     private fun updatePlantPower(level: ServerLevel) {

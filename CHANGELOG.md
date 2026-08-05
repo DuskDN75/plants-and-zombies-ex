@@ -2,8 +2,9 @@
 ### Additions
 #### General:   
 - Plantz Flag now reduces the cooldown of nearby plants by 20%. This effect does not stack.
+- When placing plants in plant pots, their initial rotation will be orientated the same as the pot.
 - Added Brainz Alloy.
-  - Drops from the Rob Zombie, Super Brainz, and Zombie Bots built by the engineer.
+  - Drops from the Grave Loot, Rob Zombies, Super Brainz, Zombie Bots, and various other methods.
   - Used for crafting blocks and special zombie tech.
 - Added Brainz Alloy block set.
   - Blocks include: Brainz Alloy Block, Stairs, Slab, Treaded Brainz Alloy Block, and Reinforced Brainz Alloy Block.
@@ -28,6 +29,9 @@
   - Found in swamps and mangroves.
 - Added Explode-O-Nut
   - Acquired from Wall Nut zen-gardening.
+- Added Grave Buster
+  - Found in the Graveyard and Pale Garden biomes.
+  - Can be used on Gravestones to acquire Grave Loot.
 - Added plant transformations
   - Some plants can be transformed into other plants under certain conditions.
 - Added Seed Packet Mutations
