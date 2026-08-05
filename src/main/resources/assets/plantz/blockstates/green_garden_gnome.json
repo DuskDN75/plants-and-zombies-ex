@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "plantz:block/garden_gnome/green" },
+    "facing=south": { "model": "plantz:block/garden_gnome/green", "y": 180 },
+    "facing=east":  { "model": "plantz:block/garden_gnome/green", "y": 90 },
+    "facing=west":  { "model": "plantz:block/garden_gnome/green", "y": 270 }
+  }
+}

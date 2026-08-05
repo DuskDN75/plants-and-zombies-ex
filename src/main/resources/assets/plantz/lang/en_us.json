@@ -100,6 +100,7 @@
   "item.plantz.sun": "Sun",
   "item.plantz.sun_bottle": "Bottle of Sun",
   "item.plantz.sun_battery": "Solar Battery",
+  "item.plantz.time_machine": "Time Machine",
   "item.plantz.watering_can": "Watering Can",
   "item.plantz.cone": "Cone",
   "item.plantz.football_helmet": "Football Helmet",
@@ -151,14 +152,16 @@
   "item.plantz.magenta_mailbox": "Magenta Mailbox",
   "item.plantz.pink_mailbox": "Pink Mailbox",
 
+  "item.plantz.blue_garden_gnome": "Blue Garden Gnome",
+  "item.plantz.green_garden_gnome": "Green Garden Gnome",
+  "item.plantz.red_garden_gnome": "Red Garden Gnome",
+  "item.plantz.yellow_garden_gnome": "Yellow Garden Gnome",
 
   "item.plantz.brainz_alloy_block": "Block of Brainz Alloy",
   "item.plantz.brainz_alloy_stairs": "Brainz Alloy Stairs",
   "item.plantz.brainz_alloy_slab": "Brainz Alloy Slab",
   "item.plantz.treaded_brainz_alloy_block": "Treaded Brainz Alloy",
   "item.plantz.reinforced_brainz_alloy_block": "Reinforced Brainz Alloy",
-
-  "item.plantz.time_machine": "Time Machine",
   "item.plantz.gravestone": "Gravestone",
 
   "item.minecraft.potion.effect.hypnotize": "Potion of Hypnosis",
@@ -192,6 +195,10 @@
   "jukebox_song.plantz.grassy_groove": "joshxviii - Grassy Groove",
 
   "block.plantz.time_machine": "Time Machine",
+  "block.plantz.blue_garden_gnome": "Blue Garden Gnome",
+  "block.plantz.green_garden_gnome": "Green Garden Gnome",
+  "block.plantz.red_garden_gnome": "Red Garden Gnome",
+  "block.plantz.yellow_garden_gnome": "Yellow Garden Gnome",
   "block.plantz.mailbox": "Mailbox",
   "block.plantz.light_gray_mailbox": "Light Gray Mailbox",
   "block.plantz.gray_mailbox": "Gray Mailbox",

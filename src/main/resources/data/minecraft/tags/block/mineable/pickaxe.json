@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "plantz:gravestone",
-    "#plantz:brainz_alloy_blocks"
+    "#plantz:brainz_alloy_blocks",
+    "#plantz:garden_gnome_blocks"
   ]
 }
