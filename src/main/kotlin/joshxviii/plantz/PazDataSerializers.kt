@@ -6,6 +6,7 @@ import joshxviii.plantz.ai.ZombieState
 import joshxviii.plantz.entity.gnome.GnomeSoundVariant
 import joshxviii.plantz.entity.gnome.GnomeVariant
 import joshxviii.plantz.entity.zombie.BrownCoatVariant
+import joshxviii.plantz.entity.zombie.ImpVariant
 import joshxviii.plantz.entity.zombie.SuperBrainzVariant
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityDataRegistry
 import net.minecraft.network.codec.ByteBufCodecs
@@ -27,6 +28,7 @@ object PazDataSerializers {
     @JvmField val DATA_SLEEPING = EntityDataSerializer.forValueType<Boolean>(ByteBufCodecs.BOOL)
     @JvmField val DATA_POWERED_UP = EntityDataSerializer.forValueType<Boolean>(ByteBufCodecs.BOOL)
     @JvmField val BROWN_COAT_VARIANT = EntityDataSerializer.forValueType<BrownCoatVariant>(BrownCoatVariant.STREAM_CODEC)
+    @JvmField val IMP_VARIANT = EntityDataSerializer.forValueType<ImpVariant>(ImpVariant.STREAM_CODEC)
     @JvmField val SUPER_BRAINZ_VARIANT = EntityDataSerializer.forValueType<SuperBrainzVariant>(SuperBrainzVariant.STREAM_CODEC)
     @JvmField val GNOME_VARIANT = EntityDataSerializer.forValueType<GnomeVariant>(GnomeVariant.STREAM_CODEC)
     @JvmField val GNOME_SOUND_VARIANT = EntityDataSerializer.forValueType<GnomeSoundVariant>(GnomeSoundVariant.STREAM_CODEC)
@@ -45,6 +47,7 @@ object PazDataSerializers {
         FabricEntityDataRegistry.register(pazResource("sleeping"), DATA_SLEEPING)
         FabricEntityDataRegistry.register(pazResource("powered_up"), DATA_POWERED_UP)
         FabricEntityDataRegistry.register(pazResource("brown_coat_variant"), BROWN_COAT_VARIANT)
+        FabricEntityDataRegistry.register(pazResource("imp_variant"), IMP_VARIANT)
         FabricEntityDataRegistry.register(pazResource("super_brainz_variant"), SUPER_BRAINZ_VARIANT)
         FabricEntityDataRegistry.register(pazResource("gnome_variant"), GNOME_VARIANT)
         FabricEntityDataRegistry.register(pazResource("gnome_sound_variant"), GNOME_SOUND_VARIANT)

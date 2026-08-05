@@ -2,9 +2,14 @@ package joshxviii.plantz.entity.zombie
 
 import joshxviii.plantz.PazBlocks
 import joshxviii.plantz.PazDamageTypes
+import joshxviii.plantz.PazDataSerializers.BROWN_COAT_VARIANT
+import joshxviii.plantz.PazDataSerializers.IMP_VARIANT
 import joshxviii.plantz.PazEffects
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazSounds
+import joshxviii.plantz.PazTags
+import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
@@ -19,8 +24,21 @@ import net.minecraft.world.level.ServerLevelAccessor
 
 class Imp(type: EntityType<out Imp> = PazEntities.IMP, level: Level) : PazZombie(type, level) {
 
+    companion object {
+        val DATA_VARIANT_ID: EntityDataAccessor<ImpVariant> = SynchedEntityData.defineId(Imp::class.java, IMP_VARIANT)
+    }
+
     init {
 
+    }
+
+    var variant: ImpVariant
+        get() = this.entityData.get(DATA_VARIANT_ID)
+        set(value) = this.entityData.set(DATA_VARIANT_ID, value)
+
+    override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
+        super.defineSynchedData(entityData)
+        entityData.define(DATA_VARIANT_ID, ImpVariant.getDefault())
     }
 
     override fun getAmbientSound(): SoundEvent {
@@ -36,26 +54,43 @@ class Imp(type: EntityType<out Imp> = PazEntities.IMP, level: Level) : PazZombie
         return SoundEvents.ZOMBIE_STEP
     }
 
-    override fun isBaby(): Boolean = true
+    override fun isBaby(): Boolean = false
     override fun canPickUpLoot(): Boolean = false
+
+    override fun canFreeze(): Boolean {
+        return if (variant == ImpVariant.YETI) false
+        else super.canFreeze()
+    }
 
     override fun actuallyHurt(level: ServerLevel, source: DamageSource, damage: Float) {
         super.actuallyHurt(level, source, damage)
         val entity = source.entity
         if (source.directEntity == entity) {// apply toxic effect attacked directly
-            if (entity is LivingEntity && entity.weaponItem.isEmpty && !entity.hasInfiniteMaterials()) entity.addEffect(MobEffectInstance(PazEffects.TOXIC, 200, 0), this)
+            if (entity is LivingEntity && entity.weaponItem.isEmpty && !entity.hasInfiniteMaterials()) {
+                when (variant) {
+                    ImpVariant.IMP -> {
+                        entity.addEffect(MobEffectInstance(PazEffects.TOXIC, 200, 0), this)
+                    }
+                    else -> {}
+                }
+            }
         }
     }
 
     override fun doHurtTarget(level: ServerLevel, target: Entity): Boolean {
         val wasHurt = super.doHurtTarget(level, target)
         if (wasHurt && target is LivingEntity) {
-            val toxicTime = when (level().difficulty) {
-                Difficulty.NORMAL -> 8
-                Difficulty.HARD -> 15
-                else -> 0
+            when (variant) {
+                ImpVariant.IMP -> {
+                    val toxicTime = when (level().difficulty) {
+                        Difficulty.NORMAL -> 8
+                        Difficulty.HARD -> 15
+                        else -> 0
+                    }
+                    if (random.nextFloat() > 0.25) target.addEffect(MobEffectInstance(PazEffects.TOXIC, toxicTime * 20, 0), this)
+                }
+                else -> {}
             }
-            if (random.nextFloat() > 0.25) target.addEffect(MobEffectInstance(PazEffects.TOXIC, toxicTime * 20, 0), this)
         }
         return wasHurt
     }
@@ -66,11 +101,16 @@ class Imp(type: EntityType<out Imp> = PazEntities.IMP, level: Level) : PazZombie
         spawnReason: EntitySpawnReason,
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
-        val data = super.finalizeSpawn(level, difficulty, spawnReason, ZombieGroupData(true, false))
+        val data = super.finalizeSpawn(level, difficulty, spawnReason, ZombieGroupData(false, false))
         val random = level.random
         if (spawnReason != EntitySpawnReason.CONVERSION) {
             setCanPickUpLoot(false)
             setCanBreakDoors(true)
+
+            variant = ImpVariant.pickForBiome(
+                level.getBiome(blockPosition()).`is`(PazTags.Biomes.HAS_BROWNCOAT_SNOW),
+                random
+            )
 
             if (getItemBySlot(EquipmentSlot.HEAD).isEmpty){
                 if (random.nextFloat() < 0.05) {
