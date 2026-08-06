@@ -20,6 +20,10 @@
     {
       "id": "#c:is_magical",
       "required": false
+    },
+    {
+      "id": "#c:is_wasteland",
+      "required": false
     }
   ]
 }

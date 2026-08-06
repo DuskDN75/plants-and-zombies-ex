@@ -72,8 +72,8 @@ object PazEntities {
             if (entity is Zombie) (entity as MobAccessor).targetSelector.addGoal(4, NearestAttackableTargetGoal(entity, Gnome::class.java, 5, true, false, null))
 
             if (entity is Mob && entity.`is`(PazTags.EntityTypes.ATTACKS_PLANTS)) {
-                (entity as MobAccessor).targetSelector.addGoal(0, NearestAttackableTargetGoal(entity, WallNut::class.java, 6, true, true) { target, level -> ((target as? WallNut ?: target as? ExplodeONut)?.let { it.distanceToSqr(entity) < 7 } ?: false)})
-                (entity as MobAccessor).targetSelector.addGoal(0, NearestAttackableTargetGoal(entity, PazPlant::class.java, 2, true, false) { target, level ->
+                (entity as MobAccessor).targetSelector.addGoal(0, NearestAttackableTargetGoal(entity, WallNut::class.java, 2, false, true) { target, level -> ((target as? WallNut ?: target as? ExplodeONut)?.let { it.distanceToSqr(entity) < 16 } ?: false)})
+                (entity as MobAccessor).targetSelector.addGoal(1, NearestAttackableTargetGoal(entity, PazPlant::class.java, 6, true, false) { target, level ->
                     target !is WallNut && target.passengers.isEmpty() && !target.`is`(PazTags.EntityTypes.IGNORED_BY_PLANT_ATTACKERS)
                 })
             }
@@ -111,6 +111,11 @@ object PazEntities {
     }
 
     // region Plants
+    @JvmField val PLACEHOLDER: EntityType<Sunflower> = registerPlant(
+        "placeholder",
+        EntityType.Builder.of(::Sunflower, MobCategory.CREATURE),
+        height = 1.1f,
+    )
     @JvmField val SUNFLOWER: EntityType<Sunflower> = registerPlant(
         "sunflower",
         EntityType.Builder.of(::Sunflower, MobCategory.CREATURE),
@@ -558,8 +563,8 @@ object PazEntities {
             .clientTrackingRange(8),
         attributes = PazZombie.Companion.ZombieAttributes(
             spawnReinforcementsChance = 10.0,
-            flyingSpeed = 3.0,
-            maxHealth = PazPlant.PEA_DAMAGE*10,
+            flyingSpeed = PazZombie.ZOMBIE_SPEED,
+            maxHealth = PazPlant.PEA_DAMAGE*8,
         )
     )
     // endregion
@@ -634,12 +639,14 @@ object PazEntities {
             .passengerAttachments(0.75F)
             .clientTrackingRange(8)
     )
-    @JvmField val BALLOON: EntityType<Balloon> = register(
+    @JvmField val BALLOON: EntityType<Balloon> = registerBalloon(
         "balloon",
         EntityType.Builder.of(::Balloon, MobCategory.MISC)
             .noLootTable()
             .sized(0.6f, 0.7f)
-            .clientTrackingRange(8)
+            .clientTrackingRange(8),
+        attributes = createMobAttributes()
+            .add(Attributes.MAX_HEALTH, PazPlant.PEA_DAMAGE*3)
     )
     @JvmField val SUN: EntityType<Sun> = register(
         "sun",
@@ -708,6 +715,16 @@ object PazEntities {
     ): EntityType<T> {
         builder.sized(width, height).eyeHeight(0.0f)
         return register(name, builder)
+    }
+
+    private fun <T : Balloon> registerBalloon(
+        name : String,
+        builder: EntityType.Builder<T> = EntityType.Builder.createNothing(MobCategory.MISC),
+        attributes: AttributeSupplier.Builder = createMobAttributes()
+    ): EntityType<T> {
+        val type = register(name, builder)
+        FabricDefaultAttributeRegistry.register(type, attributes)
+        return type
     }
 
     private fun <T : Entity> register(

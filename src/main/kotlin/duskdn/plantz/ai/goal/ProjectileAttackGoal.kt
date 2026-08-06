@@ -126,7 +126,7 @@ open class ProjectileAttackGoal(
 
         val finalVel = if(useHighArc) {
             velocityRequired*velocity*1.2
-        } else velocityRequired*velocity
+        } else velocity
 
         val targetPos = calculateMovingTargetPosition(targetPosNow,target, projectile, finalVel)
         val arcs = calculateProjectileArcs(targetPos, projectile.gravity, finalVel)

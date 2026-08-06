@@ -34,6 +34,15 @@ interface PlantHeadAttachment {
     fun `plantz$setPlantData`(value: CompoundTag)
 }
 
+interface PazEntityData {
+    fun `plantz$getHypnoId`(): Boolean
+    fun `plantz$getChilledId`(): Boolean
+    fun `plantz$getDrenchedId`(): Boolean
+    fun `plantz$getFrozenId`(): Boolean
+    fun `plantz$setFrozenId`(isFrozen: Boolean)
+    fun `plantz$getPaintedColors`(): Map<Integer, Integer>
+}
+
 fun Entity.canWearPlant(): Boolean {
     return this is LivingEntity && this.getItemBySlot(EquipmentSlot.HEAD).`is`(PazItems.PLANT_POT_HELMET)
             && this.isAlive && !this.isDeadOrDying && !this.isRemoved

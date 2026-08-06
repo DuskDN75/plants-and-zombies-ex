@@ -1,15 +1,23 @@
 package duskdn.plantz.entity.zombie
 
+import duskdn.plantz.ai.goal.FloatingPathfindGoal
 import duskdn.plantz.entity.Balloon
 import duskdn.plantz.entity.plant.init.PazPlant
+import duskdn.plantz.init.PazBlocks
 import duskdn.plantz.init.PazEntities
 import duskdn.plantz.init.PazSounds
+import duskdn.plantz.init.PazTags
+import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.tags.FluidTags
+import net.minecraft.util.RandomSource
+import net.minecraft.world.Difficulty
 import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.*
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.FlyingMoveControl
 import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.entity.ai.goal.Goal
@@ -26,11 +34,26 @@ import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.phys.Vec3
 import java.util.EnumSet
 import kotlin.math.abs
+import net.minecraft.world.entity.ai.attributes.Attributes.FLYING_SPEED
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 
 class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZOMBIE, level: Level) : PazZombie(type, level) {
 
-    init {
-
+    companion object {
+        fun checkBalloonZombieSpawnRules(
+            type: EntityType<out Mob>,
+            level: ServerLevelAccessor,
+            spawnReason: EntitySpawnReason,
+            pos: BlockPos,
+            random: RandomSource
+        ): Boolean {
+            return level.difficulty != Difficulty.PEACEFUL
+                    && (EntitySpawnReason.ignoresLightRequirements(spawnReason) || isDarkEnoughToSpawn(level, pos, random))
+                    && checkMobSpawnRules(type, level, spawnReason, pos, random)
+                    && pos.y > level.seaLevel
+        }
     }
 
     override fun getAmbientSound(): SoundEvent {
@@ -60,49 +83,110 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
         flyingNavigation = FlyingPathNavigation(this, level)
         groundNavigation = GroundPathNavigation(this, level)
 
-        return if (hasBalloon) flyingNavigation else groundNavigation
+        if (isFloating) {
+            this.moveControl = FlyingMoveControl(this, 20, false)
+            return flyingNavigation
+        } else {
+            this.moveControl = MoveControl(this)
+            return groundNavigation
+        }
     }
 
-    override fun getMoveControl(): MoveControl {
-        return if (hasBalloon) FlyingMoveControl(this, 20, true) else super.getMoveControl()
-    }
+    var isFloating: Boolean = true
 
-    var hasBalloon: Boolean = true
+    var spawnedBalloons: Boolean = false
 
-    var balloon : Balloon? = null
+    var balloonCount: Int = 1
+
+    var balloons : MutableList<Balloon> = mutableListOf()
 
     override fun tick() {
         super.tick()
 
-        if (!level().isClientSide && (hasBalloon && balloon?.leashHolder != this || balloon == null || !balloon!!.isAlive)) {
-            stopFloating()
+        if (!level().isClientSide) {
+
+            if (balloons.isEmpty() && !spawnedBalloons) {
+                spawnBalloon(level() as ServerLevel, EntitySpawnReason.MOB_SUMMONED)
+                return
+            }
+
+            if (isFloating) {
+
+                balloons.removeIf { balloon ->
+                    !balloon.isAlive || balloon.leashHolder != this
+                }
+
+                if (balloons.isEmpty()) stopFloating()
+
+            }
         }
     }
 
     fun stopFloating() {
 
+        if (!isFloating) return
+
         println("STOPPING FLOATING")
 
-        hasBalloon = false
+        isFloating = false
 
-        if (groundNavigation != null) {
-            navigation = groundNavigation
-        }
-
+        navigation = groundNavigation
         moveControl = MoveControl(this)
 
-        this.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.FLYING_SPEED)?.baseValue = 0.0
+        this.getAttribute(FLYING_SPEED)?.baseValue = 0.0
     }
 
     override fun registerGoals() {
         super.registerGoals()
 
-        this.goalSelector.addGoal(1, BalloonZombieChaseGoal(this))
+        this.goalSelector.addGoal(4, BalloonZombieChaseGoal(this))
     }
 
-//    override fun getDefaultGravity(): Double {
-//        return if (hasBalloon) 0.0 else super.getDefaultGravity()
-//    }
+    fun spawnBalloon(level: ServerLevel, spawnReason: EntitySpawnReason) {
+
+        for (i in 0 until balloonCount) {
+
+            val balloon: Balloon? = PazEntities.BALLOON.create(level, spawnReason)
+
+            if (balloon != null) {
+
+                balloon.dyeColor = DyeColor.RED
+
+                val randomX = (random.nextDouble() - 0.5) * 2
+                val randomZ = (random.nextDouble() - 0.5) * 2
+
+                balloon.snapTo(this.x+randomX, this.y + 2.0, this.z+randomZ)
+
+                level.addFreshEntity(balloon)
+
+                balloon.setLeashedTo(this, true)
+
+                isFloating = true
+
+                balloons.add(balloon)
+
+            }
+
+        }
+
+        spawnedBalloons = true
+    }
+
+    override fun readAdditionalSaveData(input: ValueInput) {
+        super.readAdditionalSaveData(input)
+
+        this.isFloating = input.getBooleanOr("isFloating", true)
+        this.balloonCount = input.getIntOr("balloonCount", 1)
+        this.spawnedBalloons = input.getBooleanOr("spawnedBalloons", false)
+    }
+
+    override fun addAdditionalSaveData(output: ValueOutput) {
+        super.addAdditionalSaveData(output)
+
+        output.putBoolean("isFloating", isFloating)
+        output.putInt("balloonCount", balloonCount)
+        output.putBoolean("spawnedBalloons", spawnedBalloons)
+    }
 
     override fun finalizeSpawn(
         level: ServerLevelAccessor,
@@ -112,26 +196,21 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
     ): SpawnGroupData? {
         val data = super.finalizeSpawn(level, difficulty, spawnReason, groupData)
 
+        if (getItemBySlot(EquipmentSlot.HEAD).isEmpty && spawnReason != EntitySpawnReason.COMMAND){
+            if (random.nextFloat() < 0.25) {
+                balloonCount = 3
+                setItemSlot(EquipmentSlot.HEAD, PazBlocks.CONE.asItem().defaultInstance)
+                setDropChance(EquipmentSlot.HEAD, 0.2f)
+            }
+            else if (random.nextFloat() < 0.1 && getItemBySlot(EquipmentSlot.HEAD).isEmpty) {
+                balloonCount = 7
+                setItemSlot(EquipmentSlot.HEAD, Items.BUCKET.defaultInstance)
+            }
+        }
+
         if (level is ServerLevel) {
 
-            balloon = PazEntities.BALLOON.create(level, spawnReason)
-
-            if (balloon != null && balloon is Balloon) {
-
-                balloon!!.dyeColor = DyeColor.RED
-
-                val randomX = (random.nextDouble() - 0.5) * 2
-                val randomZ = (random.nextDouble() - 0.5) * 2
-
-                balloon!!.snapTo(this.x, this.y + 2.0, this.z)
-
-                level.addFreshEntity(balloon!!)
-
-                balloon!!.setLeashedTo(this, true)
-
-                hasBalloon = true
-
-            }
+            spawnBalloon(level, spawnReason)
 
         }
 
@@ -144,36 +223,20 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
 
     private class BalloonZombieChaseGoal(
         private val entity: BalloonZombie
-    ): Goal() {
-
-        init {
-            this.flags = EnumSet.of(Flag.MOVE, Flag.LOOK)
-        }
+    ): FloatingPathfindGoal(entity) {
 
         override fun canUse(): Boolean {
-            return entity.hasBalloon && entity.target != null && entity.target?.isAlive == true
+            return entity.isFloating && entity.target != null && entity.target?.isAlive == true
         }
 
-        override fun tick() {
-            val target = entity.target ?: return
-
-            entity.lookControl.setLookAt(target, 30f, 30f)
-
-            var targetPosition = target.position().subtract(entity.position())
-
-            var distance = targetPosition.length()
-
-            var speed = 0.05
-
-            entity.gravity
+        override fun setEntityDelta(targetPosition: Vec3, distance: Double, speed: Double) {
 
             entity.deltaMovement = Vec3(
                 (targetPosition.x / distance) * speed,
-                (targetPosition.y / distance) * speed * 2,
-                (targetPosition.z / distance) * speed
+                (targetPosition.y / distance) * speed * (2*entity.balloonCount),
+                (targetPosition.z / distance) * speed,
             )
 
-            entity.moveControl.setWantedPosition(target.x, target.y, target.z, 1.5)
         }
 
     }

@@ -92,6 +92,7 @@ class PlantRenderer(
         } else {
             Quaternionf()
         }
+        state.isInAir = !entity.onGround()
         state.plantState = entity.state
         if (entity is Explosive) state.swelling = entity.getSwelling(partialTick)
         state.cooldown = entity.cooldown
@@ -159,6 +160,7 @@ class PlantRenderState : LivingEntityRenderState() {
     var cooldown: Int = 0
     var damagedAmount: Float = 0.0f
     var isAsleep: Boolean = false
+    var isInAir: Boolean = false
     var customName: String = ""
     var textureExtra: String = ""
     var plantState: PlantState = PlantState.IDLE

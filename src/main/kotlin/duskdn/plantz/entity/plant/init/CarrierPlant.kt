@@ -15,10 +15,13 @@ import net.minecraft.world.level.material.Fluids
  * Provides basic behavior for all attacking plants.
  */
 abstract class CarrierPlant(type: EntityType<out CarrierPlant>, level: Level) : PazPlant(type, level) {
-    companion object {
-        fun carrierCollision(carrier: PazPlant, other: Entity?): Boolean {
-            return carrier.isAlive && other != carrier.attachedEntity
-        }
+
+    override fun allowPlayerCollision(): Boolean {
+        return true
+    }
+
+    override fun allowEntityCollision(): Boolean {
+        return false
     }
 
     open fun setRider(plant: PazPlant) {
@@ -36,8 +39,6 @@ abstract class CarrierPlant(type: EntityType<out CarrierPlant>, level: Level) : 
     }
 
     override fun attackGoals() {}
-
-    override fun canBeCollidedWith(other: Entity?): Boolean = carrierCollision(this, other)
 
     override fun actuallyHurt(level: ServerLevel, source: DamageSource, damage: Float) {
         val reducedDamage = if (source.entity is Zombie) damage*0.25f else damage

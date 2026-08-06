@@ -91,7 +91,9 @@ object PazTags {
         val HAS_LILYPAD = tag("plant/has_lilypad")
         val HAS_SEA_SHROOM = tag("plant/has_seashroom")
         val HAS_SCAREDYSHROOM = tag("plant/has_scaredyshroom")
+        val HAS_LAVALILY = tag("plant/has_lavalily")
 
+        val COMMON_SPAWNS = tag("zombie/common_spawns")
         val WATER_SPAWNS = tag("zombie/water_spawns")
         val DAY_SPAWNS = tag("zombie/day_spawns")
         val HAS_BROWNCOAT = tag("zombie/has_browncoat")
@@ -103,6 +105,8 @@ object PazTags {
         val HAS_DISCO_ZOMBIE = tag("zombie/has_disco_zombie")
         val HAS_ALL_STAR = tag("zombie/has_all_star")
         val HAS_IMP = tag("zombie/has_imp")
+        val HAS_BALLOON_ZOMBIE = tag("zombie/has_balloon_zombie")
+        val HAS_BALLOON_ZOMBIE_ALT = tag("zombie/has_balloon_zombie_alt")
 
         private fun tag(name: String): TagKey<Biome>  = TagKey.create(Registries.BIOME, pazResource(name))
     }

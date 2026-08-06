@@ -29,6 +29,10 @@ class WallNut(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntiti
         return true
     }
 
+    override fun allowEntityCollision(): Boolean {
+        return true
+    }
+
     override fun hurtServer(level: ServerLevel, source: DamageSource, damage: Float): Boolean {
         source.directEntity?.let {
             if (it.`is`(WALLNUT_DEFLECTABLE)) return false

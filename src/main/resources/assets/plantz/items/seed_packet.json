@@ -5,6 +5,13 @@
     "component": "minecraft:entity_data",
     "cases": [
       {
+        "when": { "id": "plantz:placeholder" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz:item/seed_packet/placeholder"
+        }
+      },
+      {
         "when": { "id": "plantz:sunflower" },
         "model": {
           "type": "minecraft:model",

@@ -1,5 +1,6 @@
 package duskdn.plantz.init
 
+import com.mojang.serialization.Codec
 import duskdn.plantz.item.component.BlocksProjectileDamage
 import duskdn.plantz.item.component.StoredSun
 import duskdn.plantz.item.component.StoredWater
@@ -13,6 +14,15 @@ import net.minecraft.resources.ResourceKey
 import java.util.function.UnaryOperator
 
 object PazComponents {
+
+    @JvmField
+    val PLACEHOLDER_INDEX: DataComponentType<Int> = register(
+        "placeholder_index",
+    ) { b: DataComponentType.Builder<Int> ->
+        DataComponentType.builder<Int>()
+            .persistent(Codec.INT)
+            .cacheEncoding()
+    }
 
     @JvmField
     val SUN_COST: DataComponentType<SunCost> = register(

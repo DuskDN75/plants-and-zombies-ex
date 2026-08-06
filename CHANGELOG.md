@@ -1,3 +1,21 @@
+# Changelog (EX) 1.2
+### Additions
+#### General:
+- Cherrybombs spawn in cherry groves, and doomshrooms can spawn in wastelands. Mushrooms plants can also spawn in wastelands.
+- Fire plants can spawn on netherrack.
+- Sand plants can spawn on gravel.
+- Potatomine spawns in wastelands, stony shores, and dead biomes.
+#### Plants:
+- Adding Skyshooter (WIP)
+  - Peashooter that shoots in the sky and can move up and down to target zombies.
+#### Zombies:
+- Balloon Zombies
+  - Spawn in mountains with a balloon. Can spawn with a cone, bucket, or flag.
+  - Conehead Balloon Zombies have 3 balloons, Bucketheads have 7.
+### Technical Changes
+- Balloons make you hover above the ground until a certain height.
+- Updated Spawn Rules to be more modular and use layers (kind of?)
+
 # Changelog (EX) 1.1
 ### Additions
 #### General:

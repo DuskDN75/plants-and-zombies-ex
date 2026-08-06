@@ -37,6 +37,8 @@ object PazModels {
     @JvmField
     val IS_HYPNOTIZED_KEY: RenderStateDataKey<Boolean> = RenderStateDataKey.create { "plantz:hypnotized" }
     @JvmField
+    val IS_FROZEN_KEY: RenderStateDataKey<Boolean> = RenderStateDataKey.create { "plantz:frozen" }
+    @JvmField
     val IS_CHILLED_KEY: RenderStateDataKey<Boolean> = RenderStateDataKey.create { "plantz:chilled" }
     @JvmField
     val IS_DRENCHED_KEY: RenderStateDataKey<Boolean> = RenderStateDataKey.create { "plantz:drenched" }
@@ -115,6 +117,7 @@ object PazModels {
         ModelLayerRegistry.registerModelLayer(FlowerPotModel.LAYER_LOCATION) { FlowerPotModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(WaterPotModel.LAYER_LOCATION) { WaterPotModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(LavaLilyModel.LAYER_LOCATION) { LavaLilyModel.createBodyLayer() }
+        ModelLayerRegistry.registerModelLayer(SkyPeaShooterModel.LAYER_LOCATION) { SkyPeaShooterModel.createBodyLayer() }
 
         ModelLayerRegistry.registerModelLayer(PeaModel.LAYER_LOCATION) { PeaModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(NeedleModel.LAYER_LOCATION) { NeedleModel.createBodyLayer() }
@@ -180,6 +183,7 @@ object PazModels {
         EntityRenderers.register(PazEntities.FLOWER_POT) { PlantRenderer(FlowerPotModel(it.bakeLayer(FlowerPotModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.WATER_POT) { PlantRenderer(WaterPotModel(it.bakeLayer(WaterPotModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.LAVALILY) { PlantRenderer(LavaLilyModel(it.bakeLayer(LavaLilyModel.LAYER_LOCATION)), it) }
+        EntityRenderers.register(PazEntities.LAVALILY) { PlantRenderer(SkyPeaShooterModel(it.bakeLayer(SkyPeaShooterModel.LAYER_LOCATION)), it) }
 
         EntityRenderers.register(PazEntities.SUN_SHROOM) { PlantRenderer(
             SunShroomModel(it.bakeLayer(SunShroomModel.LAYER_LOCATION)), it,

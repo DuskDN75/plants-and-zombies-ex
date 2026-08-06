@@ -12,18 +12,6 @@ import java.util.Map;
 @Mixin(LivingEntity.class)
 public interface LivingEntityAccessor {
 
-    @Invoker("plantz$getHypnoId")
-    boolean plantz$getHypnoId();
-
-    @Invoker("plantz$getChilledId")
-    boolean plantz$getChilledId();
-
-    @Invoker("plantz$getDrenchedId")
-    boolean plantz$getDrenchedId();
-
-    @Invoker("plantz$getPaintedColors")
-    Map<Integer, Integer> plantz$getPaintedColors();
-
     @Invoker("actuallyHurt")
     void invokeActuallyHurt(ServerLevel level, DamageSource source, float amount);
 

@@ -7,6 +7,7 @@ import duskdn.plantz.entity.projectile.init.PazProjectile;
 import duskdn.plantz.init.PazEffects;
 import duskdn.plantz.init.PazItems;
 import duskdn.plantz.init.PazTags;
+import duskdn.plantz.util.PazEntityData;
 import duskdn.plantz.util.PlantHeadAttachment;
 import kotlin.Pair;
 import net.minecraft.core.BlockPos;
@@ -52,7 +53,7 @@ import static duskdn.plantz.init.PazDataSerializers.DATA_PAINT_COLORS;
 import static duskdn.plantz.init.PazItems.DUCKY_TUBE_DAMAGE_INTERVAL;
 
 @Mixin(LivingEntity.class)
-abstract public class LivingEntityMixin implements PlantHeadAttachment {
+abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntityData {
 
     @Unique
     private static final EntityDataAccessor<Boolean> DATA_HYPNO_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
@@ -60,6 +61,8 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     private static final EntityDataAccessor<Boolean> DATA_CHILLED_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
     @Unique
     private static final EntityDataAccessor<Boolean> DATA_DRENCHED_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
+    @Unique
+    private static final EntityDataAccessor<Boolean> DATA_FROZEN_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
     @Unique
     private static final EntityDataAccessor<Map<Integer, Integer>> DATA_PAINTED_COLORS = SynchedEntityData.defineId(LivingEntity.class, DATA_PAINT_COLORS);
 
@@ -114,6 +117,14 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
     @Unique
     public boolean plantz$getDrenchedId() {
         return ((Entity) (Object) this).getEntityData().get(DATA_DRENCHED_ID);
+    }
+    @Unique
+    public boolean plantz$getFrozenId() {
+        return ((Entity) (Object) this).getEntityData().get(DATA_FROZEN_ID);
+    }
+    @Unique
+    public void plantz$setFrozenId(boolean value) {
+        ((Entity) (Object) this).getEntityData().set(DATA_FROZEN_ID, value);
     }
     @Unique
     public Map<Integer, Integer> plantz$getPaintedColors() {
@@ -193,25 +204,28 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment {
         entityData.define(DATA_HYPNO_ID, false);
         entityData.define(DATA_CHILLED_ID, false);
         entityData.define(DATA_DRENCHED_ID, false);
+        entityData.define(DATA_FROZEN_ID, false);
         entityData.define(DATA_PAINTED_COLORS, new HashMap<>());
     }
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-    private void saveHypnoFlag(ValueOutput output, CallbackInfo ci) {
+    private void saveDataFlag(ValueOutput output, CallbackInfo ci) {
         var self = (LivingEntity) (Object) this;
         output.putBoolean("plantz:IsHypnotized", self.getEntityData().get(DATA_HYPNO_ID));
         output.putBoolean("plantz:IsChilled", self.getEntityData().get(DATA_CHILLED_ID));
         output.putBoolean("plantz:IsDrenched", self.getEntityData().get(DATA_DRENCHED_ID));
+        output.putBoolean("plantz:IsFrozen", self.getEntityData().get(DATA_FROZEN_ID));
         output.store("plantz:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT), self.getEntityData().get(DATA_PAINTED_COLORS));
         if (!this.plantz$getPlantData().isEmpty()) {
             output.store("plantz:AttachedPlant", CompoundTag.CODEC, this.plantz$getPlantData());
         }
     }
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-    private void loadHypnoFlag(ValueInput input, CallbackInfo ci) {
+    private void loadDataFlag(ValueInput input, CallbackInfo ci) {
         var self = (LivingEntity) (Object) this;
         self.getEntityData().set(DATA_HYPNO_ID, input.getBooleanOr("plantz:IsHypnotized", false));
         self.getEntityData().set(DATA_CHILLED_ID, input.getBooleanOr("plantz:IsChilled", false));
         self.getEntityData().set(DATA_DRENCHED_ID, input.getBooleanOr("plantz:IsDrenched", false));
+        self.getEntityData().set(DATA_FROZEN_ID, input.getBooleanOr("plantz:IsFrozen", false));
         self.getEntityData().set(DATA_PAINTED_COLORS, input.read("plantz:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT)).orElseGet(HashMap::new));
         plantz$setPlantData(input.read("plantz:AttachedPlant", CompoundTag.CODEC).orElseGet(CompoundTag::new));
         if (self instanceof PathfinderMob mob) {

@@ -22,6 +22,10 @@ class Spore(
 
     override fun tick() {
         super.tick()
+        movingParticles()
+    }
+
+    fun movingParticles() {
         spawnParticle(
             PazServerParticles.SPORE,
             spread = Vec3(0.01,0.01,0.01),
@@ -35,6 +39,10 @@ class Spore(
 
     override fun onHit(hitResult: HitResult) {
         super.onHit(hitResult)
+        hitParticles()
+    }
+
+    fun hitParticles() {
         spawnParticle(
             PazServerParticles.SPORE_HIT,
             amount = 18,

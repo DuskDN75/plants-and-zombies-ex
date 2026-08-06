@@ -1,6 +1,7 @@
 package duskdn.plantz.entity.plant.init
 
 import duskdn.plantz.ai.goal.ProjectileAttackGoal
+import duskdn.plantz.entity.Balloon
 import duskdn.plantz.init.PazTags
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.EntityType
@@ -43,6 +44,19 @@ abstract class AttackingPlant(type: EntityType<out AttackingPlant>, level: Level
         println("TARGET IS $target")
     }
 
+    fun enemyCheck(target: LivingEntity): Boolean {
+        return target.isAlive && target !is PazPlant // target is not plant
+                && (
+                target is Zombie // target is a zombie
+                        || ( target is Enemy && isTame ) // or an enemy, IF they are tame
+                        || ( target is Player && !isTame && attacksPlayers() ) // or a player, IF they are not tame
+                        || ( BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(target.type).`is`(PazTags.EntityTypes.ATTACKS_PLANTS) )
+                        || (target is Balloon && target.leashHolder != null && target.leashHolder is LivingEntity && enemyCheck(
+                    target.leashHolder as LivingEntity
+                ))
+                )
+    }
+
     open fun registerAttackGoal() {
 
 //        println("follow range = ${this.getAttributeValue(Attributes.FOLLOW_RANGE)}")
@@ -51,13 +65,7 @@ abstract class AttackingPlant(type: EntityType<out AttackingPlant>, level: Level
 
 //            println("FOUND TARGET: $target, ${target is Enemy}, ${BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(target.type).`is`(PazTags.EntityTypes.ATTACKS_PLANTS)}")
 
-            target !is PazPlant // target is not plant
-            && (
-                target is Zombie // target is a zombie
-                || ( target is Enemy && isTame ) // or an enemy, IF they are tame
-                || ( target is Player && !isTame && attacksPlayers() ) // or a player, IF they are not tame
-                || ( BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(target.type).`is`(PazTags.EntityTypes.ATTACKS_PLANTS) )
-            )
+            enemyCheck(target) || target is Balloon
         })
     }
 }

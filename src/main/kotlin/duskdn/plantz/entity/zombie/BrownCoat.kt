@@ -50,7 +50,7 @@ class BrownCoat(type: EntityType<out BrownCoat>, level: Level) : PazZombie(type,
         setCanPickUpLoot(true)
         setCanBreakDoors(true)
 
-        if (getItemBySlot(EquipmentSlot.HEAD).isEmpty && spawnReason != EntitySpawnReason.SPAWN_ITEM_USE && spawnReason != EntitySpawnReason.COMMAND && spawnReason != EntitySpawnReason.MOB_SUMMONED){
+        if (getItemBySlot(EquipmentSlot.HEAD).isEmpty && spawnReason != EntitySpawnReason.COMMAND){
             if (random.nextFloat() < 0.25) {
                 setItemSlot(EquipmentSlot.HEAD, PazBlocks.CONE.asItem().defaultInstance)
                 setDropChance(EquipmentSlot.HEAD, 0.2f)

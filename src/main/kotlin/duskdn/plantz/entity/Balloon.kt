@@ -1,34 +1,36 @@
 package duskdn.plantz.entity
 
-import LeashableEntity
+import duskdn.plantz.entity.plant.init.PazPlant.Companion.PEA_DAMAGE
 import duskdn.plantz.init.PazDataSerializers.DATA_DYE_COLOR
+import duskdn.plantz.init.PazEffects
 import duskdn.plantz.init.PazServerParticles
+import duskdn.plantz.init.PazSounds
+import net.minecraft.core.BlockPos
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.util.Mth
 import net.minecraft.world.damagesource.DamageSource
-import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.InterpolationHandler
+import net.minecraft.world.entity.*
 import net.minecraft.world.entity.Leashable.LeashData
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.MoverType
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.phys.Vec3
+import java.util.function.Consumer
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
 class Balloon(
-    type: EntityType<out Entity>,
+    type: EntityType<out LivingEntity>,
     level: Level
-) : LeashableEntity(type, level) {
+) : LivingEntity(type, level), Leashable {
     companion object {
         val DYE_COLOR: EntityDataAccessor<DyeColor> = SynchedEntityData.defineId(Balloon::class.java, DATA_DYE_COLOR)
 
@@ -37,11 +39,21 @@ class Balloon(
         private const val PITCH_LERP_SPEED = 0.25f
         private const val YAW_LERP_SPEED = 0.5f
         private const val MIN_ROTATION_SPEED = 0.001f
-        private const val HOLDER_PULL_STIFFNESS = 0.0075
-        private const val HOLDER_GRAVITY_LIFT_MULTIPLIER = 1-HOLDER_PULL_STIFFNESS
+        private const val HOLDER_PULL_STIFFNESS = 0.0075F
+        private const val HOLDER_GRAVITY_LIFT_MULTIPLIER = 1
         private const val MAX_HOLDER_PULL_FORCE = 0.16
         private const val MAX_HOLDER_UPWARD_VELOCITY = 0.5
+
+        data class BalloonAttributes(
+            val maxHealth: Double = PEA_DAMAGE*6
+        ) {
+            fun apply(builder: AttributeSupplier.Builder): AttributeSupplier.Builder {
+                return builder
+                    .add(Attributes.MAX_HEALTH, maxHealth)
+            }
+        }
     }
+
     private val interpolation = InterpolationHandler(this)
 
     private var balloonLeashData: LeashData? = null
@@ -53,6 +65,7 @@ class Balloon(
 
 
     override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
+        super.defineSynchedData(entityData)
         entityData.define(DYE_COLOR, DyeColor.WHITE)
     }
 
@@ -66,6 +79,10 @@ class Balloon(
         super.tick()
         while (yRot - yRotO < -180.0f) yRotO -= 360.0f
         while (yRot - yRotO >= 180.0f) yRotO += 360.0f
+
+        if (firstTick) {
+            playSound(PazSounds.BALLOON_INFLATE)
+        }
 
         val horizontalSpeed = sqrt(deltaMovement.x * deltaMovement.x + deltaMovement.z * deltaMovement.z).toFloat()
         val targetPitch = (horizontalSpeed * PITCH_SPEED_MULTIPLIER).coerceAtMost(MAX_PULL_PITCH)
@@ -92,23 +109,37 @@ class Balloon(
             deltaMovement = deltaMovement.scale(0.98)
         }
 
-        val holder = leashHolder as? LivingEntity ?: return
+        val holder = this.leashHolder as? LivingEntity ?: return
         if ((holder as? Player)?.abilities?.flying == true) return
         if (y < holder.y) return
         val verticalStretch = y - holder.y - leashElasticDistance()
         if (verticalStretch <= 0.0) return
 
+
+
+        val groundHeight = level().getHeight(Heightmap.Types.WORLD_SURFACE, blockPosition()).toDouble()
+
+        val groundDistance = if (groundHeight > -64.0) y - groundHeight else y
+
+        val groundPull = groundDistance / 100
+
+        val groundPullForce = groundPull.coerceIn(0.0, 1.0)
+
+        println("groundHeight: $groundHeight, groundDistance: $groundDistance, groundPullForce: $groundPullForce")
+
+        val mult = if (holder.hasEffect(PazEffects.CHILLED)) 0.5 else 0.0
+
         val crouchMultiplier = if (holder.isCrouching) 0.5 else 1.0
         val gravityLift = holder.getAttributeValue(Attributes.GRAVITY) * HOLDER_GRAVITY_LIFT_MULTIPLIER
         val springLift = verticalStretch * HOLDER_PULL_STIFFNESS
-        val totalLift = ((gravityLift + springLift) * crouchMultiplier)
+        val totalLift = ((gravityLift + springLift) * (crouchMultiplier - groundPullForce - mult))
             .coerceAtMost(MAX_HOLDER_PULL_FORCE)
 
         val currentYVelocity = holder.deltaMovement.y
         val availableLift = (MAX_HOLDER_UPWARD_VELOCITY - currentYVelocity).coerceAtLeast(0.0)
         val appliedLift = totalLift.coerceAtMost(availableLift)
 
-        if (appliedLift <= 0.0) return
+//        if (appliedLift <= 0.0) appliedLift = 0.0
 
         holder.addDeltaMovement(Vec3(0.0, appliedLift, 0.0))
         holder.needsSync = true
@@ -153,6 +184,10 @@ class Balloon(
 
 
     override fun isPushable(): Boolean = true
+    override fun getMainArm(): HumanoidArm {
+        return HumanoidArm.RIGHT
+    }
+
     override fun isPickable(): Boolean = true
     override fun getDefaultGravity(): Double = -0.005
     override fun leashElasticDistance(): Double = 3.0
@@ -181,10 +216,17 @@ class Balloon(
         source: DamageSource,
         damage: Float
     ): Boolean {
-        return if (isRemoved) true
-        else if (this.isInvulnerableToBase(source)) false
-        else {
-            playSound(SoundEvents.LAVA_POP) // TODO custom sounds
+
+        if (isRemoved) return true
+
+        return super.hurtServer(level, source, damage)
+    }
+
+    override fun actuallyHurt(level: ServerLevel, source: DamageSource, dmg: Float) {
+
+        if (this.isInvulnerableToBase(source)) return
+
+        if (health - dmg <= 0){
             level.sendParticles(
                 PazServerParticles.POP,
                 x, y + boundingBox.ysize * 0.5, z,
@@ -192,8 +234,17 @@ class Balloon(
                 0.0, 0.0, 0.0, 0.0
             )
             discard()
-            true
         }
+
+        super.actuallyHurt(level, source, dmg)
+    }
+
+    override fun getDeathSound(): SoundEvent {
+        return PazSounds.BALLOON_POP
+    }
+
+    override fun getHurtSound(source: DamageSource): SoundEvent {
+        return PazSounds.BALLOON_POP
     }
 
     override fun lerpPositionAndRotationStep(stepsToTarget: Int, targetX: Double, targetY: Double, targetZ: Double, targetYRot: Double, targetXRot: Double) {

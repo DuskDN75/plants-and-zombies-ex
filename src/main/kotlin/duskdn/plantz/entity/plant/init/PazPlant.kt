@@ -17,6 +17,7 @@ import duskdn.plantz.init.PazServerParticles
 import duskdn.plantz.init.PazSounds
 import duskdn.plantz.init.PazTags
 import duskdn.plantz.item.SeedPacketItem
+import duskdn.plantz.worldgen.init.PlantSpawnRules.spawnCheck
 import duskdn.plantz.util.PlantHeadAttachment
 import duskdn.plantz.util.canWearPlant
 import duskdn.plantz.util.hasSameRootOwner
@@ -107,24 +108,6 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
         const val PEA_DAMAGE = 2.5
 
         /**
-         * Checks for nearby plants in a 3x3 radius, and excludes itself.
-         */
-        fun hasAdjacentPlant(level: Level, pos: BlockPos, ogPlant: PazPlant? = null) : Boolean {
-
-//            for (direction in Direction.entries) {
-//                val searchBox = AABB(pos).inflate(1.0)
-//            }
-
-            val searchBox = AABB(pos).inflate(1.0, 0.0, 1.0)
-
-            val plants = level.getEntitiesOfClass(PazPlant::class.java, searchBox) { plant ->
-                plant.blockPosition() != pos && plant.isAlive && (ogPlant == null || (ogPlant != plant && plant != ogPlant.vehicle))
-            }
-
-            return plants.isNotEmpty()
-        }
-
-        /**
          * Default plant spawn rules
          */
         fun checkPlantSpawnRules(
@@ -134,34 +117,8 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
             pos: BlockPos,
             random: RandomSource
         ): Boolean {
-            val blockBelow = level.getBlockState(pos.below())
-            val isValid = checkValidSpawn(level, pos, spawnReason) && blockBelow.`is`(PazTags.BlockTags.PLANTABLE) && !hasAdjacentPlant(
-                level as Level, pos)
-            return isValid
+            return spawnCheck(type, level, spawnReason, pos, random)
         }
-
-        /**
-         * General Plant spawn rules. Should use this is for other plants custom spawn rules.
-         * Ensure plant groups are spread out and not clumped too close together.
-         */
-        fun checkValidSpawn(level: LevelAccessor, pos: BlockPos, spawnReason: EntitySpawnReason): Boolean {
-            val blockAtPos = level.getBlockState(pos)
-
-            if (EntitySpawnReason.isSpawner(spawnReason)) return true
-
-            return (level.getEntitiesOfClass(PazPlant::class.java, AABB(pos).inflate(38.0)) { it.tickCount > 0 }.isEmpty()
-                    && blockAtPos.getCollisionShape(level, pos.above()).isEmpty)
-        }
-
-
-//        fun checkValidGround(level: LevelAccessor, pos: BlockPos, plant: Plant) : Boolean {
-//
-//            val belowBlock = level.getBlockState(pos.below())
-//
-//            return (plant.attachedEntity != null) || (canSurviveOn(belowBlock) && !hasAdjacentPlant(level, pos, plant)) || vehicle?.`is`(
-//                PazEntities.PLANT_POT_MINECART) == true || (vehicle?.`is`(
-//                PazTags.EntityTypes.PLANT) == true && !canBreatheUnderwater())
-//        }
 
         private const val NUTRIENT_SUPPLY_MAX = 50  // ticks before suffocating when on invalid ground
         private const val FLAG_POWER_RANGE = 3
@@ -774,9 +731,10 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
     }
 
     fun forceAttack(plant: PazPlant, other: Entity?) {
-        if (other is Zombie && other.swingTime == 0) {
+        if (other is Zombie && other.swingTime == 0 && other.target != this) {
+            other.target = this
             val level = other.level() as? ServerLevel
-            if (level != null && other.isAlive && plant.passengers.isEmpty()) {
+            if (level != null && other.isAlive) {
                 val damage = other.getAttribute(Attributes.ATTACK_DAMAGE)?.value?.toFloat() ?: 1f
                 if (plant.hurtServer(level, other.damageSources().mobAttack(other), damage)) {
                     other.swing(InteractionHand.MAIN_HAND)
@@ -789,11 +747,21 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
         return false
     }
 
+    open fun allowEntityCollision(): Boolean {
+        return false
+    }
+
     fun plantCollision(plant: PazPlant, other: Entity?): Boolean {
         forceAttack(plant, other)
         if (other is Sun) return false
 
-        return plant.isAlive && other != plant.attachedEntity && !(allowPlayerCollision() && other is Player)
+        val collision = if (other is Player) {
+            allowPlayerCollision()
+        } else {
+            allowEntityCollision()
+        }
+
+        return plant.isAlive && other != plant.attachedEntity && collision
     }
 
     override fun canBeCollidedWith(other: Entity?): Boolean = plantCollision(this, other)

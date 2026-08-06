@@ -1,19 +1,26 @@
 package duskdn.plantz.entity.plant
 
 import duskdn.plantz.ai.goal.ProjectileAttackGoal
+import duskdn.plantz.entity.Balloon
 import duskdn.plantz.entity.plant.init.AttackingPlant
+import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.entity.projectile.Needle
 import duskdn.plantz.entity.zombie.BalloonZombie
 import duskdn.plantz.init.PazEntities
 import duskdn.plantz.init.PazTags
 import duskdn.plantz.init.PazTags.BlockTags.PLANTABLE
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.BlockTags
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
+import net.minecraft.world.entity.monster.Enemy
+import net.minecraft.world.entity.monster.zombie.Zombie
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.Blocks
@@ -21,21 +28,16 @@ import net.minecraft.world.level.block.state.BlockState
 
 class Cactus(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlant(PazEntities.CACTUS, level) {
 
-    companion object {
-        fun checkCactusSpawnRules(
-            type: EntityType<out AttackingPlant>,
-            level: LevelAccessor,
-            spawnReason: EntitySpawnReason,
-            pos: BlockPos,
-            random: RandomSource
-        ): Boolean {
-            val blockBelow = level.getBlockState(pos.below())
-            return checkValidSpawn(level, pos, spawnReason)
-                    && (blockBelow.`is`(PLANTABLE) || blockBelow.`is`(BlockTags.SAND) || blockBelow.`is`(Blocks.SOUL_SAND))
-        }
-    }
-
     lateinit var attackGoal: CactusAttackGoal
+
+    override fun registerAttackGoal() {
+
+        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, mustSeeTarget(), false) { target, level ->
+
+            (enemyCheck(target) && !(target is BalloonZombie && target.balloons.isNotEmpty()))
+
+        })
+    }
 
     override fun registerGoals() {
         super.registerGoals()
@@ -77,17 +79,23 @@ class Cactus(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlan
             return super.canDoAction()
         }
 
+        fun tryTargetBalloon(target: BalloonZombie) {
+
+            if (!target.isAlive || target.balloons.isEmpty()) return
+
+            val balloon: Balloon = target.balloons.first()
+
+            if (!balloon.isAlive) return
+
+            usingEntity.target = balloon
+
+        }
+
         override fun doAction(): Boolean {
 
-            if (usingEntity.target is BalloonZombie && (usingEntity.target as BalloonZombie).hasBalloon) {
+            if (usingEntity.target is BalloonZombie) {
 
-                val target: Entity = ((usingEntity.target?: return false) as BalloonZombie).balloon as Entity
-
-                if (!target.isAlive) return false
-
-                val result = fire(target)
-
-                return result
+                tryTargetBalloon(usingEntity.target as BalloonZombie)
 
             }
 

@@ -1,5 +1,12 @@
 {
   "values": [
-    "minecraft:basalt_deltas"
+    {
+      "id": "#c:is_hot/nether",
+      "required": false
+    },
+    {
+      "id": "#c:is_wasteland",
+      "required": false
+    }
   ]
 }

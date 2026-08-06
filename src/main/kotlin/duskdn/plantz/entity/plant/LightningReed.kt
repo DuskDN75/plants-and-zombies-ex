@@ -23,20 +23,6 @@ import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.phys.Vec3
 
 class LightningReed(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntities.LIGHTNING_REED, level) {
-    companion object {
-        fun checkLightningReedSpawnRules(
-            type: EntityType<out PazPlant>,
-            level: ServerLevelAccessor,
-            spawnReason: EntitySpawnReason,
-            pos: BlockPos,
-            random: RandomSource
-        ): Boolean {
-            val isThundering = level.level.isThundering
-
-            return checkValidSpawn(level, pos, spawnReason)
-                    && isThundering && pos.y > level.seaLevel - 8
-        }
-    }
 
     override fun registerGoals() {
         super.registerGoals()

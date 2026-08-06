@@ -62,7 +62,7 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
             val inWater = level.getFluidState(pos).`is`(FluidTags.WATER)
 
             // light / day requirements
-            val canSpawn = (inWater && isRaining) || EntitySpawnReason.ignoresLightRequirements(spawnReason) || biome.`is`(PazTags.Biomes.DAY_SPAWNS) || isDarkEnoughToSpawn(level, pos, random)
+            val canSpawn = (inWater && isRaining) || EntitySpawnReason.ignoresLightRequirements(spawnReason) || biome.`is`(PazTags.Biomes.COMMON_SPAWNS) || isDarkEnoughToSpawn(level, pos, random)
             if (!canSpawn) return false
 
             // water spawning

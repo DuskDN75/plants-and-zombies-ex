@@ -1,5 +1,13 @@
 {
   "values": [
-    "minecraft:basalt_deltas"
+    {
+      "id": "#c:is_hot/nether",
+      "required": false
+    },
+    {
+      "id": "terralith:snowy_cherry_grove",
+      "required": false
+    },
+    "minecraft:cherry_grove"
   ]
 }

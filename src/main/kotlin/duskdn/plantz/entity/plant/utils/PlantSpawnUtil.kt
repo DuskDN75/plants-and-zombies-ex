@@ -4,6 +4,7 @@ import duskdn.plantz.entity.Sun
 import duskdn.plantz.entity.plant.init.CarrierPlant
 import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.entity.plant.init.PazPlant.Companion.hasAdjacentPlant
+import duskdn.plantz.entity.plant.utils.PlantSpawnUtils.hasAdjacentPlant
 import duskdn.plantz.entity.plant.utils.PlantSpawnUtils.validVehicle
 import duskdn.plantz.init.PazBlocks
 import duskdn.plantz.init.PazComponents
@@ -206,6 +207,20 @@ object PlantSpawnUtils {
         if (isWater || isLava) return false
 
         return !block.getCollisionShape(level, belowPos).isEmpty
+    }
+
+    /**
+     * Checks for nearby plants in a 3x3 radius, and excludes itself.
+     */
+    fun hasAdjacentPlant(level: Level, pos: BlockPos, ogPlant: PazPlant? = null) : Boolean {
+
+        val searchBox = AABB(pos).inflate(1.0, 0.0, 1.0)
+
+        val plants = level.getEntitiesOfClass(PazPlant::class.java, searchBox) { plant ->
+            plant.blockPosition() != pos && plant.isAlive && (ogPlant == null || (ogPlant != plant && plant != ogPlant.vehicle))
+        }
+
+        return plants.isNotEmpty()
     }
 
 }

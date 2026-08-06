@@ -213,7 +213,7 @@ object PazBlocks {
                         Attributes.SPAWN_REINFORCEMENTS_CHANCE,
                         AttributeModifier(
                             pazResource("zombie_leader_flag"),
-                            1.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            100.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE
                         ),
                         EquipmentSlotGroup.HAND
                     ).add(

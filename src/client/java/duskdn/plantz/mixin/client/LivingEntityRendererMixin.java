@@ -6,6 +6,7 @@ import duskdn.plantz.DuckyTubeRenderLayer;
 import duskdn.plantz.DyeVatRenderLayer;
 import duskdn.plantz.PaintLayer;
 import duskdn.plantz.mixin.LivingEntityAccessor;
+import duskdn.plantz.util.PazEntityData;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -43,16 +44,16 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 
     @Inject(method = "extractRenderState*", at = @At("TAIL"))
     private void checkForHypnoEffect(T entity, S state, float partialTicks, CallbackInfo ci) {
-        boolean hasHypno = ((LivingEntityAccessor) entity).plantz$getHypnoId();
+        boolean hasHypno = ((PazEntityData) entity).plantz$getHypnoId();
         state.setData(IS_HYPNOTIZED_KEY, hasHypno);
 
-        boolean hasChilled = ((LivingEntityAccessor) entity).plantz$getChilledId();
+        boolean hasChilled = ((PazEntityData) entity).plantz$getChilledId();
         state.setData(IS_CHILLED_KEY, hasChilled);
 
-        boolean hasDrenched = ((LivingEntityAccessor) entity).plantz$getDrenchedId();
+        boolean hasDrenched = ((PazEntityData) entity).plantz$getDrenchedId();
         state.setData(IS_DRENCHED_KEY, hasDrenched);
 
-        Map<Integer, Integer> paintColors = ((LivingEntityAccessor) entity).plantz$getPaintedColors();
+        Map<Integer, Integer> paintColors = ((PazEntityData) entity).plantz$getPaintedColors();
         state.setData(PAINT_COLORS_KEY, paintColors);
     }
 

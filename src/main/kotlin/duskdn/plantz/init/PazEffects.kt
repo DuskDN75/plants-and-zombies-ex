@@ -53,7 +53,7 @@ object PazEffects {
     @JvmField val CHILLED: Holder<MobEffect> = register("chilled",
         ChilledMobEffect(MobEffectCategory.HARMFUL, 0x8BC1FF)
             .addAttributeModifier(Attributes.MOVEMENT_SPEED, pazResource("effect.chilled"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
-            .addAttributeModifier(Attributes.JUMP_STRENGTH, pazResource("effect.chilled"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.FLYING_SPEED, pazResource("effect.chilled"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
             .addAttributeModifier(Attributes.ATTACK_SPEED, pazResource("effect.chilled"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
             .addAttributeModifier(Attributes.BLOCK_BREAK_SPEED, pazResource("effect.chilled"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
     )
@@ -61,6 +61,7 @@ object PazEffects {
     @JvmField val DRENCHED: Holder<MobEffect> = register("drenched",
         DrenchedMobEffect(MobEffectCategory.HARMFUL, 0x3F76E4)
             .addAttributeModifier(Attributes.MOVEMENT_SPEED, pazResource("effect.drenched"), -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(Attributes.FLYING_SPEED, pazResource("effect.drenched"), -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
             .addAttributeModifier(Attributes.ARMOR_TOUGHNESS, pazResource("effect.drenched"), -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
             .addAttributeModifier(Attributes.JUMP_STRENGTH, pazResource("effect.drenched"), -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
             .addAttributeModifier(Attributes.ATTACK_SPEED, pazResource("effect.drenched"), -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)

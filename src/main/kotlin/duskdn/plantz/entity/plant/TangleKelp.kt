@@ -31,21 +31,6 @@ import net.minecraft.world.level.block.state.BlockState
 class TangleKelp(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlant(PazEntities.TANGLE_KELP, level) {
 
     companion object {
-        fun checkTangleKelpSpawnRules(
-            type: EntityType<out AttackingPlant>,
-            level: ServerLevelAccessor,
-            spawnReason: EntitySpawnReason,
-            pos: BlockPos,
-            random: RandomSource
-        ): Boolean {
-            val isRaining = level.level.isRaining
-            val inWater = level.getFluidState(pos).`is`(FluidTags.WATER)
-            val rainBonus = if (isRaining) 2.25f else 1f
-
-            return checkValidSpawn(level, pos, spawnReason)
-                    && inWater && random.nextFloat() < (0.1 * rainBonus)
-        }
-
         private val TANGLE_ATTACK_MODIFIER = AttributeModifier(
             pazResource("tangle_attack"), 100.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE
         )

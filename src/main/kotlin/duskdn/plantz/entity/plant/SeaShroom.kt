@@ -20,23 +20,6 @@ import net.minecraft.world.level.block.state.BlockState
 
 class SeaShroom(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntities.SEA_SHROOM, level) {
 
-    companion object {
-        fun checkSeaShroomSpawnRules(
-            type: EntityType<out PazPlant>,
-            level: ServerLevelAccessor,
-            spawnReason: EntitySpawnReason,
-            pos: BlockPos,
-            random: RandomSource
-        ): Boolean {
-            val isRaining = level.level.isRaining
-            val inWater = level.getFluidState(pos).`is`(FluidTags.WATER)
-            val rainBonus = if (isRaining) 2.25f else 1f
-
-            return checkValidSpawn(level, pos, spawnReason)
-                        && inWater && random.nextFloat() < (0.25 * rainBonus) && pos.y > level.seaLevel - 3
-        }
-    }
-
     override fun isPushedByFluid(): Boolean {
         return false
     }
