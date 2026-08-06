@@ -5,13 +5,13 @@
 
 package joshxviii.plantz.model.zombies;
 
+import joshxviii.plantz.renderer.entity.PazZombieRenderState;
 import joshxviii.plantz.animation.zombies.DiggerZombieAnimation;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.entity.state.ZombieRenderState;
 import net.minecraft.world.entity.AnimationState;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,7 +59,7 @@ public class DiggerZombieModel extends PazZombieModel {
 
 	//TODO fix swing animation
 	@Override
-	public void setupAnim(@NotNull ZombieRenderState state) {
+	public void setupAnim(@NotNull PazZombieRenderState state) {
 		float tempAttackTime = state.attackTime;
 		state.attackTime = 0;
 		super.setupAnim(state);

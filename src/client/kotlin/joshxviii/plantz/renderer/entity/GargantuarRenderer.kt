@@ -8,7 +8,6 @@ import joshxviii.plantz.model.zombies.GargantuarModel
 import joshxviii.plantz.model.zombies.PirateCaptainModel
 import joshxviii.plantz.model.zombies.RoboZombieModel
 import net.minecraft.client.renderer.entity.EntityRendererProvider
-import net.minecraft.client.renderer.entity.state.ZombieRenderState
 import net.minecraft.world.entity.AnimationState
 
 class GargantuarRenderer(
@@ -20,7 +19,7 @@ class GargantuarRenderer(
         return GargantuarRenderState()
     }
 
-    override fun extractRenderState(entity: PazZombie, state: ZombieRenderState, partialTicks: Float) {
+    override fun extractRenderState(entity: PazZombie, state: PazZombieRenderState, partialTicks: Float) {
         super.extractRenderState(entity, state, partialTicks)
         (state as GargantuarRenderState)
         (entity as Gargantuar)

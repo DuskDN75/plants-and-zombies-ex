@@ -34,7 +34,7 @@ open class PazZombieRenderer(
     private val babyModel: PazZombieModel = PazZombieModel(null, context.bakeLayer(ModelLayers.ZOMBIE_BABY)),
     armorSet: ArmorModelSet<ModelLayerLocation> = ModelLayers.ZOMBIE_ARMOR,
     babyArmorSet: ArmorModelSet<ModelLayerLocation> = ModelLayers.ZOMBIE_BABY_ARMOR
-) : AbstractZombieRenderer<PazZombie, ZombieRenderState, PazZombieModel>(
+) : AbstractZombieRenderer<PazZombie, PazZombieRenderState, PazZombieModel>(
     context,
     defaultModel,
     babyModel,
@@ -47,13 +47,11 @@ open class PazZombieRenderer(
     }
 
     override fun submit(
-        state: ZombieRenderState,
+        state: PazZombieRenderState,
         poseStack: PoseStack,
         collector: SubmitNodeCollector,
         camera: CameraRenderState
     ) {
-        (state as PazZombieRenderState)
-
         // debug info text
         if (PazConfig.SHOW_DEBUG_INFO) collector.submitNameTag(
             poseStack, Vec3(0.0,state.eyeHeight.toDouble(),0.0), -20,
@@ -67,13 +65,12 @@ open class PazZombieRenderer(
         return PazZombieRenderState()
     }
 
-    override fun getShadowRadius(state: ZombieRenderState): Float {
+    override fun getShadowRadius(state: PazZombieRenderState): Float {
         return super.getShadowRadius(state)
     }
 
-    override fun extractRenderState(entity: PazZombie, state: ZombieRenderState, partialTicks: Float) {
+    override fun extractRenderState(entity: PazZombie, state: PazZombieRenderState, partialTicks: Float) {
         super.extractRenderState(entity, state, partialTicks)
-        (state as PazZombieRenderState)
         state.zombieState = entity.state
         state.emergeAnimationState.copyFrom(entity.emergeAnimation)
         if (entity is DiscoZombie) state.actionAnimationState.copyFrom(entity.summonAnimation)
@@ -91,26 +88,24 @@ open class PazZombieRenderer(
             }
     }
 
-    override fun getTextureLocation(state: ZombieRenderState): Identifier {
-        (state as PazZombieRenderState)
+    override fun getTextureLocation(state: PazZombieRenderState): Identifier {
         val texture = state.getTextureLocation(PazZombieRenderState.TEXTURE_PATH, state.getSuffixes())
         return texture
     }
 }
 
-class EmissiveZombieLayer<M : EntityModel<ZombieRenderState>>(
-    renderer: RenderLayerParent<ZombieRenderState, M>,
-) : EyesLayer<ZombieRenderState, M>(renderer) {
+class EmissiveZombieLayer<M : EntityModel<PazZombieRenderState>>(
+    renderer: RenderLayerParent<PazZombieRenderState, M>,
+) : EyesLayer<PazZombieRenderState, M>(renderer) {
 
     override fun submit(
         poseStack: PoseStack,
         submitNodeCollector: SubmitNodeCollector,
         lightCoords: Int,
-        state: ZombieRenderState,
+        state: PazZombieRenderState,
         yRot: Float,
         xRot: Float
     ) {
-        if (state !is PazZombieRenderState) return
         val textureLocation = state.getEmissiveTextureLocation(PazZombieRenderState.TEXTURE_PATH, state.getSuffixes()) ?: return
         val renderType = RenderTypes.eyes(textureLocation)
         submitNodeCollector.order(1).submitModel(this.parentModel, state, poseStack, renderType, lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);

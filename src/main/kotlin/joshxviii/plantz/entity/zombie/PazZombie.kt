@@ -112,7 +112,7 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
     var waterTime = -1
     override fun tick() {
         super.tick()
-        val level = level() as? ServerLevel ?: return
+        val serverLevel = level() as? ServerLevel
 
         if (isEyeInFluid(FluidTags.WATER)) {
             waterTime++
@@ -121,7 +121,7 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
                     val currentLegs = getItemBySlot(EquipmentSlot.LEGS)
                     val dropChance = dropChances.byEquipment(EquipmentSlot.LEGS)
                     if (!currentLegs.isEmpty && max(this.random.nextFloat() - 0.1f, 0.0f).toDouble() < dropChance) {
-                        spawnAtLocation(level, currentLegs)
+                        if (serverLevel!=null) spawnAtLocation(serverLevel, currentLegs)
                     }
                 }
                 setItemSlot(EquipmentSlot.LEGS, PazItems.DUCKY_TUBE.defaultInstance)
@@ -131,12 +131,11 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
 
         when (state) {
             ZombieState.EMERGING -> {
-                //isImmobile
                 emergeAnimation.startIfStopped(tickCount)
                 if (tickCount < 15) {
                     if(tickCount==1) playSound(SoundEvents.ROOTED_DIRT_HIT, 1.0f, 0.2f)
-                    level.sendParticles(
-                        BlockParticleOption(ParticleTypes.BLOCK, level.getBlockState(blockPosition().below())),
+                    serverLevel?.sendParticles(
+                        BlockParticleOption(ParticleTypes.BLOCK, serverLevel.getBlockState(blockPosition().below())),
                         x, y + 0.05, z, 8, 0.25, 0.0, 0.25, 0.4
                     )
                 }

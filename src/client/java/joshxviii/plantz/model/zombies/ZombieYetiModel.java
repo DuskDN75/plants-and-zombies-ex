@@ -1,12 +1,12 @@
 package joshxviii.plantz.model.zombies;
 
 import joshxviii.plantz.animation.zombies.ZombieYetiAnimation;
+import joshxviii.plantz.renderer.entity.PazZombieRenderState;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.entity.state.ZombieRenderState;
 import org.jetbrains.annotations.NotNull;
 
 import static joshxviii.plantz.UtilsKt.pazResource;
@@ -52,7 +52,7 @@ public class ZombieYetiModel extends PazZombieModel {
 	}
 
 	@Override
-	public void setupAnim(@NotNull ZombieRenderState state) {
+	public void setupAnim(@NotNull PazZombieRenderState state) {
 		super.setupAnim(state);
 		actionAnimation.applyWalk(state.attackTime*4, 1.0f, 1.0f, 1.0f);
 	}

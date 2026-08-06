@@ -4,7 +4,6 @@ import joshxviii.plantz.entity.zombie.PazZombie
 import joshxviii.plantz.entity.zombie.SuperBrainz
 import joshxviii.plantz.model.zombies.SuperBrainzModel
 import net.minecraft.client.renderer.entity.EntityRendererProvider
-import net.minecraft.client.renderer.entity.state.ZombieRenderState
 import net.minecraft.util.Mth
 
 class SuperBrainzRenderer(
@@ -16,7 +15,7 @@ class SuperBrainzRenderer(
         return SuperBrainzRenderState()
     }
 
-    override fun extractRenderState(entity: PazZombie, state: ZombieRenderState, partialTicks: Float) {
+    override fun extractRenderState(entity: PazZombie, state: PazZombieRenderState, partialTicks: Float) {
         super.extractRenderState(entity, state, partialTicks)
         (state as SuperBrainzRenderState)
         extractCapeState(entity, state, partialTicks)

@@ -1,5 +1,6 @@
 package joshxviii.plantz.model.zombies;
 
+import joshxviii.plantz.renderer.entity.PazZombieRenderState;
 import joshxviii.plantz.renderer.entity.GargantuarRenderState;
 import joshxviii.plantz.animation.zombies.GargantuarAnimation;
 import net.minecraft.client.animation.KeyframeAnimation;
@@ -7,7 +8,6 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.entity.state.ZombieRenderState;
 import org.jetbrains.annotations.NotNull;
 
 import static joshxviii.plantz.UtilsKt.pazResource;
@@ -83,9 +83,11 @@ public class GargantuarModel extends PazZombieModel {
 	}
 
 	@Override
-	public void setupAnim(@NotNull ZombieRenderState state) {
+	public void setupAnim(@NotNull PazZombieRenderState state) {
 		super.setupAnim(state);
 		this.resetPose();
+		this.head.xRot = state.xRot * (float) (Math.PI / 180.0);
+		this.head.yRot = state.yRot * (float) (Math.PI / 180.0);
 
 		float animationPos = state.walkAnimationPos;
 		float animationSpeed = state.walkAnimationSpeed;

@@ -1,6 +1,5 @@
 package joshxviii.plantz.model.zombies;
 
-import joshxviii.plantz.PazEntities;
 import joshxviii.plantz.renderer.entity.PazZombieRenderState;
 import joshxviii.plantz.animation.zombies.PazZombieAnimations;
 import net.minecraft.client.animation.KeyframeAnimation;
@@ -9,13 +8,12 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.model.monster.zombie.ZombieModel;
-import net.minecraft.client.renderer.entity.state.ZombieRenderState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static joshxviii.plantz.UtilsKt.pazResource;
 
-public class PazZombieModel extends ZombieModel<@NotNull ZombieRenderState> {
+public class PazZombieModel extends ZombieModel<@NotNull PazZombieRenderState> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("paz_zombie"), "main");
 
     final KeyframeAnimation initAnimation;
@@ -26,7 +24,8 @@ public class PazZombieModel extends ZombieModel<@NotNull ZombieRenderState> {
     ) {
         var mainRoot = root.hasChild("root") ? root.getChild("root") : root;
         super(mainRoot);
-        this.initAnimation = PazZombieAnimations.emerge.bake(mainRoot);
+        if (initAnimation == null) this.initAnimation = PazZombieAnimations.emerge.bake(mainRoot);
+        else this.initAnimation = initAnimation;
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -59,9 +58,8 @@ public class PazZombieModel extends ZombieModel<@NotNull ZombieRenderState> {
     }
 
     @Override
-    public void setupAnim(final ZombieRenderState state) {
+    public void setupAnim(final PazZombieRenderState state) {
         super.setupAnim(state);
-        PazZombieRenderState pazState = (PazZombieRenderState) state;
-        initAnimation.apply(pazState.getEmergeAnimationState(), pazState.ageInTicks);
+        initAnimation.apply(state.getEmergeAnimationState(), state.ageInTicks);
     }
 }
