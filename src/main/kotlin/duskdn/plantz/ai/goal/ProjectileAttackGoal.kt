@@ -37,7 +37,7 @@ open class ProjectileAttackGoal(
 ) : ActionGoal(usingEntity, cooldownTime, actionDelay, actionStartEffect, actionSuccessEffect, actionEndEffect, actionPredicate) {
     var distanceSqr: Double = 0.0
 
-    var targetMoveDirection: Vec3 = Vec3(0.0, 0.0, 0.0)
+    var targetMoveVelocity: Vec3 = Vec3(0.0, 0.0, 0.0)
 
     var lastTarget: LivingEntity? = null
 
@@ -181,9 +181,17 @@ open class ProjectileAttackGoal(
 
         val targetVel = Vec3(
             target.x - target.xo,
-            0.0,
+            target.y - target.yo,
             target.z - target.zo
         )
+
+        val entityVel = Vec3(
+            usingEntity.x - usingEntity.xo,
+            usingEntity.y - usingEntity.yo,
+            usingEntity.z - usingEntity.zo
+        )
+
+        val relativeVel = targetVel.subtract(entityVel)
 
         var alphaMult = 0.5
 
@@ -197,7 +205,7 @@ open class ProjectileAttackGoal(
 
         val distanceAlpha = Math.clamp(distanceChange*alphaMult,0.0,1.0)
 
-        targetMoveDirection = targetMoveDirection.lerp(targetVel, distanceAlpha)
+        targetMoveVelocity = targetMoveVelocity.lerp(relativeVel, distanceAlpha)
 
 
     }
@@ -206,7 +214,7 @@ open class ProjectileAttackGoal(
 
         updateTargetVelocity(target)
 
-        if (targetMoveDirection.lengthSqr() <= 0.000001) return basePos
+        if (targetMoveVelocity.lengthSqr() <= 0.000001) return basePos
 
 
 
@@ -215,7 +223,7 @@ open class ProjectileAttackGoal(
         var time = basePos.horizontalDistance() / v
 
         repeat(8) {
-            val predicted = basePos.add(targetMoveDirection.scale(time))
+            val predicted = basePos.add(targetMoveVelocity.scale(time))
 
             val arcs = calculateProjectileArcs(predicted, g, v) ?: return predicted
             val angle = if (useHighArc) {
@@ -229,10 +237,10 @@ open class ProjectileAttackGoal(
 
             time = Mth.lerp(0.5f, time.toFloat(), flightTime.toFloat()).toDouble()
 
-            println("vel=$targetMoveDirection time=$time prediction=$predicted")
+//            println("vel=$targetMoveVelocity time=$time prediction=$predicted")
         }
 
-        return basePos.add(targetMoveDirection.scale(time))
+        return basePos.add(targetMoveVelocity.scale(time))
     }
 
     /**

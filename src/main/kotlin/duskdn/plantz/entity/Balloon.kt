@@ -125,7 +125,7 @@ class Balloon(
 
         val groundPullForce = groundPull.coerceIn(0.0, 1.0)
 
-        println("groundHeight: $groundHeight, groundDistance: $groundDistance, groundPullForce: $groundPullForce")
+//        println("groundHeight: $groundHeight, groundDistance: $groundDistance, groundPullForce: $groundPullForce")
 
         val mult = if (holder.hasEffect(PazEffects.CHILLED)) 0.5 else 0.0
 

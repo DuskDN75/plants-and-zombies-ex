@@ -37,6 +37,7 @@ object PazTags {
         @JvmField val AMPHIBIOUS = tag("amphibious")
         @JvmField val PLANTABLE_ON_WATER = tag("plantable_on_water")
         @JvmField val PLANTABLE_ON_LAVA = tag("plantable_on_lava")
+        @JvmField val PLANTABLE_ON_AIR = tag("plantable_on_air")
         @JvmField val CARRIER_ALLOW_WATER = tag("carrier_allow_water")
         @JvmField val PLANT_PROJECTILE = tag("plant_projectile")
         @JvmField val IMMUNE_TO_ELECTRICITY = tag("immune_to_electricity")

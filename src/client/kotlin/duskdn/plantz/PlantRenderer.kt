@@ -2,12 +2,12 @@ package duskdn.plantz
 
 import com.mojang.blaze3d.vertex.PoseStack
 import duskdn.plantz.ai.PlantState
-import duskdn.plantz.entity.plant.BonkChoy
-import duskdn.plantz.entity.plant.ExplodeONut
-import duskdn.plantz.entity.plant.Explosive
-import duskdn.plantz.entity.plant.KernelPult
+import duskdn.plantz.entity.plant.all.BonkChoy
+import duskdn.plantz.entity.plant.all.ExplodeONut
+import duskdn.plantz.entity.plant.all.Explosive
+import duskdn.plantz.entity.plant.all.KernelPult
 import duskdn.plantz.entity.plant.init.PazPlant
-import duskdn.plantz.entity.plant.WallNut
+import duskdn.plantz.entity.plant.all.WallNut
 import duskdn.plantz.init.PazConfig
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.renderer.SubmitNodeCollector

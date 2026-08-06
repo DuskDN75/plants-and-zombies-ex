@@ -41,7 +41,7 @@ abstract class AttackingPlant(type: EntityType<out AttackingPlant>, level: Level
     override fun setTarget(target: LivingEntity?) {
         super.setTarget(target)
 
-        println("TARGET IS $target")
+//        println("TARGET IS $target")
     }
 
     fun enemyCheck(target: LivingEntity): Boolean {

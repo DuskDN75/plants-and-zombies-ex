@@ -1,6 +1,6 @@
 package duskdn.plantz.ai.goal
 
-import duskdn.plantz.entity.plant.Explosive
+import duskdn.plantz.entity.plant.all.Explosive
 import net.minecraft.core.Holder
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
@@ -25,8 +25,6 @@ class ExplodeGoal(
         private const val DISTANCE_SQR = 49.0
     }
 
-    private var target: LivingEntity? = null
-
     init {
         flags = EnumSet.of<Flag>(Flag.MOVE)
     }
@@ -35,10 +33,6 @@ class ExplodeGoal(
         if (explosiveEntity.swellDir>=0) return true
         if (!actionPredicate.test(explosiveEntity)) return false
         if ((explosiveEntity.isAsleep || explosiveEntity.isGrowingSeeds)) return false
-        target = explosiveEntity.target
-        target?.let {
-            return (!it.isDeadOrDying && explosiveEntity.distanceToSqr(it) < activateRange * activateRange) || explosiveEntity.swell > 0
-        }
         return false
     }
 
@@ -47,7 +41,6 @@ class ExplodeGoal(
     }
 
     override fun stop() {
-        target = null
         explosiveEntity.swellDir = -1
     }
 
@@ -56,15 +49,8 @@ class ExplodeGoal(
     }
 
     override fun tick() {
-        val currentTarget = target
 
-        if (explosiveEntity.swellDir != 2) explosiveEntity.swellDir = when {
-            currentTarget == null -> -1
-            currentTarget.isDeadOrDying -> -1
-            explosiveEntity.distanceToSqr(currentTarget) > DISTANCE_SQR -> -1
-            !explosiveEntity.canAttack(currentTarget) -> -1
-            else -> 1
-        }
+        if (explosiveEntity.swellDir != 2) explosiveEntity.swellDir = 1
 
         if (explosiveEntity.swellDir > 0 && explosiveEntity.swell == 0) {
             explosiveEntity.playSound(SoundEvents.CREEPER_PRIMED, 1.0f, 1f + (1-explosiveEntity.getMaxSwellTime() / 30))

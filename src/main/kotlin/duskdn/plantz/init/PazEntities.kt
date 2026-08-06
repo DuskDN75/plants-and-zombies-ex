@@ -6,7 +6,38 @@ import duskdn.plantz.entity.Balloon
 import duskdn.plantz.entity.PlantPotMinecart
 import duskdn.plantz.entity.Sun
 import duskdn.plantz.entity.gnome.Gnome
-import duskdn.plantz.entity.plant.*
+import duskdn.plantz.entity.plant.all.BonkChoy
+import duskdn.plantz.entity.plant.all.CabbagePult
+import duskdn.plantz.entity.plant.all.Cactus
+import duskdn.plantz.entity.plant.all.CherryBomb
+import duskdn.plantz.entity.plant.all.Chomper
+import duskdn.plantz.entity.plant.all.CoffeeBean
+import duskdn.plantz.entity.plant.all.mushrooms.DoomShroom
+import duskdn.plantz.entity.plant.all.ElectricPeaShooter
+import duskdn.plantz.entity.plant.all.ExplodeONut
+import duskdn.plantz.entity.plant.all.FirePeaShooter
+import duskdn.plantz.entity.plant.all.FlowerPot
+import duskdn.plantz.entity.plant.all.mushrooms.FumeShroom
+import duskdn.plantz.entity.plant.all.mushrooms.HypnoShroom
+import duskdn.plantz.entity.plant.all.IcePeaShooter
+import duskdn.plantz.entity.plant.all.KernelPult
+import duskdn.plantz.entity.plant.all.igenous.LavaLily
+import duskdn.plantz.entity.plant.all.LightningReed
+import duskdn.plantz.entity.plant.all.aquatic.LilyPad
+import duskdn.plantz.entity.plant.all.MelonPult
+import duskdn.plantz.entity.plant.all.PeaShooter
+import duskdn.plantz.entity.plant.all.PotatoMine
+import duskdn.plantz.entity.plant.all.mushrooms.PuffShroom
+import duskdn.plantz.entity.plant.all.Repeater
+import duskdn.plantz.entity.plant.all.mushrooms.ScaredyShroom
+import duskdn.plantz.entity.plant.all.mushrooms.SeaShroom
+import duskdn.plantz.entity.plant.all.mushrooms.SunShroom
+import duskdn.plantz.entity.plant.all.Sunflower
+import duskdn.plantz.entity.plant.all.aquatic.TangleKelp
+import duskdn.plantz.entity.plant.all.WallNut
+import duskdn.plantz.entity.plant.all.aquatic.WaterPeaShooter
+import duskdn.plantz.entity.plant.all.WaterPot
+import duskdn.plantz.entity.plant.all.aerial.SkyPeaShooter
 import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.entity.projectile.*
 import duskdn.plantz.entity.projectile.peas.Pea
@@ -72,7 +103,8 @@ object PazEntities {
             if (entity is Zombie) (entity as MobAccessor).targetSelector.addGoal(4, NearestAttackableTargetGoal(entity, Gnome::class.java, 5, true, false, null))
 
             if (entity is Mob && entity.`is`(PazTags.EntityTypes.ATTACKS_PLANTS)) {
-                (entity as MobAccessor).targetSelector.addGoal(0, NearestAttackableTargetGoal(entity, WallNut::class.java, 2, false, true) { target, level -> ((target as? WallNut ?: target as? ExplodeONut)?.let { it.distanceToSqr(entity) < 16 } ?: false)})
+                (entity as MobAccessor).targetSelector.addGoal(0, NearestAttackableTargetGoal(entity, WallNut::class.java, 2, false, true) { target, level -> ((target as? WallNut
+                    ?: target as? ExplodeONut)?.let { it.distanceToSqr(entity) < 16 } ?: false)})
                 (entity as MobAccessor).targetSelector.addGoal(1, NearestAttackableTargetGoal(entity, PazPlant::class.java, 6, true, false) { target, level ->
                     target !is WallNut && target.passengers.isEmpty() && !target.`is`(PazTags.EntityTypes.IGNORED_BY_PLANT_ATTACKERS)
                 })
@@ -390,6 +422,12 @@ object PazEntities {
         eyeHeight = 0.125f,
         attributes = PazPlant.Companion.PlantAttributes(
             maxHealth = 12.0,
+        )
+    )
+    @JvmField val SKY_PEA_SHOOTER: EntityType<SkyPeaShooter> = registerPlant(
+        "sky_peashooter", EntityType.Builder.of(::SkyPeaShooter, MobCategory.CREATURE).fireImmune(),
+        attributes = PazPlant.Companion.PlantAttributes(
+            flyingSpeed = 0.2
         )
     )
     // endregion

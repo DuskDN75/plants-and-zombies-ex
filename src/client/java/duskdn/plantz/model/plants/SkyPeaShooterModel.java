@@ -10,6 +10,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.world.entity.AnimationState;
 import org.jetbrains.annotations.NotNull;
 import static duskdn.plantz.util.UtilsKt.pazResource;
 
@@ -193,5 +194,17 @@ public class SkyPeaShooterModel extends PazPlantModel {
 		this.head.xRot = state.xRot * (float) (Math.PI / 180.0);
 		super.setupAnim(state);
 		this.stem.yRot = state.yRot * (float) (Math.PI / 180.0);
+
+		float age = state.ageInTicks;
+
+		AnimationState actionAnimState = state.getActionAnimationState();
+
+		double mult = actionAnimState.isStarted() ? 1.52-actionAnimState.getTimeInMillis(age) : 1.0;
+
+		if (state.isInAir()) {
+			mult *= 4;
+		}
+
+		this.propeller.zRot = (float) (age * mult);
 	}
 }

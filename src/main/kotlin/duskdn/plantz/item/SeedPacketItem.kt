@@ -78,20 +78,35 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
         val itemStack = player.getItemInHand(hand)
 
         val component = itemStack.get(DataComponents.ENTITY_DATA)
-        val entityType = component?.type()
-        val waterPlaceable = entityType!=null && BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(entityType).`is`(PazTags.EntityTypes.PLANTABLE_ON_WATER)
-        val lavaPlaceable = entityType!=null && BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(entityType).`is`(PazTags.EntityTypes.PLANTABLE_ON_LAVA)
+        val entityType = component?.type()?.let { BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(it) }
+        val waterPlaceable = entityType!=null && entityType.`is`(PazTags.EntityTypes.PLANTABLE_ON_WATER)
+        val lavaPlaceable = entityType!=null && entityType.`is`(PazTags.EntityTypes.PLANTABLE_ON_LAVA)
+        val airPlaceable = entityType!=null && entityType.`is`(PazTags.EntityTypes.PLANTABLE_ON_AIR)
 
-        if (!waterPlaceable && !lavaPlaceable) return InteractionResult.PASS
+        if (!waterPlaceable && !lavaPlaceable && !airPlaceable) return InteractionResult.PASS
+
         val hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY)
-        if (hitResult.type != HitResult.Type.BLOCK) return InteractionResult.PASS
+
         if (level is ServerLevel) {
-            val pos: BlockPos = hitResult.blockPos
+
+            var direction: Direction
+
+            val pos: BlockPos
+
+            if (hitResult.type == HitResult.Type.MISS && airPlaceable) {
+                pos = BlockPos.containing(hitResult.location)
+                direction = Direction.UP
+            } else {
+                pos = hitResult.blockPos
+                direction = hitResult.direction
+            }
+
             val block = level.getBlockState(pos).block
+
             println("BLOCK IS: $block")
-            if (block !is LiquidBlock) return InteractionResult.PASS
-            else if (level.mayInteract(player, pos) && player.mayUseItemAt(pos, hitResult.direction, itemStack)) {
-                val result = PlantSpawnUtils.tryPlant(level, player, itemStack, pos, UseOnContext(player, hand, hitResult).clickedFace, player.direction, checkWater = waterPlaceable, checkLava = lavaPlaceable)
+            if (block !is LiquidBlock && !airPlaceable) return InteractionResult.PASS
+            else if (level.mayInteract(player, pos) && player.mayUseItemAt(pos, direction, itemStack)) {
+                val result = PlantSpawnUtils.tryPlant(level, player, itemStack, pos, UseOnContext(player, hand, hitResult).clickedFace, player.direction, checkFluid = true)
                 if (result === InteractionResult.SUCCESS) player.awardStat(Stats.ITEM_USED.get(this))
 
                 return result

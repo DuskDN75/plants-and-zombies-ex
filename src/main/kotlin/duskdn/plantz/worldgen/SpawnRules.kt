@@ -1,8 +1,10 @@
 package duskdn.plantz.worldgen
 
 import duskdn.plantz.entity.plant.init.PazPlant
+import duskdn.plantz.entity.plant.utils.PlantSpawnUtils
 import duskdn.plantz.entity.plant.utils.PlantSpawnUtils.hasAdjacentPlant
 import duskdn.plantz.init.PazTags
+import duskdn.plantz.worldgen.SpawnRules.IS_PLANTABLE_WATER
 import duskdn.plantz.worldgen.init.SpawnRule
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.core.registries.BuiltInRegistries
@@ -33,47 +35,58 @@ object SpawnRules {
     val IS_PLANTABLE_DEFAULT = SpawnRule { context ->
         val blockBelow = context.level.getBlockState(context.pos.below())
 
-        return@SpawnRule blockBelow.`is`(PazTags.BlockTags.PLANTABLE)
+        return@SpawnRule PlantSpawnUtils.canSurviveDefault(blockBelow)
     }
 
     val IS_PLANTABLE_SAND = SpawnRule { context ->
         val blockBelow = context.level.getBlockState(context.pos.below())
 
-        return@SpawnRule blockBelow.`is`(BlockTags.SAND) || blockBelow.`is`(Blocks.SOUL_SAND) || blockBelow.`is`(Blocks.GRAVEL)
+        return@SpawnRule PlantSpawnUtils.canSurviveSand(blockBelow)
     }
 
     val IS_PLANTABLE_FIRE = SpawnRule { context ->
         val blockBelow = context.level.getBlockState(context.pos.below())
 
-        return@SpawnRule blockBelow.`is`(Blocks.NETHERRACK) || blockBelow.`is`(Blocks.BASALT) || blockBelow.`is`(Blocks.GRAVEL)
+        return@SpawnRule PlantSpawnUtils.canSurviveFire(blockBelow)
     }
 
     val IS_PLANTABLE_FREE = SpawnRule { context ->
-        val blockBelow = context.level.getBlockState(context.pos.below())
 
-        return@SpawnRule !blockBelow.`is`(BlockTags.AIR)
+        val blockPos = context.pos.below()
+
+        val blockState = context.level.getBlockState(blockPos)
+
+        return@SpawnRule PlantSpawnUtils.solidFloorCheck(context.level as Level, blockPos, blockState)
     }
 
     val IS_PLANTABLE_SNOW = SpawnRule { context ->
         val blockBelow = context.level.getBlockState(context.pos.below())
 
-        return@SpawnRule blockBelow.`is`(BlockTags.SNOW)
+        return@SpawnRule PlantSpawnUtils.canSurviveSnow(blockBelow)
     }
 
     val IS_PLANTABLE_WATER = SpawnRule { context ->
-        val isWater = context.level.getFluidState(context.pos).`is`(FluidTags.WATER)
+        val blockPos = context.pos
 
-        val waterAllowed = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(context.type).`is`(PazTags.EntityTypes.PLANTABLE_ON_WATER)
+        val blockState = context.level.getBlockState(blockPos)
 
-        return@SpawnRule isWater && waterAllowed
+        return@SpawnRule PlantSpawnUtils.canSurviveWater(context.type, context.level as Level, blockState, blockPos)
     }
 
     val IS_PLANTABLE_LAVA = SpawnRule { context ->
-        val isWater = context.level.getFluidState(context.pos).`is`(FluidTags.LAVA)
+        val blockPos = context.pos
 
-        val waterAllowed = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(context.type).`is`(PazTags.EntityTypes.PLANTABLE_ON_LAVA)
+        val blockState = context.level.getBlockState(blockPos)
 
-        return@SpawnRule isWater && waterAllowed
+        return@SpawnRule PlantSpawnUtils.canSurviveLava(context.type, context.level as Level, blockState, blockPos)
+    }
+
+    val IS_PLANTABLE_AIR = SpawnRule { context ->
+        val blockPos = context.pos
+
+        val blockState = context.level.getBlockState(blockPos)
+
+        return@SpawnRule PlantSpawnUtils.canSurviveAir(context.type, context.level as Level, blockState, blockPos)
     }
 
     val IS_DARK = SpawnRule { context ->
@@ -90,17 +103,20 @@ object SpawnRules {
         val spawnReason = context.spawnReason
         val random = context.randomSource
 
+        val blockState = context.level.getBlockState(pos)
+
         val chance = context.getData<Float>("waterSpawnChance") ?: 0.25f
 
         val isRaining = level.level.isRaining
-        val inWater = level.getFluidState(pos).`is`(FluidTags.WATER)
         val rainBonus = if (isRaining) 2.25f else 1f
 
         val biome = level.getBiome(pos)
 
         val swampBonus = if (biome.`is`(ConventionalBiomeTags.IS_SWAMP)) 2.25f else 1f
 
-        return@SpawnRule inWater && random.nextFloat() < (chance * rainBonus * swampBonus)
+        val plantableWater = PlantSpawnUtils.canSurviveWater(context.type, context.level as Level, blockState, pos)
+
+        return@SpawnRule plantableWater && random.nextFloat() < (chance * rainBonus * swampBonus)
     }
 
     val LAVA_SPAWN = SpawnRule { context ->
@@ -108,15 +124,17 @@ object SpawnRules {
         val pos = context.pos
         val random = context.randomSource
 
-        val chance = context.getData<Float>("lavaSpawnChance") ?: 0.25f
+        val blockState = context.level.getBlockState(pos)
 
-        val inLava = level.getFluidState(pos).`is`(FluidTags.LAVA)
+        val chance = context.getData<Float>("lavaSpawnChance") ?: 0.25f
 
         val biome = level.getBiome(pos)
 
         val hotBonus = if (biome.`is`(ConventionalBiomeTags.IS_HOT)) 2.25f else 1f
 
-        return@SpawnRule inLava && random.nextFloat() < (chance * hotBonus)
+        val plantableLava = PlantSpawnUtils.canSurviveLava(context.type, context.level as Level, blockState, pos)
+
+        return@SpawnRule plantableLava && random.nextFloat() < (chance * hotBonus)
     }
 
     val HAS_NO_ADJACENT = SpawnRule { context ->

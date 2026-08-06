@@ -24,6 +24,8 @@ abstract class CarrierPlant(type: EntityType<out CarrierPlant>, level: Level) : 
         return false
     }
 
+    open fun checkRider(plant: PazPlant): Boolean = true
+
     open fun setRider(plant: PazPlant) {
 
         println("SETTING RIDER")

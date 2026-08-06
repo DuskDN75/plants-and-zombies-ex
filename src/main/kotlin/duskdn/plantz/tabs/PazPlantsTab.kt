@@ -135,7 +135,7 @@ object PazPlantsTab : PazCreativeTab() {
                     // endregion
 
                     // region AIR PLANTS
-                    addPlant(PazEntities.PLACEHOLDER) // Sky Shooter
+                    addPlant(PazEntities.SKY_PEA_SHOOTER) // Sky Shooter
                     addPlant(PazEntities.PLACEHOLDER) // Floater Pot
                     addPlant(PazEntities.PLACEHOLDER) // Blover
                     // endregion

@@ -3,8 +3,9 @@ package duskdn.plantz.entity.plant.init
 import duskdn.plantz.ai.PlantState
 import duskdn.plantz.ai.goal.SleepGoal
 import duskdn.plantz.entity.Sun
-import duskdn.plantz.entity.plant.WaterPot
+import duskdn.plantz.entity.plant.all.WaterPot
 import duskdn.plantz.entity.plant.utils.PlantGrowNeeds
+import duskdn.plantz.entity.plant.utils.PlantSpawnUtils
 import duskdn.plantz.entity.plant.utils.onValidGround
 import duskdn.plantz.entity.plant.utils.processSunItem
 import duskdn.plantz.entity.plant.utils.processWateringItem
@@ -17,7 +18,6 @@ import duskdn.plantz.init.PazServerParticles
 import duskdn.plantz.init.PazSounds
 import duskdn.plantz.init.PazTags
 import duskdn.plantz.item.SeedPacketItem
-import duskdn.plantz.worldgen.init.PlantSpawnRules.spawnCheck
 import duskdn.plantz.util.PlantHeadAttachment
 import duskdn.plantz.util.canWearPlant
 import duskdn.plantz.util.hasSameRootOwner
@@ -44,7 +44,6 @@ import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.ItemTags
 import net.minecraft.util.Mth
 import net.minecraft.util.ProblemReporter
-import net.minecraft.util.RandomSource
 import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
@@ -77,7 +76,6 @@ import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.LightLayer
 import net.minecraft.world.level.ServerLevelAccessor
@@ -107,20 +105,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
          */
         const val PEA_DAMAGE = 2.5
 
-        /**
-         * Default plant spawn rules
-         */
-        fun checkPlantSpawnRules(
-            type: EntityType<out PazPlant>,
-            level: LevelAccessor,
-            spawnReason: EntitySpawnReason,
-            pos: BlockPos,
-            random: RandomSource
-        ): Boolean {
-            return spawnCheck(type, level, spawnReason, pos, random)
-        }
-
-        private const val NUTRIENT_SUPPLY_MAX = 50  // ticks before suffocating when on invalid ground
+        const val NUTRIENT_SUPPLY_MAX = 50  // ticks before suffocating when on invalid ground
         private const val FLAG_POWER_RANGE = 3
 
         val PLANT_STATE: EntityDataAccessor<PlantState> = SynchedEntityData.defineId<PlantState>(PazPlant::class.java,
@@ -157,6 +142,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
             val attackKnockback: Double = 0.0,
             val attackRange: Double = 2.5,
             val movementSpeed: Double = 0.0,
+            val flyingSpeed: Double = 0.0,
             val followRange: Double = 20.0,
             val armor: Double = 0.0,
             val scale: Double = 1.0,
@@ -169,6 +155,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
                     .add(Attributes.ATTACK_KNOCKBACK, attackKnockback)
                     .add(Attributes.ENTITY_INTERACTION_RANGE, attackRange)
                     .add(Attributes.MOVEMENT_SPEED, movementSpeed)
+                    .add(Attributes.FLYING_SPEED, flyingSpeed)
                     .add(Attributes.ARMOR, armor)
                     .add(Attributes.SCALE, scale)
             }
@@ -179,7 +166,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
         return super.isInWater() || vehicle is WaterPot
     }
 
-    private var nutrientSupply = NUTRIENT_SUPPLY_MAX
+    var nutrientSupply = NUTRIENT_SUPPLY_MAX
 
     val isGrowingSeeds: Boolean
         get() = testGrowConditions() != PlantGrowNeeds.SOIL
@@ -615,7 +602,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
     fun exposedToRain(): Boolean = level().isRainingAt(blockPosition().above())
     open fun sleepsDuringNight(): Boolean = false
     open fun sleepsDuringDay(): Boolean = this.`is`(PazTags.EntityTypes.MUSHROOM)
-    open fun canSurviveOn(block: BlockState) : Boolean = block.`is`(PazTags.BlockTags.PLANTABLE)
+    open fun canSurviveOn(block: BlockState) : Boolean = PlantSpawnUtils.canSurviveDefault(block)
 
     open fun cooldownFinished() {}
 

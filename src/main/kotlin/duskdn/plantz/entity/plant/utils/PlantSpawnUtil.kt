@@ -3,7 +3,6 @@ package duskdn.plantz.entity.plant.utils
 import duskdn.plantz.entity.Sun
 import duskdn.plantz.entity.plant.init.CarrierPlant
 import duskdn.plantz.entity.plant.init.PazPlant
-import duskdn.plantz.entity.plant.init.PazPlant.Companion.hasAdjacentPlant
 import duskdn.plantz.entity.plant.utils.PlantSpawnUtils.hasAdjacentPlant
 import duskdn.plantz.entity.plant.utils.PlantSpawnUtils.validVehicle
 import duskdn.plantz.init.PazBlocks
@@ -19,6 +18,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.tags.BlockTags
 import net.minecraft.tags.FluidTags
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
@@ -47,8 +47,7 @@ object PlantSpawnUtils {
         pos: BlockPos,
         face: Direction? = null,
         horizontalDir: Direction? = null,
-        checkWater: Boolean = false,
-        checkLava: Boolean = false,
+        checkFluid: Boolean = false,
         carrier: PazPlant? = null
     ): InteractionResult {
 
@@ -76,7 +75,7 @@ object PlantSpawnUtils {
             EntityType.createDefaultStackConfig(level, itemStack, player),
             spawnPos,
             EntitySpawnReason.SPAWN_ITEM_USE,
-            !checkWater && !checkLava,
+            !checkFluid,
             face == Direction.UP
         )?: return InteractionResult.FAIL
 
@@ -86,7 +85,7 @@ object PlantSpawnUtils {
 
             val validGround = entity.onValidGround(spawnPos.x.toDouble(), spawnPos.y.toDouble(), spawnPos.z.toDouble(), carrier)
 
-            val invalidSpace = !(validGround == null || checkWater || checkLava)
+            val invalidSpace = !(validGround == null || checkFluid)
                     || !(spawnBlockCollisionShape==null || !entityBox.intersects(spawnBlockCollisionShape))
 
             println("ValidGround: $validGround, InvalidSpace: $invalidSpace")
@@ -195,18 +194,18 @@ object PlantSpawnUtils {
 
 //        println("Plant is normal")
 
-        return true
+        return carrier.checkRider(plant)
 
     }
 
-    fun solidFloorCheck(level: Level, belowPos: BlockPos, block: BlockState): Boolean {
+    fun solidFloorCheck(level: Level, pos: BlockPos, block: BlockState): Boolean {
         val isWater = block.`is`(Blocks.WATER) || block.fluidState.`is`(Fluids.WATER)
 
         val isLava = block.`is`(Blocks.LAVA) || block.fluidState.`is`(Fluids.LAVA)
 
-        if (isWater || isLava) return false
+        val isAir = block.`is`(Blocks.AIR) || block.getCollisionShape(level, pos).isEmpty
 
-        return !block.getCollisionShape(level, belowPos).isEmpty
+        return !(isWater || isLava || isAir)
     }
 
     /**
@@ -221,6 +220,73 @@ object PlantSpawnUtils {
         }
 
         return plants.isNotEmpty()
+    }
+
+    fun canSurviveDefault(block: BlockState): Boolean {
+        return block.`is`(PazTags.BlockTags.PLANTABLE)
+    }
+
+    fun canSurviveFire(block: BlockState): Boolean {
+        return block.`is`(BlockTags.BASE_STONE_NETHER) || block.`is`(Blocks.BASALT) || block.`is`(Blocks.GRAVEL)
+    }
+
+    fun canSurviveSand(block: BlockState): Boolean {
+        return block.`is`(BlockTags.SAND) || block.`is`(Blocks.SOUL_SAND)
+    }
+
+    fun canSurviveGravel(block: BlockState): Boolean {
+        return block.`is`(BlockTags.CONCRETE_POWDER) || block.`is`(Blocks.GRAVEL)
+    }
+
+    fun canSurviveSnow(block: BlockState): Boolean {
+        return block.`is`(BlockTags.SNOW)
+    }
+
+    fun canSurviveStone(block: BlockState): Boolean {
+        return block.`is`(BlockTags.BASE_STONE_OVERWORLD) || block.`is`(Blocks.COBBLESTONE)
+    }
+
+    fun canSurviveFree(block: BlockState): Boolean {
+        return !block.`is`(BlockTags.AIR)
+    }
+
+    fun canSurviveWater(type: EntityType<out Entity>, level: Level, block: BlockState, pos: BlockPos): Boolean {
+        if (block.`is`(PazBlocks.ZEN_POT)) {
+            return true
+        }
+
+        if (block.`is`(Blocks.WATER_CAULDRON)) {
+            return block.getValue(BlockStateProperties.LEVEL_CAULDRON) > 0
+        }
+
+        val waterAllowed = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(type).`is`(PazTags.EntityTypes.PLANTABLE_ON_WATER)
+
+        val fluidState = level.getFluidState(pos)
+
+        return fluidState.`is`(FluidTags.WATER) && waterAllowed
+    }
+
+    fun canSurviveLava(type: EntityType<out Entity>, level: Level, block: BlockState, pos: BlockPos): Boolean {
+        if (block.`is`(PazBlocks.ZEN_POT)) {
+            return true
+        }
+
+        if (block.`is`(Blocks.LAVA_CAULDRON)) {
+            return block.getValue(BlockStateProperties.LEVEL_CAULDRON) > 0
+        }
+
+        val lavaAllowed = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(type).`is`(PazTags.EntityTypes.PLANTABLE_ON_LAVA)
+
+        val fluidState = level.getFluidState(pos)
+
+        return fluidState.`is`(FluidTags.LAVA) && lavaAllowed
+    }
+
+    fun canSurviveAir(type: EntityType<out Entity>, level: Level, block: BlockState, pos: BlockPos): Boolean {
+
+        val airAllowed = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(type).`is`(PazTags.EntityTypes.PLANTABLE_ON_AIR)
+
+        return (block.`is`(Blocks.AIR) || block.getCollisionShape(level, pos).isEmpty) && airAllowed
     }
 
 }
@@ -269,29 +335,37 @@ fun PazPlant.onValidGround(x: Double = this.x, y: Double = this.y, z: Double = t
 }
 
 fun PazPlant.waterSurvivalCheck(block: BlockState): Boolean {
-    if (block.`is`(PazBlocks.ZEN_POT)) {
-        return true
-    }
-
-    if (block.`is`(Blocks.WATER_CAULDRON)) {
-        return block.getValue(BlockStateProperties.LEVEL_CAULDRON) > 0
-    }
-
-    val fluidState = level().getFluidState(blockPosition())
-
-    return fluidState.`is`(FluidTags.WATER)
+    return PlantSpawnUtils.canSurviveWater(this.type, level(),block,blockPosition())
 }
 
 fun PazPlant.lavaSurvivalCheck(block: BlockState): Boolean {
-    if (block.`is`(PazBlocks.ZEN_POT)) {
-        return true
-    }
+    return PlantSpawnUtils.canSurviveLava(this.type, level(),block,blockPosition())
+}
 
-    if (block.`is`(Blocks.LAVA_CAULDRON)) {
-        return block.getValue(BlockStateProperties.LEVEL_CAULDRON) > 0
-    }
+fun PazPlant.airSurvivalCheck(block: BlockState): Boolean {
+    return PlantSpawnUtils.canSurviveAir(this.type, level(),block,blockPosition())
+}
 
-    val fluidState = level().getFluidState(blockPosition())
+fun PazPlant.sandSurvivalCheck(block: BlockState): Boolean {
+    return PlantSpawnUtils.canSurviveSand(block)
+}
 
-    return fluidState.`is`(FluidTags.LAVA)
+fun PazPlant.gravelSurvivalCheck(block: BlockState): Boolean {
+    return PlantSpawnUtils.canSurviveGravel(block)
+}
+
+fun PazPlant.snowSurvivalCheck(block: BlockState): Boolean {
+    return PlantSpawnUtils.canSurviveSnow(block)
+}
+
+fun PazPlant.fireSurvivalCheck(block: BlockState): Boolean {
+    return PlantSpawnUtils.canSurviveFire(block)
+}
+
+fun PazPlant.stoneSurvivalCheck(block: BlockState): Boolean {
+    return PlantSpawnUtils.canSurviveStone(block) || PlantSpawnUtils.canSurviveFire(block)
+}
+
+fun PazPlant.mushroomSurvivalCheck(block: BlockState): Boolean {
+    return PlantSpawnUtils.canSurviveSnow(block) || PlantSpawnUtils.canSurviveGravel(block)
 }

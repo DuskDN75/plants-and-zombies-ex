@@ -2,7 +2,6 @@ package duskdn.plantz
 
 import duskdn.plantz.block.entity.FlagBlockEntity
 import duskdn.plantz.block.entity.SunBatteryBlockEntity
-import duskdn.plantz.entity.plant.LavaLily
 import duskdn.plantz.init.PazBlocks
 import duskdn.plantz.init.PazEntities
 import duskdn.plantz.model.BalloonModel
@@ -25,12 +24,6 @@ import net.minecraft.client.renderer.entity.ArmorModelSet
 import net.minecraft.client.renderer.entity.EntityRenderers
 import net.minecraft.client.renderer.entity.ThrownItemRenderer
 import net.minecraft.resources.Identifier
-import net.fabricmc.fabric.api.client.rendering.v1.BlockColorRegistry
-import net.minecraft.client.color.block.BlockTintSource
-import net.minecraft.client.renderer.BiomeColors
-import net.minecraft.client.renderer.block.BlockAndTintGetter
-import net.minecraft.core.BlockPos
-import net.minecraft.world.level.block.state.BlockState
 
 object PazModels {
 
@@ -183,7 +176,7 @@ object PazModels {
         EntityRenderers.register(PazEntities.FLOWER_POT) { PlantRenderer(FlowerPotModel(it.bakeLayer(FlowerPotModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.WATER_POT) { PlantRenderer(WaterPotModel(it.bakeLayer(WaterPotModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.LAVALILY) { PlantRenderer(LavaLilyModel(it.bakeLayer(LavaLilyModel.LAYER_LOCATION)), it) }
-        EntityRenderers.register(PazEntities.LAVALILY) { PlantRenderer(SkyPeaShooterModel(it.bakeLayer(SkyPeaShooterModel.LAYER_LOCATION)), it) }
+        EntityRenderers.register(PazEntities.SKY_PEA_SHOOTER) { PlantRenderer(SkyPeaShooterModel(it.bakeLayer(SkyPeaShooterModel.LAYER_LOCATION)), it) }
 
         EntityRenderers.register(PazEntities.SUN_SHROOM) { PlantRenderer(
             SunShroomModel(it.bakeLayer(SunShroomModel.LAYER_LOCATION)), it,

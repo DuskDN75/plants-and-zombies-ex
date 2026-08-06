@@ -225,7 +225,14 @@
         "when": { "id": "plantz:lavalily" },
         "model": {
           "type": "minecraft:model",
-          "model": "plantz:item/seed_packet/lavalily"
+          "model": "plantz:item/seed_packet/placeholder"
+        }
+      },
+      {
+        "when": { "id": "plantz:sky_peashooter" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz:item/seed_packet/placeholder"
         }
       }
     ],

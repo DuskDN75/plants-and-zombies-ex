@@ -1,0 +1,94 @@
+package duskdn.plantz.entity.plant.all.mushrooms
+
+import duskdn.plantz.init.PazDamageTypes
+import duskdn.plantz.init.PazEffects
+import duskdn.plantz.init.PazEntities
+import duskdn.plantz.init.PazServerParticles
+import duskdn.plantz.ai.PlantState
+import duskdn.plantz.ai.goal.BeamAttackGoal
+import duskdn.plantz.entity.plant.init.PazPlant
+import duskdn.plantz.entity.plant.utils.mushroomSurvivalCheck
+import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.network.syncher.EntityDataSerializers
+import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
+import net.minecraft.world.entity.monster.Enemy
+import net.minecraft.world.entity.monster.zombie.Zombie
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.BlockState
+
+class FumeShroom(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntities.FUME_SHROOM, level) {
+    companion object {
+        val SPRAY_TIME_ID: EntityDataAccessor<Int> =
+            SynchedEntityData.defineId<Int>(FumeShroom::class.java, EntityDataSerializers.INT)
+    }
+
+    var sprayTime: Int
+        get() = this.entityData.get(SPRAY_TIME_ID)
+        set(value) = this.entityData.set(SPRAY_TIME_ID, value)
+
+
+    override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
+        super.defineSynchedData(entityData)
+        entityData.define(SPRAY_TIME_ID, -1)
+    }
+
+    override fun registerGoals() {
+        super.registerGoals()
+
+        this.goalSelector.addGoal(2, BeamAttackGoal(
+            usingEntity = this,
+            beamRange = 8.0,
+            beamWidth = 2.0,
+            damageType = PazDamageTypes.PLANT_FUME,
+            cooldownTime = 35,
+            actionDelay = 12,
+            afterHitEntityEffect = {
+                it.addEffect(MobEffectInstance(PazEffects.TOXIC, 100, 0))
+        }))
+        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
+            target !is PazPlant
+                    && (target is Zombie
+                    || (target is Enemy && isTame))
+        })
+    }
+
+    override fun tick() {
+        super.tick()
+
+        if(sprayTime>=0 || state == PlantState.ACTION) sprayTime++
+        if (sprayTime in 7..19 && this.isAlive ) {
+            val eyeHeight = eyeHeight.toDouble()
+
+            val direction = this.headLookAngle.scale(2.0)
+            val speed = 0.4
+
+            val vx = direction.x * speed
+            val vy = direction.y * speed
+            val vz = direction.z * speed
+
+            repeat(5) {
+                val spread = 0.07
+                val randomVx = vx + (random.nextGaussian() * spread)
+                val randomVy = vy + (random.nextGaussian() * spread)
+                val randomVz = vz + (random.nextGaussian() * spread)
+
+                level().addParticle(
+                    PazServerParticles.FUME_BUBBLE,
+                    direction.x * .3 + this.getRandomX(0.2),
+                    this.y + eyeHeight - 0.1,
+                    direction.z * .3 + this.getRandomZ(0.2),
+                    randomVx, randomVy, randomVz
+                )
+            }
+        }
+        else if (sprayTime > 20) sprayTime = -1
+    }
+
+    override fun canSurviveOn(block: BlockState): Boolean {
+        return super.canSurviveOn(block) || mushroomSurvivalCheck(block)
+    }
+}

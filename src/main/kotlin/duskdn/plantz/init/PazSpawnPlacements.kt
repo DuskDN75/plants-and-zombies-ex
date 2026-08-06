@@ -10,6 +10,7 @@ import duskdn.plantz.mixin.SpawnPlacementsInvoker
 import duskdn.plantz.worldgen.SpawnRuleSets.PLANT_DEFAULT_SPAWN_RULES
 import duskdn.plantz.worldgen.SpawnRuleSets.PLANT_FIRE_SPAWN_RULES
 import duskdn.plantz.worldgen.SpawnRuleSets.PLANT_FREE_SPAWN_RULES
+import duskdn.plantz.worldgen.SpawnRuleSets.PLANT_LAVA_SPAWN_RULES
 import duskdn.plantz.worldgen.SpawnRuleSets.PLANT_LIGHTNING_SPAWN_RULES
 import duskdn.plantz.worldgen.SpawnRuleSets.PLANT_MUSHROOM_SPAWN_RULES
 import duskdn.plantz.worldgen.SpawnRuleSets.PLANT_NORMAL_SPAWN_RULES
@@ -49,9 +50,9 @@ object PazSpawnPlacements {
             weight = 4, minGroupSize = 1, maxGroupSize = 2)
         registerSpawnPlacement(PazEntities.FIRE_PEA_SHOOTER, PLANT_FIRE_SPAWN_RULES::spawnCheck)
 
-        addBiomeSpawn(PazTags.Biomes.HAS_FIRE_PEASHOOTER, PazEntities.FIRE_PEA_SHOOTER,
-            weight = 4, minGroupSize = 1, maxGroupSize = 2)
-        registerSpawnPlacement(PazEntities.FIRE_PEA_SHOOTER, PLANT_LAVA_SPAWN_RULES::spawnCheck)
+        addBiomeSpawn(PazTags.Biomes.HAS_LAVALILY, PazEntities.LAVALILY,
+            weight = 5, minGroupSize = 1, maxGroupSize = 3)
+        registerSpawnPlacement(PazEntities.LAVALILY, PLANT_LAVA_SPAWN_RULES::spawnCheck)
 
         addBiomeSpawn(PazTags.Biomes.HAS_FUMESHROOM, PazEntities.FUME_SHROOM,
             weight = 8, minGroupSize = 1, maxGroupSize = 1)
