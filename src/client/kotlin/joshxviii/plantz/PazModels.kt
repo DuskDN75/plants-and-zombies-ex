@@ -134,6 +134,7 @@ object PazModels {
         ModelLayerRegistry.registerModelLayer(AllStarModel.LAYER_LOCATION) { AllStarModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(SoldierZombieModel.LAYER_LOCATION) { SoldierZombieModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(PirateCaptainModel.LAYER_LOCATION) { PirateCaptainModel.createBodyLayer() }
+        ModelLayerRegistry.registerModelLayer(PirateCaptainGhostModel.LAYER_LOCATION) { PirateCaptainGhostModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(RoboZombieModel.LAYER_LOCATION) { RoboZombieModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(SuperBrainzModel.LAYER_LOCATION) { SuperBrainzModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(ImpModel.LAYER_LOCATION) { ImpModel.createBodyLayer() }
@@ -214,6 +215,7 @@ object PazModels {
         EntityRenderers.register(PazEntities.ALL_STAR) { PazZombieRenderer(it, AllStarModel(it.bakeLayer(AllStarModel.LAYER_LOCATION)), AllStarModel(it.bakeLayer(AllStarModel.LAYER_LOCATION))) }
         EntityRenderers.register(PazEntities.SOLDIER_ZOMBIE) { PazZombieRenderer(it, SoldierZombieModel(it.bakeLayer(SoldierZombieModel.LAYER_LOCATION)), SoldierZombieModel(it.bakeLayer(SoldierZombieModel.LAYER_LOCATION))) }
         EntityRenderers.register(PazEntities.PIRATE_CAPTAIN) { PirateCaptainRenderer(it) }
+        EntityRenderers.register(PazEntities.PIRATE_CAPTAIN_GHOST) { PirateCaptainRenderer(it, PirateCaptainGhostModel(it.bakeLayer(PirateCaptainGhostModel.LAYER_LOCATION))) }
         EntityRenderers.register(PazEntities.ROBO_ZOMBIE) { RoboZombieRenderer(it) }
         EntityRenderers.register(PazEntities.SUPER_BRAINZ) { SuperBrainzRenderer(it) }
         EntityRenderers.register(PazEntities.IMP) { PazZombieRenderer(it, ImpModel(it.bakeLayer(ImpModel.LAYER_LOCATION)), ImpModel(it.bakeLayer(ImpModel.LAYER_LOCATION))) }

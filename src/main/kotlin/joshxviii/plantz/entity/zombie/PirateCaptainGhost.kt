@@ -7,7 +7,6 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.damagesource.DamageSource
-import net.minecraft.world.entity.AnimationState
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
@@ -15,7 +14,7 @@ import net.minecraft.world.entity.SpawnGroupData
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
 
-class PirateCaptain(type: EntityType<out PirateCaptain>, level: Level) : PazZombie(type, level) {
+class PirateCaptainGhost(type: EntityType<out PirateCaptainGhost>, level: Level) : PazZombie(type, level) {
 
     override fun getAmbientSound(): SoundEvent {
         return SoundEvents.EMPTY

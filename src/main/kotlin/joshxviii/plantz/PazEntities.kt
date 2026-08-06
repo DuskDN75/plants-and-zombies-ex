@@ -424,6 +424,18 @@ object PazEntities {
             .add(Attributes.MOVEMENT_SPEED, 0.21)
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0)
     )
+    @JvmField val PIRATE_CAPTAIN_GHOST: EntityType<PirateCaptainGhost> =  registerZombie(
+        "pirate_captain_ghost",
+        EntityType.Builder.of(::PirateCaptainGhost, MobCategory.MONSTER)
+            .sized(0.6f, 1.95f)
+            .eyeHeight(1.74f)
+            .clientTrackingRange(8),
+        attributes = Zombie.createAttributes()
+            .add(Attributes.ATTACK_DAMAGE, 9.0)
+            .add(Attributes.MAX_HEALTH, 60.0)
+            .add(Attributes.MOVEMENT_SPEED, 0.25)
+            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0)
+    )
     @JvmField val ROBO_ZOMBIE: EntityType<RoboZombie> =  registerZombie(
         "robo_zombie",
         EntityType.Builder.of(::RoboZombie, MobCategory.MONSTER)
