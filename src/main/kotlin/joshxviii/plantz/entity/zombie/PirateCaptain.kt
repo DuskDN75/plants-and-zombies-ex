@@ -11,11 +11,17 @@ import net.minecraft.world.entity.AnimationState
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.SpawnGroupData
+import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
 
 class PirateCaptain(type: EntityType<out PirateCaptain>, level: Level) : PazZombie(type, level) {
+
+    init {
+        xpReward = 80
+    }
 
     override fun getAmbientSound(): SoundEvent {
         return SoundEvents.EMPTY
@@ -38,6 +44,7 @@ class PirateCaptain(type: EntityType<out PirateCaptain>, level: Level) : PazZomb
     }
 
     override fun canPickUpLoot(): Boolean = false
+    override fun isLeftHanded(): Boolean = false
 
     override fun tick() {
         super.tick()
@@ -50,6 +57,9 @@ class PirateCaptain(type: EntityType<out PirateCaptain>, level: Level) : PazZomb
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
         val data = super.finalizeSpawn(level, difficulty, spawnReason, ZombieGroupData(false, false))
+
+        setItemSlot(EquipmentSlot.MAINHAND, Items.CROSSBOW.defaultInstance)
+        setDropChance(EquipmentSlot.MAINHAND, 0.0f)
 
         return data
     }

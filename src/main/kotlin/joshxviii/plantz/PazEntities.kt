@@ -434,6 +434,7 @@ object PazEntities {
             .add(Attributes.ATTACK_DAMAGE, 9.0)
             .add(Attributes.MAX_HEALTH, 60.0)
             .add(Attributes.MOVEMENT_SPEED, 0.25)
+            .add(Attributes.FOLLOW_RANGE, 126.0)
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0)
     )
     @JvmField val ROBO_ZOMBIE: EntityType<RoboZombie> =  registerZombie(

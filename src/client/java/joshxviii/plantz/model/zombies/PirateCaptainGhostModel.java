@@ -69,6 +69,6 @@ public class PirateCaptainGhostModel extends PazZombieModel {
 
         float animationPos = state.walkAnimationPos;
         float animationSpeed = state.walkAnimationSpeed;
-        idleAnimation.applyWalk(animationPos, animationSpeed, 2.5f, 1.5f);
+        idleAnimation.applyWalk(animationPos+state.ageInTicks, animationSpeed+0.2f, 1.0f, 1.5f);
     }
 }
