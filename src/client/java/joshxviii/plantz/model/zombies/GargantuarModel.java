@@ -1,6 +1,6 @@
 package joshxviii.plantz.model.zombies;
 
-import joshxviii.plantz.renderer.entity.PazZombieRenderState;
+import joshxviii.plantz.renderer.entity.GargantuarRenderState;
 import joshxviii.plantz.animation.zombies.GargantuarAnimation;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -8,14 +8,14 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.entity.state.ZombieRenderState;
-import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
 import static joshxviii.plantz.UtilsKt.pazResource;
 
 public class GargantuarModel extends PazZombieModel {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("gargantuar"), "main");
-	private final KeyframeAnimation attackAnimation;
+	private final KeyframeAnimation walkAnimation;
+	private final KeyframeAnimation punchAnimation;
 	private final KeyframeAnimation smashAnimation;
 	private final KeyframeAnimation throwAnimation;
 
@@ -24,7 +24,8 @@ public class GargantuarModel extends PazZombieModel {
 			GargantuarAnimation.init.bake(root.getChild("root")),
 			root
 		);
-		this.attackAnimation = GargantuarAnimation.action.bake(root.getChild("root"));
+		this.walkAnimation = GargantuarAnimation.walk.bake(root.getChild("root"));
+		this.punchAnimation = GargantuarAnimation.action.bake(root.getChild("root"));
 		this.throwAnimation = GargantuarAnimation.toss.bake(root.getChild("root"));
 		this.smashAnimation = GargantuarAnimation.attack.bake(root.getChild("root"));
 	}
@@ -83,21 +84,18 @@ public class GargantuarModel extends PazZombieModel {
 
 	@Override
 	public void setupAnim(@NotNull ZombieRenderState state) {
-		state.isAggressive = false;
-		float tempAttackTime = state.attackTime;
-		state.attackTime = 0;
 		super.setupAnim(state);
+		this.resetPose();
 
 		float animationPos = state.walkAnimationPos;
 		float animationSpeed = state.walkAnimationSpeed;
-		if (state.attackTime<=0) this.rightArm.xRot = Mth.cos(animationPos * 0.6662F + (float) Math.PI) * 0.6F * animationSpeed * 0.5F / state.speedValue;
-		if (state.attackTime<=0) this.leftArm.xRot = Mth.cos(animationPos * 0.6662F) * 0.6F * animationSpeed * 0.5F / state.speedValue;
-		state.attackTime = tempAttackTime;
-		attackAnimation.applyWalk(state.attackTime*5f, 1.0f, 1.0f, 1.0f);
 
-		PazZombieRenderState pazState = (PazZombieRenderState) state;
-		initAnimation.apply(pazState.getInitAnimationState(), pazState.ageInTicks);
-		smashAnimation.apply(pazState.getActionAnimationState(), pazState.ageInTicks);
-		throwAnimation.apply(pazState.getSpecialAnimationState(), pazState.ageInTicks);
+		walkAnimation.applyWalk(animationPos, animationSpeed, 2.0f, 2.0f);
+
+		GargantuarRenderState gargState = (GargantuarRenderState) state;
+		initAnimation.apply(gargState.getEmergeAnimationState(), gargState.ageInTicks);
+		punchAnimation.apply(gargState.getPunchAnimationState(), gargState.ageInTicks);
+		smashAnimation.apply(gargState.getSmashAnimationState(), gargState.ageInTicks);
+		throwAnimation.apply(gargState.getThrowImpAnimationState(), gargState.ageInTicks);
 	}
 }

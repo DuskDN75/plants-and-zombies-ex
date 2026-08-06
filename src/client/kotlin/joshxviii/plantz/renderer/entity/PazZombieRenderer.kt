@@ -75,11 +75,7 @@ open class PazZombieRenderer(
         super.extractRenderState(entity, state, partialTicks)
         (state as PazZombieRenderState)
         state.zombieState = entity.state
-        state.initAnimationState.copyFrom(entity.emergeAnimation)
-        if (entity is Gargantuar) {
-            state.actionAnimationState.copyFrom(entity.smashAttackAnimation)
-            state.specialAnimationState.copyFrom(entity.throwImpAnimation)
-        }
+        state.emergeAnimationState.copyFrom(entity.emergeAnimation)
         if (entity is DiscoZombie) state.actionAnimationState.copyFrom(entity.summonAnimation)
         if (entity is AllStar) state.actionAnimationState.copyFrom(entity.chargeAnimation)
         if (entity is NewspaperZombie) state.isAngry = entity.isAngry()
@@ -131,12 +127,10 @@ open class PazZombieRenderState : ZombieRenderState() {
 
     var customName: String = ""
     var textureExtra: String = ""
-    var actionTime: Int = 0
     var isAngry: Boolean = false
     var zombieState: ZombieState = ZombieState.IDLE
-    val initAnimationState: AnimationState = AnimationState()
+    val emergeAnimationState: AnimationState = AnimationState()
     val actionAnimationState: AnimationState = AnimationState()
-    val specialAnimationState: AnimationState = AnimationState()
 
     fun getSuffixes(): MutableList<String> {
         val magicName = this.isMagicName(customName)

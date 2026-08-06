@@ -131,11 +131,11 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
 
         when (state) {
             ZombieState.EMERGING -> {
-                isImmobile
+                //isImmobile
                 emergeAnimation.startIfStopped(tickCount)
                 if (tickCount < 15) {
                     if(tickCount==1) playSound(SoundEvents.ROOTED_DIRT_HIT, 1.0f, 0.2f)
-                    if (level is ServerLevel) level.sendParticles(
+                    level.sendParticles(
                         BlockParticleOption(ParticleTypes.BLOCK, level.getBlockState(blockPosition().below())),
                         x, y + 0.05, z, 8, 0.25, 0.0, 0.25, 0.4
                     )

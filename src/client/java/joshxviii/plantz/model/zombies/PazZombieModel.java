@@ -24,9 +24,9 @@ public class PazZombieModel extends ZombieModel<@NotNull ZombieRenderState> {
             @Nullable KeyframeAnimation initAnimation,
             final ModelPart root
     ) {
-        super(root.hasChild("root") ? root.getChild("root") : root);
-        if (initAnimation==null) this.initAnimation = PazZombieAnimations.emerge.bake(root.hasChild("root") ? root.getChild("root") : root);
-        else this.initAnimation = initAnimation;
+        var mainRoot = root.hasChild("root") ? root.getChild("root") : root;
+        super(mainRoot);
+        this.initAnimation = PazZombieAnimations.emerge.bake(mainRoot);
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -62,7 +62,6 @@ public class PazZombieModel extends ZombieModel<@NotNull ZombieRenderState> {
     public void setupAnim(final ZombieRenderState state) {
         super.setupAnim(state);
         PazZombieRenderState pazState = (PazZombieRenderState) state;
-        // Gargantuar has his arms down, so he needs to call his own init animation later.
-        if (pazState.entityType != PazEntities.GARGANTUAR) initAnimation.apply(pazState.getInitAnimationState(), pazState.ageInTicks);
+        initAnimation.apply(pazState.getEmergeAnimationState(), pazState.ageInTicks);
     }
 }

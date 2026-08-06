@@ -35,6 +35,9 @@ class FlagBlockEntity(
     }
 
     var health : Float = MAX_HEALTH
+        set(value) {
+            field = value.coerceAtMost(MAX_HEALTH)
+        }
     var resetTime : Int = 0
 
     fun tick(level: Level, pos: BlockPos, state: BlockState) {

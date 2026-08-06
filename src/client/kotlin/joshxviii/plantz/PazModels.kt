@@ -22,6 +22,7 @@ import joshxviii.plantz.renderer.SunBatteryRenderer
 import joshxviii.plantz.renderer.entity.SunRenderer
 import joshxviii.plantz.renderer.TimeMachineRenderSate
 import joshxviii.plantz.renderer.TimeMachineRenderer
+import joshxviii.plantz.renderer.entity.GargantuarRenderer
 import joshxviii.plantz.renderer.entity.PirateCaptainRenderer
 import joshxviii.plantz.renderer.entity.PlantRenderer
 import joshxviii.plantz.renderer.entity.RoboZombieRenderer
@@ -216,7 +217,7 @@ object PazModels {
         EntityRenderers.register(PazEntities.ROBO_ZOMBIE) { RoboZombieRenderer(it) }
         EntityRenderers.register(PazEntities.SUPER_BRAINZ) { SuperBrainzRenderer(it) }
         EntityRenderers.register(PazEntities.IMP) { PazZombieRenderer(it, ImpModel(it.bakeLayer(ImpModel.LAYER_LOCATION)), ImpModel(it.bakeLayer(ImpModel.LAYER_LOCATION))) }
-        EntityRenderers.register(PazEntities.GARGANTUAR) { PazZombieRenderer(it, GargantuarModel(it.bakeLayer(GargantuarModel.LAYER_LOCATION))) }
+        EntityRenderers.register(PazEntities.GARGANTUAR) { GargantuarRenderer(it) }
 
         EntityRenderers.register(PazEntities.GNOME) { GnomeRenderer(it, GnomeModel(it.bakeLayer(GnomeModel.LAYER_LOCATION))) }
 

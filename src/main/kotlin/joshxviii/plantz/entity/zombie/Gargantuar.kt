@@ -44,6 +44,7 @@ class Gargantuar(type: EntityType<out Gargantuar>, level: Level) : PazZombie(typ
     }
 
     val smashAttackAnimation : AnimationState = AnimationState()
+    val punchAttackAnimation : AnimationState = AnimationState()
     val throwImpAnimation : AnimationState = AnimationState()
 
     var smashAttackTime: Int
