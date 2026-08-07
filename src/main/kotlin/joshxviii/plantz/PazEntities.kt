@@ -432,7 +432,7 @@ object PazEntities {
             .clientTrackingRange(8),
         attributes = Zombie.createAttributes()
             .add(Attributes.ATTACK_DAMAGE, 9.0)
-            .add(Attributes.MAX_HEALTH, 60.0)
+            .add(Attributes.MAX_HEALTH, 80.0)
             .add(Attributes.MOVEMENT_SPEED, 0.25)
             .add(Attributes.FOLLOW_RANGE, 126.0)
             .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0)
@@ -444,6 +444,7 @@ object PazEntities {
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
         attributes = Zombie.createAttributes()
+            .add(Attributes.ARMOR, 16.0)
             .add(Attributes.ATTACK_DAMAGE, 8.0)
             .add(Attributes.MAX_HEALTH, 100.0)
             .add(Attributes.STEP_HEIGHT, 1.0)
@@ -458,6 +459,7 @@ object PazEntities {
             .eyeHeight(2.0f)
             .clientTrackingRange(8),
         attributes = Zombie.createAttributes()
+            .add(Attributes.ARMOR, 8.0)
             .add(Attributes.ATTACK_DAMAGE, 8.0)
             .add(Attributes.MAX_HEALTH, 200.0)
             .add(Attributes.STEP_HEIGHT, 1.0)
@@ -485,6 +487,7 @@ object PazEntities {
             .passengerAttachments(2.0f)
             .clientTrackingRange(8),
         attributes = Zombie.createAttributes()
+            .add(Attributes.ARMOR, 6.0)
             .add(Attributes.ATTACK_DAMAGE, 8.0)
             .add(Attributes.MAX_HEALTH, 600.0)
             .add(Attributes.MOVEMENT_SPEED, 0.21)

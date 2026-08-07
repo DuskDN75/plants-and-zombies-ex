@@ -1,7 +1,11 @@
 package joshxviii.plantz.model.zombies;
 
+import joshxviii.plantz.animation.zombies.SuperBrainzAnimation;
 import joshxviii.plantz.renderer.entity.PazZombieRenderState;
+import joshxviii.plantz.renderer.entity.RoboZombieRenderState;
 import joshxviii.plantz.renderer.entity.SuperBrainzRenderState;
+import net.minecraft.client.animation.KeyframeAnimation;
+import net.minecraft.client.model.AnimationUtils;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -13,11 +17,13 @@ import static joshxviii.plantz.UtilsKt.pazResource;
 
 public class SuperBrainzModel extends PazZombieModel {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("super_brainz"), "main");
+    private final KeyframeAnimation walkAnimation;
     ModelPart cape;
 
     public SuperBrainzModel(final ModelPart root) {
         super(null, root);
         cape = root.getChild("root").getChild("body").getChild("cape");
+        this.walkAnimation = SuperBrainzAnimation.walk.bake(root.getChild("root"));
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -79,7 +85,16 @@ public class SuperBrainzModel extends PazZombieModel {
     @Override
     public void setupAnim(@NotNull PazZombieRenderState state) {
         super.setupAnim(state);
+        this.resetPose();
+        AnimationUtils.animateZombieArms(this.leftArm, this.rightArm, false, state);
+        this.head.xRot = state.xRot * (float) (Math.PI / 180.0);
+        this.head.yRot = state.yRot * (float) (Math.PI / 180.0);
+
         SuperBrainzRenderState superBrainzState = (SuperBrainzRenderState) state;
+        float animationPos = state.walkAnimationPos;
+        float animationSpeed = state.walkAnimationSpeed;
+        walkAnimation.applyWalk(animationPos, animationSpeed, 2f, 2f);
+
         cape.resetPose();
         cape.rotateBy(
                 new Quaternionf()

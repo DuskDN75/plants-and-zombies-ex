@@ -46,7 +46,7 @@ class SuperBrainz(type: EntityType<out SuperBrainz>, level: Level) : PazZombie(t
 
     override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
         super.defineSynchedData(entityData)
-        entityData.define(DATA_VARIANT_ID, SuperBrainzVariant.pickRandomVariant())
+        entityData.define(DATA_VARIANT_ID, SuperBrainzVariant.getDefault())
     }
 
     override fun addAdditionalSaveData(output: ValueOutput) {
@@ -56,7 +56,7 @@ class SuperBrainz(type: EntityType<out SuperBrainz>, level: Level) : PazZombie(t
 
     override fun readAdditionalSaveData(input: ValueInput) {
         super.readAdditionalSaveData(input)
-        variant = input.read<SuperBrainzVariant>("variant", SuperBrainzVariant.CODEC).getOrDefault(SuperBrainzVariant.pickRandomVariant())
+        variant = input.read("variant", SuperBrainzVariant.CODEC).getOrDefault(SuperBrainzVariant.pickRandomVariant())
     }
 
     override fun registerGoals() {
