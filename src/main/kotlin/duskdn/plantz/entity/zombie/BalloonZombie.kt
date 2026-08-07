@@ -28,6 +28,8 @@ import net.minecraft.world.phys.Vec3
 import java.util.EnumSet
 import net.minecraft.world.entity.ai.attributes.Attributes.FLYING_SPEED
 import net.minecraft.world.item.Items
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
 import kotlin.math.absoluteValue
@@ -44,9 +46,9 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
             random: RandomSource
         ): Boolean {
             return level.difficulty != Difficulty.PEACEFUL
-                    && (EntitySpawnReason.ignoresLightRequirements(spawnReason) || isDarkEnoughToSpawn(level, pos, random))
-                    && checkMobSpawnRules(type, level, spawnReason, pos, random)
-                    && pos.y > level.seaLevel
+                    && (EntitySpawnReason.ignoresLightRequirements(spawnReason))
+//                    && checkMobSpawnRules(type, level, spawnReason, pos, random)
+                    && pos.y > level.seaLevel + 8
         }
     }
 
@@ -70,8 +72,8 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
 
     override fun isBaby(): Boolean = isBabyZombie()
 
-    override lateinit var flyingNavigation: PathNavigation
-    lateinit var groundNavigation: PathNavigation
+    override var flyingNavigation: PathNavigation? = null
+    var groundNavigation: PathNavigation? = null
 
     override fun createNavigation(level: Level): PathNavigation {
         flyingNavigation = FlyingPathNavigation(this, level)
@@ -79,10 +81,10 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
 
         if (isFloating) {
             this.moveControl = FlyingMoveControl(this, 20, false)
-            return flyingNavigation
+            return flyingNavigation as PathNavigation
         } else {
             this.moveControl = MoveControl(this)
-            return groundNavigation
+            return groundNavigation as PathNavigation
         }
     }
 
@@ -129,11 +131,13 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
 
         if (!isFloating) return
 
+        if (groundNavigation == null) return
+
         println("STOPPING FLOATING")
 
         isFloating = false
 
-        navigation = groundNavigation
+        navigation = groundNavigation as PathNavigation
         moveControl = MoveControl(this)
 
         this.getAttribute(FLYING_SPEED)?.baseValue = 0.0
@@ -238,13 +242,52 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
             return entity.isFloating && entity.target != null && entity.target?.isAlive == true
         }
 
-        override fun setEntityControls(target: LivingEntity) {
-            entity.lookControl.setLookAt(target, 30f, 30f)
+        override fun setEntityDelta(distance: Vec3, speed: Double) {
 
-            entity.moveControl.setWantedPosition(target.x, target.y, target.z, 1.5)
+            val dis = distance.normalize()
+
+            entity.deltaMovement = Vec3(
+                dis.x * speed,
+                dis.y * speed * (2*entity.balloonCount),
+                dis.z * speed
+            )
+
         }
 
-        override val targetPullDistance: Double = 5.0
+        override fun tick() {
+
+            if (!(entity.isFloating && entity.target != null && entity.target?.isAlive == true)) return
+
+
+
+            val target = entity.target as LivingEntity
+
+            val targetDirection: Vec3 = target.position().subtract(entity.position())
+
+
+
+            var flyingSpeed = entity.getAttribute(Attributes.FLYING_SPEED)?.value ?: 0.0
+
+
+
+            val groundHeight = entity.level().getHeight(Heightmap.Types.WORLD_SURFACE, entity.blockPosition())
+
+            val groundDistance = entity.y - groundHeight.toDouble()
+
+            val groundBlock = entity.level().getBlockState(entity.blockPosition().atY(groundHeight))
+
+
+
+            val targetDistance = targetDirection.length()
+
+            if (targetDistance <= 3.0) flyingSpeed *= targetDistance/3.0
+
+            if (targetDistance <= 0.2) flyingSpeed = 0.0
+
+            setEntityDelta(targetDirection, flyingSpeed)
+
+            setEntityControls()
+        }
 
     }
 }

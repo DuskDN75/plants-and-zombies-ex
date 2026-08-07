@@ -56,6 +56,7 @@ object PazSounds {
     @JvmField val GARGANTUAR_DIG = register("entity.gargantuar.dig")
 
     @JvmField val BALLOON_INFLATE = register("entity.balloon.inflate")
+    @JvmField val BALLOON_HIT = register("entity.balloon.hit")
     @JvmField val BALLOON_POP = register("entity.balloon.pop")
 
     @JvmField var GNOME_SOUNDS: Map<GnomeSoundVariant, GnomeSoundVariant.GnomeSoundSet> = registerGnomeSoundVariants()
@@ -63,6 +64,9 @@ object PazSounds {
 
     @JvmField val HYPNOTIZED = register("event.mob_effect.hypnotized")
     @JvmField val APPLY_ZOMBIE_OMEN = register("event.mob_effect.zombie_omen")
+
+    @JvmField val WAVE_INCOMING = register("event.wave.wave_incoming")
+    @JvmField val WAVE_START = register("event.wave.wave_start")
 
     @JvmField val PLANT_EXPLODE = registerForHolder("entity.plant_explode")
     @JvmField val POTATOMINE_EXPLODE = registerForHolder("entity.potatomine.explode")

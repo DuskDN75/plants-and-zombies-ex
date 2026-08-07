@@ -10,6 +10,7 @@ import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.*
@@ -69,6 +70,8 @@ class Balloon(
         entityData.define(DYE_COLOR, DyeColor.WHITE)
     }
 
+    var didBalloonSound = false
+
     override fun baseTick() {
         super.baseTick()
         yRotO = yRot
@@ -80,8 +83,15 @@ class Balloon(
         while (yRot - yRotO < -180.0f) yRotO -= 360.0f
         while (yRot - yRotO >= 180.0f) yRotO += 360.0f
 
-        if (firstTick) {
-            playSound(PazSounds.BALLOON_INFLATE)
+        if (tickCount == 2 && !didBalloonSound) {
+
+            didBalloonSound = true
+
+//            level().playLocalSound(this.blockPosition(), PazSounds.BALLOON_INFLATE, SoundSource.NEUTRAL, 1.0f, 1.0f, true)
+
+            val randomPitch = random.nextInt(80,120).toFloat()/100
+
+            playSound(PazSounds.BALLOON_INFLATE, 1f, randomPitch)
         }
 
         val horizontalSpeed = sqrt(deltaMovement.x * deltaMovement.x + deltaMovement.z * deltaMovement.z).toFloat()
@@ -119,7 +129,7 @@ class Balloon(
 
         val groundHeight = level().getHeight(Heightmap.Types.WORLD_SURFACE, blockPosition()).toDouble()
 
-        val groundDistance = if (groundHeight > -64.0) y - groundHeight else y
+        val groundDistance = y - groundHeight
 
         val groundPull = groundDistance / 100
 
@@ -233,6 +243,9 @@ class Balloon(
                 1,
                 0.0, 0.0, 0.0, 0.0
             )
+
+            makeSound(PazSounds.BALLOON_POP)
+
             discard()
         }
 
@@ -244,7 +257,7 @@ class Balloon(
     }
 
     override fun getHurtSound(source: DamageSource): SoundEvent {
-        return PazSounds.BALLOON_POP
+        return PazSounds.BALLOON_HIT
     }
 
     override fun lerpPositionAndRotationStep(stepsToTarget: Int, targetX: Double, targetY: Double, targetZ: Double, targetYRot: Double, targetXRot: Double) {

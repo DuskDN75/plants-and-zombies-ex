@@ -125,7 +125,7 @@ object PazSpawnPlacements {
         registerSpawnPlacement(PazEntities.SUNFLOWER, PLANT_NORMAL_SPAWN_RULES::spawnCheck)
 
         addBiomeSpawn(PazTags.Biomes.HAS_PUFFSHROOM, PazEntities.PUFF_SHROOM,
-            weight = 12, minGroupSize = 1, maxGroupSize = 4)
+            weight = 12, minGroupSize = 2, maxGroupSize = 4)
         registerSpawnPlacement(PazEntities.PUFF_SHROOM, PLANT_MUSHROOM_SPAWN_RULES::spawnCheck)
 
         addBiomeSpawn(PazTags.Biomes.HAS_WALLNUT, PazEntities.WALL_NUT,
@@ -179,7 +179,7 @@ object PazSpawnPlacements {
             weight = 7, minGroupSize = 1, maxGroupSize = 4)
         addBiomeSpawn(PazTags.Biomes.HAS_BALLOON_ZOMBIE_ALT, PazEntities.BALLOON_ZOMBIE, category = MobCategory.MONSTER,
             weight = 60, minGroupSize = 1, maxGroupSize = 4)
-        registerSpawnPlacement(PazEntities.BALLOON_ZOMBIE, BalloonZombie::checkBalloonZombieSpawnRules, spawnPlacements = SpawnPlacementTypes.NO_RESTRICTIONS)
+        registerSpawnPlacement(PazEntities.BALLOON_ZOMBIE, BalloonZombie::checkBalloonZombieSpawnRules, spawnPlacements = SpawnPlacementTypes.NO_RESTRICTIONS, heightmap = Heightmap.Types.WORLD_SURFACE)
         // endregion
     }
 

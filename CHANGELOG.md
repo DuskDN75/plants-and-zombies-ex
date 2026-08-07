@@ -1,3 +1,16 @@
+# Changelog (EX) 1.3
+### Additions
+#### General:
+- Changed a few spawns for mushroom plants.
+- Balloons now have SFX when inflated (still a bit buggy), attacked, and popped.
+#### Plants:
+- Adding Skyshooter (FINISHED)
+  - Peashooter that shoots in the sky and can move up and down to target zombies.
+#### Zombies:
+- Flag Zombies
+  - They now spawn a multitude of other zombies once a plant is detected
+### Technical Changes
+
 # Changelog (EX) 1.2
 ### Additions
 #### General:

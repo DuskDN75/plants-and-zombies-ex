@@ -122,7 +122,7 @@ open class ProjectileAttackGoal(
             gravity*(targetDistance+(targetPosNow.y * 1.2))
         )
 
-        println("velocity = $velocity, distance = $targetDistance, velocityRequired = $velocityRequired")
+//        println("velocity = $velocity, distance = $targetDistance, velocityRequired = $velocityRequired")
 
         val finalVel = if(useHighArc) {
             velocityRequired*velocity*1.2

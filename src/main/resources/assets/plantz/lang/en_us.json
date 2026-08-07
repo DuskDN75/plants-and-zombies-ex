@@ -299,6 +299,13 @@
   "plantz.subtitles.entity.gargantuar.death": "Gargantuar dies",
   "plantz.subtitles.entity.gargantuar.hurt": "Gargantuar hurt",
 
+  "plantz.subtitles.entity.balloon.inflate": "Balloon inflates",
+  "plantz.subtitles.entity.balloon.hit": "Balloon bopped",
+  "plantz.subtitles.entity.balloon.pop": "Balloon pops",
+
   "plantz.subtitles.event.mob_effect.hypnotized": "Hypnotized mob",
-  "plantz.subtitles.event.mob_effect.zombie_omen": "Zombie raid omen"
+  "plantz.subtitles.event.mob_effect.zombie_omen": "Zombie raid omen",
+
+  "plantz.subtitles.event.wave.wave_incoming": "Wave incoming",
+  "plantz.subtitles.event.wave.wave_start": "Wave starts"
 }

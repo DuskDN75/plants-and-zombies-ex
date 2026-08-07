@@ -105,7 +105,7 @@ object PazEntities {
             if (entity is Mob && entity.`is`(PazTags.EntityTypes.ATTACKS_PLANTS)) {
                 (entity as MobAccessor).targetSelector.addGoal(0, NearestAttackableTargetGoal(entity, WallNut::class.java, 2, false, true) { target, level -> ((target as? WallNut
                     ?: target as? ExplodeONut)?.let { it.distanceToSqr(entity) < 16 } ?: false)})
-                (entity as MobAccessor).targetSelector.addGoal(1, NearestAttackableTargetGoal(entity, PazPlant::class.java, 6, true, false) { target, level ->
+                (entity as MobAccessor).targetSelector.addGoal(1, NearestAttackableTargetGoal(entity, PazPlant::class.java, 6, false, true) { target, level ->
                     target !is WallNut && target.passengers.isEmpty() && !target.`is`(PazTags.EntityTypes.IGNORED_BY_PLANT_ATTACKERS)
                 })
             }

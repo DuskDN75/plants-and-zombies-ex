@@ -1,12 +1,19 @@
 package duskdn.plantz.ai.goal
 
+import duskdn.plantz.entity.Balloon
 import duskdn.plantz.entity.interfaces.FloatingMob
+import net.minecraft.advancements.criterion.MovementPredicate.speed
+import net.minecraft.core.BlockPos
+import net.minecraft.world.entity.Leashable
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.Goal
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.phys.Vec3
 import kotlin.math.absoluteValue
+import kotlin.math.sign
 
 open class FloatingPathfindGoal<T> (
     val entity: T
@@ -16,15 +23,30 @@ open class FloatingPathfindGoal<T> (
         return entity.isFloating && entity.spawnPos != null
     }
 
-    open fun setEntityControls(target: LivingEntity) {
+    open fun setEntityControls() {
+
+        if (entity.target == null) return
+
+        val target = entity.target as LivingEntity
+
         entity.lookControl.setLookAt(target, 30f, 30f)
 
         entity.moveControl.setWantedPosition(target.x, target.y, target.z, 1.5)
     }
 
+    open fun avoidGround(block: BlockState, distance: Double): Boolean {
+        return false
+    }
+
+    open val pullTowardsSpawn: Boolean = false
+
     open val spawnPullDistance: Double = 0.0
 
     open val targetPullDistance: Double = 0.0
+
+    open val targetAvoidDistance: Double = 10.0
+
+    open val targetAvoid: Boolean = false
 
     open fun setEntityDelta(distance: Vec3, speed: Double) {
 
@@ -42,50 +64,93 @@ open class FloatingPathfindGoal<T> (
 
         var spawnPos: Vec3 = if (entity.spawnPos != null) entity.spawnPos as Vec3 else return
 
-        val spawnDistance = spawnPos.subtract(entity.position())
+        val spawnDirection = spawnPos.subtract(entity.position())
 
 
 
-        var distance: Vec3 = spawnDistance
+        var direction: Vec3 = spawnDirection
+
+        val spawnDistance = spawnDirection.length()
 
 
 
-        var flyingSpeed = entity.getAttribute(Attributes.FLYING_SPEED)?.value ?: 0.0
+        val ogFlyingSpeed = entity.getAttribute(Attributes.FLYING_SPEED)?.value ?: 0.0
 
-        var targetDistance: Vec3 = Vec3.ZERO
+        var flyingSpeed = ogFlyingSpeed
 
-        if (entity.target != null) {
+        var targetDirection: Vec3 = Vec3.ZERO
 
-            val target = entity.target ?: return
+        var targetDistance: Double = targetAvoidDistance+1
 
-            targetDistance = target.position().subtract(entity.position())
 
-            distance = targetDistance
+
+        var forceVec: Vec3 = Vec3.ZERO
+
+
+
+        if (entity.target != null && (entity.target as LivingEntity).isAlive) {
+
+            val target = entity.target as LivingEntity
+
+            targetDirection = target.position().subtract(entity.position())
+
+            direction = targetDirection
+
+            targetDistance = targetDirection.length()
+
+            val searcherTarget = if (target !is PathfinderMob && target is Leashable) target.leashHolder else target
+
+            if (targetDistance <= targetAvoidDistance && targetAvoid && searcherTarget is PathfinderMob && searcherTarget.target == this) {
+
+                val offset = if (target.position().y > spawnPos.y) -10.0 else 10.0
+
+                val offsetDirection = direction.add(0.0,offset,0.0)
+
+                direction = offsetDirection
+
+                flyingSpeed *= 2
+            }
+
+            if (targetPullDistance != 0.0 && targetDistance <= targetPullDistance.absoluteValue && !targetAvoid) {
+                val targetPull = if (!targetAvoid) (targetDistance/targetPullDistance).coerceIn(0.0, 1.0) else 0.0
+
+                flyingSpeed *= 1 - targetPull
+            }
         }
 
 
 
-        val disLength = distance.length()
+        val groundHeight = entity.level().getHeight(Heightmap.Types.WORLD_SURFACE, entity.blockPosition())
+
+        val groundDistance = entity.y - groundHeight.toDouble()
+
+        val groundBlock = entity.level().getBlockState(entity.blockPosition().atY(groundHeight))
+
+        val disLength = direction.length()
 
         if (disLength <= 1.0) flyingSpeed *= disLength
 
-        if (spawnPullDistance.absoluteValue >= 0.01) {
+        if (pullTowardsSpawn) {
 
-            val spawnPull = (spawnDistance.length()/(spawnPullDistance)).coerceIn(0.0, 1.0)
+            val spawnPull = (spawnDistance/(spawnPullDistance)).coerceIn(0.0, 1.0)
 
             flyingSpeed *= 1 - spawnPull
 
         }
 
-        if (entity.target != null && targetPullDistance != 0.0 && targetDistance.length() <= targetPullDistance.absoluteValue) {
+        if (avoidGround(groundBlock, groundDistance)) {
+            direction = Vec3(
+                direction.x,
+                50.0,
+                direction.z
+            )
 
-            val targetPull = (targetDistance.length()/targetPullDistance).coerceIn(0.0, 1.0)
-
-            flyingSpeed *= 1 - targetPull
-
+            flyingSpeed = ogFlyingSpeed
         }
 
-        setEntityDelta(distance, flyingSpeed)
+        setEntityDelta(direction, flyingSpeed)
+
+        setEntityControls()
     }
 
 }

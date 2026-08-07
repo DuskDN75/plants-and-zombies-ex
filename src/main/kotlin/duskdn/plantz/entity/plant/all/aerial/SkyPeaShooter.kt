@@ -5,10 +5,12 @@ import duskdn.plantz.ai.goal.FloatingPathfindGoal
 import duskdn.plantz.entity.interfaces.FloatingMob
 import duskdn.plantz.entity.plant.init.AttackingPlant
 import duskdn.plantz.entity.plant.utils.airSurvivalCheck
+import duskdn.plantz.entity.plant.utils.onValidGround
 import duskdn.plantz.entity.projectile.peas.Pea
 import duskdn.plantz.entity.zombie.BalloonZombie
 import duskdn.plantz.init.PazEntities
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.util.Mth
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.entity.EntityType
@@ -24,9 +26,11 @@ import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.phys.Vec3
 import java.util.EnumSet
+import kotlin.math.absoluteValue
+import kotlin.math.roundToInt
 import kotlin.math.sign
 
-class SkyPeaShooter(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlant(PazEntities.SKY_PEA_SHOOTER, level),
+class SkyPeaShooter(type: EntityType<out SkyPeaShooter>, level: Level) : AttackingPlant(PazEntities.SKY_PEA_SHOOTER, level),
     FloatingMob {
     override fun registerGoals() {
         super.registerGoals()
@@ -34,7 +38,7 @@ class SkyPeaShooter(type: EntityType<out AttackingPlant>, level: Level) : Attack
         this.goalSelector.addGoal(2, BalloonPriorityProjectileAttackGoal(
             usingEntity = this,
             projectileFactory = { Pea(level(), this)},
-            cooldownTime = 15,
+            cooldownTime = 35,
             actionDelay = 3))
 
         this.goalSelector.addGoal(3, SkyPeaChaseGoal(this))
@@ -54,6 +58,18 @@ class SkyPeaShooter(type: EntityType<out AttackingPlant>, level: Level) : Attack
 
         this.isFloating = input.getBooleanOr("isFloating", true)
         this.checkedSpawn = input.getBooleanOr("checkedSpawn", false)
+
+        val hasSpawnPos = input.getBooleanOr("hasSpawnPos", false)
+
+        if (hasSpawnPos) {
+            val spawnPosX = input.getDoubleOr("spawnPosX", 0.0)
+            val spawnPosY = input.getDoubleOr("spawnPosY", 0.0)
+            val spawnPosZ = input.getDoubleOr("spawnPosZ", 0.0)
+
+            spawnPos = Vec3(spawnPosX, spawnPosY, spawnPosZ)
+        } else {
+            spawnPos = null
+        }
     }
 
     override fun addAdditionalSaveData(output: ValueOutput) {
@@ -61,11 +77,22 @@ class SkyPeaShooter(type: EntityType<out AttackingPlant>, level: Level) : Attack
 
         output.putBoolean("isFloating", isFloating)
         output.putBoolean("checkedSpawn", checkedSpawn)
+
+        val hasSpawnPos = spawnPos != null
+
+        if (hasSpawnPos) {
+            output.putBoolean("hasSpawnPos", true)
+            output.putDouble("spawnPosX", spawnPos!!.x)
+            output.putDouble("spawnPosY", spawnPos!!.y)
+            output.putDouble("spawnPosZ", spawnPos!!.z)
+        } else {
+            output.putBoolean("hasSpawnPos", false)
+        }
     }
 
     override var isFloating: Boolean = true
 
-    override lateinit var flyingNavigation: PathNavigation
+    override var flyingNavigation: PathNavigation? = null
 
     override var checkedSpawn = false
 
@@ -77,7 +104,7 @@ class SkyPeaShooter(type: EntityType<out AttackingPlant>, level: Level) : Attack
         flyingNavigation = FlyingPathNavigation(this, level)
 
         this.moveControl = FlyingMoveControl(this, 20, true)
-        return flyingNavigation
+        return flyingNavigation as PathNavigation
     }
 
 
@@ -85,7 +112,7 @@ class SkyPeaShooter(type: EntityType<out AttackingPlant>, level: Level) : Attack
     override fun tick() {
         super.tick()
 
-        if (!checkedSpawn && !firstTick) {
+        if (!checkedSpawn) {
             checkedSpawn = true
 
             println("MAKING SPAWN POS")
@@ -111,6 +138,22 @@ class SkyPeaShooter(type: EntityType<out AttackingPlant>, level: Level) : Attack
         return super.canSurviveOn(block) || airSurvivalCheck(block)
     }
 
+    override fun causeFallDamage(fallDistance: Double, damageModifier: Float, damageSource: DamageSource): Boolean {
+        return false
+    }
+
+    fun checkTarget(): Boolean {
+        return target != null && (target as LivingEntity).isAlive && (((target as LivingEntity).y-y).absoluteValue >= 1.0 || (target as LivingEntity).distanceTo(this) <= 12.0f)
+    }
+
+    override fun onGround(): Boolean {
+        return super.onGround() && !checkTarget()
+    }
+
+    override fun isNoGravity(): Boolean {
+        return (!super.onGround() && checkTarget()) || spawnPos == null
+    }
+
     private class SkyPeaChaseGoal(
         entity: SkyPeaShooter
     ) : FloatingPathfindGoal<SkyPeaShooter>(entity) {
@@ -131,8 +174,20 @@ class SkyPeaShooter(type: EntityType<out AttackingPlant>, level: Level) : Attack
 
         }
 
+        override val pullTowardsSpawn: Boolean = true
+
+        override val targetAvoidDistance: Double = 5.0
+
+        override val targetAvoid: Boolean = true
+
+        override fun avoidGround(block: BlockState, distance: Double): Boolean {
+            return !entity.canSurviveOn(block) && distance >= 2.0
+        }
+
+        override fun setEntityControls() {}
+
         override fun canUse(): Boolean {
-            return entity.nutrientSupply >= NUTRIENT_SUPPLY_MAX - 1
+            return true
         }
 
         override val spawnPullDistance: Double = 5.0

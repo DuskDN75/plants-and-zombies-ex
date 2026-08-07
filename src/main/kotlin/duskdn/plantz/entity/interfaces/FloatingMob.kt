@@ -15,6 +15,6 @@ interface FloatingMob {
 
     var isFloating: Boolean
 
-    var flyingNavigation: PathNavigation
+    var flyingNavigation: PathNavigation?
 
 }

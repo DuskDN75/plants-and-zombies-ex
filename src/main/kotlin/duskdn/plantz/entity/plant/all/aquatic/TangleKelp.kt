@@ -11,6 +11,7 @@ import duskdn.plantz.init.PazTags.EntityTypes.CANNOT_CHOMP
 import duskdn.plantz.util.pazResource
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
@@ -59,7 +60,7 @@ class TangleKelp(type: EntityType<out AttackingPlant>, level: Level) : Attacking
         actionDelay = 1,
         damageType = PazDamageTypes.PLANT_TANGLE,
         actionStartEffect = {
-            tangleKelpEntity.playSound(PazSounds.ZOMBIE_EATS)
+            tangleKelpEntity.playSound(SoundEvents.AMBIENT_UNDERWATER_ENTER)
         }
     ) {
 

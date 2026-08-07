@@ -36,6 +36,8 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.material.Fluids
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 
 abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie(type, level) {
 
@@ -180,6 +182,24 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
     override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
         super.defineSynchedData(entityData)
         entityData.define(ZOMBIE_STATE, ZombieState.IDLE)
+    }
+
+    override fun readAdditionalSaveData(input: ValueInput) {
+        super.readAdditionalSaveData(input)
+
+        this.waveStarted = input.getBooleanOr("waveStarted", true)
+    }
+
+    override fun addAdditionalSaveData(output: ValueOutput) {
+        super.addAdditionalSaveData(output)
+
+        output.putBoolean("waveStarted", waveStarted)
+    }
+
+    var waveStarted: Boolean = false
+
+    override fun setTarget(target: LivingEntity?) {
+        super.setTarget(target)
     }
 
     override fun hurtServer(level: ServerLevel, source: DamageSource, damage: Float): Boolean {

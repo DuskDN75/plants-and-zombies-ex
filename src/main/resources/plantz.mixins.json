@@ -14,7 +14,9 @@
     "ServerPlayerMixin",
     "SpawnPlacementsInvoker",
     "VillagerHostilesSensorMixin",
-    "ZombieMixin"
+    "ZombieMixin",
+    "ZombieAccessor",
+    "MobMixin"
   ],
   "injectors": {
     "defaultRequire": 1

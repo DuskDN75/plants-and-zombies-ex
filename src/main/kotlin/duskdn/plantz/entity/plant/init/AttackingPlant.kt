@@ -1,5 +1,6 @@
 package duskdn.plantz.entity.plant.init
 
+import duskdn.plantz.ai.goal.PlantTargetGoal
 import duskdn.plantz.ai.goal.ProjectileAttackGoal
 import duskdn.plantz.entity.Balloon
 import duskdn.plantz.init.PazTags
@@ -44,11 +45,19 @@ abstract class AttackingPlant(type: EntityType<out AttackingPlant>, level: Level
 //        println("TARGET IS $target")
     }
 
+    override fun canAttack(target: LivingEntity): Boolean {
+        return target.isAlive && target !is PazPlant
+    }
+
+    override fun wantsToAttack(target: LivingEntity, owner: LivingEntity): Boolean {
+        return target.isAlive && target !is PazPlant
+    }
+
     fun enemyCheck(target: LivingEntity): Boolean {
         return target.isAlive && target !is PazPlant // target is not plant
                 && (
                 target is Zombie // target is a zombie
-                        || ( target is Enemy && isTame ) // or an enemy, IF they are tame
+                        || ( target is Enemy ) // or an enem
                         || ( target is Player && !isTame && attacksPlayers() ) // or a player, IF they are not tame
                         || ( BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(target.type).`is`(PazTags.EntityTypes.ATTACKS_PLANTS) )
                         || (target is Balloon && target.leashHolder != null && target.leashHolder is LivingEntity && enemyCheck(
@@ -61,11 +70,12 @@ abstract class AttackingPlant(type: EntityType<out AttackingPlant>, level: Level
 
 //        println("follow range = ${this.getAttributeValue(Attributes.FOLLOW_RANGE)}")
 
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, mustSeeTarget(), false) { target, level ->
+        this.targetSelector.addGoal(4,
+            PlantTargetGoal(this, LivingEntity::class.java, 5, mustSeeTarget(), false) { target, level ->
 
 //            println("FOUND TARGET: $target, ${target is Enemy}, ${BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(target.type).`is`(PazTags.EntityTypes.ATTACKS_PLANTS)}")
 
-            enemyCheck(target) || target is Balloon
-        })
+                enemyCheck(target) || target is Balloon
+            })
     }
 }

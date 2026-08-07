@@ -90,7 +90,11 @@ object SpawnRules {
     }
 
     val IS_DARK = SpawnRule { context ->
-        return@SpawnRule context.level.getBrightness(LightLayer.BLOCK, context.pos) < 4
+        return@SpawnRule context.level.getBrightness(LightLayer.SKY, context.pos) < 15 || context.level.getBrightness(LightLayer.BLOCK, context.pos) < 15 || context.level.level.isDarkOutside
+    }
+
+    val IS_LIGHT = SpawnRule { context ->
+        return@SpawnRule context.level.getBrightness(LightLayer.SKY, context.pos) > 0 && context.level.level.isBrightOutside
     }
 
     val IS_THUNDERING = SpawnRule { context ->

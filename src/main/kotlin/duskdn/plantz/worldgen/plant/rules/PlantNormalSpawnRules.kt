@@ -15,7 +15,7 @@ open class PlantNormalSpawnRules(): PlantSpawnRules() {
         var otherRule = if (isMushroom) {
             SpawnRules.IS_DARK.testRule(context)
         } else {
-            SpawnRules.ABOVE_SEALEVEL.testRule(context) && !SpawnRules.IS_DARK.testRule(context)
+            SpawnRules.ABOVE_SEALEVEL.testRule(context) && SpawnRules.IS_LIGHT.testRule(context)
         }
 
         if (!strict) otherRule = true
