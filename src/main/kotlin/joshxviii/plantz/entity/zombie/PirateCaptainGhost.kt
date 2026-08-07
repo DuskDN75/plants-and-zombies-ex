@@ -36,8 +36,8 @@ class PirateCaptainGhost(type: EntityType<out PirateCaptainGhost>, level: Level)
     override fun registerGoals() {
         super.registerGoals()
         goalSelector.addGoal(0, FloatGoal(this))
-        goalSelector.addGoal(4, GhostChargeAttackGoal(this))
-        goalSelector.addGoal(8, GhostRandomMoveGoal(this))
+        goalSelector.addGoal(1, GhostChargeAttackGoal(this))
+        goalSelector.addGoal(2, GhostRandomMoveGoal(this))
     }
 
     override fun getAmbientSound(): SoundEvent {
@@ -71,6 +71,7 @@ class PirateCaptainGhost(type: EntityType<out PirateCaptainGhost>, level: Level)
     override fun isAffectedByBlocks(): Boolean = !isRemoved
     override fun canPickUpLoot(): Boolean = false
     override fun isLeftHanded(): Boolean = false
+    override fun hasLineOfSight(target: Entity): Boolean = true
 
     override fun tick() {
         noPhysics = true
@@ -151,8 +152,7 @@ class PirateCaptainGhost(type: EntityType<out PirateCaptainGhost>, level: Level)
         }
     }
 
-    private class GhostChargeAttackGoal
-        (val ghost: PirateCaptainGhost) : Goal() {
+    private class GhostChargeAttackGoal(val ghost: PirateCaptainGhost) : Goal() {
 
         init {
             setFlags(EnumSet.of(Flag.MOVE))
@@ -178,7 +178,7 @@ class PirateCaptainGhost(type: EntityType<out PirateCaptainGhost>, level: Level)
                 ghost.moveControl.setWantedPosition(eyePosition.x, eyePosition.y, eyePosition.z, 1.0)
             }
             ghost.isCharging = true
-            ghost.playSound(SoundEvents.VEX_CHARGE, 1.0f, 1.0f)
+            ghost.playSound(SoundEvents.VEX_CHARGE, 1.0f, 0.5f)
         }
 
         override fun stop() {

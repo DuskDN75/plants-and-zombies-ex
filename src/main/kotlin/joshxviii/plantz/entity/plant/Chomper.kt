@@ -119,7 +119,7 @@ class Chomper(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.CHO
                     0.2, 0.2, 0.2,
                     0.32
                 )
-                target.discard()
+                target.remove(RemovalReason.KILLED)
                 chomperEntity.chewTime = CHEW_TIME
             }
             return true

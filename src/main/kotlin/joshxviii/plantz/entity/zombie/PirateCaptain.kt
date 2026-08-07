@@ -1,5 +1,6 @@
 package joshxviii.plantz.entity.zombie
 
+import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazSounds
 import joshxviii.plantz.ai.ZombieState
 import net.minecraft.server.level.ServerLevel
@@ -8,6 +9,7 @@ import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.AnimationState
+import net.minecraft.world.entity.ConversionParams
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
@@ -48,6 +50,17 @@ class PirateCaptain(type: EntityType<out PirateCaptain>, level: Level) : PazZomb
 
     override fun tick() {
         super.tick()
+    }
+
+    override fun remove(reason: RemovalReason) {
+        if (reason == RemovalReason.KILLED) {
+            convertTo(PazEntities.PIRATE_CAPTAIN_GHOST, ConversionParams.single(this, true, true)) {
+                it.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED)
+                it.setItemSlot(EquipmentSlot.MAINHAND, Items.IRON_SWORD.defaultInstance)
+                it.setDropChance(EquipmentSlot.MAINHAND, 0.0f)
+            }
+        }
+        super.remove(reason)
     }
 
     override fun finalizeSpawn(
