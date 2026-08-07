@@ -73,6 +73,7 @@ open class PazZombieRenderer(
         super.extractRenderState(entity, state, partialTicks)
         state.zombieState = entity.state
         state.emergeAnimationState.copyFrom(entity.emergeAnimation)
+        state.floatAnimationState.copyFrom(entity.floatAnimation)
         if (entity is DiscoZombie) state.actionAnimationState.copyFrom(entity.summonAnimation)
         if (entity is AllStar) state.actionAnimationState.copyFrom(entity.chargeAnimation)
         if (entity is NewspaperZombie) state.isAngry = entity.isAngry()
@@ -125,6 +126,7 @@ open class PazZombieRenderState : ZombieRenderState() {
     var isAngry: Boolean = false
     var zombieState: ZombieState = ZombieState.IDLE
     val emergeAnimationState: AnimationState = AnimationState()
+    val floatAnimationState: AnimationState = AnimationState()
     val actionAnimationState: AnimationState = AnimationState()
 
     fun getSuffixes(): MutableList<String> {

@@ -18,6 +18,8 @@ class SuperBrainzRenderer(
     override fun extractRenderState(entity: PazZombie, state: PazZombieRenderState, partialTicks: Float) {
         super.extractRenderState(entity, state, partialTicks)
         (state as SuperBrainzRenderState)
+        (entity as SuperBrainz)
+        state.isFlying = entity.isFlying
         extractCapeState(entity, state, partialTicks)
     }
 
@@ -54,6 +56,7 @@ class SuperBrainzRenderer(
 }
 
 class SuperBrainzRenderState: PazZombieRenderState() {
+    var isFlying: Boolean = false
     var capeFlap: Float = 0f
     var capeLean: Float = 0f
     var capeLean2: Float = 0f

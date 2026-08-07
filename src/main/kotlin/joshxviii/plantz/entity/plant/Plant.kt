@@ -121,9 +121,11 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
 
         val ON_PLAYER_HEAD_EFFECTS: Identifier = pazResource("on_player_head_effects")
 
+        const val PLANT_DAMAGE = 1.0
+
         data class PlantAttributes(
             val maxHealth: Double = 20.0,
-            val attackDamage: Double = 1.0,
+            val attackDamage: Double = PLANT_DAMAGE,
             val attackKnockback: Double = 0.001,
             val attackRange: Double = 2.5,
             val movementSpeed: Double = 0.0,

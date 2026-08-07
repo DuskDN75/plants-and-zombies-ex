@@ -17,6 +17,7 @@ public class PazZombieModel extends ZombieModel<@NotNull PazZombieRenderState> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("paz_zombie"), "main");
 
     final KeyframeAnimation initAnimation;
+    final KeyframeAnimation floatAnimation;
 
     public PazZombieModel(
             @Nullable KeyframeAnimation initAnimation,
@@ -26,6 +27,8 @@ public class PazZombieModel extends ZombieModel<@NotNull PazZombieRenderState> {
         super(mainRoot);
         if (initAnimation == null) this.initAnimation = PazZombieAnimations.emerge.bake(mainRoot);
         else this.initAnimation = initAnimation;
+        this.floatAnimation = PazZombieAnimations.balloon_float.bake(mainRoot);
+
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -61,5 +64,6 @@ public class PazZombieModel extends ZombieModel<@NotNull PazZombieRenderState> {
     public void setupAnim(final PazZombieRenderState state) {
         super.setupAnim(state);
         initAnimation.apply(state.getEmergeAnimationState(), state.ageInTicks);
+        floatAnimation.apply(state.getFloatAnimationState(), state.ageInTicks);
     }
 }

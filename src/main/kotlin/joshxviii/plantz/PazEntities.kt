@@ -311,8 +311,9 @@ object PazEntities {
             .sized(0.6f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
-        attributes = Zombie.createAttributes()
-            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 10.0)
+        attributes = PazZombie.Companion.PazZombieAttributes(
+            spawnReinforcementsChance = 10.0
+        )
     )
     @JvmField val NEWSPAPER_ZOMBIE: EntityType<NewspaperZombie> =  registerZombie(
         "newspaper_zombie",
@@ -320,9 +321,10 @@ object PazEntities {
             .sized(0.6f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
-        attributes = Zombie.createAttributes()
-            .add(Attributes.MOVEMENT_SPEED, 0.22)
-            .add(Attributes.MAX_HEALTH, 25.0)
+        attributes = PazZombie.Companion.PazZombieAttributes(
+            movementSpeed = 0.22,
+            maxHealth = 25.0,
+        )
     )
     @JvmField val DIGGER_ZOMBIE: EntityType<DiggerZombie> =  registerZombie(
         "digger_zombie",
@@ -330,11 +332,12 @@ object PazEntities {
             .sized(0.63f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
-        attributes = Zombie.createAttributes()
-            .add(Attributes.ATTACK_DAMAGE, 2.0)
-            .add(Attributes.MAX_HEALTH, 35.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.225)
-            .add(Attributes.FOLLOW_RANGE, 26.0)
+        attributes = PazZombie.Companion.PazZombieAttributes(
+            attackDamage = 2.0,
+            movementSpeed = 0.225,
+            maxHealth = 35.0,
+            followRange = 26.0,
+        )
     )
     @JvmField val ENGINEER_ZOMBIE: EntityType<EngineerZombie> =  registerZombie(
         "engineer_zombie",
@@ -342,25 +345,27 @@ object PazEntities {
             .sized(0.63f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
-        attributes = Zombie.createAttributes()
-            .add(Attributes.ATTACK_DAMAGE, 1.5)
-            .add(Attributes.MAX_HEALTH, 30.0)
+        attributes = PazZombie.Companion.PazZombieAttributes(
+            attackDamage = 1.5,
+            maxHealth = 30.0
+        )
     )
     @JvmField val ZOMBIE_YETI: EntityType<ZombieYeti> =  registerZombie(
         "zombie_yeti",
         EntityType.Builder.of(::ZombieYeti, MobCategory.MONSTER)
             .sized(1.25f, 2.6f)
             .clientTrackingRange(8),
-        attributes = Zombie.createAttributes()
-            .add(Attributes.WATER_MOVEMENT_EFFICIENCY, 2.0)
-            .add(Attributes.ATTACK_DAMAGE, 13.0)
-            .add(Attributes.MAX_HEALTH, 120.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.27)
-            .add(Attributes.KNOCKBACK_RESISTANCE, 0.5)
-            .add(Attributes.SCALE, 1.25)
-            .add(Attributes.STEP_HEIGHT, 1.0)
-            .add(Attributes.ENTITY_INTERACTION_RANGE, 2.5)
-            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0)
+        attributes = PazZombie.Companion.PazZombieAttributes(
+            waterMovementEfficiency = 2.0,
+            attackDamage = 13.0,
+            maxHealth = 120.0,
+            movementSpeed = 0.27,
+            knockbackResistance = 0.5,
+            scale = 1.25,
+            stepHeight = 1.0,
+            interactionRange = 2.5,
+            spawnReinforcementsChance = 0.0,
+        )
     )
     @JvmField val DISCO_ZOMBIE: EntityType<DiscoZombie> =  registerZombie(
         "disco_zombie",
@@ -368,11 +373,12 @@ object PazEntities {
             .sized(0.64f, 2.2f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
-        attributes = Zombie.createAttributes()
-            .add(Attributes.ATTACK_DAMAGE, 7.0)
-            .add(Attributes.MAX_HEALTH, 60.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.235)
-            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.1)
+        attributes = PazZombie.Companion.PazZombieAttributes(
+            attackDamage = 7.0,
+            maxHealth = 60.0,
+            movementSpeed = 0.235,
+            spawnReinforcementsChance = 0.1,
+        )
     )
     @JvmField val BACKUP_DANCER: EntityType<BackupDancer> =  registerZombie(
         "backup_dancer",
@@ -380,12 +386,13 @@ object PazEntities {
             .sized(0.64f, 1.96f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
-        attributes = Zombie.createAttributes()
-            .add(Attributes.ATTACK_DAMAGE, 3.5)
-            .add(Attributes.MAX_HEALTH, 20.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.3)
-            .add(Attributes.FOLLOW_RANGE, 24.0)
-            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0)
+        attributes = PazZombie.Companion.PazZombieAttributes(
+            attackDamage = 3.5,
+            maxHealth = 20.0,
+            movementSpeed = 0.3,
+            followRange = 24.0,
+            spawnReinforcementsChance = 0.0,
+        )
     )
     @JvmField val ALL_STAR: EntityType<AllStar> =  registerZombie(
         "all_star",
@@ -393,12 +400,13 @@ object PazEntities {
             .sized(0.6f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
-        attributes = Zombie.createAttributes()
-            .add(Attributes.ATTACK_DAMAGE, 8.0)
-            .add(Attributes.MAX_HEALTH, 75.0)
-            .add(Attributes.STEP_HEIGHT, 1.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.23)
-            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 1.5)
+        attributes = PazZombie.Companion.PazZombieAttributes(
+            attackDamage = 8.0,
+            maxHealth = 75.0,
+            stepHeight = 1.0,
+            movementSpeed = 0.23,
+            spawnReinforcementsChance = 1.5,
+        )
     )
     @JvmField val SOLDIER_ZOMBIE: EntityType<SoldierZombie> = registerZombie(
         "soldier_zombie",
@@ -406,11 +414,12 @@ object PazEntities {
             .sized(0.6f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
-        attributes = Zombie.createAttributes()
-            .add(Attributes.ATTACK_DAMAGE, 4.0)
-            .add(Attributes.MAX_HEALTH, 40.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.237)
-            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 2.0)
+        attributes = PazZombie.Companion.PazZombieAttributes(
+            attackDamage = 4.0,
+            maxHealth = 40.0,
+            movementSpeed = 0.237,
+            spawnReinforcementsChance = 2.0,
+        )
     )
     @JvmField val PIRATE_CAPTAIN: EntityType<PirateCaptain> =  registerZombie(
         "pirate_captain",
@@ -418,11 +427,13 @@ object PazEntities {
             .sized(0.6f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
-        attributes = Zombie.createAttributes()
-            .add(Attributes.ATTACK_DAMAGE, 10.0)
-            .add(Attributes.MAX_HEALTH, 120.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.21)
-            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0)
+        attributes = PazZombie.Companion.PazZombieAttributes(
+            armor = 4.0,
+            attackDamage = 10.0,
+            maxHealth = 120.0,
+            movementSpeed = 0.21,
+            spawnReinforcementsChance = 0.0,
+        )
     )
     @JvmField val PIRATE_CAPTAIN_GHOST: EntityType<PirateCaptainGhost> =  registerZombie(
         "pirate_captain_ghost",
@@ -430,12 +441,13 @@ object PazEntities {
             .sized(0.6f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
-        attributes = Zombie.createAttributes()
-            .add(Attributes.ATTACK_DAMAGE, 9.0)
-            .add(Attributes.MAX_HEALTH, 80.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.25)
-            .add(Attributes.FOLLOW_RANGE, 126.0)
-            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0)
+        attributes = PazZombie.Companion.PazZombieAttributes(
+            attackDamage = 9.0,
+            maxHealth = 80.0,
+            movementSpeed = 0.25,
+            followRange = 126.0,
+            spawnReinforcementsChance = 0.0,
+        )
     )
     @JvmField val ROBO_ZOMBIE: EntityType<RoboZombie> =  registerZombie(
         "robo_zombie",
@@ -443,14 +455,15 @@ object PazEntities {
             .sized(1.3f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
-        attributes = Zombie.createAttributes()
-            .add(Attributes.ARMOR, 16.0)
-            .add(Attributes.ATTACK_DAMAGE, 8.0)
-            .add(Attributes.MAX_HEALTH, 100.0)
-            .add(Attributes.STEP_HEIGHT, 1.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.23)
-            .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)
-            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0)
+        attributes = PazZombie.Companion.PazZombieAttributes(
+            armor = 16.0,
+            attackDamage = 8.0,
+            maxHealth = 100.0,
+            stepHeight = 1.0,
+            movementSpeed = 0.23,
+            knockbackResistance = 1.0,
+            spawnReinforcementsChance = 0.0,
+        )
     )
     @JvmField val SUPER_BRAINZ: EntityType<SuperBrainz> =  registerZombie(
         "super_brainz",
@@ -458,14 +471,15 @@ object PazEntities {
             .sized(1.0f, 2.4f)
             .eyeHeight(2.0f)
             .clientTrackingRange(8),
-        attributes = Zombie.createAttributes()
-            .add(Attributes.ARMOR, 8.0)
-            .add(Attributes.ATTACK_DAMAGE, 8.0)
-            .add(Attributes.MAX_HEALTH, 200.0)
-            .add(Attributes.STEP_HEIGHT, 1.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.23)
-            .add(Attributes.KNOCKBACK_RESISTANCE, 0.6)
-            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0)
+        attributes = PazZombie.Companion.PazZombieAttributes(
+            armor = 8.0,
+            attackDamage = 8.0,
+            maxHealth = 200.0,
+            stepHeight = 1.0,
+            movementSpeed = 0.25,
+            knockbackResistance = 0.6,
+            spawnReinforcementsChance = 0.0,
+        )
     )
     @JvmField val IMP: EntityType<Imp> =  registerZombie(
         "imp",
@@ -474,11 +488,13 @@ object PazEntities {
             .passengerAttachments(2.075f)
             .ridingOffset(-0.7f)
             .clientTrackingRange(8),
-        attributes = Zombie.createAttributes()
-            .add(Attributes.ATTACK_DAMAGE, 1.5)
-            .add(Attributes.MAX_HEALTH, 20.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.32)
-            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.3)
+        attributes = PazZombie.Companion.PazZombieAttributes(
+            attackDamage = 1.5,
+            maxHealth = 20.0,
+            movementSpeed = 0.32,
+            spawnReinforcementsChance = 0.3,
+        )
+
     )
     @JvmField val GARGANTUAR: EntityType<Gargantuar> =  registerZombie(
         "gargantuar",
@@ -486,17 +502,18 @@ object PazEntities {
             .sized(1.7f, 3.2f)
             .passengerAttachments(2.0f)
             .clientTrackingRange(8),
-        attributes = Zombie.createAttributes()
-            .add(Attributes.ARMOR, 6.0)
-            .add(Attributes.ATTACK_DAMAGE, 8.0)
-            .add(Attributes.MAX_HEALTH, 600.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.21)
-            .add(Attributes.KNOCKBACK_RESISTANCE, 1.4)
-            .add(Attributes.EXPLOSION_KNOCKBACK_RESISTANCE, 0.7)
-            .add(Attributes.SCALE, 1.33)
-            .add(Attributes.STEP_HEIGHT, 1.0)
-            .add(Attributes.ENTITY_INTERACTION_RANGE, 3.5)
-            .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0)
+        attributes = PazZombie.Companion.PazZombieAttributes(
+            armor = 6.0,
+            attackDamage = 8.0,
+            maxHealth = 600.0,
+            movementSpeed = 0.21,
+            knockbackResistance = 1.4,
+            explosionKnockbackResistance = 0.7,
+            scale = 1.33,
+            stepHeight = 1.0,
+            interactionRange = 3.5,
+            spawnReinforcementsChance = 0.0,
+        )
     )
     // endregion
 
@@ -588,12 +605,12 @@ object PazEntities {
     private fun <T : Zombie> registerZombie(
         name : String,
         builder: EntityType.Builder<T> = EntityType.Builder.createNothing(MobCategory.MONSTER),
-        attributes: AttributeSupplier.Builder = Zombie.createAttributes()
+        attributes: PazZombie.Companion.PazZombieAttributes = PazZombie.Companion.PazZombieAttributes()
     ): EntityType<T> {
         val type = register(name, builder
             .ridingOffset(-0.7f)
             .notInPeaceful())
-        FabricDefaultAttributeRegistry.register(type, attributes)
+        FabricDefaultAttributeRegistry.register(type, attributes.apply(createMobAttributes()))
         return type
     }
 

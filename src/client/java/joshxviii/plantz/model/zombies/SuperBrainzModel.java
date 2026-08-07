@@ -18,12 +18,14 @@ import static joshxviii.plantz.UtilsKt.pazResource;
 public class SuperBrainzModel extends PazZombieModel {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("super_brainz"), "main");
     private final KeyframeAnimation walkAnimation;
+    private final KeyframeAnimation flyAnimation;
     ModelPart cape;
 
     public SuperBrainzModel(final ModelPart root) {
         super(null, root);
         cape = root.getChild("root").getChild("body").getChild("cape");
         this.walkAnimation = SuperBrainzAnimation.walk.bake(root.getChild("root"));
+        this.flyAnimation = SuperBrainzAnimation.fly.bake(root.getChild("root"));
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -93,7 +95,10 @@ public class SuperBrainzModel extends PazZombieModel {
         SuperBrainzRenderState superBrainzState = (SuperBrainzRenderState) state;
         float animationPos = state.walkAnimationPos;
         float animationSpeed = state.walkAnimationSpeed;
-        walkAnimation.applyWalk(animationPos, animationSpeed, 2f, 2f);
+        if (superBrainzState.isFlying())
+            flyAnimation.applyWalk(animationPos, animationSpeed, 2f, 2f);
+        else
+            walkAnimation.applyWalk(animationPos, animationSpeed, 2f, 2f);
 
         cape.resetPose();
         cape.rotateBy(
