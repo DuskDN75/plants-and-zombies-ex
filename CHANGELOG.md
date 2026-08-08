@@ -1,3 +1,90 @@
+# Changelog (EX) 1.4
+### Additions
+#### General:
+- e
+#### Plants:
+- e
+#### Zombies:
+- e
+### Technical Changes
+- e
+
+# Changelog (EX) 1.3
+### Additions
+#### General:
+- Changed a few spawns for mushroom plants.
+- Balloons now have SFX when inflated (still a bit buggy), attacked, and popped.
+#### Plants:
+- Adding Skyshooter (FINISHED)
+  - Peashooter that shoots in the sky and can move up and down to target zombies.
+#### Zombies:
+- Flag Zombies
+  - They now spawn a multitude of other zombies once a plant is detected
+### Technical Changes
+
+# Changelog (EX) 1.2
+### Additions
+#### General:
+- Cherrybombs spawn in cherry groves, and doomshrooms can spawn in wastelands. Mushrooms plants can also spawn in wastelands.
+- Fire plants can spawn on netherrack.
+- Sand plants can spawn on gravel.
+- Potatomine spawns in wastelands, stony shores, and dead biomes.
+#### Plants:
+- Adding Skyshooter (WIP)
+  - Peashooter that shoots in the sky and can move up and down to target zombies.
+#### Zombies:
+- Balloon Zombies
+  - Spawn in mountains with a balloon. Can spawn with a cone, bucket, or flag.
+  - Conehead Balloon Zombies have 3 balloons, Bucketheads have 7.
+### Technical Changes
+- Balloons make you hover above the ground until a certain height.
+- Updated Spawn Rules to be more modular and use layers (kind of?)
+
+# Changelog (EX) 1.1
+### Additions
+#### General:
+- Trying to shovel a carrier plant that has a plant ontop of itself will now shovel the plant first.
+- Seashrooms and other aquatic plants can no longer be placed on lilypads.
+- Zombified Piglins now float in lava.
+- Using the Ducky Tube while in lava will allow you to move faster.
+- Ice Peas now turn into Water Peas when burned.
+- Water Peas turn into steam and disintegrate when burned.
+#### Plants:
+- Added Sea Pea
+  - A amphibious peashooter, found in any warm ocean or wet biome, shoots piercing peas in water and splashing peas on land
+- Added Flower Pot
+  - Now an actual plant
+- Added Water Pot
+  - Now an actual plant
+- Added Lava Lily (WIP)
+  - Lilypad but for lava, simple enough. Any plants on it will be immune to fire.
+#### Zombies:
+- Zombies and other mobs that attack plants get doubled follow range at night.
+### Technical Changes
+- Improved the math for projectiles. 
+- Organized the file structure more.
+- Created base classes for Peas, Attacking Plants
+
+# Changelog (EX) 1.0
+### Additions
+#### General:
+#### Plants:
+- Added Lilypad
+  - Found in any warm ocean or wet biome.
+- Removed Seed Packet Mutations
+  - When zen-gardening a plant, seeds for a different plant may be produced instead.
+    - Wall Nut has a 5% chance to produce Explode-O-Nut seeds.
+    - Explode-O-Nut no longer have mutations.
+    - Electric Peashooters no longer have mutations.
+    - Peashooter has a 5% chance to produce Repeater seeds.
+    - Repeaters no longer have mutations.
+- Repeaters spawn naturally again.
+#### Zombies:
+- Zombies will now primarily attack Wall Nuts.
+### Technical Changes
+
+
+
 # Changelog 1.5
 ### Additions
 #### General:   

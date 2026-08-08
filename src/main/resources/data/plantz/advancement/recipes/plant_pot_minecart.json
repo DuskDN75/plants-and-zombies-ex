@@ -7,21 +7,26 @@
       },
       "trigger": "minecraft:recipe_unlocked"
     },
-    "has_plant_pot": {
+    "has_flower_pot": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "plantz:plant_pot"
+            "items": "plantz:seed_packet"
           }
-        ]
+        ],
+        "predicates": {
+          "minecraft:entity_data": {
+            "id": "plantz:flower_pot"
+          }
+        }
       }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_plant_pot"
+      "has_flower_pot"
     ]
   ],
   "rewards": {

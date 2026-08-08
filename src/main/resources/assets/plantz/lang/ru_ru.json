@@ -76,7 +76,7 @@
   "item.plantz.brainz_flag": "Флаг Мозгов",
   "item.plantz.plantz_flag": "Флаг Растений",
   "item.plantz.plant_pot": "Горшок",
-  "item.plantz.zen_plant_pot": "Горшок дзен",
+  "item.plantz.zen_pot": "Горшок дзен",
   "item.plantz.plant_pot_minecart": "Вагонетка с горшком",
   "item.plantz.plant_pot_helmet": "Шлем из горшка",
   "item.plantz.seed_packet": "Пустая пачка семян",
@@ -121,7 +121,7 @@
 
   "item.plantz.music_disc_grassy_groove": "Пластинка",
 
-  "jukebox_song.plantz.grassy_groove": "joshxviii - Grassy Groove",
+  "jukebox_song.plantz.grassy_groove": "duskdn - Grassy Groove",
 
   "block.plantz.mailbox": "Почтовый ящик",
   "block.plantz.light_gray_mailbox": "Светло-серый почтовый ящик",

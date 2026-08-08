@@ -76,7 +76,7 @@
   "item.plantz.brainz_flag": "Beyinz Bayrağı",
   "item.plantz.plantz_flag": "Bitki Bayrağı",
   "item.plantz.plant_pot": "Bitki Saksısı",
-  "item.plantz.zen_plant_pot": "Zen Bitki Saksısı",
+  "item.plantz.zen_pot": "Zen Bitki Saksısı",
   "item.plantz.plant_pot_minecart": "Bitki Saksılı Vagon",
   "item.plantz.plant_pot_helmet": "Bitki Saksısı Kaskı",
   "item.plantz.seed_packet": "Boş Tohum Paketi",
@@ -121,7 +121,7 @@
 
   "item.plantz.music_disc_grassy_groove": "Müzik Diski",
 
-  "jukebox_song.plantz.grassy_groove": "joshxviii - Grassy Groove",
+  "jukebox_song.plantz.grassy_groove": "duskdn - Grassy Groove",
 
   "block.plantz.mailbox": "Posta Kutusu",
   "block.plantz.light_gray_mailbox": "Açık Gri Posta Kutusu",

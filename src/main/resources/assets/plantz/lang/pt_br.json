@@ -76,7 +76,7 @@
   "item.plantz.brainz_flag": "Bandeira de Mioloz",
   "item.plantz.plantz_flag": "Bandeira de Plantaz",
   "item.plantz.plant_pot": "Vaso de Planta",
-  "item.plantz.zen_plant_pot": "Vaso Zen de Planta",
+  "item.plantz.zen_pot": "Vaso Zen de Planta",
   "item.plantz.plant_pot_minecart": "Carrinho de mina com Vaso de Planta",
   "item.plantz.plant_pot_helmet": "Capacete de Vaso de Planta",
   "item.plantz.seed_packet": "Pacote de Sementes Vazio",
@@ -121,7 +121,7 @@
 
   "item.plantz.music_disc_grassy_groove": "Disco Musical",
 
-  "jukebox_song.plantz.grassy_groove": "joshxviii - Grassy Groove",
+  "jukebox_song.plantz.grassy_groove": "duskdn - Grassy Groove",
 
   "block.plantz.mailbox": "Caixa de Correio",
   "block.plantz.light_gray_mailbox": "Caixa de Correio Cinza-clara",

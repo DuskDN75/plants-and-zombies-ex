@@ -78,7 +78,7 @@
   "item.plantz.brainz_flag": "脳の旗",
   "item.plantz.plantz_flag": "プラントの旗",
   "item.plantz.plant_pot": "フラワーポット",
-  "item.plantz.zen_plant_pot": "禅のフラワーポット",
+  "item.plantz.zen_pot": "禅のフラワーポット",
   "item.plantz.plant_pot_minecart": "フラワーポット付きトロッコ",
   "item.plantz.plant_pot_helmet": "ヘルポット",
   "item.plantz.seed_packet": "シードパケット",
@@ -124,7 +124,7 @@
 
   "item.plantz.music_disc_grassy_groove": "レコード",
 
-  "jukebox_song.plantz.grassy_groove": "joshxviii - Grassy Groove",
+  "jukebox_song.plantz.grassy_groove": "duskdn - Grassy Groove",
 
   "block.plantz.time_machine": "タイムマシン",
   "block.plantz.mailbox": "郵便箱",

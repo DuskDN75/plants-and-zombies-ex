@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "plantz:plant_pot",
-    "plantz:zen_plant_pot"
+    "plantz:zen_pot"
   ]
 }

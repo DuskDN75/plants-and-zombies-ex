@@ -3,8 +3,13 @@
     "plantz:pea",
     "plantz:pea_fire",
     "plantz:pea_ice",
+    "plantz:pea_water",
+    "plantz:water_spore",
     "plantz:spore",
     "plantz:melon",
+    "plantz:cabbage",
+    "plantz:kernel",
+    "plantz:butter",
     "plantz:needle"
   ]
 }

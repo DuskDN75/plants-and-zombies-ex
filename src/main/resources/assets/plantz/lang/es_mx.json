@@ -76,7 +76,7 @@
   "item.plantz.brainz_flag": "Bandera de Cerebroz",
   "item.plantz.plantz_flag": "Bandera Planta",
   "item.plantz.plant_pot": "Maceta",
-  "item.plantz.zen_plant_pot": "Maceta Zen",
+  "item.plantz.zen_pot": "Maceta Zen",
   "item.plantz.plant_pot_minecart": "Vagón con maceta",
   "item.plantz.plant_pot_helmet": "Casco maceta",
   "item.plantz.seed_packet": "Paquete de semillas vacío",
@@ -121,7 +121,7 @@
 
   "item.plantz.music_disc_grassy_groove": "Disco de música",
 
-  "jukebox_song.plantz.grassy_groove": "joshxviii - Grassy Groove",
+  "jukebox_song.plantz.grassy_groove": "duskdn - Grassy Groove",
 
   "block.plantz.mailbox": "Buzón",
   "block.plantz.light_gray_mailbox": "Buzón gris claro",

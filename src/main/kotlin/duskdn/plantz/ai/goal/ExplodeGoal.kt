@@ -1,0 +1,71 @@
+package duskdn.plantz.ai.goal
+
+import duskdn.plantz.entity.plant.all.Explosive
+import net.minecraft.core.Holder
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.PathfinderMob
+import net.minecraft.world.entity.ai.goal.Goal
+import net.minecraft.world.level.gameevent.GameEvent
+import java.util.*
+import java.util.function.Predicate
+
+class ExplodeGoal(
+    private val explosiveEntity: Explosive,
+    val explosionRadius: Float = 2.5f,
+    val sound: Holder.Reference<SoundEvent> = SoundEvents.GENERIC_EXPLODE,
+    val destroyBlocks: Boolean = false,
+    val activateRange: Double = 3.0,
+    val actionPredicate: Predicate<PathfinderMob> = Predicate { true },
+    val actionEndEffect: () -> Unit = {},
+) : Goal() {
+
+    companion object {
+        private const val DISTANCE_SQR = 49.0
+    }
+
+    init {
+        flags = EnumSet.of<Flag>(Flag.MOVE)
+    }
+
+    override fun canUse(): Boolean {
+        if (!actionPredicate.test(explosiveEntity)) return false
+        if ((explosiveEntity.isAsleep || explosiveEntity.isGrowingSeeds)) return false
+        if (explosiveEntity.swellDir>=0) return true
+        return false
+    }
+
+    override fun start() {
+        explosiveEntity.getNavigation().stop()
+    }
+
+    override fun stop() {
+        explosiveEntity.swellDir = -1
+    }
+
+    override fun requiresUpdateEveryTick(): Boolean {
+        return true
+    }
+
+    override fun tick() {
+
+        if (!canUse()) return
+
+        if (explosiveEntity.swellDir != 2) explosiveEntity.swellDir = 1
+
+        if (explosiveEntity.swellDir > 0 && explosiveEntity.swell == 0) {
+            explosiveEntity.playSound(SoundEvents.CREEPER_PRIMED, 1.0f, 1f + (1-explosiveEntity.getMaxSwellTime() / 30))
+            explosiveEntity.gameEvent(GameEvent.PRIME_FUSE)
+        }
+
+        if (explosiveEntity.swell == explosiveEntity.getMaxSwellTime()) {
+            actionEndEffect()
+            explosiveEntity.explode(
+                radius = explosionRadius,
+                sound = sound,
+                destroyBlocks = destroyBlocks,
+            )
+        }
+    }
+}

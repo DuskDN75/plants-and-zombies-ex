@@ -210,6 +210,22 @@
         }
       }
     },
+    "plantz:lilypad": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz:lilypad"
+        }
+      }
+    },
+    "plantz:water_peashooter": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz:water_peashooter"
+        }
+      }
+    },
     "plantz:seashroom": {
       "trigger": "minecraft:tame_animal",
       "conditions": {
@@ -223,6 +239,22 @@
       "conditions": {
         "entity": {
           "type": "plantz:coffeebean"
+        }
+      }
+    },
+    "plantz:flower_pot": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz:flower_pot"
+        }
+      }
+    },
+    "plantz:water_pot": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz:water_pot"
         }
       }
     },

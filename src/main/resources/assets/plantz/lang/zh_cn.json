@@ -77,7 +77,7 @@
   "item.plantz.brainz_flag": "脑子旗帜",
   "item.plantz.plantz_flag": "植物旗帜",
   "item.plantz.plant_pot": "花盆",
-  "item.plantz.zen_plant_pot": "禅境花盆",
+  "item.plantz.zen_pot": "禅境花盆",
   "item.plantz.plant_pot_minecart": "花盆矿车",
   "item.plantz.plant_pot_helmet": "花盆头盔",
   "item.plantz.seed_packet": "种子包",
@@ -123,7 +123,7 @@
 
   "item.plantz.music_disc_grassy_groove": "音乐唱片",
 
-  "jukebox_song.plantz.grassy_groove": "joshxviii - Grassy Groove",
+  "jukebox_song.plantz.grassy_groove": "duskdn - Grassy Groove",
 
   "block.plantz.time_machine": "时光机",
   "block.plantz.mailbox": "邮箱",

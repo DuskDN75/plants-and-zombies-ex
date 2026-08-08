@@ -1,13 +1,24 @@
 {
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
-  "ingredients": [
-    [
-      "plantz:plant_pot"
+  "key": {
+    "@": [
+      "plantz:sun"
     ],
-    [
+    "#": [
       "minecraft:minecart"
+    ],
+    "$": [
+      "minecraft:brick"
+    ],
+    "%": [
+      "minecraft:dirt"
     ]
+  },
+  "pattern": [
+    " @ ",
+    "$%$",
+    " # "
   ],
   "result": {
     "count": 1,

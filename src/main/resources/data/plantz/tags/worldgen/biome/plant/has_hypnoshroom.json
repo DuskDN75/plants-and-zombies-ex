@@ -1,15 +1,28 @@
 {
   "values": [
     "minecraft:lush_caves",
-    "minecraft:dark_forest",
-    "minecraft:warped_forest",
-    "minecraft:mushroom_fields",
+    {
+      "id": "#c:is_spooky",
+      "required": false
+    },
+    {
+      "id": "#c:is_nether_forest",
+      "required": false
+    },
+    {
+      "id": "#terralith:cave/underground_jungle",
+      "required": false
+    },
     {
       "id": "#c:is_mushroom",
       "required": false
     },
     {
       "id": "#c:is_magical",
+      "required": false
+    },
+    {
+      "id": "#c:is_wasteland",
       "required": false
     }
   ]

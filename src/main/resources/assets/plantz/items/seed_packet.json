@@ -5,6 +5,13 @@
     "component": "minecraft:entity_data",
     "cases": [
       {
+        "when": { "id": "plantz:placeholder" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz:item/seed_packet/placeholder"
+        }
+      },
+      {
         "when": { "id": "plantz:sunflower" },
         "model": {
           "type": "minecraft:model",
@@ -173,6 +180,20 @@
         }
       },
       {
+        "when": { "id": "plantz:lilypad" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz:item/seed_packet/lilypad"
+        }
+      },
+      {
+        "when": { "id": "plantz:water_peashooter" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz:item/seed_packet/water_peashooter"
+        }
+      },
+      {
         "when": { "id": "plantz:seashroom" },
         "model": {
           "type": "minecraft:model",
@@ -184,6 +205,34 @@
         "model": {
           "type": "minecraft:model",
           "model": "plantz:item/seed_packet/coffeebean"
+        }
+      },
+      {
+        "when": { "id": "plantz:flower_pot" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz:item/seed_packet/flower_pot"
+        }
+      },
+      {
+        "when": { "id": "plantz:water_pot" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz:item/seed_packet/water_pot"
+        }
+      },
+      {
+        "when": { "id": "plantz:lavalily" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz:item/seed_packet/placeholder"
+        }
+      },
+      {
+        "when": { "id": "plantz:sky_peashooter" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz:item/seed_packet/sky_peashooter"
         }
       },
       {

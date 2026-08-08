@@ -18,8 +18,18 @@
     "plantz:melonpult",
     "plantz:coffeebean",
     "plantz:bonkchoy",
+    "plantz:lilypad",
+    "plantz:water_peashooter",
     "plantz:tanglekelp",
-    "plantz:grave_buster",
-    "#plantz:mushroom"
+    "plantz:puffshroom",
+    "plantz:fumeshroom",
+    "plantz:scaredyshroom",
+    "plantz:sunshroom",
+    "plantz:hypnoshroom",
+    "plantz:doomshroom",
+    "plantz:seashroom",
+    "plantz:flower_pot",
+    "plantz:water_pot",
+    "plantz:grave_buster"
   ]
 }

@@ -242,6 +242,23 @@
     "sounds": [{ "name": "plantz:entity/imp/death", "volume": 0.8 }], "subtitle": "plantz.subtitles.entity.imp.death"
   },
 
+  "entity.balloon.inflate": {
+    "sounds": [{ "name": "plantz:entity/balloon/inflate", "volume": 1.0, "pitch": 1.0 }], "subtitle": "plantz.subtitles.entity.balloon.inflate"
+  },
+  "entity.balloon.hit": {
+    "sounds": [
+      { "name": "plantz:entity/balloon/hurt_1", "volume": 0.7 },
+      { "name": "plantz:entity/balloon/hurt_2", "volume": 0.7 },
+      { "name": "plantz:entity/balloon/hurt_3", "volume": 0.7 },
+      { "name": "plantz:entity/balloon/hurt_4", "volume": 0.7, "pitch": 0.8 },
+      { "name": "plantz:entity/balloon/hurt_5", "volume": 0.7, "pitch": 0.8 },
+      { "name": "plantz:entity/balloon/hurt_6", "volume": 0.7, "pitch": 0.8 }
+    ], "subtitle": "plantz.subtitles.entity.balloon.hit"
+  },
+  "entity.balloon.pop": {
+    "sounds": [{ "name": "plantz:entity/balloon/pop", "volume": 1.0, "pitch": 0.8 }], "subtitle": "plantz.subtitles.entity.balloon.pop"
+  },
+
   "entity.gargantuar.ambient": {
     "sounds": [
       { "name": "plantz:entity/gargantuar/ambient_1", "volume": 2.0 },
@@ -280,6 +297,14 @@
   "event.mob_effect.zombie_omen": {
     "sounds": [{ "name": "event/mob_effects/raid_omen", "volume": 1.0, "pitch": 1.2 }], "subtitle": "plantz.subtitles.event.mob_effect.zombie_omen"
   },
+
+  "entity.events.wave_incoming": {
+    "sounds": [{ "name": "plantz:event/wave/wave_incoming", "volume": 1.0, "pitch": 1.0 }], "subtitle": "plantz.subtitles.event.wave_incoming"
+  },
+  "entity.events.wave_start": {
+    "sounds": [{ "name": "plantz:event/wave/wave_start", "volume": 1.0, "pitch": 1.0 }], "subtitle": "plantz.subtitles.event.wave_start"
+  },
+
   "music_disc.grassy_groove": {
     "sounds": [{ "name": "plantz:music/grassy_groove", "volume": 1.0, "pitch": 1.0 }], "subtitle": "plantz.subtitles.music_disc.grassy_groove"
   }
