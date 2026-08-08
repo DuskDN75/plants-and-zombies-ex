@@ -1,3 +1,14 @@
+# Changelog (EX) 1.4
+### Additions
+#### General:
+- e
+#### Plants:
+- e
+#### Zombies:
+- e
+### Technical Changes
+- e
+
 # Changelog (EX) 1.3
 ### Additions
 #### General:

@@ -12,6 +12,7 @@
     "AvatarRendererMixin",
     "GuiMixin",
     "HumanoidModelMixin",
-    "LivingEntityRendererMixin"
+    "LivingEntityRendererMixin",
+    "GuiGraphicsExtractorMixin"
   ]
 }

@@ -75,6 +75,7 @@ import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.UseCooldown
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.LightLayer
@@ -160,6 +161,22 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
                     .add(Attributes.SCALE, scale)
             }
         }
+    }
+
+    fun spawnParticle(
+        particle : ParticleOptions = ParticleTypes.POOF,
+        amount : Int = 6,
+        spread: Vec3 = Vec3(0.3, 0.3, 0.3),
+        offset: Vec3 = Vec3.ZERO,
+        speed: Double = 0.4
+    ) {
+        (this.level() as? ServerLevel)?.sendParticles(
+            particle,
+            this.x+offset.x, this.y+offset.y, this.z+offset.z,
+            amount,
+            spread.x, spread.y, spread.z,
+            speed
+        )
     }
 
     override fun isInWater(): Boolean {
@@ -829,6 +846,13 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
         if (force || customName!=null) {// Spawn a seed packet item containing this plant's data
             val stack = SeedPacketItem.stackFor(this.type)
             if (customName!=null) stack.set(DataComponents.CUSTOM_NAME, customName)
+
+            if (PazConfig.PLANT_COOLDOWN_ENABLED && owner is Player) {
+
+                (stack.item as SeedPacketItem).setCooldownGroup(stack)
+
+            }
+
             val itemEntity = ItemEntity(level, x, y + 0.5, z, stack)
             if(level.addFreshEntity(itemEntity)){
                 this.discard()

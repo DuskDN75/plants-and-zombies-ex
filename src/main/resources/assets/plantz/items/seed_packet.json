@@ -232,7 +232,7 @@
         "when": { "id": "plantz:sky_peashooter" },
         "model": {
           "type": "minecraft:model",
-          "model": "plantz:item/seed_packet/placeholder"
+          "model": "plantz:item/seed_packet/sky_peashooter"
         }
       }
     ],

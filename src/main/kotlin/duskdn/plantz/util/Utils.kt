@@ -7,6 +7,8 @@ import duskdn.plantz.init.PazConfig
 import duskdn.plantz.init.PazItems
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Vec3i
+import net.minecraft.core.particles.ParticleOptions
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerEntityGetter
@@ -23,6 +25,7 @@ import net.minecraft.world.entity.projectile.Projectile
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.pathfinder.Path
 import net.minecraft.world.phys.Vec3
+import java.lang.reflect.Field
 
 fun pazResource(path: String): Identifier = Identifier.fromNamespaceAndPath(MODID, path)
 
@@ -208,3 +211,36 @@ fun Path?.canReachTarget(target: BlockPos?): Boolean {
 fun Path?.getEndPos(): BlockPos? = this?.endNode?.let { BlockPos(it.x, it.y, it.z) }
 
 fun PathNavigation.moveToBlockPos(blockPos: BlockPos, speedModifier: Double) = this.moveTo(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble(), speedModifier)
+
+fun Any.getVariableByString(variable: String): Any? {
+
+    return try {
+        val field: Field = this.javaClass.getDeclaredField("variable")
+
+        field.isAccessible = true
+
+        field.get(this)
+    } catch (e: NoSuchFieldException) {
+
+    } catch (e: Exception) {
+
+    }
+
+}
+
+fun LivingEntity.spawnParticle(
+    particle : ParticleOptions = ParticleTypes.POOF,
+    amount : Int = 6,
+    spread: Vec3 = Vec3(0.3, 0.3, 0.3),
+    location: Vec3 = this.position(),
+    offset: Vec3 = Vec3.ZERO,
+    speed: Double = 0.4
+) {
+    (this.level() as? ServerLevel)?.sendParticles(
+        particle,
+        location.x+offset.x, location.y+offset.y, location.z+offset.z,
+        amount,
+        spread.x, spread.y, spread.z,
+        speed
+    )
+}

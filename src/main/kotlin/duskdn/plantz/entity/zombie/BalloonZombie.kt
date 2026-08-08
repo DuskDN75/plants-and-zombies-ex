@@ -6,6 +6,8 @@ import duskdn.plantz.entity.interfaces.FloatingMob
 import duskdn.plantz.init.PazBlocks
 import duskdn.plantz.init.PazEntities
 import duskdn.plantz.init.PazSounds
+import duskdn.plantz.util.trackVariable
+import duskdn.plantz.util.updateTrackers
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
@@ -28,12 +30,9 @@ import net.minecraft.world.phys.Vec3
 import java.util.EnumSet
 import net.minecraft.world.entity.ai.attributes.Attributes.FLYING_SPEED
 import net.minecraft.world.item.Items
-import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
-import kotlin.math.absoluteValue
-import kotlin.math.sign
 
 class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZOMBIE, level: Level) : PazZombie(type, level), FloatingMob {
 
@@ -103,13 +102,23 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
     override fun tick() {
         super.tick()
 
-        if (!level().isClientSide) {
+        var level = level()
 
-            if (balloons.isEmpty() && !spawnedBalloons && !checkedSpawn && !firstTick) {
+        if (!level.isClientSide) {
+
+            if (!checkedSpawn) {
 
                 checkedSpawn = true
 
                 spawnPos = position()
+
+                trackVariable("spawnPos", Vec3(0.2, 0.5, 1.0))
+
+            }
+
+            if (balloons.isEmpty() && !spawnedBalloons && !firstTick) {
+
+                checkedSpawn = true
 
                 spawnBalloon(level() as ServerLevel, EntitySpawnReason.MOB_SUMMONED)
                 return
@@ -125,6 +134,9 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
 
             }
         }
+
+        updateTrackers(level)
+
     }
 
     fun stopFloating() {
@@ -186,6 +198,18 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
         this.balloonCount = input.getIntOr("balloonCount", 1)
         this.spawnedBalloons = input.getBooleanOr("spawnedBalloons", false)
         this.checkedSpawn = input.getBooleanOr("checkedSpawn", false)
+
+        val hasSpawnPos = input.getBooleanOr("hasSpawnPos", false)
+
+        if (hasSpawnPos) {
+            val spawnPosX = input.getDoubleOr("spawnPosX", 0.0)
+            val spawnPosY = input.getDoubleOr("spawnPosY", 0.0)
+            val spawnPosZ = input.getDoubleOr("spawnPosZ", 0.0)
+
+            spawnPos = Vec3(spawnPosX, spawnPosY, spawnPosZ)
+        } else {
+            spawnPos = null
+        }
     }
 
     override fun addAdditionalSaveData(output: ValueOutput) {
@@ -195,6 +219,17 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
         output.putInt("balloonCount", balloonCount)
         output.putBoolean("spawnedBalloons", spawnedBalloons)
         output.putBoolean("checkedSpawn", checkedSpawn)
+
+        val hasSpawnPos = spawnPos != null
+
+        if (hasSpawnPos) {
+            output.putBoolean("hasSpawnPos", true)
+            output.putDouble("spawnPosX", spawnPos!!.x)
+            output.putDouble("spawnPosY", spawnPos!!.y)
+            output.putDouble("spawnPosZ", spawnPos!!.z)
+        } else {
+            output.putBoolean("hasSpawnPos", false)
+        }
     }
 
     override fun finalizeSpawn(
@@ -242,51 +277,28 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
             return entity.isFloating && entity.target != null && entity.target?.isAlive == true
         }
 
-        override fun setEntityDelta(distance: Vec3, speed: Double) {
+        override fun getEntityDelta(direction: Vec3, speed: Double): Vec3 {
 
-            val dis = distance.normalize()
+            val dis = direction.normalize()
 
-            entity.deltaMovement = Vec3(
+            val delta = Vec3(
                 dis.x * speed,
                 dis.y * speed * (2*entity.balloonCount),
                 dis.z * speed
             )
 
+            return delta
+
         }
 
-        override fun tick() {
+        override fun slowApproach(distance: Double): Double {
 
-            if (!(entity.isFloating && entity.target != null && entity.target?.isAlive == true)) return
+            if (distance <= 0.2) return 0.0
 
+            if (distance <= 3.0) return distance/3.0
 
+            return 1.0
 
-            val target = entity.target as LivingEntity
-
-            val targetDirection: Vec3 = target.position().subtract(entity.position())
-
-
-
-            var flyingSpeed = entity.getAttribute(Attributes.FLYING_SPEED)?.value ?: 0.0
-
-
-
-            val groundHeight = entity.level().getHeight(Heightmap.Types.WORLD_SURFACE, entity.blockPosition())
-
-            val groundDistance = entity.y - groundHeight.toDouble()
-
-            val groundBlock = entity.level().getBlockState(entity.blockPosition().atY(groundHeight))
-
-
-
-            val targetDistance = targetDirection.length()
-
-            if (targetDistance <= 3.0) flyingSpeed *= targetDistance/3.0
-
-            if (targetDistance <= 0.2) flyingSpeed = 0.0
-
-            setEntityDelta(targetDirection, flyingSpeed)
-
-            setEntityControls()
         }
 
     }

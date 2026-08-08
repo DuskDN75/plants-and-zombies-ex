@@ -5,17 +5,20 @@ import duskdn.plantz.ai.goal.FloatingPathfindGoal
 import duskdn.plantz.entity.interfaces.FloatingMob
 import duskdn.plantz.entity.plant.init.AttackingPlant
 import duskdn.plantz.entity.plant.utils.airSurvivalCheck
-import duskdn.plantz.entity.plant.utils.onValidGround
 import duskdn.plantz.entity.projectile.peas.Pea
 import duskdn.plantz.entity.zombie.BalloonZombie
 import duskdn.plantz.init.PazEntities
+import duskdn.plantz.util.trackVariable
+import duskdn.plantz.util.updateTrackers
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.util.Mth
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.Leashable
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.control.FlyingMoveControl
+import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation
 import net.minecraft.world.entity.ai.navigation.PathNavigation
@@ -27,11 +30,13 @@ import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.phys.Vec3
 import java.util.EnumSet
 import kotlin.math.absoluteValue
-import kotlin.math.roundToInt
 import kotlin.math.sign
 
 class SkyPeaShooter(type: EntityType<out SkyPeaShooter>, level: Level) : AttackingPlant(PazEntities.SKY_PEA_SHOOTER, level),
     FloatingMob {
+
+    var chaseGoal: SkyPeaChaseGoal? = null
+
     override fun registerGoals() {
         super.registerGoals()
 
@@ -41,7 +46,9 @@ class SkyPeaShooter(type: EntityType<out SkyPeaShooter>, level: Level) : Attacki
             cooldownTime = 35,
             actionDelay = 3))
 
-        this.goalSelector.addGoal(3, SkyPeaChaseGoal(this))
+        chaseGoal = SkyPeaChaseGoal(this)
+
+        this.goalSelector.addGoal(3, chaseGoal as Goal)
     }
 
     override fun registerAttackGoal() {
@@ -112,13 +119,23 @@ class SkyPeaShooter(type: EntityType<out SkyPeaShooter>, level: Level) : Attacki
     override fun tick() {
         super.tick()
 
-        if (!checkedSpawn) {
+        val level = level()
+
+        if (!checkedSpawn && this.chaseGoal != null) {
             checkedSpawn = true
 
             println("MAKING SPAWN POS")
 
             spawnPos = position()
+
+            trackVariable("spawnPos", Vec3(0.2, 0.5, 1.0))
+
+//            trackVariable(variable = "currentVelocity", color = Vec3(1.0, 0.0, 0.0), thing = this.chaseGoal!!)
         }
+
+        updateTrackers(level)
+
+//        this.chaseGoal?.updateTrackers(level)
     }
 
     fun getGroundDistance(): Double {
@@ -154,7 +171,7 @@ class SkyPeaShooter(type: EntityType<out SkyPeaShooter>, level: Level) : Attacki
         return (!super.onGround() && checkTarget()) || spawnPos == null
     }
 
-    private class SkyPeaChaseGoal(
+    class SkyPeaChaseGoal(
         entity: SkyPeaShooter
     ) : FloatingPathfindGoal<SkyPeaShooter>(entity) {
 
@@ -162,15 +179,36 @@ class SkyPeaShooter(type: EntityType<out SkyPeaShooter>, level: Level) : Attacki
             this.flags = EnumSet.of(Flag.MOVE)
         }
 
-        override fun setEntityDelta(distance: Vec3, speed: Double) {
+        override fun getTargetDirection(target: LivingEntity, spawnPos: Vec3): Pair<Vec3, Double> {
 
-            println("spawnPos: ${entity.spawnPos}, distance: $distance, speed: $speed")
+            val target = entity.target as LivingEntity
 
-            entity.deltaMovement = Vec3(
-                0.0,
-                (distance.y.sign) * speed * 2,
-                0.0
-            )
+            var targetDirection = target.position().subtract(entity.position())
+
+            val targetDistance = targetDirection.length()
+
+            val searcherTarget = if (target !is PathfinderMob && target is Leashable) target.leashHolder else target
+
+            var targetSpeed: Double = 1.0
+
+            val avoidTarget = targetDistance <= targetAvoidDistance && targetAvoid && searcherTarget is PathfinderMob && searcherTarget.target == this
+
+            if (avoidTarget) {
+
+                val offset = if (target.position().y > spawnPos.y) -10.0 else 10.0
+
+                targetDirection = targetDirection.add(0.0,offset,0.0)
+
+                targetSpeed *= 2
+            }
+
+            if (targetPullDistance != 0.0 && targetDistance <= targetPullDistance.absoluteValue && !avoidTarget) {
+                val targetPull = if (!targetAvoid) (targetDistance/targetPullDistance).coerceIn(0.0, 1.0) else 0.0
+
+                targetSpeed -= targetPull
+            }
+
+            return Vec3(0.0, targetDirection.y, 0.0) to targetSpeed
 
         }
 
