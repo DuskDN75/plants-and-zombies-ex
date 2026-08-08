@@ -44,6 +44,8 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.material.Fluids
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import kotlin.math.max
 
 abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie(type, level) {
@@ -84,8 +86,8 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
         const val ZOMBIE_SPEED = 0.23
 
         data class PazZombieAttributes(
-            val maxHealth: Double = PLANT_DAMAGE*6,
-            val attackDamage: Double = PLANT_DAMAGE,
+            val maxHealth: Double = 20.0,
+            val attackDamage: Double = 1.0,
             val attackKnockback: Double = 0.4,
             val attackRange: Double = 2.5,
             val movementSpeed: Double = ZOMBIE_SPEED,
@@ -155,6 +157,7 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
     }
 
     var balloons : MutableList<Balloon> = mutableListOf()
+    var balloonCount = 0
 
     override fun registerGoals() {
         super.registerGoals()
@@ -228,6 +231,7 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
             level.addFreshEntity(balloon)
             balloon.setLeashedTo(this, true)
             balloons.add(balloon)
+            balloonCount++
         }
     }
 
@@ -238,6 +242,14 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
     override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
         super.defineSynchedData(entityData)
         entityData.define(ZOMBIE_STATE, ZombieState.IDLE)
+    }
+
+    override fun addAdditionalSaveData(output: ValueOutput) {
+        super.addAdditionalSaveData(output)
+    }
+
+    override fun readAdditionalSaveData(input: ValueInput) {
+        super.readAdditionalSaveData(input)
     }
 
     override fun hurtServer(level: ServerLevel, source: DamageSource, damage: Float): Boolean {
@@ -289,7 +301,7 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
             else setDropChance(EquipmentSlot.LEGS, 0.15f)
         }
 
-        if (random.nextFloat() < 0.5) spawnBalloons(2)
+        if (random.nextFloat() < 0.5) spawnBalloons(3)
 
         return data
     }

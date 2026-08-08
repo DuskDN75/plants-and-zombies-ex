@@ -6,6 +6,7 @@ import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazServerParticles
 import joshxviii.plantz.applyImpulse
 import joshxviii.plantz.entity.zombie.AllStar.Companion.CHARGE_BOOST_ID
+import joshxviii.plantz.entity.zombie.PazZombie
 import joshxviii.plantz.pazResource
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ParticleTypes
@@ -60,6 +61,21 @@ class Balloon(
 
     override fun getInterpolation(): InterpolationHandler = interpolation
 
+    override fun load(input: ValueInput) {
+        super.load(input)
+        val holder = leashHolder
+        if (holder is PazZombie && !holder.balloons.contains(this)) {
+            holder.balloons.add(this)
+        }
+    }
+
+    override fun getLeashHolder(): Entity? {
+        val holder = super.getLeashHolder()
+        if (holder is PazZombie && !holder.balloons.contains(this)) {
+            holder.balloons.add(this)
+        }
+        return holder
+    }
 
     override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
         entityData.define(DYE_COLOR, DyeColor.WHITE)

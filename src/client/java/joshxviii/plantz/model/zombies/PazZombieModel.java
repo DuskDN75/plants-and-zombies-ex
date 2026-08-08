@@ -1,5 +1,6 @@
 package joshxviii.plantz.model.zombies;
 
+import joshxviii.plantz.ai.ZombieState;
 import joshxviii.plantz.renderer.entity.PazZombieRenderState;
 import joshxviii.plantz.animation.zombies.PazZombieAnimations;
 import net.minecraft.client.animation.KeyframeAnimation;
@@ -63,7 +64,12 @@ public class PazZombieModel extends ZombieModel<@NotNull PazZombieRenderState> {
     @Override
     public void setupAnim(final PazZombieRenderState state) {
         super.setupAnim(state);
+        if (state.getZombieState() == ZombieState.FLOATING) {
+            var animationPos = state.walkAnimationPos;
+            var animationSpeed = state.walkAnimationSpeed + 0.2f;
+            floatAnimation.applyWalk(animationPos, animationSpeed, 1f, 2f);
+        }
         initAnimation.apply(state.getEmergeAnimationState(), state.ageInTicks);
-        floatAnimation.apply(state.getFloatAnimationState(), state.ageInTicks);
+
     }
 }
