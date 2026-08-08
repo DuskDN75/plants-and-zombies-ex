@@ -17,6 +17,7 @@ import duskdn.plantz.entity.plant.all.ElectricPeaShooter
 import duskdn.plantz.entity.plant.all.ExplodeONut
 import duskdn.plantz.entity.plant.all.FirePeaShooter
 import duskdn.plantz.entity.plant.all.FlowerPot
+import duskdn.plantz.entity.plant.all.GraveBuster
 import duskdn.plantz.entity.plant.all.mushrooms.FumeShroom
 import duskdn.plantz.entity.plant.all.mushrooms.HypnoShroom
 import duskdn.plantz.entity.plant.all.IcePeaShooter
@@ -49,6 +50,8 @@ import duskdn.plantz.entity.turret.Turret
 import duskdn.plantz.entity.zombie.*
 import duskdn.plantz.mixin.MobAccessor
 import duskdn.plantz.util.pazResource
+import joshxviii.plantz.entity.zombie.PirateCaptain
+import joshxviii.plantz.entity.zombie.PirateCaptainGhost
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
@@ -412,7 +415,7 @@ object PazEntities {
         width = 1.0f,
         height = 1.0f,
         eyeHeight = 0.6f,
-        attributes = Plant.Companion.PlantAttributes(
+        attributes = PazPlant.Companion.PlantAttributes(
             maxHealth = 6.0,
             followRange = 1.0
         )
@@ -543,13 +546,8 @@ object PazEntities {
         attributes = PazZombie.Companion.ZombieAttributes(
             attackDamage = PazPlant.PEA_DAMAGE*2,
             maxHealth = PazPlant.PEA_DAMAGE*16,
-            spawnReinforcementsChance = 2.0
-        )
-        attributes = PazZombie.Companion.PazZombieAttributes(
-            attackDamage = 4.0,
-            maxHealth = 40.0,
             movementSpeed = 0.237,
-            spawnReinforcementsChance = 2.0,
+            spawnReinforcementsChance = 2.0
         )
     )
     @JvmField val PIRATE_CAPTAIN: EntityType<PirateCaptain> =  registerZombie(
@@ -558,7 +556,7 @@ object PazEntities {
             .sized(0.6f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
-        attributes = PazZombie.Companion.PazZombieAttributes(
+        attributes = PazZombie.Companion.ZombieAttributes(
             armor = 4.0,
             attackDamage = 10.0,
             maxHealth = 120.0,
@@ -572,7 +570,7 @@ object PazEntities {
             .sized(0.6f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
-        attributes = PazZombie.Companion.PazZombieAttributes(
+        attributes = PazZombie.Companion.ZombieAttributes(
             attackDamage = 9.0,
             maxHealth = 80.0,
             movementSpeed = 0.25,

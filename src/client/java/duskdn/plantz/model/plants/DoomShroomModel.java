@@ -1,33 +1,39 @@
-package duskdn.plantz.model.plants;
+package joshxviii.plantz.model.plants;
 
-import duskdn.plantz.PlantRenderState;
-import duskdn.plantz.animation.plants.CoffeeBeanAnimation;
-import duskdn.plantz.model.plants.init.PazPlantModel;
+import joshxviii.plantz.PlantRenderState;
+import joshxviii.plantz.animation.plants.DoomShroomAnimation;
+import joshxviii.plantz.animation.plants.HypnoShroomAnimation;
+import net.minecraft.client.animation.KeyframeAnimation;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
-import static duskdn.plantz.util.UtilsKt.pazResource;
+
+import static joshxviii.plantz.UtilsKt.pazResource;
 
 
-public class CoffeeBeanModel extends PazPlantModel {
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("coffeebean"), "main");
+public class DoomShroomModel extends PlantModel {
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("doomshroom"), "main");
 	private final ModelPart body;
 	private final ModelPart head;
+	private final ModelPart cap;
+	private final ModelPart eyes;
 
-	public CoffeeBeanModel(ModelPart root) {
+	public DoomShroomModel(ModelPart root) {
 		super(
-				CoffeeBeanAnimation.init.bake(root),
-				CoffeeBeanAnimation.idle.bake(root),
-				CoffeeBeanAnimation.action.bake(root),
-				CoffeeBeanAnimation.sleep.bake(root),
+			DoomShroomAnimation.init.bake(root),
+			DoomShroomAnimation.idle.bake(root),
+			DoomShroomAnimation.action.bake(root),
+			DoomShroomAnimation.sleep.bake(root),
 				null,
-				root
+			root
 		);
 		this.body = root.getChild("body");
 		this.head = this.body.getChild("head");
+		this.cap = this.head.getChild("cap");
+		this.eyes = this.cap.getChild("eyes");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -36,18 +42,19 @@ public class CoffeeBeanModel extends PazPlantModel {
 
 		PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-		PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 10).addBox(-2.5F, -9.0F, -2.0F, 5.0F, 5.0F, 5.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 0).addBox(-2.5F, -4.0F, -3.0F, 5.0F, 4.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 21).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition cube_r1 = head.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 20).addBox(-1.0F, -2.0F, 0.0F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -9.0F, 0.5F, -0.7854F, 0.0F, 0.0F));
+		PartDefinition cap = head.addOrReplaceChild("cap", CubeListBuilder.create().texOffs(0, 0).addBox(-7.0F, -7.0F, -7.0F, 14.0F, 7.0F, 14.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -7.0F, 0.0F));
 
-		return LayerDefinition.create(meshdefinition, 32, 32);
+		PartDefinition eyes = cap.addOrReplaceChild("eyes", CubeListBuilder.create().texOffs(32, 29).addBox(-4.0F, -3.0F, -7.025F, 8.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
 
 	@Override
 	public void setupAnim(@NotNull PlantRenderState state) {
-		this.body.zRot = Mth.sin(state.ageInTicks * 1.5f)*0.01f;
 		super.setupAnim(state);
-		this.body.yRot = state.yRot * (float) (Mth.PI / 180.0);
+		this.cap.xRot += state.xRot * (float) (Math.PI / 280.0);
+		this.body.yRot = state.yRot * (float) (Math.PI / 180.0);
 	}
 }

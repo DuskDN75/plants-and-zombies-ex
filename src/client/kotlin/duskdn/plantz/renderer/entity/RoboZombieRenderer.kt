@@ -1,8 +1,10 @@
-package joshxviii.plantz.renderer.entity
+package duskdn.plantz.renderer.entity
 
-import joshxviii.plantz.entity.zombie.PazZombie
-import joshxviii.plantz.entity.zombie.RoboZombie
-import joshxviii.plantz.model.zombies.RoboZombieModel
+import duskdn.plantz.renderer.entity.PazZombieRenderState
+import duskdn.plantz.renderer.entity.PazZombieRenderer
+import duskdn.plantz.entity.zombie.PazZombie
+import duskdn.plantz.entity.zombie.RoboZombie
+import duskdn.plantz.model.zombies.RoboZombieModel
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.world.entity.AnimationState
 

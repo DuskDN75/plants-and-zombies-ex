@@ -1,4 +1,4 @@
-package duskdn.plantz.renderer
+package duskdn.plantz.renderer.entity
 
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.state.EntityRenderState

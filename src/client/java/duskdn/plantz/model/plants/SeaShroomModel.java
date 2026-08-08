@@ -1,6 +1,6 @@
 package duskdn.plantz.model.plants;
 
-import duskdn.plantz.PlantRenderState;
+import duskdn.plantz.renderer.entity.PlantRenderState;
 import duskdn.plantz.animation.plants.SeaShroomAnimation;
 import duskdn.plantz.model.plants.init.PazPlantModel;
 import net.minecraft.client.animation.KeyframeAnimation;

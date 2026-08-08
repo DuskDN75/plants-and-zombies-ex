@@ -20,8 +20,6 @@ import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.*
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier
-import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.FlyingMoveControl
 import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.entity.ai.goal.MoveThroughVillageGoal
@@ -49,6 +47,8 @@ import kotlin.math.max
 abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie(type, level) {
 
     val emergeAnimation : AnimationState = AnimationState()
+
+    val floatAnimation : AnimationState = AnimationState()
 
     companion object {
 
@@ -222,7 +222,7 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
         }
     }
 
-    fun spawnBalloons(count: Int = 1) {
+    fun spawnBalloons(count: Int = balloonCount) {
         val level = level() as? ServerLevel ?: return
         for (i in 0 until count) {
             val balloon = PazEntities.BALLOON.create(level, EntitySpawnReason.TRIGGERED) ?: return
@@ -232,7 +232,6 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
             level.addFreshEntity(balloon)
             balloon.setLeashedTo(this, true)
             balloons.add(balloon)
-            balloonCount++
         }
     }
 

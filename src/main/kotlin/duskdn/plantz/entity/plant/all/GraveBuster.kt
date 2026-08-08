@@ -1,10 +1,11 @@
-package joshxviii.plantz.entity.plant
+package duskdn.plantz.entity.plant.all
 
+import duskdn.plantz.ai.goal.ActionGoal
+import duskdn.plantz.entity.plant.init.PazPlant
+import duskdn.plantz.init.PazBlocks
+import duskdn.plantz.init.PazEntities
+import duskdn.plantz.init.PazLootTables
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import joshxviii.plantz.PazBlocks
-import joshxviii.plantz.PazEntities
-import joshxviii.plantz.PazLootTables
-import joshxviii.plantz.ai.goal.ActionGoal
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
@@ -21,7 +22,7 @@ import net.minecraft.world.level.storage.loot.LootTable
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams
 
-class GraveBuster(type: EntityType<out Plant>, level: Level) : Plant(PazEntities.GRAVE_BUSTER, level) {
+class GraveBuster(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntities.GRAVE_BUSTER, level) {
 
     override fun registerGoals() {
         super.registerGoals()
@@ -30,7 +31,7 @@ class GraveBuster(type: EntityType<out Plant>, level: Level) : Plant(PazEntities
     override fun attackGoals() {}
 
     override fun canPlaceOn(block: BlockState): Boolean {
-        return block.`is`(PazBlocks.ZEN_PLANT_POT) || block.`is`(PazBlocks.GRAVESTONE)
+        return block.`is`(PazBlocks.ZEN_POT) || block.`is`(PazBlocks.GRAVESTONE)
     }
 
     override fun tick() {
@@ -56,7 +57,7 @@ class GraveBuster(type: EntityType<out Plant>, level: Level) : Plant(PazEntities
             return (usingEntity.tickCount > cooldownTime
                     && usingEntity.isAlive
                     && graveBuster.isTame
-                    && !(usingEntity is Plant && (usingEntity.isAsleep || usingEntity.isGrowingSeeds)))
+                    && !(usingEntity is PazPlant && (usingEntity.isAsleep || usingEntity.isGrowingSeeds)))
         }
 
         override fun canDoAction(): Boolean {

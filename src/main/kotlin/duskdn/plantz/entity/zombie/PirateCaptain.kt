@@ -1,14 +1,11 @@
-package joshxviii.plantz.entity.zombie
+package duskdn.plantz.entity.zombie
 
-import joshxviii.plantz.PazEntities
-import joshxviii.plantz.PazSounds
-import joshxviii.plantz.ai.ZombieState
+import duskdn.plantz.init.PazEntities
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.damagesource.DamageSource
-import net.minecraft.world.entity.AnimationState
 import net.minecraft.world.entity.ConversionParams
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason

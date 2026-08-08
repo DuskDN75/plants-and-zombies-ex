@@ -1,24 +1,14 @@
-<<<<<<<< HEAD:src/client/kotlin/joshxviii/plantz/renderer/entity/BalloonRenderer.kt
-package joshxviii.plantz.renderer.entity
+package duskdn.plantz.renderer.entity
 
-import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.math.Axis
-import joshxviii.plantz.entity.Balloon
-import joshxviii.plantz.model.BalloonModel
-import joshxviii.plantz.pazResource
-========
-package duskdn.plantz
-
+import net.minecraft.client.renderer.entity.EntityRenderer
+import net.minecraft.client.renderer.entity.state.EntityRenderState
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import duskdn.plantz.entity.Balloon
 import duskdn.plantz.model.BalloonModel
 import duskdn.plantz.util.pazResource
->>>>>>>> 68eac8a988f75e82769978a50f4547f227e4f5a3:src/client/kotlin/duskdn/plantz/BalloonRenderer.kt
 import net.minecraft.client.renderer.SubmitNodeCollector
-import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.EntityRendererProvider
-import net.minecraft.client.renderer.entity.state.EntityRenderState
 import net.minecraft.client.renderer.state.level.CameraRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.resources.Identifier
@@ -28,7 +18,7 @@ import net.minecraft.world.item.DyeColor
 class BalloonRenderer(
     context: EntityRendererProvider.Context,
     val model: BalloonModel<BalloonRenderState>
-) : net.minecraft.client.renderer.entity.EntityRenderer<Balloon, BalloonRenderState>(context) {
+) : EntityRenderer<Balloon, BalloonRenderState>(context) {
 
     override fun submit(
         state: BalloonRenderState,
@@ -69,7 +59,7 @@ class BalloonRenderer(
     }
 }
 
-class BalloonRenderState : net.minecraft.client.renderer.entity.state.EntityRenderState() {
+class BalloonRenderState : EntityRenderState() {
     var color: DyeColor = DyeColor.WHITE
     @JvmField
     var yRot: Float = 0f

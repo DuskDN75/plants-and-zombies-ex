@@ -3,7 +3,7 @@ package duskdn.plantz.model.plants;// Made with Blockbench 5.1.4
 // Paste this class into your mod and generate all required imports
 
 
-import duskdn.plantz.PlantRenderState;
+import duskdn.plantz.renderer.entity.PlantRenderState;
 import duskdn.plantz.animation.plants.LilyPadAnimation;
 import duskdn.plantz.model.plants.init.PazPlantModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;

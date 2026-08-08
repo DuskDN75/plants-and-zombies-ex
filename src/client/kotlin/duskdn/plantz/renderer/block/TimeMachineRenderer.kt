@@ -1,10 +1,10 @@
-package joshxviii.plantz.renderer
+package duskdn.plantz.renderer.block
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
-import joshxviii.plantz.block.TimeMachineBlock
-import joshxviii.plantz.block.TimeMachineState
-import joshxviii.plantz.block.entity.TimeMachineBlockEntity
+import duskdn.plantz.block.TimeMachineBlock
+import duskdn.plantz.block.TimeMachineState
+import duskdn.plantz.block.entity.TimeMachineBlockEntity
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState

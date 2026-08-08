@@ -1,23 +1,14 @@
-<<<<<<<< HEAD:src/client/kotlin/joshxviii/plantz/renderer/entity/PazZombieRenderer.kt
-package joshxviii.plantz.renderer.entity
+package duskdn.plantz.renderer.entity
 
-import com.mojang.blaze3d.vertex.PoseStack
-import joshxviii.plantz.PazConfig
-import joshxviii.plantz.ai.ZombieState
-import joshxviii.plantz.entity.zombie.*
-import joshxviii.plantz.model.zombies.PazZombieModel
-import joshxviii.plantz.renderer.getEmissiveTextureLocation
-import joshxviii.plantz.renderer.getTextureLocation
-import joshxviii.plantz.renderer.isMagicName
-========
-package duskdn.plantz
+import duskdn.plantz.renderer.getEmissiveTextureLocation
+import duskdn.plantz.renderer.getTextureLocation
+import duskdn.plantz.renderer.isMagicName
 
 import com.mojang.blaze3d.vertex.PoseStack
 import duskdn.plantz.ai.ZombieState
 import duskdn.plantz.entity.zombie.*
 import duskdn.plantz.init.PazConfig
 import duskdn.plantz.model.zombies.init.PazZombieModel
->>>>>>>> 68eac8a988f75e82769978a50f4547f227e4f5a3:src/client/kotlin/duskdn/plantz/PazZombieRenderer.kt
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.model.geom.ModelLayerLocation
 import net.minecraft.client.model.geom.ModelLayers
@@ -107,7 +98,7 @@ open class PazZombieRenderer(
 
 class EmissiveZombieLayer<M : EntityModel<PazZombieRenderState>>(
     renderer: RenderLayerParent<PazZombieRenderState, M>,
-) : EyesLayer<PazZombieRenderState, M>(renderer) {
+) : net.minecraft.client.renderer.entity.layers.EyesLayer<PazZombieRenderState, M>(renderer) {
 
     override fun submit(
         poseStack: PoseStack,
@@ -125,7 +116,7 @@ class EmissiveZombieLayer<M : EntityModel<PazZombieRenderState>>(
     override fun renderType(): RenderType = RenderTypes.lines()
 }
 
-open class PazZombieRenderState : ZombieRenderState() {
+open class PazZombieRenderState : net.minecraft.client.renderer.entity.state.ZombieRenderState() {
 
     companion object {
         const val TEXTURE_PATH = "textures/entity/zombie"

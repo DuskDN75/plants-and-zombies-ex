@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/client/kotlin/joshxviii/plantz/renderer/PlantPotMinecartRenderer.kt
-package joshxviii.plantz.renderer
-========
-package duskdn.plantz
->>>>>>>> 68eac8a988f75e82769978a50f4547f227e4f5a3:src/client/kotlin/duskdn/plantz/PlantPotMinecartRenderer.kt
+package duskdn.plantz.renderer
 
 import com.mojang.blaze3d.vertex.PoseStack
 import duskdn.plantz.entity.PlantPotMinecart

@@ -1,14 +1,7 @@
-<<<<<<<< HEAD:src/client/kotlin/joshxviii/plantz/renderer/RenderingUtils.kt
-package joshxviii.plantz.renderer
-
-import joshxviii.plantz.PazEntities.MAGIC_NAMES
-import joshxviii.plantz.pazResource
-========
-package duskdn.plantz
+package duskdn.plantz.renderer
 
 import duskdn.plantz.init.PazEntities.MAGIC_NAMES
 import duskdn.plantz.util.pazResource
->>>>>>>> 68eac8a988f75e82769978a50f4547f227e4f5a3:src/client/kotlin/duskdn/plantz/RenderingUtils.kt
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.resources.Identifier

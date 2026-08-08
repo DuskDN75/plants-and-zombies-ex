@@ -1,4 +1,4 @@
-package joshxviii.plantz.animation.zombies;
+package duskdn.plantz.animation.zombies;
 
 import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;

@@ -1,32 +1,21 @@
-<<<<<<<< HEAD:src/client/kotlin/joshxviii/plantz/renderer/entity/GnomeRenderer.kt
-package joshxviii.plantz.renderer.entity
+package duskdn.plantz.renderer.entity
 
+import net.minecraft.client.renderer.entity.MobRenderer
+import net.minecraft.client.renderer.entity.layers.RenderLayer
 import com.mojang.blaze3d.vertex.PoseStack
-import joshxviii.plantz.GnomeArmorSet
-import joshxviii.plantz.PazModels.ARMOR_LAYER_LOCATION
-import joshxviii.plantz.entity.gnome.Gnome
-import joshxviii.plantz.entity.gnome.GnomeVariant
-import joshxviii.plantz.model.GnomeArmorModel
-import joshxviii.plantz.model.GnomeModel
-========
-package duskdn.plantz
-
-import com.mojang.blaze3d.vertex.PoseStack
-import duskdn.plantz.PazModels.ARMOR_LAYER_LOCATION
+import duskdn.plantz.GnomeArmorSet
 import duskdn.plantz.entity.gnome.Gnome
 import duskdn.plantz.entity.gnome.GnomeVariant
 import duskdn.plantz.model.GnomeArmorModel
 import duskdn.plantz.model.GnomeModel
->>>>>>>> 68eac8a988f75e82769978a50f4547f227e4f5a3:src/client/kotlin/duskdn/plantz/GnomeRenderer.kt
-import net.minecraft.client.model.HumanoidModel.ArmPose
+import joshxviii.plantz.PazModels.ARMOR_LAYER_LOCATION
+import net.minecraft.client.model.HumanoidModel
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.entity.EntityRendererProvider
-import net.minecraft.client.renderer.entity.MobRenderer
 import net.minecraft.client.renderer.entity.RenderLayerParent
 import net.minecraft.client.renderer.entity.layers.CustomHeadLayer
 import net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer
-import net.minecraft.client.renderer.entity.layers.RenderLayer
 import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState
 import net.minecraft.client.renderer.state.level.CameraRenderState
 import net.minecraft.client.resources.model.EquipmentClientInfo.LayerType
@@ -45,7 +34,7 @@ import net.minecraft.world.item.component.SwingAnimation
 class GnomeRenderer(
     context: EntityRendererProvider.Context,
     defaultModel: GnomeModel<GnomeRenderState>,
-) : net.minecraft.client.renderer.entity.MobRenderer<Gnome, GnomeRenderState, GnomeModel<GnomeRenderState>>(
+) : MobRenderer<Gnome, GnomeRenderState, GnomeModel<GnomeRenderState>>(
     context,
     defaultModel,
     0.2f
@@ -76,12 +65,12 @@ class GnomeRenderer(
         return GnomeRenderState()
     }
 
-    fun getArmPose(mob: Gnome, arm: HumanoidArm): ArmPose {
+    fun getArmPose(mob: Gnome, arm: HumanoidArm): HumanoidModel.ArmPose {
         val itemHeldByArm: ItemStack = mob.getItemHeldByArm(arm)
         val anim = itemHeldByArm.get<SwingAnimation>(DataComponents.SWING_ANIMATION)
-        return if (anim != null && anim.type() == SwingAnimationType.STAB && mob.swinging) ArmPose.SPEAR
-        else if (itemHeldByArm.`is`(ItemTags.SPEARS)) ArmPose.SPEAR
-        else if (itemHeldByArm.`is`(Items.BOW) && mob.isAggressive) ArmPose.BOW_AND_ARROW else ArmPose.EMPTY
+        return if (anim != null && anim.type() == SwingAnimationType.STAB && mob.swinging) HumanoidModel.ArmPose.SPEAR
+        else if (itemHeldByArm.`is`(ItemTags.SPEARS)) HumanoidModel.ArmPose.SPEAR
+        else if (itemHeldByArm.`is`(Items.BOW) && mob.isAggressive) HumanoidModel.ArmPose.BOW_AND_ARROW else HumanoidModel.ArmPose.EMPTY
     }
 
     override fun extractRenderState(entity: Gnome, state: GnomeRenderState, partialTicks: Float) {
@@ -90,12 +79,12 @@ class GnomeRenderer(
         state.variant = entity.variant
         state.isPassenger = entity.isPassenger
         state.isUsingItem = entity.isUsingItem
-        state.headEquipment = getEquipmentIfRenderable(entity, EquipmentSlot.HEAD)
-        state.chestEquipment = getEquipmentIfRenderable(entity, EquipmentSlot.CHEST)
-        state.legsEquipment = getEquipmentIfRenderable(entity, EquipmentSlot.LEGS)
-        state.feetEquipment = getEquipmentIfRenderable(entity, EquipmentSlot.FEET)
-        state.leftArmPose = getArmPose(entity, HumanoidArm.LEFT)
-        state.rightArmPose = getArmPose(entity, HumanoidArm.RIGHT)
+        state.headEquipment = GnomeRenderer.getEquipmentIfRenderable(entity, EquipmentSlot.HEAD)
+        state.chestEquipment = GnomeRenderer.getEquipmentIfRenderable(entity, EquipmentSlot.CHEST)
+        state.legsEquipment = GnomeRenderer.getEquipmentIfRenderable(entity, EquipmentSlot.LEGS)
+        state.feetEquipment = GnomeRenderer.getEquipmentIfRenderable(entity, EquipmentSlot.FEET)
+        state.leftArmPose = GnomeRenderer.getArmPose(entity, HumanoidArm.LEFT)
+        state.rightArmPose = GnomeRenderer.getArmPose(entity, HumanoidArm.RIGHT)
     }
 
     private fun getEquipmentIfRenderable(entity: LivingEntity, slot: EquipmentSlot): ItemStack {
@@ -108,7 +97,7 @@ class GnomeArmorLayer(
     renderer: RenderLayerParent<GnomeRenderState, GnomeModel<GnomeRenderState>>,
     private val armorModels: GnomeArmorSet<GnomeArmorModel<GnomeRenderState>>,
     private val equipmentRenderer: EquipmentLayerRenderer
-) : net.minecraft.client.renderer.entity.layers.RenderLayer<GnomeRenderState, GnomeModel<GnomeRenderState>>(renderer) {
+) : RenderLayer<GnomeRenderState, GnomeModel<GnomeRenderState>>(renderer) {
 
     override fun submit(
         poseStack: PoseStack, submitNodeCollector: SubmitNodeCollector, lightCoords: Int, state: GnomeRenderState, yRot: Float, xRot: Float
@@ -164,7 +153,7 @@ class GnomeArmorLayer(
     }
 }
 
-class GnomeRenderState : net.minecraft.client.renderer.entity.state.ArmedEntityRenderState() {
+class GnomeRenderState : ArmedEntityRenderState() {
     var isPassenger: Boolean = false
     var isUsingItem: Boolean = false
     var variant: GnomeVariant = GnomeVariant.BLUE

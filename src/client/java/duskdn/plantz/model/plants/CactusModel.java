@@ -1,9 +1,10 @@
-package joshxviii.plantz.model.plants;// Made with Blockbench 5.0.7
+package duskdn.plantz.model.plants;// Made with Blockbench 5.0.7
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
 
-import joshxviii.plantz.PlantRenderState;
-import joshxviii.plantz.animation.plants.CactusAnimation;
+import duskdn.plantz.animation.plants.CactusAnimation;
+import duskdn.plantz.model.plants.init.PazPlantModel;
+import duskdn.plantz.renderer.entity.PlantRenderState;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -11,9 +12,10 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import org.jetbrains.annotations.NotNull;
-import static joshxviii.plantz.UtilsKt.pazResource;
 
-public class CactusModel extends PlantModel{
+import static duskdn.plantz.util.UtilsKt.pazResource;
+
+public class CactusModel extends PazPlantModel {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("cactus"), "main");
 	private final ModelPart body;
 	private final ModelPart trunk;

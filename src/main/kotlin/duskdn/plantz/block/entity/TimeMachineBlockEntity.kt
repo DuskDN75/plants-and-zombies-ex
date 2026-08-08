@@ -1,6 +1,7 @@
 package duskdn.plantz.block.entity
 
 import duskdn.plantz.block.TimeMachineBlock
+import duskdn.plantz.block.TimeMachineBlock.Companion.STATE
 import duskdn.plantz.block.TimeMachineState
 import duskdn.plantz.init.PazBlocks
 import duskdn.plantz.init.PazComponents
@@ -11,6 +12,8 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.AbstractContainerMenu

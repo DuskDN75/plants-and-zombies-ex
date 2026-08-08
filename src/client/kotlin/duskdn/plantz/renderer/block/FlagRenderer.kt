@@ -1,20 +1,15 @@
-<<<<<<<< HEAD:src/client/kotlin/joshxviii/plantz/renderer/FlagRenderer.kt
-package joshxviii.plantz.renderer
+package duskdn.plantz.renderer.block
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
-import joshxviii.plantz.PazConfig
-import joshxviii.plantz.block.entity.FlagBlockEntity.Companion.MAX_HEALTH
-
-========
-package duskdn.plantz
-
 import duskdn.plantz.block.FlagBlock
 import duskdn.plantz.block.entity.FlagBlockEntity
+import duskdn.plantz.block.entity.FlagBlockEntity.Companion.MAX_HEALTH
 import duskdn.plantz.init.PazBlocks
+import duskdn.plantz.init.PazConfig
 import duskdn.plantz.model.FlagBlockModel
 import duskdn.plantz.util.pazResource
->>>>>>>> 68eac8a988f75e82769978a50f4547f227e4f5a3:src/client/kotlin/duskdn/plantz/FlagRenderer.kt
+
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState

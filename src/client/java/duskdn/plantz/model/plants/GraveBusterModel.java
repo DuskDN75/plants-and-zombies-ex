@@ -1,9 +1,10 @@
-package joshxviii.plantz.model.plants;// Made with Blockbench 5.0.7
+package duskdn.plantz.model.plants;// Made with Blockbench 5.0.7
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
 
-import joshxviii.plantz.animation.plants.GraveBusterAnimation;
-import joshxviii.plantz.renderer.entity.PlantRenderState;
+import duskdn.plantz.animation.plants.GraveBusterAnimation;
+import duskdn.plantz.model.plants.init.PazPlantModel;
+import duskdn.plantz.renderer.entity.PlantRenderState;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -11,9 +12,9 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
-import static joshxviii.plantz.UtilsKt.pazResource;
+import static duskdn.plantz.util.UtilsKt.pazResource;
 
-public class GraveBusterModel extends PlantModel{
+public class GraveBusterModel extends PazPlantModel {
 	public static final float BODY_DROP_DISTANCE = 14.0F;
 	public static final int BODY_DROP_DURATION = 37;
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("grave_buster"), "main");

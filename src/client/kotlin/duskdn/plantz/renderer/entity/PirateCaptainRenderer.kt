@@ -1,14 +1,10 @@
-package joshxviii.plantz.renderer.entity
+package duskdn.plantz.renderer.entity
 
+import duskdn.plantz.renderer.entity.PazZombieRenderState
+import duskdn.plantz.renderer.entity.PazZombieRenderer
 import com.mojang.blaze3d.vertex.PoseStack
-import joshxviii.plantz.PazEntities
-import joshxviii.plantz.entity.zombie.PazZombie
-import joshxviii.plantz.entity.zombie.PirateCaptain
-import joshxviii.plantz.entity.zombie.PirateCaptainGhost
-import joshxviii.plantz.entity.zombie.RoboZombie
-import joshxviii.plantz.model.zombies.PazZombieModel
-import joshxviii.plantz.model.zombies.PirateCaptainModel
-import joshxviii.plantz.model.zombies.RoboZombieModel
+import duskdn.plantz.entity.zombie.PazZombie
+import duskdn.plantz.model.zombies.init.PazZombieModel
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.rendertype.RenderType

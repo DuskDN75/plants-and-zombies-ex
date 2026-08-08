@@ -1,4 +1,4 @@
-package joshxviii.plantz.effect
+package duskdn.plantz.effect
 
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.world.effect.MobEffect

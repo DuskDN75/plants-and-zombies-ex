@@ -1,22 +1,11 @@
-<<<<<<<< HEAD:src/client/kotlin/joshxviii/plantz/renderer/BodyItemAttachmentRenderLayer.kt
-package joshxviii.plantz.renderer
+package duskdn.plantz.renderer
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
-import joshxviii.plantz.PazItems
 import joshxviii.plantz.PazModels.PAINT_COLORS_KEY
-import joshxviii.plantz.model.zombies.PazZombieModel
-import joshxviii.plantz.pazResource
-========
-package duskdn.plantz
-
-import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.math.Axis
-import duskdn.plantz.PazModels.PAINT_COLORS_KEY
 import duskdn.plantz.init.PazItems
 import duskdn.plantz.model.zombies.init.PazZombieModel
 import duskdn.plantz.util.pazResource
->>>>>>>> 68eac8a988f75e82769978a50f4547f227e4f5a3:src/client/kotlin/duskdn/plantz/BodyItemAttachmentRenderLayer.kt
 import net.minecraft.client.Minecraft
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.model.HumanoidModel

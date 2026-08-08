@@ -95,10 +95,6 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
 
     var spawnedBalloons: Boolean = false
 
-    var balloonCount: Int = 1
-
-    var balloons : MutableList<Balloon> = mutableListOf()
-
     override fun tick() {
         super.tick()
 
@@ -120,7 +116,7 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
 
                 checkedSpawn = true
 
-                spawnBalloon(level() as ServerLevel, EntitySpawnReason.MOB_SUMMONED)
+                spawnBalloons()
                 return
             }
 
@@ -159,36 +155,6 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
         super.registerGoals()
 
         this.goalSelector.addGoal(4, BalloonZombieChaseGoal(this))
-    }
-
-    fun spawnBalloon(level: ServerLevel, spawnReason: EntitySpawnReason) {
-
-        for (i in 0 until balloonCount) {
-
-            val balloon: Balloon? = PazEntities.BALLOON.create(level, spawnReason)
-
-            if (balloon != null) {
-
-                balloon.dyeColor = DyeColor.RED
-
-                val randomX = (random.nextDouble() - 0.5) * 2
-                val randomZ = (random.nextDouble() - 0.5) * 2
-
-                balloon.snapTo(this.x+randomX, this.y + 2.0, this.z+randomZ)
-
-                level.addFreshEntity(balloon)
-
-                balloon.setLeashedTo(this, true)
-
-                isFloating = true
-
-                balloons.add(balloon)
-
-            }
-
-        }
-
-        spawnedBalloons = true
     }
 
     override fun readAdditionalSaveData(input: ValueInput) {
@@ -254,7 +220,7 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
 
         if (level is ServerLevel) {
 
-            spawnBalloon(level, spawnReason)
+            spawnBalloons()
 
         }
 

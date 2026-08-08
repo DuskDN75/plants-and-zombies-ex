@@ -1,4 +1,4 @@
-package joshxviii.plantz.animation.plants;
+package duskdn.plantz.animation.plants;
 
 import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;

@@ -1,6 +1,6 @@
 package duskdn.plantz.model.plants;
 
-import duskdn.plantz.PlantRenderState;
+import duskdn.plantz.renderer.entity.PlantRenderState;
 import duskdn.plantz.animation.plants.SunShroomBabyAnimation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;

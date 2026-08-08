@@ -2,10 +2,7 @@ package duskdn.plantz.block
 
 import com.mojang.serialization.MapCodec
 import duskdn.plantz.block.entity.TimeMachineBlockEntity
-import duskdn.plantz.PazBlocks
-import duskdn.plantz.PazComponents
-import duskdn.plantz.PazItems
-import duskdn.plantz.block.entity.MailboxBlockEntity
+import duskdn.plantz.init.PazBlocks
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.util.RandomSource

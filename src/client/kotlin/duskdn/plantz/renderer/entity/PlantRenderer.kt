@@ -1,20 +1,11 @@
-<<<<<<<< HEAD:src/client/kotlin/joshxviii/plantz/renderer/entity/PlantRenderer.kt
-package joshxviii.plantz.renderer.entity
+package duskdn.plantz.renderer.entity
 
-import com.mojang.blaze3d.vertex.PoseStack
-import joshxviii.plantz.PazConfig
-import joshxviii.plantz.ai.PlantState
-import joshxviii.plantz.entity.plant.BonkChoy
-import joshxviii.plantz.entity.plant.ExplodeONut
-import joshxviii.plantz.entity.plant.Explosive
-import joshxviii.plantz.entity.plant.KernelPult
-import joshxviii.plantz.entity.plant.Plant
-import joshxviii.plantz.entity.plant.WallNut
-import joshxviii.plantz.renderer.getEmissiveTextureLocation
-import joshxviii.plantz.renderer.getTextureLocation
-import joshxviii.plantz.renderer.isMagicName
-========
-package duskdn.plantz
+import duskdn.plantz.renderer.getEmissiveTextureLocation
+import duskdn.plantz.renderer.getTextureLocation
+import duskdn.plantz.renderer.isMagicName
+import net.minecraft.client.renderer.entity.MobRenderer
+import net.minecraft.client.renderer.entity.layers.EyesLayer
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 
 import com.mojang.blaze3d.vertex.PoseStack
 import duskdn.plantz.ai.PlantState
@@ -25,14 +16,10 @@ import duskdn.plantz.entity.plant.all.KernelPult
 import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.entity.plant.all.WallNut
 import duskdn.plantz.init.PazConfig
->>>>>>>> 68eac8a988f75e82769978a50f4547f227e4f5a3:src/client/kotlin/duskdn/plantz/PlantRenderer.kt
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.entity.EntityRendererProvider
-import net.minecraft.client.renderer.entity.MobRenderer
 import net.minecraft.client.renderer.entity.RenderLayerParent
-import net.minecraft.client.renderer.entity.layers.EyesLayer
-import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.client.renderer.state.level.CameraRenderState
@@ -49,11 +36,7 @@ class PlantRenderer(
     private val defaultModel: EntityModel<PlantRenderState>,
     context: EntityRendererProvider.Context,
     private val babyModel: EntityModel<PlantRenderState>? = null,
-<<<<<<<< HEAD:src/client/kotlin/joshxviii/plantz/renderer/entity/PlantRenderer.kt
-) : net.minecraft.client.renderer.entity.MobRenderer<Plant, PlantRenderState, EntityModel<PlantRenderState>>(
-========
 ) : MobRenderer<PazPlant, PlantRenderState, EntityModel<PlantRenderState>>(
->>>>>>>> 68eac8a988f75e82769978a50f4547f227e4f5a3:src/client/kotlin/duskdn/plantz/PlantRenderer.kt
     context,
     defaultModel,
     0.5f
@@ -152,7 +135,7 @@ class PlantRenderer(
 
 class EmissivePlantLayer<M : EntityModel<PlantRenderState>>(
     renderer: RenderLayerParent<PlantRenderState, M>,
-) : net.minecraft.client.renderer.entity.layers.EyesLayer<PlantRenderState, M>(renderer) {
+) : EyesLayer<PlantRenderState, M>(renderer) {
 
     override fun submit(
         poseStack: PoseStack,
@@ -171,7 +154,7 @@ class EmissivePlantLayer<M : EntityModel<PlantRenderState>>(
 }
 
 
-class PlantRenderState : net.minecraft.client.renderer.entity.state.LivingEntityRenderState() {
+class PlantRenderState : LivingEntityRenderState() {
     companion object {
         const val TEXTURE_PATH = "textures/entity/plant"
     }

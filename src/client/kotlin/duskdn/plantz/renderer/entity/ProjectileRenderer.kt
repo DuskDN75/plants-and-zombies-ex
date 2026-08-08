@@ -1,24 +1,14 @@
-<<<<<<<< HEAD:src/client/kotlin/joshxviii/plantz/renderer/entity/ProjectileRenderer.kt
-package joshxviii.plantz.renderer.entity
-
-import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.math.Axis
-import joshxviii.plantz.entity.projectile.PaintBall
-import joshxviii.plantz.pazResource
-========
-package duskdn.plantz
+package duskdn.plantz.renderer.entity
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import duskdn.plantz.entity.projectile.PaintBall
 import duskdn.plantz.util.pazResource
->>>>>>>> 68eac8a988f75e82769978a50f4547f227e4f5a3:src/client/kotlin/duskdn/plantz/ProjectileRenderer.kt
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.EntityRendererProvider
-import net.minecraft.client.renderer.entity.state.EntityRenderState
 import net.minecraft.client.renderer.rendertype.RenderSetup
 import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.client.renderer.state.level.CameraRenderState
@@ -32,7 +22,7 @@ class ProjectileRenderer(
     val model: EntityModel<ProjectileRenderState>,
     context: EntityRendererProvider.Context,
     val emissive: Boolean = false,
-) : EntityRenderer<Projectile, ProjectileRenderState>(
+) : net.minecraft.client.renderer.entity.EntityRenderer<Projectile, ProjectileRenderState>(
     context
 ) {
     override fun submit(

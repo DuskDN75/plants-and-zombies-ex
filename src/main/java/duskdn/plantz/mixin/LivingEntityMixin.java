@@ -28,6 +28,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathType;
@@ -256,7 +257,7 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
             cir.setReturnValue(!((Entity) (Object) this).is(PazTags.EntityTypes.CANNOT_HYPNOTIZE));
         }
         if (newEffect.is(PazEffects.CHILLED)) {
-            cir.setReturnValue(!((Entity) (Object) this).is(PazTags.EntityTypes.CANNOT_CHILL));
+            cir.setReturnValue(!((Entity) (Object) this).canFreeze());
 
             LivingEntity entity = (LivingEntity) (Object) this;
 
@@ -344,15 +345,17 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
 
         var armors = PazProjectile.Companion.checkForArmor(self);
 
-        var trueDamage = damage;
-
-        var damageMult = 1;
+        float damageMult = 1.0f;
 
         if (!(source.getDirectEntity() instanceof Projectile)) {
-            damageMult = 3;
+            damageMult = 3.0f;
         }
 
-        leftoverDamage = trueDamage*damageMult;
+        if ((source.getDirectEntity() instanceof PazProjectile projectile)) {
+            damageMult = projectile.getDamage();
+        }
+
+        float leftoverDamage = damage*damageMult;
 
         if (!armors.isEmpty()) {
 

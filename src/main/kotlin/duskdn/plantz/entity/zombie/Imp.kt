@@ -1,11 +1,13 @@
 package duskdn.plantz.entity.zombie
 
 import duskdn.plantz.init.PazBlocks
+import duskdn.plantz.init.PazDataSerializers.IMP_VARIANT
 import duskdn.plantz.init.PazEffects
 import duskdn.plantz.init.PazEntities
 import duskdn.plantz.init.PazSounds
 import duskdn.plantz.init.PazTags
 import joshxviii.plantz.entity.zombie.ImpVariant
+import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
