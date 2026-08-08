@@ -66,7 +66,7 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
             val result = processSeedPacketInteraction(player, target, itemStack)
             if (result == PacketInteractionResult.SUCCESS) {
                 itemStack.consume(1, player)
-                applyCooldown(itemStack, player)
+//                applyCooldown(itemStack, player)
                 return InteractionResult.SUCCESS_SERVER
             }
             if (result == PacketInteractionResult.FAIL) return InteractionResult.CONSUME
@@ -109,7 +109,6 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
                 val result = PlantSpawnUtils.tryPlant(level, player, itemStack, pos, UseOnContext(player, hand, hitResult).clickedFace, player.direction, checkFluid = true)
                 if (result === InteractionResult.SUCCESS) {
                     player.awardStat(Stats.ITEM_USED.get(this))
-                    applyCooldown(itemStack, player)
                 }
 
                 return result
@@ -130,9 +129,9 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
 
             val didPlant = PlantSpawnUtils.tryPlant(level, context.player, itemStack, spawnPos, clickedFace, context.horizontalDirection)
 
-            if (didPlant == InteractionResult.SUCCESS && context.player != null) {
-                applyCooldown(itemStack, context.player as Player)
-            }
+//            if (didPlant == InteractionResult.SUCCESS && context.player != null) {
+////                applyCooldown(itemStack, context.player as Player)
+//            }
 
             return didPlant
         }
@@ -172,7 +171,7 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
         // remove used sun
         if (result == PacketInteractionResult.SUCCESS && !player.hasInfiniteMaterials()) {
             player.removeSunFromStorageAndInventory(sunCost)
-            applyCooldown(itemStack, player)
+//            applyCooldown(itemStack, player)
         }
 
         return result
@@ -187,7 +186,7 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
     fun setCooldownGroup(itemStack: ItemStack) {
         val entityType = itemStack.get(DataComponents.ENTITY_DATA)?.type()?: return
         val group = BuiltInRegistries.ENTITY_TYPE.getKey(entityType)
-        val cooldownTime = PazConfig.getCooldownTime(PazConfig.getSunCost(entityType))
+        val cooldownTime = PazConfig.getCooldownTime(entityType).toFloat()
         itemStack.set(DataComponents.USE_COOLDOWN, UseCooldown(cooldownTime, Optional.of(group)))
     }
 
@@ -195,7 +194,7 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
         val entityType = itemStack.get(DataComponents.ENTITY_DATA)?.type()?: return
         val group = BuiltInRegistries.ENTITY_TYPE.getKey(entityType)
         if (PazConfig.PLANT_COOLDOWN_ENABLED && !player.isCreative) {
-            val cooldownTime = PazConfig.getCooldownTime(PazConfig.getSunCost(entityType))
+            val cooldownTime = PazConfig.getCooldownTime(entityType).toFloat()
             itemStack.set(DataComponents.USE_COOLDOWN, UseCooldown(cooldownTime, Optional.of(group)))
             player.cooldowns.addCooldown(group, (cooldownTime*20).toInt())
         } else {

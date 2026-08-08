@@ -24,7 +24,7 @@ abstract class ActionGoal(
     val cooldownVariationRange: IntRange = 0..0
 ): Goal() {
     var isDoingAction = false
-    var actionTimer = -1
+    open var actionTimer = -1
 
     override fun stop() {
         isDoingAction = false

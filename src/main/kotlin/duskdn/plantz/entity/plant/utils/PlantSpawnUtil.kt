@@ -8,6 +8,7 @@ import duskdn.plantz.entity.plant.utils.PlantSpawnUtils.validVehicle
 import duskdn.plantz.init.PazBlocks
 import duskdn.plantz.init.PazComponents
 import duskdn.plantz.init.PazTags
+import duskdn.plantz.item.SeedPacketItem
 import duskdn.plantz.util.getTotalSun
 import duskdn.plantz.util.removeSunFromStorageAndInventory
 import net.minecraft.ChatFormatting
@@ -135,7 +136,9 @@ object PlantSpawnUtils {
 
         itemStack.consume(1, player)
         if (!player.hasInfiniteMaterials()) {
-            player.removeSunFromStorageAndInventory(sunCost)
+            val success = player.removeSunFromStorageAndInventory(sunCost)
+
+            if (!success) return InteractionResult.FAIL
         }
         entity.playSound(SoundEvents.BIG_DRIPLEAF_PLACE)
         if (entity is TamableAnimal) entity.tame(player)
@@ -144,6 +147,8 @@ object PlantSpawnUtils {
         println("CARRIER IS: $carrier")
 
         if (carrier != null && carrier is CarrierPlant && entity is PazPlant) carrier.setRider(entity)
+
+        (itemStack.item as SeedPacketItem).applyCooldown(itemStack, player)
 
         return InteractionResult.SUCCESS
     }

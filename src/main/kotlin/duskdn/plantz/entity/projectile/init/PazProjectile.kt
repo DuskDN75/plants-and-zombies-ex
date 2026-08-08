@@ -29,6 +29,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.OwnableEntity
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.monster.Enemy
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.entity.projectile.Projectile
 import net.minecraft.world.entity.projectile.ProjectileDeflection
 import net.minecraft.world.entity.projectile.ProjectileUtil
@@ -452,13 +453,13 @@ abstract class PazProjectile(
     }
 
     override fun canHitEntity(entity: Entity): Boolean {
-        println("FOUND ENTITY!!!")
+//        println("FOUND ENTITY!!!")
         if (entity is Projectile) {
-            println("ENTITY IS PROJECTILE")
+//            println("ENTITY IS PROJECTILE")
             return false
         }
         if (piercingIgnoreEntityIds.contains(entity.id)) {
-            println("ENTITY HAS BEEN PIERCED ALREADY")
+//            println("ENTITY HAS BEEN PIERCED ALREADY")
             return false
         }
         val owner = entityOwner
@@ -467,7 +468,8 @@ abstract class PazProjectile(
 //            println("SAME ROOT OWNER")
             return false
         }
-        println("CAN HIT ENTITY!")
+        if (entity is Player && owner is PazPlant && owner.owner == entity) return false
+//        println("CAN HIT ENTITY!")
         return super.canHitEntity(entity)
     }
 

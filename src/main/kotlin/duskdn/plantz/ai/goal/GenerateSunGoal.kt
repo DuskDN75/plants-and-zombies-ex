@@ -9,7 +9,7 @@ import java.util.function.Predicate
 
 class GenerateSunGoal(
     usingEntity: PazPlant,
-    cooldownTime: Int = 900,
+    cooldownTime: Int = 500,
     actionDelay: Int = 0,
     actionStartEffect: () -> Unit = {},
     actionSuccessEffect: () -> Unit = {},
@@ -19,10 +19,17 @@ class GenerateSunGoal(
     val generatesAtNight : Boolean = false,
 ): ActionGoal(usingEntity, cooldownTime, actionDelay, actionStartEffect, actionSuccessEffect, actionEndEffect, actionPredicate, -10..20) {
     override fun canUse(): Boolean = (
-        usingEntity.tickCount>cooldownTime
+        usingEntity.tickCount>1
             && usingEntity.isAlive
             && !(usingEntity is PazPlant && (usingEntity.isAsleep || usingEntity.isGrowingSeeds))
     )
+
+    override var actionTimer: Int = 140
+
+    override fun stop() {
+        isDoingAction = false
+        actionTimer = 140
+    }
 
     override fun canDoAction(): Boolean = (generatesAtNight || (usingEntity as? PazPlant)?.sunIsVisible() == true)
 
