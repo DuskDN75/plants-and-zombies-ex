@@ -2,6 +2,7 @@ package duskdn.plantz.init
 
 import duskdn.plantz.block.ConeBlock
 import duskdn.plantz.block.FlagBlock
+import duskdn.plantz.block.GardenGnomeBlock
 import duskdn.plantz.block.GravestoneBlock
 import duskdn.plantz.block.MailboxBlock
 import duskdn.plantz.block.SunBatteryBlock

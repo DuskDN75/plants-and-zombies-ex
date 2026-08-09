@@ -14,7 +14,7 @@ import java.util.function.Predicate
  * @param actionSuccessEffect Callback function used to add effects at the end of the action
  */
 abstract class ActionGoal(
-    val usingEntity: PathfinderMob,
+    open val usingEntity: PathfinderMob,
     var cooldownTime: Int = 20,
     val actionDelay: Int = 0,
     val actionStartEffect: () -> Unit = {},
@@ -31,18 +31,18 @@ abstract class ActionGoal(
         actionTimer = -1
     }
 
-    final override fun requiresUpdateEveryTick(): Boolean = true
+    override fun requiresUpdateEveryTick(): Boolean = true
     final override fun canContinueToUse(): Boolean = canUse()
 
     override fun tick() {
         if (
             canDoAction()
-            && !(usingEntity is PazPlant && usingEntity.cooldown > -1)
+            && !(usingEntity is PazPlant && (usingEntity as PazPlant).cooldown > -1)
             && actionTimer == -1
         ) {
             (usingEntity as? PazPlant)?.cooldown = Mth.floor(
                 (cooldownTime+cooldownVariationRange.random()) *
-                        if (usingEntity.poweredUp) 0.8 else 1.0
+                        if ((usingEntity as PazPlant).poweredUp) 0.8 else 1.0
             ).coerceAtLeast(actionDelay)
             actionTimer = actionDelay.coerceAtLeast(0)
             actionStartEffect()

@@ -4,7 +4,6 @@ import duskdn.plantz.init.PazBlocks
 import duskdn.plantz.init.PazSounds
 import duskdn.plantz.init.PazDataSerializers.BROWN_COAT_VARIANT
 import duskdn.plantz.init.PazTags
-import joshxviii.plantz.entity.zombie.BrownCoatVariant
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel

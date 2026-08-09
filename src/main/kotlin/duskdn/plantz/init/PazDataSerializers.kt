@@ -4,10 +4,10 @@ import duskdn.plantz.ai.PlantState
 import duskdn.plantz.ai.ZombieState
 import duskdn.plantz.entity.gnome.GnomeSoundVariant
 import duskdn.plantz.entity.gnome.GnomeVariant
+import duskdn.plantz.entity.zombie.BrownCoatVariant
+import duskdn.plantz.entity.zombie.ImpVariant
 import duskdn.plantz.entity.zombie.SuperBrainzVariant
 import duskdn.plantz.util.pazResource
-import joshxviii.plantz.entity.zombie.BrownCoatVariant
-import joshxviii.plantz.entity.zombie.ImpVariant
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityDataRegistry
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.syncher.EntityDataSerializer
@@ -21,7 +21,7 @@ object PazDataSerializers {
     @JvmField val DATA_COOLDOWN = EntityDataSerializer.forValueType<Int>(ByteBufCodecs.VAR_INT)
     @JvmField val DATA_RECEIVED_SUN = EntityDataSerializer.forValueType<Int>(ByteBufCodecs.VAR_INT)
     @JvmField val DATA_RECEIVED_WATER = EntityDataSerializer.forValueType<Int>(ByteBufCodecs.VAR_INT)
-    @JvmField val DATA_SWELL_DIR = EntityDataSerializer.forValueType<Int>(ByteBufCodecs.VAR_INT)
+    @JvmField val ACTIVE_DIRECTION = EntityDataSerializer.forValueType<Int>(ByteBufCodecs.VAR_INT)
     @JvmField val DATA_SEED_GROW_COOLDOWN = EntityDataSerializer.forValueType<Int>(ByteBufCodecs.VAR_INT)
     @JvmField val DATA_COFFEE_BUFF = EntityDataSerializer.forValueType<Int>(ByteBufCodecs.VAR_INT)
     @JvmField val DATA_SLEEPING = EntityDataSerializer.forValueType<Boolean>(ByteBufCodecs.BOOL)
@@ -40,7 +40,7 @@ object PazDataSerializers {
         FabricEntityDataRegistry.register(pazResource("cooldown"), DATA_COOLDOWN)
         FabricEntityDataRegistry.register(pazResource("received_sun"), DATA_RECEIVED_SUN)
         FabricEntityDataRegistry.register(pazResource("received_water"), DATA_RECEIVED_WATER)
-        FabricEntityDataRegistry.register(pazResource("swell_dir"), DATA_SWELL_DIR)
+        FabricEntityDataRegistry.register(pazResource("active_direction"), ACTIVE_DIRECTION)
         FabricEntityDataRegistry.register(pazResource("seed_grow_cooldown"), DATA_SEED_GROW_COOLDOWN)
         FabricEntityDataRegistry.register(pazResource("coffe_buff"), DATA_COFFEE_BUFF)
         FabricEntityDataRegistry.register(pazResource("sleeping"), DATA_SLEEPING)

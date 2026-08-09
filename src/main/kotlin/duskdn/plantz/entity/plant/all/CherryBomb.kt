@@ -4,18 +4,14 @@ import duskdn.plantz.init.NukeBlastParticleOptions
 import duskdn.plantz.init.NukeSmokeParticleOptions
 import duskdn.plantz.init.NukeWaveParticleOptions
 import duskdn.plantz.init.PazEntities
-import duskdn.plantz.init.PazTags.BlockTags.PLANTABLE
 import duskdn.plantz.ai.goal.ExplodeGoal
+import duskdn.plantz.entity.plant.init.Explosive
 import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.entity.plant.utils.mushroomSurvivalCheck
 import duskdn.plantz.entity.plant.utils.sandSurvivalCheck
 import duskdn.plantz.entity.plant.utils.stoneSurvivalCheck
-import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.tags.BlockTags
-import net.minecraft.util.RandomSource
-import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
@@ -23,7 +19,6 @@ import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.state.BlockState
 
 class CherryBomb(type: EntityType<out Explosive>, level: Level) : Explosive(PazEntities.CHERRY_BOMB, level) {

@@ -1,5 +1,6 @@
 package duskdn.plantz.entity.plant.all
 
+import duskdn.plantz.entity.plant.init.Explosive
 import duskdn.plantz.init.NukeBlastParticleOptions
 import duskdn.plantz.init.NukeSmokeParticleOptions
 import duskdn.plantz.init.NukeWaveParticleOptions

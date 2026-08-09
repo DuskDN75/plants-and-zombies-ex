@@ -5,7 +5,7 @@
 
 package duskdn.plantz.model.zombies;
 
-import joshxviii.plantz.renderer.entity.PazZombieRenderState;
+import duskdn.plantz.renderer.entity.PazZombieRenderState;
 
 import duskdn.plantz.model.zombies.init.PazZombieModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;

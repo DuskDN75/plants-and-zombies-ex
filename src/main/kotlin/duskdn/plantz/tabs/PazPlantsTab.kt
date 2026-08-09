@@ -186,7 +186,7 @@ object PazPlantsTab : PazCreativeTab() {
                     addPlant(PazEntities.BONK_CHOY)
                     addPlant(PazEntities.EXPLODE_O_NUT)
                     addPlant(PazEntities.COFFEE_BEAN)
-                    addPlant(PazEntities.PLACEHOLDER) // Warped Shroom
+                    addPlant(PazEntities.GRAVE_BUSTER) // Warped Shroom
                     // endregion
 
                     //endregion

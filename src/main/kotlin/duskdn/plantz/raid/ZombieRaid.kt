@@ -6,6 +6,8 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import duskdn.plantz.*
+import duskdn.plantz.entity.zombie.ImpVariant
+import duskdn.plantz.entity.zombie.BrownCoatVariant
 import duskdn.plantz.advancement.ZombieRaidContext
 import duskdn.plantz.block.entity.FlagBlockEntity
 import duskdn.plantz.entity.zombie.BrownCoat
@@ -17,8 +19,6 @@ import duskdn.plantz.init.PazEntities
 import duskdn.plantz.init.PazItems
 import duskdn.plantz.init.PazSounds
 import duskdn.plantz.util.tickTimeFormat
-import joshxviii.plantz.entity.zombie.BrownCoatVariant
-import joshxviii.plantz.entity.zombie.ImpVariant
 import net.minecraft.SharedConstants
 import net.minecraft.ChatFormatting
 import net.minecraft.core.BlockPos

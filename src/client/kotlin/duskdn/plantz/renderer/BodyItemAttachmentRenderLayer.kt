@@ -2,7 +2,7 @@ package duskdn.plantz.renderer
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
-import joshxviii.plantz.PazModels.PAINT_COLORS_KEY
+import duskdn.plantz.PazModels.PAINT_COLORS_KEY
 import duskdn.plantz.init.PazItems
 import duskdn.plantz.model.zombies.init.PazZombieModel
 import duskdn.plantz.util.pazResource

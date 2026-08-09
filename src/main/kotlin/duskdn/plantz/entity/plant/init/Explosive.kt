@@ -1,9 +1,8 @@
-package duskdn.plantz.entity.plant.all
+package duskdn.plantz.entity.plant.init
 
-import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.init.PazConfig
 import duskdn.plantz.init.PazDamageTypes
-import duskdn.plantz.init.PazDataSerializers.DATA_SWELL_DIR
+import duskdn.plantz.init.PazDataSerializers
 import duskdn.plantz.init.PazSounds
 import net.minecraft.ChatFormatting
 import net.minecraft.core.Holder
@@ -30,10 +29,14 @@ import java.util.Optional
 
 abstract class Explosive(type: EntityType<out Explosive>, level: Level) : PazPlant(type, level) {
     companion object {
-        val EXPLOSION_CALCULATOR: ExplosionDamageCalculator = SimpleExplosionDamageCalculator(false, true, Optional.of<Float>(1f), Optional.ofNullable(null))
-        val DESTRUCTIVE_EXPLOSION_CALCULATOR: ExplosionDamageCalculator = SimpleExplosionDamageCalculator(true, false, Optional.of<Float>(1.5f), Optional.ofNullable(null))
+        val EXPLOSION_CALCULATOR: ExplosionDamageCalculator =
+            SimpleExplosionDamageCalculator(false, true, Optional.of<Float>(1f), Optional.ofNullable(null))
+        val DESTRUCTIVE_EXPLOSION_CALCULATOR: ExplosionDamageCalculator =
+            SimpleExplosionDamageCalculator(true, false, Optional.of<Float>(1.5f), Optional.ofNullable(null))
 
-        val SWELL_DIR: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Explosive::class.java, DATA_SWELL_DIR)
+        val SWELL_DIR: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Explosive::class.java,
+            PazDataSerializers.DATA_SWELL_DIR
+        )
     }
 
     var swellDir: Int
@@ -61,7 +64,9 @@ abstract class Explosive(type: EntityType<out Explosive>, level: Level) : PazPla
             if (itemStack.`is`(Items.FLINT_AND_STEEL)) {
                 if (cooldown<0) {
                     if (isAsleep) {
-                        player.sendOverlayMessage(Component.translatable("message.plantz.sleeping", name.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED))
+                        player.sendOverlayMessage(
+                            Component.translatable("message.plantz.sleeping", name.copy().withStyle(
+                                ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED))
                         return InteractionResult.FAIL
                     }
                     swellDir=2

@@ -2,7 +2,7 @@ package duskdn.plantz.entity.plant.all.aerial
 
 import duskdn.plantz.ai.goal.BalloonPriorityProjectileAttackGoal
 import duskdn.plantz.ai.goal.FloatingPathfindGoal
-import duskdn.plantz.entity.interfaces.FloatingMob
+import duskdn.plantz.entity.interfaces.IFloatingMob
 import duskdn.plantz.entity.plant.init.AttackingPlant
 import duskdn.plantz.entity.plant.utils.airSurvivalCheck
 import duskdn.plantz.entity.projectile.peas.Pea
@@ -30,10 +30,9 @@ import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.phys.Vec3
 import java.util.EnumSet
 import kotlin.math.absoluteValue
-import kotlin.math.sign
 
 class SkyPeaShooter(type: EntityType<out SkyPeaShooter>, level: Level) : AttackingPlant(PazEntities.SKY_PEA_SHOOTER, level),
-    FloatingMob {
+    IFloatingMob {
 
     var chaseGoal: SkyPeaChaseGoal? = null
 
@@ -63,7 +62,6 @@ class SkyPeaShooter(type: EntityType<out SkyPeaShooter>, level: Level) : Attacki
     override fun readAdditionalSaveData(input: ValueInput) {
         super.readAdditionalSaveData(input)
 
-        this.isFloating = input.getBooleanOr("isFloating", true)
         this.checkedSpawn = input.getBooleanOr("checkedSpawn", false)
 
         val hasSpawnPos = input.getBooleanOr("hasSpawnPos", false)
@@ -82,7 +80,6 @@ class SkyPeaShooter(type: EntityType<out SkyPeaShooter>, level: Level) : Attacki
     override fun addAdditionalSaveData(output: ValueOutput) {
         super.addAdditionalSaveData(output)
 
-        output.putBoolean("isFloating", isFloating)
         output.putBoolean("checkedSpawn", checkedSpawn)
 
         val hasSpawnPos = spawnPos != null
@@ -96,8 +93,6 @@ class SkyPeaShooter(type: EntityType<out SkyPeaShooter>, level: Level) : Attacki
             output.putBoolean("hasSpawnPos", false)
         }
     }
-
-    override var isFloating: Boolean = true
 
     override var flyingNavigation: PathNavigation? = null
 

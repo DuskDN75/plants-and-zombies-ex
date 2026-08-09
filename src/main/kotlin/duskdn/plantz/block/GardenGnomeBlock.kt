@@ -1,4 +1,4 @@
-package joshxviii.plantz.block
+package duskdn.plantz.block
 
 import com.mojang.serialization.MapCodec
 import net.minecraft.core.BlockPos

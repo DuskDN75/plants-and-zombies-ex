@@ -50,8 +50,6 @@ import duskdn.plantz.entity.turret.Turret
 import duskdn.plantz.entity.zombie.*
 import duskdn.plantz.mixin.MobAccessor
 import duskdn.plantz.util.pazResource
-import joshxviii.plantz.entity.zombie.PirateCaptain
-import joshxviii.plantz.entity.zombie.PirateCaptainGhost
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry

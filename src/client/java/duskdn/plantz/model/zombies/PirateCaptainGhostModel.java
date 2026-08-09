@@ -1,8 +1,8 @@
-package joshxviii.plantz.model.zombies;
+package duskdn.plantz.model.zombies;
 
-import joshxviii.plantz.animation.zombies.PirateCaptainGhostAnimation;
-import joshxviii.plantz.animation.zombies.RoboZombieAnimation;
-import joshxviii.plantz.renderer.entity.PazZombieRenderState;
+import duskdn.plantz.animation.zombies.PirateCaptainGhostAnimation;
+import duskdn.plantz.model.zombies.init.PazZombieModel;
+import duskdn.plantz.renderer.entity.PazZombieRenderState;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.AnimationUtils;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -11,7 +11,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import org.jetbrains.annotations.NotNull;
 
-import static joshxviii.plantz.UtilsKt.pazResource;
+import static duskdn.plantz.util.UtilsKt.pazResource;
 
 public class PirateCaptainGhostModel extends PazZombieModel {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("pirate_captain_ghost"), "main");

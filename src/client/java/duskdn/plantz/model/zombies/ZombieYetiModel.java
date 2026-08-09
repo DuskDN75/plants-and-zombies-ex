@@ -2,6 +2,7 @@ package duskdn.plantz.model.zombies;
 
 import duskdn.plantz.animation.zombies.ZombieYetiAnimation;
 import duskdn.plantz.model.zombies.init.PazZombieModel;
+import duskdn.plantz.renderer.entity.PazZombieRenderState;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -53,7 +54,7 @@ public class ZombieYetiModel extends PazZombieModel {
 	}
 
 	@Override
-	public void setupAnim(@NotNull ZombieRenderState state) {
+	public void setupAnim(@NotNull PazZombieRenderState state) {
 		super.setupAnim(state);
 		actionAnimation.applyWalk(state.attackTime*4, 1.0f, 1.0f, 1.0f);
 	}

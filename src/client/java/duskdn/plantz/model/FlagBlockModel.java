@@ -1,6 +1,6 @@
 package duskdn.plantz.model;
 
-import duskdn.plantz.FlagRenderState;
+import duskdn.plantz.renderer.block.FlagRenderState;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;

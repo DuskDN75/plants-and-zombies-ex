@@ -1,13 +1,13 @@
 # Changelog (EX) 1.4
 ### Additions
 #### General:
-- e
+- Updated to the latest version of Plants & Zombies
 #### Plants:
 - e
 #### Zombies:
 - e
 ### Technical Changes
-- e
+- Generalized instant use plants (added InstantUseGoal and IInstantPlant for all instant use plants, and changed swell to active time and swell dir to active direction)
 
 # Changelog (EX) 1.3
 ### Additions

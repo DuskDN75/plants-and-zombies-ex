@@ -116,7 +116,7 @@ class EmissiveZombieLayer<M : EntityModel<PazZombieRenderState>>(
     override fun renderType(): RenderType = RenderTypes.lines()
 }
 
-open class PazZombieRenderState : net.minecraft.client.renderer.entity.state.ZombieRenderState() {
+open class PazZombieRenderState : ZombieRenderState() {
 
     companion object {
         const val TEXTURE_PATH = "textures/entity/zombie"

@@ -4,11 +4,11 @@ import net.minecraft.client.renderer.entity.MobRenderer
 import net.minecraft.client.renderer.entity.layers.RenderLayer
 import com.mojang.blaze3d.vertex.PoseStack
 import duskdn.plantz.GnomeArmorSet
+import duskdn.plantz.PazModels.ARMOR_LAYER_LOCATION
 import duskdn.plantz.entity.gnome.Gnome
 import duskdn.plantz.entity.gnome.GnomeVariant
 import duskdn.plantz.model.GnomeArmorModel
 import duskdn.plantz.model.GnomeModel
-import joshxviii.plantz.PazModels.ARMOR_LAYER_LOCATION
 import net.minecraft.client.model.HumanoidModel
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.entity.EntityRendererProvider
@@ -79,12 +79,12 @@ class GnomeRenderer(
         state.variant = entity.variant
         state.isPassenger = entity.isPassenger
         state.isUsingItem = entity.isUsingItem
-        state.headEquipment = GnomeRenderer.getEquipmentIfRenderable(entity, EquipmentSlot.HEAD)
-        state.chestEquipment = GnomeRenderer.getEquipmentIfRenderable(entity, EquipmentSlot.CHEST)
-        state.legsEquipment = GnomeRenderer.getEquipmentIfRenderable(entity, EquipmentSlot.LEGS)
-        state.feetEquipment = GnomeRenderer.getEquipmentIfRenderable(entity, EquipmentSlot.FEET)
-        state.leftArmPose = GnomeRenderer.getArmPose(entity, HumanoidArm.LEFT)
-        state.rightArmPose = GnomeRenderer.getArmPose(entity, HumanoidArm.RIGHT)
+        state.headEquipment = getEquipmentIfRenderable(entity, EquipmentSlot.HEAD)
+        state.chestEquipment = getEquipmentIfRenderable(entity, EquipmentSlot.CHEST)
+        state.legsEquipment = getEquipmentIfRenderable(entity, EquipmentSlot.LEGS)
+        state.feetEquipment = getEquipmentIfRenderable(entity, EquipmentSlot.FEET)
+        state.leftArmPose = getArmPose(entity, HumanoidArm.LEFT)
+        state.rightArmPose = getArmPose(entity, HumanoidArm.RIGHT)
     }
 
     private fun getEquipmentIfRenderable(entity: LivingEntity, slot: EquipmentSlot): ItemStack {

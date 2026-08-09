@@ -4,6 +4,9 @@ import duskdn.plantz.renderer.entity.PazZombieRenderState
 import duskdn.plantz.renderer.entity.PazZombieRenderer
 import com.mojang.blaze3d.vertex.PoseStack
 import duskdn.plantz.entity.zombie.PazZombie
+import duskdn.plantz.entity.zombie.PirateCaptain
+import duskdn.plantz.entity.zombie.PirateCaptainGhost
+import duskdn.plantz.model.zombies.PirateCaptainModel
 import duskdn.plantz.model.zombies.init.PazZombieModel
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.entity.EntityRendererProvider

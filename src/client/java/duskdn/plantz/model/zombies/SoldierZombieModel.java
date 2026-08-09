@@ -1,6 +1,6 @@
 package duskdn.plantz.model.zombies;
 
-import duskdn.plantz.PazZombieRenderState;
+import duskdn.plantz.renderer.entity.PazZombieRenderState;
 import duskdn.plantz.model.zombies.init.PazZombieModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -54,7 +54,7 @@ public class SoldierZombieModel extends PazZombieModel {
     }
 
     @Override
-    public void setupAnim(@NotNull ZombieRenderState state) {
+    public void setupAnim(@NotNull PazZombieRenderState state) {
         float tempAttackTime = state.attackTime;
         state.attackTime = 0;
         super.setupAnim(state);

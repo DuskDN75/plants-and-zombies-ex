@@ -4,6 +4,7 @@ import duskdn.plantz.renderer.entity.PazZombieRenderState
 import duskdn.plantz.renderer.entity.PazZombieRenderer
 import duskdn.plantz.entity.zombie.SuperBrainz
 import duskdn.plantz.model.zombies.SuperBrainzModel
+import duskdn.plantz.entity.zombie.PazZombie
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.util.Mth
 

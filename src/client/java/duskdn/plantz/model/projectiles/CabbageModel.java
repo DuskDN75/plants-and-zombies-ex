@@ -1,6 +1,6 @@
 package duskdn.plantz.model.projectiles;
 
-import duskdn.plantz.ProjectileRenderState;
+import duskdn.plantz.renderer.entity.ProjectileRenderState;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;

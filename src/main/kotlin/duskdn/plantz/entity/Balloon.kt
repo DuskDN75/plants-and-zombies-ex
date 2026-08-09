@@ -1,6 +1,7 @@
 package duskdn.plantz.entity
 
 import duskdn.plantz.entity.plant.init.PazPlant.Companion.PEA_DAMAGE
+import duskdn.plantz.entity.zombie.BalloonZombie
 import duskdn.plantz.init.PazDataSerializers.DATA_DYE_COLOR
 import duskdn.plantz.init.PazEffects
 import duskdn.plantz.init.PazServerParticles
@@ -140,12 +141,14 @@ class Balloon(
         val crouchMultiplier = if (holder.isCrouching) 0.5 else 1.0
         val gravityLift = holder.getAttributeValue(Attributes.GRAVITY) * HOLDER_GRAVITY_LIFT_MULTIPLIER
         val springLift = verticalStretch * HOLDER_PULL_STIFFNESS
-        val totalLift = ((gravityLift + springLift) * (crouchMultiplier - groundPullForce - mult))
+        var totalLift = ((gravityLift + springLift) * (crouchMultiplier - groundPullForce - mult))
             .coerceAtMost(MAX_HOLDER_PULL_FORCE)
 
-        val currentYVelocity = holder.deltaMovement.y
+        if (holder is BalloonZombie && groundDistance > 8) totalLift = 0.0
+
+        var currentYVelocity = holder.deltaMovement.y
         val availableLift = (MAX_HOLDER_UPWARD_VELOCITY - currentYVelocity).coerceAtLeast(0.0)
-        val appliedLift = totalLift.coerceAtMost(availableLift)
+        var appliedLift = totalLift.coerceAtMost(availableLift)
 
         holder.addDeltaMovement(Vec3(0.0, appliedLift, 0.0))
         holder.needsSync = true

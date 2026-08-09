@@ -1,10 +1,9 @@
 package duskdn.plantz.ai.goal
 
-import duskdn.plantz.entity.plant.all.Explosive
+import duskdn.plantz.entity.plant.init.Explosive
 import net.minecraft.core.Holder
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
-import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.level.gameevent.GameEvent

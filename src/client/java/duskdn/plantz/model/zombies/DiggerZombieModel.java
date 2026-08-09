@@ -7,6 +7,7 @@ package duskdn.plantz.model.zombies;
 
 import duskdn.plantz.animation.zombies.DiggerZombieAnimation;
 import duskdn.plantz.model.zombies.init.PazZombieModel;
+import duskdn.plantz.renderer.entity.PazZombieRenderState;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -60,7 +61,7 @@ public class DiggerZombieModel extends PazZombieModel {
 
 	//TODO fix swing animation
 	@Override
-	public void setupAnim(@NotNull ZombieRenderState state) {
+	public void setupAnim(@NotNull PazZombieRenderState state) {
 		float tempAttackTime = state.attackTime;
 		state.attackTime = 0;
 		super.setupAnim(state);

@@ -1,4 +1,4 @@
-package joshxviii.plantz.entity.zombie
+package duskdn.plantz.entity.zombie
 
 import com.mojang.serialization.Codec
 import io.netty.buffer.ByteBuf

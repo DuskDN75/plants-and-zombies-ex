@@ -6,7 +6,7 @@ import duskdn.plantz.init.PazEffects
 import duskdn.plantz.init.PazEntities
 import duskdn.plantz.init.PazSounds
 import duskdn.plantz.init.PazTags
-import joshxviii.plantz.entity.zombie.ImpVariant
+import duskdn.plantz.entity.zombie.ImpVariant
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
@@ -100,7 +100,7 @@ class Imp(type: EntityType<out Imp> = PazEntities.IMP, level: Level) : PazZombie
             val chance = random.nextFloat()
             when (variant) {
                 ImpVariant.IMP -> if (chance < 0.2f) target.addEffect(MobEffectInstance(PazEffects.TOXIC, effectTime * 20, 0), this)
-                ImpVariant.YETI -> if (chance < 0.5f) target.addEffect(MobEffectInstance(PazEffects.FREEZE, (effectTime * 30).coerceAtLeast(20), 1), this)
+                ImpVariant.YETI -> if (chance < 0.5f) target.addEffect(MobEffectInstance(PazEffects.CHILLED, (effectTime * 30).coerceAtLeast(20), 1), this)
                 else -> {}
             }
         }

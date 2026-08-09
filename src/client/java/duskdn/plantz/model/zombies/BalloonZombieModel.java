@@ -9,6 +9,7 @@ package duskdn.plantz.model.zombies;
 import duskdn.plantz.animation.zombies.BalloonZombieAnimation;
 import duskdn.plantz.animation.zombies.DiscoZombieAnimation;
 import duskdn.plantz.model.zombies.init.PazZombieModel;
+import duskdn.plantz.renderer.entity.PazZombieRenderState;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -21,11 +22,15 @@ import static duskdn.plantz.util.UtilsKt.pazResource;
 
 public class BalloonZombieModel extends PazZombieModel {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("balloonzombie"), "main");
-	private final KeyframeAnimation floatAnimation;
+	private final ModelPart propeller_tilt;
+	private final ModelPart propeller;
+	private final ModelPart hat;
 
 	public BalloonZombieModel(final ModelPart root) {
 		super(null, root);
-		this.floatAnimation = BalloonZombieAnimation.floating.bake(root.getChild("root"));
+		this.propeller_tilt = this.head.getChild("propeller_tilt");
+		this.propeller = this.propeller_tilt.getChild("propeller");
+		this.hat = this.head.getChild("hat");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -64,7 +69,8 @@ public class BalloonZombieModel extends PazZombieModel {
 	}
 
 	@Override
-	public void setupAnim(@NotNull ZombieRenderState state) {
+	public void setupAnim(@NotNull PazZombieRenderState state) {
 		super.setupAnim(state);
+		this.propeller.yRot = state.ageInTicks;
 	}
 }

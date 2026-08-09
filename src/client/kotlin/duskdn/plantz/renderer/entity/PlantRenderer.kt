@@ -11,7 +11,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import duskdn.plantz.ai.PlantState
 import duskdn.plantz.entity.plant.all.BonkChoy
 import duskdn.plantz.entity.plant.all.ExplodeONut
-import duskdn.plantz.entity.plant.all.Explosive
+import duskdn.plantz.entity.plant.init.Explosive
 import duskdn.plantz.entity.plant.all.KernelPult
 import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.entity.plant.all.WallNut

@@ -1,5 +1,6 @@
 package duskdn.plantz.entity.plant.all
 
+import duskdn.plantz.entity.plant.init.Explosive
 import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.entity.plant.utils.gravelSurvivalCheck
 import duskdn.plantz.entity.plant.utils.sandSurvivalCheck

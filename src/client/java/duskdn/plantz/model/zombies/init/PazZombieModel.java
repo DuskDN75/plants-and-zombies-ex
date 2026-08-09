@@ -1,8 +1,9 @@
 package duskdn.plantz.model.zombies.init;
 
+import duskdn.plantz.ai.ZombieState;
 import duskdn.plantz.init.PazEntities;
-import duskdn.plantz.PazZombieRenderState;
 import duskdn.plantz.animation.zombies.init.PazZombieAnimations;
+import duskdn.plantz.renderer.entity.PazZombieRenderState;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -15,18 +16,22 @@ import org.jetbrains.annotations.Nullable;
 
 import static duskdn.plantz.util.UtilsKt.pazResource;
 
-public class PazZombieModel extends ZombieModel<@NotNull ZombieRenderState> {
+public class PazZombieModel extends ZombieModel<@NotNull PazZombieRenderState> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("paz_zombie"), "main");
 
     protected final KeyframeAnimation initAnimation;
+    final KeyframeAnimation floatAnimation;
 
     public PazZombieModel(
             @Nullable KeyframeAnimation initAnimation,
             final ModelPart root
     ) {
-        super(root.hasChild("root") ? root.getChild("root") : root);
-        if (initAnimation==null) this.initAnimation = PazZombieAnimations.emerge.bake(root.hasChild("root") ? root.getChild("root") : root);
+        var mainRoot = root.hasChild("root") ? root.getChild("root") : root;
+        super(mainRoot);
+        if (initAnimation == null) this.initAnimation = PazZombieAnimations.emerge.bake(mainRoot);
         else this.initAnimation = initAnimation;
+        this.floatAnimation = PazZombieAnimations.balloon_float.bake(mainRoot);
+
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -59,10 +64,14 @@ public class PazZombieModel extends ZombieModel<@NotNull ZombieRenderState> {
     }
 
     @Override
-    public void setupAnim(final ZombieRenderState state) {
+    public void setupAnim(final PazZombieRenderState state) {
         super.setupAnim(state);
-        PazZombieRenderState pazState = (PazZombieRenderState) state;
-        // Gargantuar has his arms down, so he needs to call his own init animation later.
-        if (pazState.entityType != PazEntities.GARGANTUAR) initAnimation.apply(pazState.getInitAnimationState(), pazState.ageInTicks);
+        if (state.getZombieState() == ZombieState.FLOATING) {
+            var animationPos = state.walkAnimationPos;
+            var animationSpeed = state.walkAnimationSpeed + 0.2f;
+            floatAnimation.applyWalk(animationPos, animationSpeed, 1f, 2f);
+        }
+        initAnimation.apply(state.getEmergeAnimationState(), state.ageInTicks);
+
     }
 }

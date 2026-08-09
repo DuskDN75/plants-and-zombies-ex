@@ -183,7 +183,7 @@ object PazSpawnPlacements {
             weight = 7, minGroupSize = 1, maxGroupSize = 4)
         addBiomeSpawn(PazTags.Biomes.HAS_BALLOON_ZOMBIE_ALT, PazEntities.BALLOON_ZOMBIE, category = MobCategory.MONSTER,
             weight = 60, minGroupSize = 1, maxGroupSize = 4)
-        registerSpawnPlacement(PazEntities.BALLOON_ZOMBIE, BalloonZombie::checkBalloonZombieSpawnRules, spawnPlacements = SpawnPlacementTypes.NO_RESTRICTIONS, heightmap = Heightmap.Types.WORLD_SURFACE)
+        registerSpawnPlacement(PazEntities.BALLOON_ZOMBIE, BalloonZombie::checkBalloonZombieSpawnRules, spawnPlacements = SpawnPlacementTypes.NO_RESTRICTIONS)
         // endregion
     }
 

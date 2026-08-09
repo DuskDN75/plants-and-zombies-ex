@@ -3,6 +3,7 @@ package duskdn.plantz.entity.zombie
 import duskdn.plantz.ai.goal.ProjectileAttackGoal
 import duskdn.plantz.entity.projectile.Missile
 import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent

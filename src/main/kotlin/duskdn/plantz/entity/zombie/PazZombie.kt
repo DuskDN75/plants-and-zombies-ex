@@ -35,6 +35,7 @@ import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.monster.zombie.ZombifiedPiglin
 import net.minecraft.world.entity.npc.villager.AbstractVillager
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
@@ -143,12 +144,20 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
     }
 
     val flyControl = object : FlyingMoveControl(this, 20, true) {
-        override fun getSpeedModifier(): Double = 0.0
+        override fun getSpeedModifier(): Double = 1.0
     }
 
+    var flyingNavigation: PathNavigation? = null
+
     override fun createNavigation(level: Level): PathNavigation {
-        return if (state == ZombieState.FLOATING) FlyingPathNavigation(this, level)
-        else super.createNavigation(level)
+
+        flyingNavigation = FlyingPathNavigation(this, level)
+
+        if ((state == ZombieState.FLOATING)) {
+            return flyingNavigation as PathNavigation
+        } else {
+            return super.createNavigation(level)
+        }
     }
 
     override fun getMoveControl(): MoveControl {
@@ -158,7 +167,7 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
     }
 
     var balloons : MutableList<Balloon> = mutableListOf()
-    var balloonCount = 0
+    open var balloonCount = 0
 
     override fun registerGoals() {
         super.registerGoals()
@@ -173,6 +182,11 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
         this.targetSelector.addGoal(3, NearestAttackableTargetGoal(this, AbstractVillager::class.java, false))
         this.targetSelector.addGoal(3, NearestAttackableTargetGoal(this, IronGolem::class.java, true))
         this.targetSelector.addGoal(5, NearestAttackableTargetGoal(this, Turtle::class.java, 10, true, false, Turtle.BABY_ON_LAND_SELECTOR))
+    }
+
+    fun updateMovement() {
+        navigation = createNavigation(level())
+        moveControl = getMoveControl()
     }
 
     var waterTime = -1
@@ -199,13 +213,22 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
             ZombieState.IDLE -> {
                 emergeAnimation.stop()
                 floatAnimation.stop()
-                if (serverLevel!=null && balloons.isNotEmpty()) state = ZombieState.FLOATING
+                if (serverLevel!=null && balloons.isNotEmpty()) {
+                    state = ZombieState.FLOATING
+                    updateMovement()
+                }
             }
             ZombieState.FLOATING -> {
                 floatAnimation.startIfStopped(tickCount)
                 if (serverLevel!=null) {
                     balloons.removeIf { !it.isAlive || it.leashHolder != this }
-                    if (balloons.isEmpty()) state = ZombieState.IDLE
+                    if (balloons.isEmpty()) {
+//                        println("CHANGED TO IDLE")
+                        state = ZombieState.IDLE
+                        navigation.stop()
+                        isNoGravity = false
+                        updateMovement()
+                    }
                 }
             }
             ZombieState.EMERGING -> {
@@ -222,13 +245,14 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
         }
     }
 
-    fun spawnBalloons(count: Int = balloonCount) {
+    open fun spawnBalloons(count: Int = balloonCount) {
         val level = level() as? ServerLevel ?: return
         for (i in 0 until count) {
             val balloon = PazEntities.BALLOON.create(level, EntitySpawnReason.TRIGGERED) ?: return
             val randomX = (random.nextDouble() - 0.5) * 2 + x
             val randomZ = (random.nextDouble() - 0.5) * 2 + z
             balloon.snapTo(randomX, eyeY + 1.0, randomZ)
+            balloon.dyeColor = DyeColor.RED
             level.addFreshEntity(balloon)
             balloon.setLeashedTo(this, true)
             balloons.add(balloon)

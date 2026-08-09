@@ -1,7 +1,11 @@
 package duskdn.plantz.model.zombies;
 
-import duskdn.plantz.PazZombieRenderState;
+import duskdn.plantz.animation.zombies.SuperBrainzAnimation;
+import duskdn.plantz.renderer.entity.PazZombieRenderState;
 import duskdn.plantz.model.zombies.init.PazZombieModel;
+import duskdn.plantz.renderer.entity.SuperBrainzRenderState;
+import net.minecraft.client.animation.KeyframeAnimation;
+import net.minecraft.client.model.AnimationUtils;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -14,11 +18,15 @@ import static duskdn.plantz.util.UtilsKt.pazResource;
 
 public class SuperBrainzModel extends PazZombieModel {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("super_brainz"), "main");
+    private final KeyframeAnimation walkAnimation;
+    private final KeyframeAnimation flyAnimation;
     ModelPart cape;
 
     public SuperBrainzModel(final ModelPart root) {
         super(null, root);
         cape = root.getChild("root").getChild("body").getChild("cape");
+        this.walkAnimation = SuperBrainzAnimation.walk.bake(root.getChild("root"));
+        this.flyAnimation = SuperBrainzAnimation.fly.bake(root.getChild("root"));
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -78,16 +86,28 @@ public class SuperBrainzModel extends PazZombieModel {
     }
 
     @Override
-    public void setupAnim(@NotNull ZombieRenderState state) {
+    public void setupAnim(@NotNull PazZombieRenderState state) {
         super.setupAnim(state);
-        PazZombieRenderState pazState = (PazZombieRenderState) state;
+        this.resetPose();
+        AnimationUtils.animateZombieArms(this.leftArm, this.rightArm, false, state);
+        this.head.xRot = state.xRot * (float) (Math.PI / 180.0);
+        this.head.yRot = state.yRot * (float) (Math.PI / 180.0);
+
+        SuperBrainzRenderState superBrainzState = (SuperBrainzRenderState) state;
+        float animationPos = state.walkAnimationPos;
+        float animationSpeed = state.walkAnimationSpeed;
+        if (superBrainzState.isFlying())
+            flyAnimation.applyWalk(animationPos, animationSpeed, 2f, 2f);
+        else
+            walkAnimation.applyWalk(animationPos, animationSpeed, 2f, 2f);
+
         cape.resetPose();
         cape.rotateBy(
                 new Quaternionf()
                         .rotateY((float) -Math.PI)
-                        .rotateX((6.0F + pazState.getCapeLean() / 2.0F + pazState.getCapeFlap()) * (float) -(Math.PI / 180.0))
-                        .rotateZ(pazState.getCapeLean2() / 2.0F * (float) -(Math.PI / 180.0))
-                        .rotateY((180.0F - pazState.getCapeLean2() / 2.0F) * (float) -(Math.PI / 180.0))
+                        .rotateX((6.0F + superBrainzState.getCapeLean() / 2.0F + superBrainzState.getCapeFlap()) * (float) -(Math.PI / 180.0))
+                        .rotateZ(superBrainzState.getCapeLean2() / 2.0F * (float) -(Math.PI / 180.0))
+                        .rotateY((180.0F - superBrainzState.getCapeLean2() / 2.0F) * (float) -(Math.PI / 180.0))
         );
     }
 }

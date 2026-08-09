@@ -1,5 +1,6 @@
-package joshxviii.plantz
+package duskdn.plantz
 
+import duskdn.plantz.GnomeArmorSet
 import duskdn.plantz.block.entity.FlagBlockEntity
 import duskdn.plantz.block.entity.SunBatteryBlockEntity
 import duskdn.plantz.block.entity.TimeMachineBlockEntity
@@ -15,17 +16,17 @@ import duskdn.plantz.model.zombies.*
 import duskdn.plantz.model.zombies.init.PazZombieModel
 import duskdn.plantz.util.pazResource
 import duskdn.plantz.renderer.entity.BalloonRenderer
-import duskdn.plantz.renderer.FlagRenderState
-import duskdn.plantz.renderer.FlagRenderer
 import duskdn.plantz.renderer.entity.GnomeRenderer
 import duskdn.plantz.renderer.entity.PazZombieRenderer
 import duskdn.plantz.renderer.PlantPotMinecartRenderer
+import duskdn.plantz.renderer.block.FlagRenderState
+import duskdn.plantz.renderer.block.FlagRenderer
+import duskdn.plantz.renderer.block.SunBatteryRenderSate
+import duskdn.plantz.renderer.block.SunBatteryRenderer
+import duskdn.plantz.renderer.block.TimeMachineRenderSate
+import duskdn.plantz.renderer.block.TimeMachineRenderer
 import duskdn.plantz.renderer.entity.ProjectileRenderer
-import duskdn.plantz.renderer.SunBatteryRenderSate
-import duskdn.plantz.renderer.SunBatteryRenderer
 import duskdn.plantz.renderer.entity.SunRenderer
-import duskdn.plantz.renderer.TimeMachineRenderSate
-import duskdn.plantz.renderer.TimeMachineRenderer
 import duskdn.plantz.renderer.entity.GargantuarRenderer
 import duskdn.plantz.renderer.entity.PirateCaptainRenderer
 import duskdn.plantz.renderer.entity.PlantRenderer
@@ -86,10 +87,10 @@ object PazModels {
     val ARMOR_LAYER_FEET   = ModelLayerLocation(pazResource("gnome_armor"), "boots")
 
     val ARMOR_LAYER_LOCATION = GnomeArmorSet(
-        head  = ARMOR_LAYER_HEAD,
+        head = ARMOR_LAYER_HEAD,
         chest = ARMOR_LAYER_CHEST,
-        legs  = ARMOR_LAYER_LEGS,
-        feet  = ARMOR_LAYER_FEET
+        legs = ARMOR_LAYER_LEGS,
+        feet = ARMOR_LAYER_FEET
     )
 
     fun registerAll() {
@@ -252,7 +253,11 @@ object PazModels {
         EntityRenderers.register(PazEntities.THROWN_SUN_BOTTLE) { ThrownItemRenderer(it) }
         EntityRenderers.register(PazEntities.BALLOON) { BalloonRenderer(it, BalloonModel(it.bakeLayer(BalloonModel.LAYER_LOCATION))) }
 
-        BlockEntityRenderers.register<FlagBlockEntity, FlagRenderState>(PazBlocks.FLAG_BLOCK_ENTITY) { FlagRenderer(FlagBlockModel(it.bakeLayer(FlagBlockModel.LAYER_LOCATION))) }
+        BlockEntityRenderers.register<FlagBlockEntity, FlagRenderState>(PazBlocks.FLAG_BLOCK_ENTITY) {
+            FlagRenderer(
+                FlagBlockModel(it.bakeLayer(FlagBlockModel.LAYER_LOCATION))
+            )
+        }
         BlockEntityRenderers.register<SunBatteryBlockEntity, SunBatteryRenderSate>(PazBlocks.SUN_BATTERY_BLOCK_ENTITY) { SunBatteryRenderer() }
         BlockEntityRenderers.register<TimeMachineBlockEntity, TimeMachineRenderSate>(PazBlocks.TIME_MACHINE_ENTITY) { TimeMachineRenderer() }
     }

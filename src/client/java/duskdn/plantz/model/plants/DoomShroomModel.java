@@ -1,8 +1,8 @@
-package joshxviii.plantz.model.plants;
+package duskdn.plantz.model.plants;
 
-import joshxviii.plantz.PlantRenderState;
-import joshxviii.plantz.animation.plants.DoomShroomAnimation;
-import joshxviii.plantz.animation.plants.HypnoShroomAnimation;
+import duskdn.plantz.animation.plants.DoomShroomAnimation;
+import duskdn.plantz.model.plants.init.PazPlantModel;
+import duskdn.plantz.renderer.entity.PlantRenderState;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -11,10 +11,10 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import org.jetbrains.annotations.NotNull;
 
-import static joshxviii.plantz.UtilsKt.pazResource;
+import static duskdn.plantz.util.UtilsKt.pazResource;
 
 
-public class DoomShroomModel extends PlantModel {
+public class DoomShroomModel extends PazPlantModel {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("doomshroom"), "main");
 	private final ModelPart body;
 	private final ModelPart head;

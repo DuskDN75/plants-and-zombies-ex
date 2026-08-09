@@ -1,17 +1,10 @@
 package duskdn.plantz.ai.goal
 
-import duskdn.plantz.entity.Balloon
-import duskdn.plantz.entity.interfaces.FloatingMob
-import duskdn.plantz.util.blueDustParticle
+import duskdn.plantz.entity.interfaces.IFloatingMob
 import duskdn.plantz.util.orangeDustParticle
 import duskdn.plantz.util.redDustParticle
-import duskdn.plantz.util.trackVariable
 import duskdn.plantz.util.trackVector
 import duskdn.plantz.util.updateTrackers
-import net.minecraft.advancements.criterion.MovementPredicate
-import net.minecraft.advancements.criterion.MovementPredicate.speed
-import net.minecraft.core.BlockPos
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Leashable
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
@@ -21,14 +14,13 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.phys.Vec3
 import kotlin.math.absoluteValue
-import kotlin.math.sign
 
 open class FloatingPathfindGoal<T> (
     val entity: T
-): Goal() where T: PathfinderMob, T: FloatingMob {
+): Goal() where T: PathfinderMob, T: IFloatingMob {
 
     override fun canUse(): Boolean {
-        return entity.isFloating
+        return true
     }
 
 //    init {

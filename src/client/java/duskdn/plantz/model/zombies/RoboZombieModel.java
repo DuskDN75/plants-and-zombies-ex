@@ -1,6 +1,6 @@
 package duskdn.plantz.model.zombies;
 
-import duskdn.plantz.PazZombieRenderState;
+import duskdn.plantz.renderer.entity.PazZombieRenderState;
 import duskdn.plantz.model.zombies.init.PazZombieModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -67,7 +67,7 @@ public class RoboZombieModel extends PazZombieModel {
     }
 
     @Override
-    public void setupAnim(@NotNull ZombieRenderState state) {
+    public void setupAnim(@NotNull PazZombieRenderState state) {
         //super.setupAnim(state);
         PazZombieRenderState pazState = (PazZombieRenderState) state;
 

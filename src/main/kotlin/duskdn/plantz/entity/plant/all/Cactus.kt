@@ -41,10 +41,10 @@ class Cactus(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlan
     }
 
     class CactusAttackGoal(
-        val cactusEntity: Cactus,
+        override val usingEntity: Cactus,
     ) : BalloonPriorityProjectileAttackGoal(
-        usingEntity = cactusEntity,
-        projectileFactory = { Needle(cactusEntity.level(), cactusEntity) },
+        usingEntity = usingEntity,
+        projectileFactory = { Needle(usingEntity.level(), usingEntity) },
         velocity = 1.5,
         cooldownTime = 60,
         actionDelay = 6,

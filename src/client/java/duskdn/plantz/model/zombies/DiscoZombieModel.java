@@ -5,7 +5,7 @@
 
 package duskdn.plantz.model.zombies;
 
-import duskdn.plantz.PazZombieRenderState;
+import duskdn.plantz.renderer.entity.PazZombieRenderState;
 import duskdn.plantz.animation.zombies.DiscoZombieAnimation;
 import duskdn.plantz.model.zombies.init.PazZombieModel;
 import net.minecraft.client.animation.KeyframeAnimation;
@@ -64,9 +64,8 @@ public class DiscoZombieModel extends PazZombieModel {
 	}
 
 	@Override
-	public void setupAnim(@NotNull ZombieRenderState state) {
+	public void setupAnim(@NotNull PazZombieRenderState state) {
 		super.setupAnim(state);
-		PazZombieRenderState pazState = (PazZombieRenderState) state;
-		actionAnimation.apply(pazState.getActionAnimationState(), pazState.ageInTicks);
+		actionAnimation.apply(state.getActionAnimationState(), state.ageInTicks);
 	}
 }
