@@ -26,7 +26,7 @@ class CherryBomb(type: EntityType<out Explosive>, level: Level) : Explosive(PazE
     override fun registerGoals() {
         super.registerGoals()
         this.goalSelector.addGoal(1, ExplodeGoal(
-            explosiveEntity = this,
+            usingEntity = this,
             actionEndEffect = {
                 addParticlesAroundSelf(
                     particle = ParticleTypes.LARGE_SMOKE,
@@ -45,12 +45,6 @@ class CherryBomb(type: EntityType<out Explosive>, level: Level) : Explosive(PazE
                 )
             }
         ))
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
-            target !is PazPlant
-                    && (target is Zombie
-                    || (target is Enemy && isTame)
-                    || (target is Player && !isTame))
-        })
     }
 
     override fun canSurviveOn(block: BlockState): Boolean {

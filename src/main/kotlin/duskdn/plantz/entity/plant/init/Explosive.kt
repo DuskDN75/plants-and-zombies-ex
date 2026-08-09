@@ -1,5 +1,6 @@
 package duskdn.plantz.entity.plant.init
 
+import duskdn.plantz.entity.plant.interfaces.IInstantPlant
 import duskdn.plantz.init.PazConfig
 import duskdn.plantz.init.PazDamageTypes
 import duskdn.plantz.init.PazDataSerializers
@@ -27,35 +28,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.SimpleExplosionDamageCalculator
 import java.util.Optional
 
-abstract class Explosive(type: EntityType<out Explosive>, level: Level) : PazPlant(type, level) {
-    companion object {
-        val EXPLOSION_CALCULATOR: ExplosionDamageCalculator =
-            SimpleExplosionDamageCalculator(false, true, Optional.of<Float>(1f), Optional.ofNullable(null))
-        val DESTRUCTIVE_EXPLOSION_CALCULATOR: ExplosionDamageCalculator =
-            SimpleExplosionDamageCalculator(true, false, Optional.of<Float>(1.5f), Optional.ofNullable(null))
-
-        val SWELL_DIR: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Explosive::class.java,
-            PazDataSerializers.DATA_SWELL_DIR
-        )
-    }
-
-    var swellDir: Int
-        get() = this.entityData.get(SWELL_DIR)
-        set(value) {
-            this.entityData.set(SWELL_DIR, value)
-        }
-
-    override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
-        super.defineSynchedData(entityData)
-        entityData.define(SWELL_DIR, 0)
-    }
-
-    override fun tick() {
-        super.tick()
-        if (swell == getMaxSwellTime() && !isRemoved) explode()
-        calculateSwell()
-    }
-
+abstract class Explosive(type: EntityType<out Explosive>, level: Level) : InstantUsePlant(type, level) {
     override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
         val itemStack = player.getItemInHand(hand)
         val level = level()
@@ -69,7 +42,7 @@ abstract class Explosive(type: EntityType<out Explosive>, level: Level) : PazPla
                                 ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED))
                         return InteractionResult.FAIL
                     }
-                    swellDir=2
+                    activeDirection=2
                     playSound(SoundEvents.FLINTANDSTEEL_USE)
                     return InteractionResult.SUCCESS_SERVER
                 }
@@ -78,54 +51,13 @@ abstract class Explosive(type: EntityType<out Explosive>, level: Level) : PazPla
         return super.mobInteract(player, hand)
     }
 
-    open fun getMaxSwellTime() : Int = 30
-    var oldSwell = 0; var swell = 0
-    fun getSwelling(a: Float): Float = Mth.lerp(a, oldSwell.toFloat(), swell.toFloat()) / (getMaxSwellTime() - 2).toFloat()
-
-    fun calculateSwell() {
-        oldSwell = swell
-        swell = (swell + swellDir.coerceIn(-1,1)).coerceIn(0, getMaxSwellTime())
+    override fun getActiveSound(): SoundEvent {
+        return SoundEvents.CREEPER_PRIMED
     }
 
-    open fun explode(
-        radius: Float = 4.0f,
-        sound: Holder.Reference<SoundEvent> = PazSounds.PLANT_EXPLODE,
-        damageType: ResourceKey<DamageType> = PazDamageTypes.PLANT_AOE,
-        destroyBlocks: Boolean = false,
-        discardOnExplode: Boolean = discardOnExplode()
-    ) {
-        swellDir = -1
-        swell = 0
-        val level = this.level()
-        val source = this.damageSources().source(damageType, this,
-            if (PazConfig.PLAYER_CREDIT_FOR_PLANT_KILLS) this.rootOwner else this)
-        level.explode(
-            this,
-            source,
-            EXPLOSION_CALCULATOR,
-            x, y, z,
-            radius,
-            false,
-            Level.ExplosionInteraction.MOB,
-            ParticleTypes.SMOKE,
-            ParticleTypes.EXPLOSION,
-            WeightedList.of(),
-            sound
-        )
-        if (destroyBlocks) level.explode(
-            this,
-            null,
-            DESTRUCTIVE_EXPLOSION_CALCULATOR,
-            x, y, z,
-            radius*.5f,
-            false,
-            Level.ExplosionInteraction.MOB,
-            ParticleTypes.SMOKE,
-            ParticleTypes.EXPLOSION,
-            WeightedList.of(),
-            SoundEvents.ITEM_BREAK
-        )
-        if (discardOnExplode) discard()
-    }
     open fun discardOnExplode(): Boolean = true
+
+    override fun beginActivate(): Boolean {
+        return true
+    }
 }

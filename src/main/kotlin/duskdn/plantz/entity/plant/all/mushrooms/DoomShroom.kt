@@ -17,17 +17,13 @@ import net.minecraft.world.level.block.state.BlockState
 
 class DoomShroom(type: EntityType<out Explosive>, level: Level) : Explosive(PazEntities.DOOM_SHROOM, level) {
 
-    override fun getMaxSwellTime(): Int = 48
-
     override fun registerGoals() {
         super.registerGoals()
         this.goalSelector.addGoal(1, ExplodeGoal(
-            explosiveEntity = this,
-            explosionRadius = 7f,
-            activateRange = 4.0,
+            usingEntity = this,
+            attackRadius = 7f,
             destroyBlocks = true,
             actionEndEffect = {
-                //TODO custom sounds
                 playSound(SoundEvents.DRAGON_FIREBALL_EXPLODE, 2f, 0.0f)
                 playSound(SoundEvents.ENDER_DRAGON_SHOOT, 2f, 0.0f)
                 addParticlesAroundSelf(

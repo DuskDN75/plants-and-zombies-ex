@@ -1,70 +1,99 @@
 package duskdn.plantz.ai.goal
 
 import duskdn.plantz.entity.plant.init.Explosive
+import duskdn.plantz.init.PazConfig
+import duskdn.plantz.init.PazDamageTypes
+import duskdn.plantz.init.PazSounds
 import net.minecraft.core.Holder
+import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.resources.ResourceKey
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.util.random.WeightedList
+import net.minecraft.world.damagesource.DamageType
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.Goal
+import net.minecraft.world.level.ExplosionDamageCalculator
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.SimpleExplosionDamageCalculator
 import net.minecraft.world.level.gameevent.GameEvent
 import java.util.*
 import java.util.function.Predicate
 
 class ExplodeGoal(
-    private val explosiveEntity: Explosive,
-    val explosionRadius: Float = 2.5f,
-    val sound: Holder.Reference<SoundEvent> = SoundEvents.GENERIC_EXPLODE,
+    override val usingEntity: Explosive,
+    cooldownTime: Int = 20,
+    actionDelay: Int = 0,
+    actionStartEffect: () -> Unit = {},
+    actionSuccessEffect: () -> Unit = {},
+    actionEndEffect: () -> Unit = {},
+    actionPredicate: Predicate<PathfinderMob> = Predicate { true },
+    attackRadius: Float = usingEntity.attributes.getValue(Attributes.FOLLOW_RANGE).toFloat(),
+    velocity : Double = 1.2,
+    soundEvent: Holder.Reference<SoundEvent> = PazSounds.PLANT_EXPLODE,
+    damageType: ResourceKey<DamageType> = PazDamageTypes.PLANT_AOE,
+    beforeActionEntityEffect: (targets: MutableList<LivingEntity>) -> Unit = {},
+    afterActionEntityEffect: (targets: MutableList<LivingEntity>) -> Unit = {},
+    requireTarget: Boolean = false,
+    activateRange: Double = 3.0,
     val destroyBlocks: Boolean = false,
-    val activateRange: Double = 3.0,
-    val actionPredicate: Predicate<PathfinderMob> = Predicate { true },
-    val actionEndEffect: () -> Unit = {},
-) : Goal() {
+    val causeFire: Boolean = false,
+) : InstantUseGoal<Explosive>(
+    usingEntity, cooldownTime, actionDelay, actionStartEffect, actionSuccessEffect, actionEndEffect, actionPredicate,
+    velocity = velocity,
+    attackRadius = attackRadius,
+    soundEvent = soundEvent,
+    damageType = damageType,
+    beforeActionEntityEffect = beforeActionEntityEffect,
+    afterActionEntityEffect = afterActionEntityEffect,
+    requireTarget = requireTarget,
+    activateRange = activateRange,
+) {
 
     companion object {
-        private const val DISTANCE_SQR = 49.0
+        val EXPLOSION_CALCULATOR: ExplosionDamageCalculator =
+            SimpleExplosionDamageCalculator(false, true, Optional.of<Float>(1f), Optional.ofNullable(null))
+        val DESTRUCTIVE_EXPLOSION_CALCULATOR: ExplosionDamageCalculator =
+            SimpleExplosionDamageCalculator(true, false, Optional.of<Float>(1.5f), Optional.ofNullable(null))
     }
 
-    init {
-        flags = EnumSet.of<Flag>(Flag.MOVE)
-    }
+    override fun doAction(): Boolean {
+        val result = super.doAction()
 
-    override fun canUse(): Boolean {
-        if (!actionPredicate.test(explosiveEntity)) return false
-        if ((explosiveEntity.isAsleep || explosiveEntity.isGrowingSeeds)) return false
-        if (explosiveEntity.swellDir>=0) return true
-        return false
-    }
+        val level = usingEntity.level()
+        val source = usingEntity.damageSources().source(damageType, usingEntity,
+            if (PazConfig.PLAYER_CREDIT_FOR_PLANT_KILLS) usingEntity.rootOwner else usingEntity)
 
-    override fun start() {
-        explosiveEntity.getNavigation().stop()
-    }
+        level.explode(
+            usingEntity,
+            source,
+            EXPLOSION_CALCULATOR,
+            usingEntity.x, usingEntity.y, usingEntity.z,
+            attackRadius,
+            causeFire,
+            Level.ExplosionInteraction.MOB,
+            ParticleTypes.SMOKE,
+            ParticleTypes.EXPLOSION,
+            WeightedList.of(),
+            soundEvent
+        )
+        if (destroyBlocks) level.explode(
+            usingEntity,
+            null,
+            DESTRUCTIVE_EXPLOSION_CALCULATOR,
+            usingEntity.x, usingEntity.y, usingEntity.z,
+            attackRadius*.5f,
+            causeFire,
+            Level.ExplosionInteraction.MOB,
+            ParticleTypes.SMOKE,
+            ParticleTypes.EXPLOSION,
+            WeightedList.of(),
+            SoundEvents.ITEM_BREAK
+        )
 
-    override fun stop() {
-        explosiveEntity.swellDir = -1
-    }
-
-    override fun requiresUpdateEveryTick(): Boolean {
-        return true
-    }
-
-    override fun tick() {
-
-        if (!canUse()) return
-
-        if (explosiveEntity.swellDir != 2) explosiveEntity.swellDir = 1
-
-        if (explosiveEntity.swellDir > 0 && explosiveEntity.swell == 0) {
-            explosiveEntity.playSound(SoundEvents.CREEPER_PRIMED, 1.0f, 1f + (1-explosiveEntity.getMaxSwellTime() / 30))
-            explosiveEntity.gameEvent(GameEvent.PRIME_FUSE)
-        }
-
-        if (explosiveEntity.swell == explosiveEntity.getMaxSwellTime()) {
-            actionEndEffect()
-            explosiveEntity.explode(
-                radius = explosionRadius,
-                sound = sound,
-                destroyBlocks = destroyBlocks,
-            )
-        }
+        return result
     }
 }

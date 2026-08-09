@@ -3,10 +3,16 @@ package duskdn.plantz.ai.goal
 import duskdn.plantz.entity.interfaces.IFloatingMob
 import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.entity.plant.interfaces.IInstantPlant
+import duskdn.plantz.init.PazConfig
+import duskdn.plantz.init.PazDamageTypes
 import duskdn.plantz.init.PazSounds
+import net.minecraft.core.Holder
+import net.minecraft.resources.ResourceKey
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.Goal
@@ -22,21 +28,42 @@ abstract class InstantUseGoal<T>(
     actionSuccessEffect: () -> Unit = {},
     actionEndEffect: () -> Unit = {},
     actionPredicate: Predicate<PathfinderMob> = Predicate { true },
-    var projectileFactory: () -> Entity,
     var attackRadius: Float = usingEntity.attributes.getValue(Attributes.FOLLOW_RANGE).toFloat(),
     var velocity : Double = 1.2,
-    val soundEvent: SoundEvent? = PazSounds.PROJECTILE_FIRE,
-    val discard
+    val soundEvent: Holder.Reference<SoundEvent> = PazSounds.PLANT_EXPLODE,
+    val damageType: ResourceKey<DamageType> = PazDamageTypes.PLANT_AOE,
+    val beforeActionEntityEffect: (targets: MutableList<LivingEntity>) -> Unit = {},
+    val afterActionEntityEffect: (targets: MutableList<LivingEntity>) -> Unit = {},
+    val requireTarget: Boolean = false,
+    val activateRange: Double = 3.0,
 ) : ActionGoal(usingEntity, cooldownTime, actionDelay, actionStartEffect, actionSuccessEffect, actionEndEffect, actionPredicate) where T: PazPlant, T: IInstantPlant {
 
     init {
         flags = EnumSet.of<Flag>(Flag.MOVE)
     }
 
+    private var target: LivingEntity? = null
+
+    fun getTargets(): MutableList<LivingEntity> {
+        return usingEntity.level().getEntitiesOfClass(
+            LivingEntity::class.java,
+            usingEntity.boundingBox.inflate(attackRadius.toDouble())
+        ).filter { it != usingEntity }.toMutableList()
+    }
+
     override fun canUse(): Boolean {
+
+        if (requireTarget) {
+            target = usingEntity.target
+            target?.let {
+                return (!it.isDeadOrDying && usingEntity.distanceToSqr(it) < activateRange * activateRange) || usingEntity.activeTime > 0
+            }
+        }
+
         if (!actionPredicate.test(usingEntity)) return false
         if ((usingEntity.isAsleep || usingEntity.isGrowingSeeds)) return false
         if (usingEntity.activeDirection>=0) return true
+
         return false
     }
 
@@ -45,6 +72,7 @@ abstract class InstantUseGoal<T>(
     }
 
     override fun stop() {
+        target = null
         usingEntity.activeDirection = -1
     }
 
@@ -56,16 +84,19 @@ abstract class InstantUseGoal<T>(
         return canUse()
     }
 
-    fun startAction(): Boolean {
-        
+    open fun startAction(): Boolean {
+
+        usingEntity.playSound(usingEntity.getActiveSound())
+
+        return true
     }
 
     override fun doAction(): Boolean {
-        val result = usingEntity.activate()
 
-        if (result && usingEntity.discardOnExplode()) usingEntity.discard()
+        usingEntity.activeDirection = -1
+        usingEntity.activeTime = 0
 
-        return result
+        return true
     }
 
     override fun tick() {
@@ -76,13 +107,15 @@ abstract class InstantUseGoal<T>(
 
         if (usingEntity.activeDirection > 0 && usingEntity.activeTime == 0) {
             startAction()
-            usingEntity.playSound(usingEntity.getActiveSound())
+            beforeActionEntityEffect(getTargets())
             usingEntity.gameEvent(GameEvent.PRIME_FUSE)
         }
 
         if (usingEntity.activeTime == usingEntity.getMaxActiveTime()) {
             actionEndEffect()
-            doAction()
+            val result = doAction()
+            afterActionEntityEffect(getTargets())
+            if (result && usingEntity.discardOnActivate()) usingEntity.discard()
         }
     }
 

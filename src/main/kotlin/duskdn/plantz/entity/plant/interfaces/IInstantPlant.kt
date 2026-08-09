@@ -11,8 +11,6 @@ import net.minecraft.util.Unit
 import net.minecraft.world.level.Level
 
 interface IInstantPlant: IPlant {
-    val entity: PazPlant
-        get() = this as PazPlant
 
     var activeDirection: Int
         get() = entity.entityData.get(ACTIVE_DIRECTION)
@@ -36,6 +34,6 @@ interface IInstantPlant: IPlant {
 
     fun getActiveSound(): SoundEvent
 
-    open fun discardOnExplode(): Boolean = true
+    open fun discardOnActivate(): Boolean = true
 
 }
