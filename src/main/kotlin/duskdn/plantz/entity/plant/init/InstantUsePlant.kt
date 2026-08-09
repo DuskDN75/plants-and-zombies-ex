@@ -49,31 +49,5 @@ abstract class InstantUsePlant(type: EntityType<out InstantUsePlant>, level: Lev
     override var oldActiveTime = 0
     override var activeTime = 0
 
-    open fun activate(
-        radius: Float = 4.0f,
-        sound: Holder.Reference<SoundEvent> = PazSounds.PLANT_EXPLODE,
-        damageType: ResourceKey<DamageType> = PazDamageTypes.PLANT_AOE,
-        destroyBlocks: Boolean = false,
-        discardOnFinish: Boolean = discardOnFinish()
-    ) {
-        activeDirection = -1
-        activeTime = 0
-        val level = this.level()
-        val source = this.damageSources().source(damageType, this,
-            if (PazConfig.PLAYER_CREDIT_FOR_PLANT_KILLS) this.rootOwner else this)
-        activateFunction()
-        if (discardOnFinish) discard()
-    }
-
-    open fun activate() {
-        activeDirection = -1
-        activeTime = 0
-        val level = this.level()
-        val source = this.damageSources().source(damageType, this,
-            if (PazConfig.PLAYER_CREDIT_FOR_PLANT_KILLS) this.rootOwner else this)
-        activateFunction()
-        if (discardOnFinish) discard()
-    }
-
     open fun discardOnFinish(): Boolean = true
 }

@@ -1,6 +1,6 @@
 package duskdn.plantz.entity.plant.all
 
-import duskdn.plantz.entity.plant.init.Explosive
+import duskdn.plantz.entity.plant.init.ExplosivePlant
 import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.entity.plant.utils.gravelSurvivalCheck
 import duskdn.plantz.entity.plant.utils.sandSurvivalCheck
@@ -24,7 +24,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.block.state.BlockState
 
-class PotatoMine(type: EntityType<out Explosive>, level: Level) : Explosive(PazEntities.POTATO_MINE, level) {
+class PotatoMine(type: EntityType<out ExplosivePlant>, level: Level) : ExplosivePlant(PazEntities.POTATO_MINE, level) {
     override fun registerGoals() {
         super.registerGoals()
     }

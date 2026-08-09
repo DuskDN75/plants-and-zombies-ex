@@ -11,7 +11,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import duskdn.plantz.ai.PlantState
 import duskdn.plantz.entity.plant.all.BonkChoy
 import duskdn.plantz.entity.plant.all.ExplodeONut
-import duskdn.plantz.entity.plant.init.Explosive
+import duskdn.plantz.entity.plant.init.ExplosivePlant
 import duskdn.plantz.entity.plant.all.KernelPult
 import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.entity.plant.all.WallNut
@@ -98,7 +98,7 @@ class PlantRenderer(
         }
         state.isInAir = !entity.onGround()
         state.plantState = entity.state
-        if (entity is Explosive) state.swelling = entity.getSwelling(partialTick)
+        if (entity is ExplosivePlant) state.swelling = entity.getSwelling(partialTick)
         state.cooldown = entity.cooldown
         state.isAsleep = entity.isAsleep
         state.damagedAmount = entity.damagedPercent

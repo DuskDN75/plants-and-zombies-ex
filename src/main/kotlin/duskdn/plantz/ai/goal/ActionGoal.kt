@@ -6,6 +6,10 @@ import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.goal.Goal
 import java.util.function.Predicate
 
+data class ActionData(
+    val targets: List<PathfinderMob> = emptyList()
+)
+
 /**
  * Defines an action goal for plants.
  * Used for triggering animations and action timing
@@ -15,20 +19,27 @@ import java.util.function.Predicate
  */
 abstract class ActionGoal(
     open val usingEntity: PathfinderMob,
-    var cooldownTime: Int = 20,
-    val actionDelay: Int = 0,
-    val actionStartEffect: () -> Unit = {},
-    val actionSuccessEffect: () -> Unit = {},
-    val actionEndEffect: () -> Unit = {},
-    val actionPredicate: Predicate<PathfinderMob> = Predicate { true },
-    val cooldownVariationRange: IntRange = 0..0
+    open var cooldownTime: Int = 20,
+    open val actionDelay: Int = 0,
+    open val actionStartEffect: (ActionData?) -> Unit = {},
+    open val actionSuccessEffect: (ActionData?) -> Unit = {},
+    open val actionEndEffect: (ActionData?) -> Unit = {},
+    open val actionPredicate: Predicate<PathfinderMob> = Predicate { true },
+    open val cooldownVariationRange: IntRange = 0..0
 ): Goal() {
-    var isDoingAction = false
+    open var isDoingAction = false
     open var actionTimer = -1
+    open var actionDirection = 1
+
+
 
     override fun stop() {
         isDoingAction = false
         actionTimer = -1
+    }
+
+    open fun getData(): ActionData? {
+        return null
     }
 
     override fun requiresUpdateEveryTick(): Boolean = true
@@ -39,23 +50,34 @@ abstract class ActionGoal(
             canDoAction()
             && !(usingEntity is PazPlant && (usingEntity as PazPlant).cooldown > -1)
             && actionTimer == -1
+            && actionDelay >= 0
         ) {
             (usingEntity as? PazPlant)?.cooldown = Mth.floor(
                 (cooldownTime+cooldownVariationRange.random()) *
                         if ((usingEntity as PazPlant).poweredUp) 0.8 else 1.0
             ).coerceAtLeast(actionDelay)
             actionTimer = actionDelay.coerceAtLeast(0)
-            actionStartEffect()
+            actionStartEffect(getData())
             isDoingAction = true
         }
 
-        if (actionTimer > 0) --actionTimer
+        if (actionTimer > 0) actionTimer += actionDirection
         if (actionTimer == 0) {// do action
-            if (actionPredicate.test(usingEntity)) if (doAction()) actionSuccessEffect()
+            preAction()
+            if (actionPredicate.test(usingEntity)) if (doAction()) actionSuccessEffect(getData())
             isDoingAction = false
             actionTimer = -1
-            actionEndEffect()
+            actionEndEffect(getData())
+            postAction()
         }
+    }
+
+    open fun preAction() {
+
+    }
+
+    open fun postAction() {
+
     }
 
     abstract fun canDoAction() : Boolean

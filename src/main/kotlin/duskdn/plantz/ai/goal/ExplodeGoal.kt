@@ -1,6 +1,6 @@
 package duskdn.plantz.ai.goal
 
-import duskdn.plantz.entity.plant.init.Explosive
+import duskdn.plantz.entity.plant.init.ExplosivePlant
 import duskdn.plantz.init.PazConfig
 import duskdn.plantz.init.PazDamageTypes
 import duskdn.plantz.init.PazSounds
@@ -11,20 +11,17 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.util.random.WeightedList
 import net.minecraft.world.damagesource.DamageType
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.attributes.Attributes
-import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.level.ExplosionDamageCalculator
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.SimpleExplosionDamageCalculator
-import net.minecraft.world.level.gameevent.GameEvent
 import java.util.*
 import java.util.function.Predicate
 
 class ExplodeGoal(
-    override val usingEntity: Explosive,
+    override val usingEntity: ExplosivePlant,
     cooldownTime: Int = 20,
     actionDelay: Int = 0,
     actionStartEffect: () -> Unit = {},
@@ -41,7 +38,7 @@ class ExplodeGoal(
     activateRange: Double = 3.0,
     val destroyBlocks: Boolean = false,
     val causeFire: Boolean = false,
-) : InstantUseGoal<Explosive>(
+) : InstantUseGoal<ExplosivePlant>(
     usingEntity, cooldownTime, actionDelay, actionStartEffect, actionSuccessEffect, actionEndEffect, actionPredicate,
     velocity = velocity,
     attackRadius = attackRadius,

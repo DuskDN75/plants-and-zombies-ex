@@ -10,6 +10,7 @@ import net.minecraft.core.Holder
 import net.minecraft.resources.ResourceKey
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.util.Mth
 import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
@@ -23,10 +24,10 @@ import java.util.function.Predicate
 abstract class InstantUseGoal<T>(
     override val usingEntity: T,
     cooldownTime: Int = 20,
-    actionDelay: Int = 0,
-    actionStartEffect: () -> Unit = {},
-    actionSuccessEffect: () -> Unit = {},
-    actionEndEffect: () -> Unit = {},
+    actionDelay: Int = usingEntity.getMaxActiveTime(),
+    actionStartEffect: (ActionData?) -> Unit = {},
+    actionSuccessEffect: (ActionData?) -> Unit = {},
+    actionEndEffect: (ActionData?) -> Unit = {},
     actionPredicate: Predicate<PathfinderMob> = Predicate { true },
     var attackRadius: Float = usingEntity.attributes.getValue(Attributes.FOLLOW_RANGE).toFloat(),
     var velocity : Double = 1.2,
@@ -68,10 +69,12 @@ abstract class InstantUseGoal<T>(
     }
 
     override fun start() {
+        super.start()
         usingEntity.getNavigation().stop()
     }
 
     override fun stop() {
+        super.stop()
         target = null
         usingEntity.activeDirection = -1
     }
@@ -81,7 +84,7 @@ abstract class InstantUseGoal<T>(
     }
 
     override fun canDoAction(): Boolean {
-        return canUse()
+        return usingEntity.activeDirection > 0 && usingEntity.activeTime == 0
     }
 
     open fun startAction(): Boolean {
@@ -101,22 +104,9 @@ abstract class InstantUseGoal<T>(
 
     override fun tick() {
 
-        if (!canUse()) return
-
         if (usingEntity.activeDirection != 2) usingEntity.activeDirection = 1
 
-        if (usingEntity.activeDirection > 0 && usingEntity.activeTime == 0) {
-            startAction()
-            beforeActionEntityEffect(getTargets())
-            usingEntity.gameEvent(GameEvent.PRIME_FUSE)
-        }
-
-        if (usingEntity.activeTime == usingEntity.getMaxActiveTime()) {
-            actionEndEffect()
-            val result = doAction()
-            afterActionEntityEffect(getTargets())
-            if (result && usingEntity.discardOnActivate()) usingEntity.discard()
-        }
+        super.tick()
     }
 
 }

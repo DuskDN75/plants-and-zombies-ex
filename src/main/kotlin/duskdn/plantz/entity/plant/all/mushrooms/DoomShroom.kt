@@ -5,7 +5,7 @@ import duskdn.plantz.init.NukeSmokeParticleOptions
 import duskdn.plantz.init.NukeWaveParticleOptions
 import duskdn.plantz.init.PazEntities
 import duskdn.plantz.ai.goal.ExplodeGoal
-import duskdn.plantz.entity.plant.init.Explosive
+import duskdn.plantz.entity.plant.init.ExplosivePlant
 import duskdn.plantz.entity.plant.utils.mushroomSurvivalCheck
 import duskdn.plantz.entity.plant.utils.stoneSurvivalCheck
 import net.minecraft.core.particles.ParticleTypes
@@ -15,7 +15,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class DoomShroom(type: EntityType<out Explosive>, level: Level) : Explosive(PazEntities.DOOM_SHROOM, level) {
+class DoomShroom(type: EntityType<out ExplosivePlant>, level: Level) : ExplosivePlant(PazEntities.DOOM_SHROOM, level) {
 
     override fun registerGoals() {
         super.registerGoals()
