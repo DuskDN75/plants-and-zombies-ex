@@ -16,9 +16,9 @@ open class MeleeAttackActionGoal(
     usingEntity: PathfinderMob,
     cooldownTime: Int = 20,
     actionDelay: Int = 0,
-    actionStartEffect: () -> Unit = {},
-    actionSuccessEffect: () -> Unit = {},
-    actionEndEffect: () -> Unit = {},
+    actionStartEffect: (ActionData?) -> Unit = {},
+    actionSuccessEffect: (ActionData?) -> Unit = {},
+    actionEndEffect: (ActionData?) -> Unit = {},
     actionPredicate: Predicate<PathfinderMob> = Predicate { true },
     val damageMultiplier: Float = 1.0f,
     val damageType: ResourceKey<DamageType> = PazDamageTypes.PLANT,
@@ -30,7 +30,7 @@ open class MeleeAttackActionGoal(
         actionPredicate.test(usingEntity)
             && usingEntity.tickCount>cooldownTime
             && usingEntity.target?.isAlive == true
-            && !(usingEntity is PazPlant && (usingEntity.isAsleep || usingEntity.isGrowingSeeds))
+            && !(usingEntity is PazPlant && ((usingEntity as PazPlant).isAsleep || (usingEntity as PazPlant).isGrowingSeeds))
     )
 
     override fun canDoAction(): Boolean {
@@ -47,7 +47,7 @@ open class MeleeAttackActionGoal(
         val damage : Float = usingEntity.attributes.getValue(Attributes.ATTACK_DAMAGE).toFloat() * damageMultiplier
         val knockback : Double = usingEntity.attributes.getValue(Attributes.ATTACK_KNOCKBACK)
         val source = usingEntity.damageSources().source(damageType, usingEntity,
-            if (PazConfig.PLAYER_CREDIT_FOR_PLANT_KILLS && usingEntity is OwnableEntity) usingEntity.rootOwner else usingEntity)
+            if (PazConfig.PLAYER_CREDIT_FOR_PLANT_KILLS && usingEntity is OwnableEntity) (usingEntity as OwnableEntity).rootOwner else usingEntity)
 
         beforeHitEntityEffect(target)
         if (target.hurtServer(usingEntity.level() as ServerLevel, source, damage)) {

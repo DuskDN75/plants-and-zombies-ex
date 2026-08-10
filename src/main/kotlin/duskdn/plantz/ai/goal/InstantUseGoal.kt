@@ -30,20 +30,16 @@ abstract class InstantUseGoal<T>(
     actionEndEffect: (ActionData?) -> Unit = {},
     actionPredicate: Predicate<PathfinderMob> = Predicate { true },
     var attackRadius: Float = usingEntity.attributes.getValue(Attributes.FOLLOW_RANGE).toFloat(),
-    var velocity : Double = 1.2,
     val soundEvent: Holder.Reference<SoundEvent> = PazSounds.PLANT_EXPLODE,
     val damageType: ResourceKey<DamageType> = PazDamageTypes.PLANT_AOE,
-    val beforeActionEntityEffect: (targets: MutableList<LivingEntity>) -> Unit = {},
-    val afterActionEntityEffect: (targets: MutableList<LivingEntity>) -> Unit = {},
     val requireTarget: Boolean = false,
     val activateRange: Double = 3.0,
+    override var maxActionTime: Int = usingEntity.getMaxActiveTime(),
 ) : ActionGoal(usingEntity, cooldownTime, actionDelay, actionStartEffect, actionSuccessEffect, actionEndEffect, actionPredicate) where T: PazPlant, T: IInstantPlant {
 
     init {
         flags = EnumSet.of<Flag>(Flag.MOVE)
     }
-
-    private var target: LivingEntity? = null
 
     fun getTargets(): MutableList<LivingEntity> {
         return usingEntity.level().getEntitiesOfClass(
@@ -52,20 +48,23 @@ abstract class InstantUseGoal<T>(
         ).filter { it != usingEntity }.toMutableList()
     }
 
+    override fun getData(): ActionData? {
+        return ActionData(getTargets())
+    }
+
     override fun canUse(): Boolean {
 
         if (requireTarget) {
             target = usingEntity.target
             target?.let {
-                return (!it.isDeadOrDying && usingEntity.distanceToSqr(it) < activateRange * activateRange) || usingEntity.activeTime > 0
+                return (!it.isDeadOrDying && usingEntity.distanceToSqr(it) < activateRange * activateRange) || actionTimer < maxActionTime
             }
         }
 
         if (!actionPredicate.test(usingEntity)) return false
         if ((usingEntity.isAsleep || usingEntity.isGrowingSeeds)) return false
-        if (usingEntity.activeDirection>=0) return true
 
-        return false
+        return true
     }
 
     override fun start() {
@@ -76,7 +75,6 @@ abstract class InstantUseGoal<T>(
     override fun stop() {
         super.stop()
         target = null
-        usingEntity.activeDirection = -1
     }
 
     override fun requiresUpdateEveryTick(): Boolean {
@@ -84,29 +82,31 @@ abstract class InstantUseGoal<T>(
     }
 
     override fun canDoAction(): Boolean {
-        return usingEntity.activeDirection > 0 && usingEntity.activeTime == 0
-    }
 
-    open fun startAction(): Boolean {
+        println("ENTITY IS ACTIVE: ${usingEntity.active}")
 
-        usingEntity.playSound(usingEntity.getActiveSound())
-
-        return true
+        return usingEntity.active
     }
 
     override fun doAction(): Boolean {
-
-        usingEntity.activeDirection = -1
-        usingEntity.activeTime = 0
-
         return true
     }
 
-    override fun tick() {
+    override fun startAction() {
 
-        if (usingEntity.activeDirection != 2) usingEntity.activeDirection = 1
+        val sound = usingEntity.getActiveSound()
 
-        super.tick()
+        if (sound != null) {
+            usingEntity.playSound(sound)
+        }
+    }
+
+    override fun preAction() {
+
+    }
+
+    override fun postAction() {
+        if (usingEntity.discardOnActivate()) usingEntity.discard()
     }
 
 }

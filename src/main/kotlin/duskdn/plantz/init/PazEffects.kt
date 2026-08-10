@@ -56,10 +56,6 @@ object PazEffects {
 
     @JvmField val CHILLED: Holder<MobEffect> = register("chilled",
         ChilledMobEffect(MobEffectCategory.HARMFUL, 0x8BC1FF)
-            .addAttributeModifier(Attributes.MOVEMENT_SPEED, pazResource("effect.chilled"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
-            .addAttributeModifier(Attributes.FLYING_SPEED, pazResource("effect.chilled"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
-            .addAttributeModifier(Attributes.ATTACK_SPEED, pazResource("effect.chilled"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
-            .addAttributeModifier(Attributes.BLOCK_BREAK_SPEED, pazResource("effect.chilled"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
     )
 
     @JvmField val DRENCHED: Holder<MobEffect> = register("drenched",

@@ -1,7 +1,10 @@
 package duskdn.plantz.mixin;
 
+import duskdn.plantz.entity.projectile.init.PazProjectile;
 import duskdn.plantz.init.PazBlocks;
+import duskdn.plantz.init.PazItems;
 import duskdn.plantz.init.PazSounds;
+import kotlin.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -10,18 +13,26 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.zombie.Zombie;
+import net.minecraft.world.entity.monster.zombie.ZombifiedPiglin;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.Heightmap;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * @author Josh
@@ -36,21 +47,13 @@ public class MobMixin {
     private int waveDelayTicks = 0;
 
     @Unique
-    private static final Identifier REINFORCEMENT_CALLER_CHARGE_ID = Identifier.withDefaultNamespace("reinforcement_caller_charge");
-
-    @Unique
-    private static final AttributeModifier ZOMBIE_REINFORCEMENT_CALLEE_CHARGE = new AttributeModifier(
-            Identifier.withDefaultNamespace("reinforcement_callee_charge"), -0.05F, AttributeModifier.Operation.ADD_VALUE
-    );
-
-    @Unique
-    private void spawnReinforcement(final Zombie entity, final ServerLevel level, final LivingEntity target) {
+    private void spawnReinforcement(final Mob entity, final ServerLevel level, final LivingEntity target) {
         if (target != null
                 && level.isSpawningMonsters()) {
             int x = Mth.floor(entity.getX());
             int z = Mth.floor(entity.getZ());
-            EntityType<? extends Zombie> type = entity.getType();
-            Zombie reinforcement = type.create(level, EntitySpawnReason.REINFORCEMENT);
+            EntityType<? extends Mob> type = (EntityType<? extends Mob>) entity.getType();
+            Mob reinforcement = type.create(level, EntitySpawnReason.REINFORCEMENT);
             if (reinforcement == null) {
                 return;
             }
@@ -70,14 +73,26 @@ public class MobMixin {
                 boolean extraChecks = !level.hasNearbyAlivePlayer(xt, yt, zt, 7.0)
                         && level.isUnobstructed(reinforcement)
                         && level.noCollision(reinforcement)
-                        && (((ZombieAccessor) reinforcement).invokeCanSpawnInLiquids() || !level.containsAnyLiquid(reinforcement.getBoundingBox()));
+                        && ((reinforcement instanceof ZombieAccessor zombie) && zombie.invokeCanSpawnInLiquids()) || !level.containsAnyLiquid(reinforcement.getBoundingBox());
 
                 if (extraChecks) {
                     reinforcement.setTarget(target);
                     reinforcement.finalizeSpawn(level, level.getCurrentDifficultyAt(reinforcement.blockPosition()), EntitySpawnReason.REINFORCEMENT, null);
                     level.addFreshEntityWithPassengers(reinforcement);
 
-                    IO.println("SPAWNED ZOMBIE!!!");
+                    var item = entity.getItemBySlot(EquipmentSlot.LEGS);
+
+                    var headItem = entity.getItemBySlot(EquipmentSlot.HEAD);
+
+                    var offhandItem = entity.getItemBySlot(EquipmentSlot.OFFHAND);
+
+                    var mainhandItem = entity.getItemBySlot(EquipmentSlot.MAINHAND);
+
+                    if (item.is(PazItems.DUCKY_TUBE)) reinforcement.setItemSlot(EquipmentSlot.LEGS, item);
+
+                    if (headItem.is(PazBlocks.CONE.asItem()) || headItem.is(Items.BUCKET)) reinforcement.setItemSlot(EquipmentSlot.HEAD, item);
+
+                    if (offhandItem.is(PazBlocks.BRAINZ_FLAG.asItem()) && mainhandItem.is(PazBlocks.BRAINZ_FLAG.asItem())) reinforcement.setItemSlot(EquipmentSlot.MAINHAND, offhandItem);
 
                     break;
                 }
@@ -103,11 +118,11 @@ public class MobMixin {
     }
 
     @Unique
-    private void spawnWave(Zombie zombie) {
+    private void spawnWave(Mob entity) {
 
-        if (!(zombie.level() instanceof ServerLevel level)) return;
+        if (!(entity.level() instanceof ServerLevel level)) return;
 
-        LivingEntity target = zombie.getTarget();
+        LivingEntity target = entity.getTarget();
 
         Difficulty difficulty = level.getDifficulty();
 
@@ -133,7 +148,7 @@ public class MobMixin {
             }
         }
 
-        int count = zombie.getRandom().nextInt(minimumCount,maximumCount);
+        int count = entity.getRandom().nextInt(minimumCount,maximumCount);
 
         IO.println("Count is: "+count);
 
@@ -141,7 +156,7 @@ public class MobMixin {
 
             IO.println("SPAWNING REINFORCEMENT: "+i);
 
-            spawnReinforcement(zombie, level, target);
+            spawnReinforcement(entity, level, target);
 
         }
 
@@ -151,25 +166,19 @@ public class MobMixin {
     public void waitForWave(CallbackInfo ci) {
         Mob entity = (Mob) (Object) this;
 
-        if (entity instanceof Zombie zombie) {
+        if (spawnedWave && waveDelayTicks > 0) {
 
-//            IO.println("WAVE DELAY TICKS: "+waveDelayTicks);
+            waveDelayTicks--;
 
-            if (spawnedWave && waveDelayTicks > 0) {
+            if (waveDelayTicks <= 0 && entity.getTarget() != null) {
 
-                waveDelayTicks--;
+                spawnWave(entity);
 
-                if (waveDelayTicks <= 0 && zombie.getTarget() != null) {
+                Level level = entity.level();
 
-                    spawnWave(zombie);
+                if (level.isClientSide()) {
 
-                    Level level = zombie.level();
-
-                    if (level.isClientSide()) {
-
-                        level.playLocalSound(zombie.blockPosition(), PazSounds.WAVE_START, SoundSource.HOSTILE, 1.0f, 1.0f, false);
-
-                    }
+                    level.playLocalSound(entity.blockPosition(), PazSounds.WAVE_START, SoundSource.HOSTILE, 1.0f, 1.0f, false);
 
                 }
 
@@ -186,7 +195,7 @@ public class MobMixin {
 
         if (!spawnedWave) {
 
-            if (entity.getItemBySlot(EquipmentSlot.MAINHAND).is(PazBlocks.BRAINZ_FLAG.asItem()) && entity instanceof Zombie zombie ) {
+            if (entity.getItemBySlot(EquipmentSlot.MAINHAND).is(PazBlocks.BRAINZ_FLAG.asItem()) ) {
 
                 IO.println("WAVE TRIGGERED!");
 
@@ -194,14 +203,38 @@ public class MobMixin {
 
                 spawnedWave = true;
 
-                Level level = zombie.level();
+                Level level = entity.level();
 
                 if (level.isClientSide()) {
 
-                    level.playLocalSound(zombie.blockPosition(), PazSounds.WAVE_INCOMING, SoundSource.HOSTILE, 1.0f, 1.0f, false);
+                    level.playLocalSound(entity.blockPosition(), PazSounds.WAVE_INCOMING, SoundSource.HOSTILE, 1.0f, 1.0f, false);
 
                 }
 
+            }
+
+        }
+
+    }
+
+    @Inject(method = "finalizeSpawn", at = @At("HEAD"), cancellable = true)
+    public void addArmor(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnReason, SpawnGroupData groupData, CallbackInfoReturnable<SpawnGroupData> cir) {
+
+        LivingEntity self = (LivingEntity)(Object)this;
+
+        if (self instanceof ZombifiedPiglin zombie) {
+
+            if (zombie.getItemBySlot(EquipmentSlot.HEAD).isEmpty() && spawnReason != EntitySpawnReason.COMMAND && spawnReason != EntitySpawnReason.SPAWN_ITEM_USE){
+                if (zombie.getRandom().nextFloat() < 0.25) {
+                    zombie.setItemSlot(EquipmentSlot.HEAD, PazBlocks.CONE.asItem().getDefaultInstance());
+                    zombie.setDropChance(EquipmentSlot.HEAD, 0.2f);
+                }
+                else if (zombie.getRandom().nextFloat() < 0.1 && zombie.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
+                    zombie.setItemSlot(EquipmentSlot.HEAD, Items.BUCKET.getDefaultInstance());
+                }
+                else if (zombie.getRandom().nextFloat() < 0.1 && zombie.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
+                    zombie.setItemSlot(EquipmentSlot.MAINHAND, PazBlocks.BRAINZ_FLAG.asItem().getDefaultInstance());
+                }
             }
 
         }

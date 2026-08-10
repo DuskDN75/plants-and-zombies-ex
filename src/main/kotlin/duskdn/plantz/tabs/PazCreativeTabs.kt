@@ -6,5 +6,6 @@ object PazCreativeTabs {
         PazPlantsTab.initialize()
         PazZombiesTab.initialize()
         PazItemsTab.initialize()
+        PazBlocksTab.initialize()
     }
 }

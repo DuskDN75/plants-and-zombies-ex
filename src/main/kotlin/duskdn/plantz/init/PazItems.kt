@@ -1,6 +1,8 @@
 package duskdn.plantz.init
 
 import duskdn.plantz.entity.plant.init.PazPlant
+import duskdn.plantz.entity.zombie.HatVariant
+import duskdn.plantz.entity.zombie.PazZombie
 import duskdn.plantz.item.*
 import duskdn.plantz.item.component.BlocksProjectileDamage
 import duskdn.plantz.item.component.StoredSun
@@ -34,6 +36,7 @@ import net.minecraft.world.item.equipment.EquipmentAssets
 import net.minecraft.world.item.equipment.Equippable
 import net.minecraft.world.level.block.ComposterBlock
 import net.minecraft.world.level.block.DispenserBlock
+import java.util.function.Consumer
 import java.util.function.Function
 
 object PazItems {
@@ -204,21 +207,28 @@ object PazItems {
         properties = Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).jukeboxPlayable(PazJukeboxSongs.GRASSY_GROOVE)
     )
 
-    @JvmField val BROWN_COAT_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.BROWN_COAT)
-    @JvmField val NEWSPAPER_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.NEWSPAPER_ZOMBIE)
-    @JvmField val DIGGER_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.DIGGER_ZOMBIE)
-    @JvmField val ENGINEER_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.ENGINEER_ZOMBIE)
-    @JvmField val ZOMBIE_YETI_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.ZOMBIE_YETI)
-    @JvmField val DISCO_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.DISCO_ZOMBIE)
-    @JvmField val BACKUP_DANCER_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.BACKUP_DANCER)
-    @JvmField val ALL_STAR_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.ALL_STAR)
-    @JvmField val SOLDIER_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.SOLDIER_ZOMBIE)
-    @JvmField val ROBO_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.ROBO_ZOMBIE)
-    @JvmField val SUPER_BRAINZ_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.SUPER_BRAINZ)
-    @JvmField val IMP_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.IMP)
-    @JvmField val GARGANTUAR_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.GARGANTUAR)
-    @JvmField val BALLOON_ZOMBIE_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.BALLOON_ZOMBIE)
-    @JvmField val PIRATE_CAPTAIN_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.PIRATE_CAPTAIN)
+    @JvmField val BROWN_COAT_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
+        PazEntities.BROWN_COAT
+    )
+
+    @JvmField val NEWSPAPER_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.NEWSPAPER_ZOMBIE)
+    @JvmField val DIGGER_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.DIGGER_ZOMBIE)
+    @JvmField val ENGINEER_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.ENGINEER_ZOMBIE)
+    @JvmField val ZOMBIE_YETI_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.ZOMBIE_YETI)
+    @JvmField val DISCO_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.DISCO_ZOMBIE)
+    @JvmField val BACKUP_DANCER_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.BACKUP_DANCER)
+    @JvmField val ALL_STAR_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.ALL_STAR)
+    @JvmField val SOLDIER_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.SOLDIER_ZOMBIE)
+    @JvmField val ROBO_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.ROBO_ZOMBIE)
+    @JvmField val SUPER_BRAINZ_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.SUPER_BRAINZ)
+    @JvmField val IMP_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.IMP)
+    @JvmField val GARGANTUAR_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.GARGANTUAR)
+
+    @JvmField val BALLOON_ZOMBIE_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
+        PazEntities.BALLOON_ZOMBIE
+    )
+
+    @JvmField val PIRATE_CAPTAIN_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.PIRATE_CAPTAIN)
 
     @JvmField val GNOME_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.GNOME)
 
@@ -235,11 +245,78 @@ object PazItems {
         return item
     }
 
-    private fun registerSpawnEgg(type: EntityType<*>): Item {
+    private fun registerPazZombieSpawnEgg(
+        type: EntityType<*>,
+        worker: (PazZombie) -> Unit = {},
+        properties: Item.Properties = Item.Properties(),
+        customId: String? = null,
+    ): Item {
+        val entityId = if (customId != null) customId else EntityType.getKey(type).path
+        return registerItem(
+            "${entityId}_spawn_egg",
+            { props ->
+                PazZombieSpawnEgg(props, worker)
+            },
+            properties
+                .spawnEgg(type)
+        )
+    }
+
+    private fun registerPazZombieWithVariants(
+        type: EntityType<*>,
+        properties: Item.Properties = Item.Properties(),
+    ): MutableList<Item> {
+
+        val spawnEggList: MutableList<Item> = mutableListOf()
+
         val entityId = EntityType.getKey(type).path
+
+        HatVariant.entries.forEach { hatVariant ->
+            spawnEggList.add(
+                registerPazZombieSpawnEgg(
+                    type,
+                    worker = {
+
+                        if (hatVariant.hat != null) {
+                            it.setItemSlot(
+                                EquipmentSlot.HEAD,
+                                hatVariant.hat.defaultInstance
+                            )
+                        }
+
+                    },
+                    customId = if (hatVariant.hatName != null) "${entityId}_${hatVariant.hatName}" else null
+                )
+            )
+        }
+
+        spawnEggList.add(
+            registerPazZombieSpawnEgg(
+                type,
+                worker = {
+                    it.setItemSlot(
+                        EquipmentSlot.MAINHAND,
+                        PazBlocks.BRAINZ_FLAG.asItem().defaultInstance
+                    )
+                    it
+                },
+                customId = "${entityId}_flag"
+            )
+        )
+
+        return spawnEggList
+    }
+
+    private fun registerSpawnEgg(
+        type: EntityType<*>,
+        properties: Item.Properties = Item.Properties(),
+        customId: String? = null,
+    ): Item {
+        val entityId = if (customId != null) customId else EntityType.getKey(type).path
         return registerItem(
            "${entityId}_spawn_egg", ::SpawnEggItem,
-            Item.Properties().spawnEgg(type)
+            properties
+                .spawnEgg(type)
         )
     }
 

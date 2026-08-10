@@ -119,6 +119,10 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
         return ((Entity) (Object) this).getEntityData().get(DATA_FROZEN_ID);
     }
     @Unique
+    public void plantz$setFrozenId(boolean value) {
+        ((Entity) (Object) this).getEntityData().set(DATA_FROZEN_ID, value);
+    }
+    @Unique
     public boolean plantz$getDrenchedId() {
         return ((Entity) (Object) this).getEntityData().get(DATA_DRENCHED_ID);
     }
@@ -235,11 +239,11 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
     }
 
     @Inject(method = "onEffectAdded", at = @At(value = "TAIL"))
-    public void onHypnoAdded(MobEffectInstance effect, Entity source, CallbackInfo ci) {
+    public void onEffectAdded(MobEffectInstance effect, Entity source, CallbackInfo ci) {
         updateEffects();
     }
     @Inject(method = "onEffectsRemoved", at = @At(value = "TAIL"))
-    public void onHypnoRemoved(Collection<MobEffectInstance> effects, CallbackInfo ci) {
+    public void onEffectRemoved(Collection<MobEffectInstance> effects, CallbackInfo ci) {
         updateEffects();
     }
     @Unique
@@ -252,12 +256,12 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
     }
 
     @Inject(method = "canBeAffected", at = @At(value = "RETURN"), cancellable = true)
-    public void immuneToHypnosis(MobEffectInstance newEffect, CallbackInfoReturnable<Boolean> cir) {
+    public void immuneToEffect(MobEffectInstance newEffect, CallbackInfoReturnable<Boolean> cir) {
         if (newEffect.is(PazEffects.HYPNOTIZE)) {
             cir.setReturnValue(!((Entity) (Object) this).is(PazTags.EntityTypes.CANNOT_HYPNOTIZE));
         }
         if (newEffect.is(PazEffects.CHILLED)) {
-            cir.setReturnValue(!((Entity) (Object) this).canFreeze());
+            cir.setReturnValue(((Entity) (Object) this).canFreeze());
 
             LivingEntity entity = (LivingEntity) (Object) this;
 
@@ -349,10 +353,6 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
 
         if (!(source.getDirectEntity() instanceof Projectile)) {
             damageMult = 3.0f;
-        }
-
-        if ((source.getDirectEntity() instanceof PazProjectile projectile)) {
-            damageMult = projectile.getDamage();
         }
 
         float leftoverDamage = damage*damageMult;

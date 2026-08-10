@@ -25,20 +25,28 @@ object PazZombiesTab : PazCreativeTab() {
                 .displayItems { parameters, output ->
 
                     // zombie spawn eggs
-                    output.accept(PazItems.BROWN_COAT_SPAWN_EGG)
+
+                    PazItems.BROWN_COAT_SPAWN_EGGS.forEach { output.accept(it) }
+
                     output.accept(PazItems.NEWSPAPER_ZOMBIE_SPAWN_EGG)
-                    output.accept(PazItems.DIGGER_ZOMBIE_SPAWN_EGG)
-                    output.accept(PazItems.ENGINEER_ZOMBIE_SPAWN_EGG)
-                    output.accept(PazItems.ZOMBIE_YETI_SPAWN_EGG)
                     output.accept(PazItems.DISCO_ZOMBIE_SPAWN_EGG)
                     output.accept(PazItems.BACKUP_DANCER_SPAWN_EGG)
                     output.accept(PazItems.ALL_STAR_SPAWN_EGG)
+
+                    output.accept(PazItems.DIGGER_ZOMBIE_SPAWN_EGG)
+                    output.accept(PazItems.ENGINEER_ZOMBIE_SPAWN_EGG)
+                    output.accept(PazItems.ZOMBIE_YETI_SPAWN_EGG)
+
                     output.accept(PazItems.SOLDIER_ZOMBIE_SPAWN_EGG)
                     output.accept(PazItems.ROBO_ZOMBIE_SPAWN_EGG)
-                    output.accept(PazItems.SUPER_BRAINZ_SPAWN_EGG)
+
+                    PazItems.BALLOON_ZOMBIE_SPAWN_EGGS.forEach { output.accept(it) }
+
                     output.accept(PazItems.IMP_SPAWN_EGG)
                     output.accept(PazItems.GARGANTUAR_SPAWN_EGG)
-                    output.accept(PazItems.BALLOON_ZOMBIE_SPAWN_EGG)
+
+                    output.accept(PazItems.SUPER_BRAINZ_SPAWN_EGG)
+                    output.accept(PazItems.PIRATE_CAPTAIN_SPAWN_EGG)
 
                     // gnome
                     if (parameters.hasPermissions()) output.accept(PazItems.GNOME_SPAWN_EGG)

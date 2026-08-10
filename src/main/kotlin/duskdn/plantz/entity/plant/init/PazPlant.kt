@@ -4,6 +4,9 @@ import duskdn.plantz.ai.PlantState
 import duskdn.plantz.ai.goal.SleepGoal
 import duskdn.plantz.entity.Sun
 import duskdn.plantz.entity.plant.all.WaterPot
+import duskdn.plantz.entity.plant.interfaces.IExplosivePlant.Companion.SWELL
+import duskdn.plantz.entity.plant.interfaces.IExplosivePlant.Companion.SWELL_OLD
+import duskdn.plantz.entity.plant.interfaces.IInstantPlant.Companion.ACTIVE
 import duskdn.plantz.entity.plant.utils.PlantGrowNeeds
 import duskdn.plantz.entity.plant.utils.PlantSpawnUtils
 import duskdn.plantz.entity.plant.utils.onValidGround
@@ -290,6 +293,9 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
         entityData.define(COFFEE_BUFF, 0)
         entityData.define(SLEEPING, false)
         entityData.define(POWERED_UP, false)
+        entityData.define(SWELL, 0)
+        entityData.define(SWELL_OLD, 0)
+        entityData.define(ACTIVE, true)
         entityData.define(ATTACHED_PLAYER, Optional.empty())
     }
 

@@ -39,6 +39,7 @@ import duskdn.plantz.entity.plant.all.WallNut
 import duskdn.plantz.entity.plant.all.aquatic.WaterPeaShooter
 import duskdn.plantz.entity.plant.all.WaterPot
 import duskdn.plantz.entity.plant.all.aerial.SkyPeaShooter
+import duskdn.plantz.entity.plant.all.mushrooms.IceShroom
 import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.entity.projectile.*
 import duskdn.plantz.entity.projectile.peas.Pea
@@ -359,6 +360,15 @@ object PazEntities {
         "doomshroom", EntityType.Builder.of(::DoomShroom, MobCategory.CREATURE),
         eyeHeight = 0.6f,
         height = 0.8f,
+        attributes = PazPlant.Companion.PlantAttributes(
+            maxHealth = 28.0,
+            followRange = 5.0
+        )
+    )
+    @JvmField val ICE_SHROOM: EntityType<IceShroom> = registerPlant(
+        "iceshroom", EntityType.Builder.of(::IceShroom, MobCategory.CREATURE),
+        eyeHeight = 0.43f,
+        height = 0.7f,
         attributes = PazPlant.Companion.PlantAttributes(
             maxHealth = 28.0,
             followRange = 5.0

@@ -11,9 +11,12 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.StructureTags
 import net.minecraft.util.RandomSource
+import net.minecraft.util.StringRepresentable
 import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.*
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
@@ -94,7 +97,7 @@ class BrownCoat(type: EntityType<out BrownCoat>, level: Level) : PazZombie(type,
             random
         )
 
-        if (getItemBySlot(EquipmentSlot.HEAD).isEmpty && spawnReason != EntitySpawnReason.COMMAND){
+        if (getItemBySlot(EquipmentSlot.HEAD).isEmpty && spawnReason != EntitySpawnReason.COMMAND && spawnReason != EntitySpawnReason.SPAWN_ITEM_USE){
             if (random.nextFloat() < 0.25) {
                 setItemSlot(EquipmentSlot.HEAD, PazBlocks.CONE.asItem().defaultInstance)
                 setDropChance(EquipmentSlot.HEAD, 0.2f)
@@ -106,4 +109,10 @@ class BrownCoat(type: EntityType<out BrownCoat>, level: Level) : PazZombie(type,
 
         return data
     }
+}
+
+enum class HatVariant(val hat: Item?, val hatName: String?) {
+    NONE(null, null),
+    CONE(PazBlocks.CONE.asItem(), "cone"),
+    BUCKET(Items.BUCKET, "bucket"),
 }

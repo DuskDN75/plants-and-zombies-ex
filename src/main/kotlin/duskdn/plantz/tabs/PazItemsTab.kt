@@ -28,13 +28,10 @@ object PazItemsTab : PazCreativeTab() {
                     output.accept(PazItems.MUSIC_DISC_GRASSY_GROOVE)
 
                     // items
-                    if (parameters.hasPermissions()) output.accept(PazBlocks.TIME_MACHINE)
                     output.accept(PazItems.BRAINZ_ALLOY)
-                    output.accept(PazItems.SUN_BATTERY)
                     output.accept(PazItems.SUN)
                     output.accept(PazItems.SUN_BOTTLE)
                     output.accept(PazItems.WATERING_CAN)
-                    output.accept(PazBlocks.ZEN_POT)
                     output.accept(PazItems.PLANT_POT_MINECART)
                     output.accept(PazItems.PLANT_POT_HELMET)
                     output.accept(PazItems.DUCKY_TUBE)
@@ -42,17 +39,9 @@ object PazItemsTab : PazCreativeTab() {
                     output.accept(PazItems.NEWSPAPER)
                     output.accept(PazItems.FOOTBALL_HELMET)
                     output.accept(PazItems.DYE_BLASTER)
-                    output.accept(PazBlocks.BRAINZ_FLAG)
-                    output.accept(PazBlocks.PLANTZ_FLAG)
 
                     // balloons
                     PazItems.balloonByColor.forEach { output.accept(it.value) }
-
-                    // mailboxes
-                    PazBlocks.mailboxByColor.forEach { output.accept(it.value) }
-
-                    // other
-                    output.accept(PazBlocks.GRAVESTONE)
                 }
                 .build()
         )

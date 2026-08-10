@@ -43,7 +43,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     }
 
     @Inject(method = "extractRenderState*", at = @At("TAIL"))
-    private void checkForHypnoEffect(T entity, S state, float partialTicks, CallbackInfo ci) {
+    private void checkForEffects(T entity, S state, float partialTicks, CallbackInfo ci) {
         boolean hasHypno = ((PazEntityData) entity).plantz$getHypnoId();
         state.setData(IS_HYPNOTIZED_KEY, hasHypno);
 
@@ -52,6 +52,9 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 
         boolean hasDrenched = ((PazEntityData) entity).plantz$getDrenchedId();
         state.setData(IS_DRENCHED_KEY, hasDrenched);
+
+        boolean hasFrozen = ((PazEntityData) entity).plantz$getFrozenId();
+        state.setData(IS_FROZEN_KEY, hasFrozen);
 
         Map<Integer, Integer> paintColors = ((PazEntityData) entity).plantz$getPaintedColors();
         state.setData(PAINT_COLORS_KEY, paintColors);
@@ -64,64 +67,34 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     private static final int PLANTZ_CHILLED_TINT = 0xFF8BC1FF;
 
     @Unique
+    private static final int PLANTZ_FROZEN_TINT = 0xFF0C0293;
+
+    @Unique
     private static final int PLANTZ_DRENCHED_TINT = 0xFF3F76E4;
 
     @ModifyExpressionValue(
-        method = "submit*",
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;multiply(II)I")
+            method = "submit*",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;multiply(II)I")
     )
-    private int plantz$applyHypnoTint(int tintedColor, S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
+    private int plantz$applyTint(int tintedColor, S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
         AtomicInteger finalColor = new AtomicInteger(tintedColor);
 
         if (state.getDataOrDefault(IS_HYPNOTIZED_KEY, false)) {
             finalColor.set(ARGB.multiply(finalColor.get(), PLANTZ_HYPNO_TINT));
         }
 
-        // multiple colors end up just looking black. not gonna use this for now.
-//        Map<Integer, Integer> colors = state.getDataOrDefault(PAINT_COLORS_KEY, new HashMap<>());
-//        colors.forEach( (color, amplifier) -> {
-//            if (color != -1) finalColor.set(ARGB.multiply(finalColor.get(), ARGB.opaque(color)));
-//        });
-
-        return finalColor.get();
-    }
-
-    @ModifyExpressionValue(
-            method = "submit*",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;multiply(II)I")
-    )
-    private int plantz$applyChilledTint(int tintedColor, S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
-        AtomicInteger finalColor = new AtomicInteger(tintedColor);
-
         if (state.getDataOrDefault(IS_CHILLED_KEY, false)) {
             finalColor.set(ARGB.multiply(finalColor.get(), PLANTZ_CHILLED_TINT));
         }
-
-        // multiple colors end up just looking black. not gonna use this for now.
-//        Map<Integer, Integer> colors = state.getDataOrDefault(PAINT_COLORS_KEY, new HashMap<>());
-//        colors.forEach( (color, amplifier) -> {
-//            if (color != -1) finalColor.set(ARGB.multiply(finalColor.get(), ARGB.opaque(color)));
-//        });
-
-        return finalColor.get();
-    }
-
-    @ModifyExpressionValue(
-            method = "submit*",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;multiply(II)I")
-    )
-    private int plantz$applyDrenchedTint(int tintedColor, S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
-        AtomicInteger finalColor = new AtomicInteger(tintedColor);
 
         if (state.getDataOrDefault(IS_DRENCHED_KEY, false)) {
             finalColor.set(ARGB.srgbLerp(0.8f, finalColor.get(), PLANTZ_DRENCHED_TINT));
         }
 
-        // multiple colors end up just looking black. not gonna use this for now.
-//        Map<Integer, Integer> colors = state.getDataOrDefault(PAINT_COLORS_KEY, new HashMap<>());
-//        colors.forEach( (color, amplifier) -> {
-//            if (color != -1) finalColor.set(ARGB.multiply(finalColor.get(), ARGB.opaque(color)));
-//        });
+        if (state.getDataOrDefault(IS_FROZEN_KEY, false)) {
+            finalColor.set(ARGB.srgbLerp(0.8f, finalColor.get(), PLANTZ_FROZEN_TINT));
+        }
+
 
         return finalColor.get();
     }

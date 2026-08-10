@@ -1,5 +1,6 @@
 package duskdn.plantz.entity.zombie
 
+import duskdn.plantz.ai.ZombieState
 import duskdn.plantz.entity.interfaces.IFloatingMob
 import duskdn.plantz.init.PazBlocks
 import duskdn.plantz.init.PazEntities
@@ -56,6 +57,10 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
     override fun doHurtTarget(level: ServerLevel, target: Entity): Boolean {
         val result = super.doHurtTarget(level, target)
         return result
+    }
+
+    override fun isNoGravity(): Boolean {
+        return balloons.isNotEmpty() && state == ZombieState.EMERGING
     }
 
     override fun isBaby(): Boolean = isBabyZombie()

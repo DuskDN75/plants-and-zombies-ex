@@ -15,6 +15,7 @@ import duskdn.plantz.entity.plant.init.ExplosivePlant
 import duskdn.plantz.entity.plant.all.KernelPult
 import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.entity.plant.all.WallNut
+import duskdn.plantz.entity.plant.interfaces.IExplosivePlant
 import duskdn.plantz.init.PazConfig
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.renderer.SubmitNodeCollector
@@ -98,7 +99,7 @@ class PlantRenderer(
         }
         state.isInAir = !entity.onGround()
         state.plantState = entity.state
-        if (entity is ExplosivePlant) state.swelling = entity.getSwelling(partialTick)
+        if (entity is IExplosivePlant) state.swelling = entity.getSwelling(partialTick)
         state.cooldown = entity.cooldown
         state.isAsleep = entity.isAsleep
         state.damagedAmount = entity.damagedPercent

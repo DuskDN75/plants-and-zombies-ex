@@ -29,25 +29,14 @@ import net.minecraft.world.level.SimpleExplosionDamageCalculator
 import java.util.Optional
 
 abstract class InstantUsePlant(type: EntityType<out InstantUsePlant>, level: Level) : PazPlant(type, level), IInstantPlant {
-    companion object {
-        val ACTIVE_DIRECTION: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(InstantUsePlant::class.java,
-            PazDataSerializers.ACTIVE_DIRECTION
-        )
-    }
-
-    override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
-        super.defineSynchedData(entityData)
-        entityData.define(ACTIVE_DIRECTION, 0)
-    }
-
-    override fun tick() {
-        super.tick()
-        if (activeTime == getMaxActiveTime() && !isRemoved) activate()
-        calculateActiveTime()
-    }
-
-    override var oldActiveTime = 0
-    override var activeTime = 0
-
-    open fun discardOnFinish(): Boolean = true
+//    companion object {
+//        val ACTIVE_DIRECTION: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(InstantUsePlant::class.java,
+//            PazDataSerializers.ACTIVE_DIRECTION
+//        )
+//    }
+//
+//    override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
+//        super.defineSynchedData(entityData)
+//        entityData.define(ACTIVE_DIRECTION, 0)
+//    }
 }

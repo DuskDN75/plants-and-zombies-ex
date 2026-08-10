@@ -34,99 +34,53 @@ object PazPlantsTab : PazCreativeTab() {
 
                 .displayItems { parameters, output ->
 
-                    fun addPlant(type: EntityType<*>) {
+                    fun addPlant(type: EntityType<*>, customName: String = "placeholder") {
 
                         val stack = SeedPacketItem.stackFor(type)
 
                         if (type == PazEntities.PLACEHOLDER) {
                             stack.set(PLACEHOLDER_INDEX, placeholderCount++)
+                            stack.set(DataComponents.CUSTOM_NAME, Component.translatable("entity.plantz.$customName"))
                         }
 
                         output.accept(stack)
                     }
 
-                    // region BASE GAME
-//
-//                    addPlant(PazEntities.SUNFLOWER)
-//                    addPlant(PazEntities.PEA_SHOOTER)
-//                    addPlant(PazEntities.CHERRY_BOMB)
-//                    addPlant(PazEntities.WALL_NUT)
-//                    addPlant(PazEntities.POTATO_MINE)
-//                    addPlant(PazEntities.ICE_PEA_SHOOTER)
-//                    addPlant(PazEntities.CHOMPER)
-//                    addPlant(PazEntities.REPEATER)
-//
-//                    addPlant(PazEntities.PUFF_SHROOM)
-//                    addPlant(PazEntities.SUN_SHROOM)
-//                    addPlant(PazEntities.FUME_SHROOM)
-//                    addPlant(PazEntities.PLACEHOLDER)
-//                    addPlant(PazEntities.HYPNOSHROOM)
-//                    addPlant(PazEntities.SCAREDY_SHROOM)
-//                    addPlant(PazEntities.PLACEHOLDER)
-//                    addPlant(PazEntities.DOOM_SHROOM)
-//
-//                    addPlant(PazEntities.LILYPAD)
-//                    addPlant(PazEntities.PLACEHOLDER)
-//                    addPlant(PazEntities.PLACEHOLDER)
-//                    addPlant(PazEntities.TANGLE_KELP)
-//                    addPlant(PazEntities.PLACEHOLDER)
-//                    addPlant(PazEntities.PLACEHOLDER)
-//                    addPlant(PazEntities.PLACEHOLDER)
-//                    addPlant(PazEntities.PLACEHOLDER)
-//
-//
-//                    addPlant(PazEntities.SEA_SHROOM)
-//                    addPlant(PazEntities.PLACEHOLDER)
-//                    addPlant(PazEntities.CACTUS)
-//                    addPlant(PazEntities.PLACEHOLDER)
-//                    addPlant(PazEntities.PLACEHOLDER)
-//                    addPlant(PazEntities.PLACEHOLDER)
-//                    addPlant(PazEntities.PLACEHOLDER)
-//                    addPlant(PazEntities.PLACEHOLDER)
-//
-//                    addPlant(PazEntities.CABBAGE_PULT)
-//                    addPlant(PazEntities.FLOWER_POT)
-//                    addPlant(PazEntities.KERNEL_PULT)
-//                    addPlant(PazEntities.COFFEE_BEAN)
-//                    addPlant(PazEntities.PLACEHOLDER)
-//                    addPlant(PazEntities.PLACEHOLDER)
-//                    addPlant(PazEntities.PLACEHOLDER)
-//                    addPlant(PazEntities.MELON_PULT)
-//                    addPlant(PazEntities.LIGHTNING_REED)
-//
-//                    addPlant(PazEntities.EXPLODE_O_NUT)
-//                    addPlant(PazEntities.FIRE_PEA_SHOOTER)
-//                    addPlant(PazEntities.WATER_PEA_SHOOTER)
-//                    addPlant(PazEntities.ELECTRIC_PEA_SHOOTER)
-//                    addPlant(PazEntities.WATER_POT)
-//                    addPlant(PazEntities.LAVALILY)
-//
-                    //endregion
-
                     // region MORE ORGANIZED
 
                     // region SUNFLOWER PLANTS
                     addPlant(PazEntities.SUNFLOWER)
+                    addPlant(PazEntities.PLACEHOLDER,"twin_sunflower") // TWIN SUNFLOWER
                     // endregion
 
                     // region INSTANT PLANTS
                     addPlant(PazEntities.CHERRY_BOMB)
                     addPlant(PazEntities.POTATO_MINE)
                     addPlant(PazEntities.CHOMPER)
+                    addPlant(PazEntities.PLACEHOLDER,"jalapeno") // JALAPENO
+                    addPlant(PazEntities.PLACEHOLDER,"cob_cannon") // Cob Cannon
                     // endregion
 
                     // region DEFENSIVE PLANTS
                     addPlant(PazEntities.WALL_NUT)
+                    addPlant(PazEntities.PLACEHOLDER, "tallnut") // TALL NUT
+                    addPlant(PazEntities.PLACEHOLDER, "pumpkin") // PUMPKIN
+                    addPlant(PazEntities.EXPLODE_O_NUT)
                     // endregion
 
                     // region BASIC PLANTS
                     addPlant(PazEntities.PEA_SHOOTER)
                     addPlant(PazEntities.REPEATER)
+                    addPlant(PazEntities.PLACEHOLDER,"gatling_pea") // GATLING PEA
+                    addPlant(PazEntities.PLACEHOLDER, "threepeater") // THREEPEATER
+                    addPlant(PazEntities.PLACEHOLDER, "split_pea") // SPLIT PEA
+                    addPlant(PazEntities.PLACEHOLDER, "starfruit") // Starfruit
                     // endregion
 
                     // region ICE PLANTS
                     addPlant(PazEntities.ICE_PEA_SHOOTER)
-                    addPlant(PazEntities.PLACEHOLDER) // Iceberg Lettuce
+                    addPlant(PazEntities.PLACEHOLDER, "iceberg_lettuce") // Iceberg Lettuce
+                    addPlant(PazEntities.PLACEHOLDER, "hurrikale") // Hurrikale
                     // endregion
 
                     // region ELECTRIC PLANTS
@@ -136,14 +90,14 @@ object PazPlantsTab : PazCreativeTab() {
 
                     // region AIR PLANTS
                     addPlant(PazEntities.SKY_PEA_SHOOTER) // Sky Shooter
-                    addPlant(PazEntities.PLACEHOLDER) // Floater Pot
-                    addPlant(PazEntities.PLACEHOLDER) // Blover
+                    addPlant(PazEntities.PLACEHOLDER, "floater_pot") // Floater Pot
+                    addPlant(PazEntities.PLACEHOLDER, "blover") // Blover
                     // endregion
 
                     // region SHARP PLANTS
                     addPlant(PazEntities.CACTUS)
-                    addPlant(PazEntities.PLACEHOLDER) // Spikeweed
-                    addPlant(PazEntities.PLACEHOLDER) // Starfruit
+                    addPlant(PazEntities.PLACEHOLDER, "spikeweed") // Spikeweed
+                    addPlant(PazEntities.PLACEHOLDER, "spikerock") // Spike Rock
                     // endregion
 
                     // region MUSHROOMS
@@ -152,11 +106,13 @@ object PazPlantsTab : PazCreativeTab() {
                     addPlant(PazEntities.FUME_SHROOM)
                     addPlant(PazEntities.HYPNOSHROOM)
                     addPlant(PazEntities.SCAREDY_SHROOM)
-                    addPlant(PazEntities.PLACEHOLDER) // Ice Shroom
+                    addPlant(PazEntities.ICE_SHROOM)
                     addPlant(PazEntities.DOOM_SHROOM)
-                    addPlant(PazEntities.PLACEHOLDER) // Fire Shroom
-                    addPlant(PazEntities.PLACEHOLDER) // Crimson Shroom
-                    addPlant(PazEntities.PLACEHOLDER) // Warped Shroom
+                    addPlant(PazEntities.PLACEHOLDER, "magnetshroom") // MAGNET SHROOM
+                    addPlant(PazEntities.PLACEHOLDER, "fireshroom") // Fire Shroom
+                    addPlant(PazEntities.PLACEHOLDER, "crimsonshroom") // Crimson Shroom
+                    addPlant(PazEntities.PLACEHOLDER, "warpedshroom") // Warped Shroom
+                    addPlant(PazEntities.PLACEHOLDER, "gloomshroom") // Gloom Shroom
                     // endregion
 
                     // region AQUATIC PLANTS
@@ -165,6 +121,7 @@ object PazPlantsTab : PazCreativeTab() {
                     addPlant(PazEntities.SEA_SHROOM)
                     addPlant(PazEntities.WATER_PEA_SHOOTER)
                     addPlant(PazEntities.WATER_POT)
+                    addPlant(PazEntities.PLACEHOLDER, "cattail") // CATTAIL
                     // endregion
 
                     // region FIRE PLANTS
@@ -180,13 +137,18 @@ object PazPlantsTab : PazCreativeTab() {
                     addPlant(PazEntities.CABBAGE_PULT)
                     addPlant(PazEntities.KERNEL_PULT)
                     addPlant(PazEntities.MELON_PULT)
+                    addPlant(PazEntities.PLACEHOLDER, "winter_melon") // WINTER MELON
                     // endregion
 
                     // region MISC PLANTS
-                    addPlant(PazEntities.BONK_CHOY)
-                    addPlant(PazEntities.EXPLODE_O_NUT)
                     addPlant(PazEntities.COFFEE_BEAN)
-                    addPlant(PazEntities.GRAVE_BUSTER) // Warped Shroom
+                    addPlant(PazEntities.GRAVE_BUSTER)
+                    addPlant(PazEntities.PLACEHOLDER, "torchwood") // TORCHWOOD
+                    addPlant(PazEntities.PLACEHOLDER, "plantern") // PLANTERN
+                    addPlant(PazEntities.PLACEHOLDER, "garlic") // GARLIC
+                    addPlant(PazEntities.PLACEHOLDER, "umbrella_leaf") // UMBRELLA LEAF
+                    addPlant(PazEntities.PLACEHOLDER, "marigold") // MARIGOLD
+                    addPlant(PazEntities.PLACEHOLDER, "gold_magnet") // Gold Magnet
                     // endregion
 
                     //endregion

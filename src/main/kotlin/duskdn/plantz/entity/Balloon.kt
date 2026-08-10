@@ -69,8 +69,6 @@ class Balloon(
         entityData.define(DYE_COLOR, DyeColor.WHITE)
     }
 
-    var didBalloonSound = false
-
     override fun baseTick() {
         super.baseTick()
         yRotO = yRot
@@ -78,20 +76,17 @@ class Balloon(
     }
 
     override fun tick() {
-        super.tick()
-        while (yRot - yRotO < -180.0f) yRotO -= 360.0f
-        while (yRot - yRotO >= 180.0f) yRotO += 360.0f
 
-        if (tickCount == 2 && !didBalloonSound) {
-
-            didBalloonSound = true
-
-//            level().playLocalSound(this.blockPosition(), PazSounds.BALLOON_INFLATE, SoundSource.NEUTRAL, 1.0f, 1.0f, true)
+        if (!level().isClientSide && firstTick) {
 
             val randomPitch = random.nextInt(80,120).toFloat()/100
 
             playSound(PazSounds.BALLOON_INFLATE, 1f, randomPitch)
         }
+
+        super.tick()
+        while (yRot - yRotO < -180.0f) yRotO -= 360.0f
+        while (yRot - yRotO >= 180.0f) yRotO += 360.0f
 
         val horizontalSpeed = sqrt(deltaMovement.x * deltaMovement.x + deltaMovement.z * deltaMovement.z).toFloat()
         val targetPitch = (horizontalSpeed * PITCH_SPEED_MULTIPLIER).coerceAtMost(MAX_PULL_PITCH)
@@ -144,7 +139,9 @@ class Balloon(
         var totalLift = ((gravityLift + springLift) * (crouchMultiplier - groundPullForce - mult))
             .coerceAtMost(MAX_HOLDER_PULL_FORCE)
 
-        if (holder is BalloonZombie && groundDistance > 8) totalLift = 0.0
+        if (holder is BalloonZombie) {
+            totalLift *= if (groundDistance < 8 && groundHeight > -64.0) (1-groundDistance/8) else 0.0
+        }
 
         var currentYVelocity = holder.deltaMovement.y
         val availableLift = (MAX_HOLDER_UPWARD_VELOCITY - currentYVelocity).coerceAtLeast(0.0)

@@ -13,9 +13,9 @@ class WakeUpSleepingPlantsGoal(
     usingEntity: PazPlant,
     cooldownTime: Int = 20,
     actionDelay: Int = 0,
-    actionStartEffect: () -> Unit = {},
-    actionSuccessEffect: () -> Unit = {},
-    actionEndEffect: () -> Unit = {},
+    actionStartEffect: (ActionData?) -> Unit = {},
+    actionSuccessEffect: (ActionData?) -> Unit = {},
+    actionEndEffect: (ActionData?) -> Unit = {},
     actionPredicate: Predicate<PathfinderMob> = Predicate { true },
     val maxPlants: Int = 1,
 ): ActionGoal(usingEntity, cooldownTime, actionDelay, actionStartEffect, actionSuccessEffect, actionEndEffect, actionPredicate, -10..20) {

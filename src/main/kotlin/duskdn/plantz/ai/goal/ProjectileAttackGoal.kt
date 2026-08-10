@@ -24,9 +24,9 @@ open class ProjectileAttackGoal(
     usingEntity: PathfinderMob,
     cooldownTime: Int = 20,
     actionDelay: Int = 0,
-    actionStartEffect: () -> Unit = {},
-    actionSuccessEffect: () -> Unit = {},
-    actionEndEffect: () -> Unit = {},
+    actionStartEffect: (ActionData?) -> Unit = {},
+    actionSuccessEffect: (ActionData?) -> Unit = {},
+    actionEndEffect: (ActionData?) -> Unit = {},
     actionPredicate: Predicate<PathfinderMob> = Predicate { true },
     var projectileFactory: () -> Entity,
     var inaccuracy: Float = 0.0f,
@@ -52,7 +52,7 @@ open class ProjectileAttackGoal(
     override fun canUse(): Boolean = (
         usingEntity.tickCount>cooldownTime
             && usingEntity.target?.isAlive == true
-            && !(usingEntity is PazPlant && (usingEntity.isAsleep || usingEntity.isGrowingSeeds))
+            && !(usingEntity is PazPlant && ((usingEntity as PazPlant).isAsleep || (usingEntity as PazPlant).isGrowingSeeds))
     )
 
     override fun stop() {

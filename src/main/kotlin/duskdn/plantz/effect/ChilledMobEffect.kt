@@ -4,13 +4,19 @@ import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.init.PazDamageTypes
 import duskdn.plantz.init.PazEffects
 import duskdn.plantz.util.PazEntityData
+import duskdn.plantz.util.pazResource
 import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.EntityTypeTags
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectCategory
+import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.Mob
+import net.minecraft.world.entity.ai.attributes.AttributeModifier
+import net.minecraft.world.entity.ai.attributes.Attributes
+import java.lang.classfile.Attribute
 
 /**
  *
@@ -23,15 +29,66 @@ class ChilledMobEffect(
         const val PARTICLE_INTERVAL: Int = 12
     }
 
+    val effectModifier: Identifier = pazResource("effect.chilled")
+
+    val attributesList = listOf(
+        Attributes.MOVEMENT_SPEED,
+        Attributes.FLYING_SPEED,
+        Attributes.ATTACK_SPEED,
+        Attributes.BLOCK_BREAK_SPEED
+    )
+
     override fun shouldApplyEffectTickThisTick(tickCount: Int, amplification: Int): Boolean {
-        return tickCount % PARTICLE_INTERVAL == 0
+        return true
+    }
+
+    fun applyAttributes(entity: LivingEntity, mult: Double = 1.0) {
+
+        removeAttributes(entity)
+
+        for (attribute in attributesList) {
+            entity.getAttribute(attribute)?.let { instance ->
+                if (!instance.hasModifier(effectModifier)) {
+                    instance.addTransientModifier(
+                        AttributeModifier(
+                            effectModifier,
+                            -0.5 * mult,
+                            AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+                        )
+                    )
+                }
+            }
+        }
+
+    }
+
+    fun removeAttributes(entity: LivingEntity) {
+
+        for (attribute in attributesList) {
+            entity.getAttribute(attribute)?.removeModifier(effectModifier)
+        }
+
+    }
+
+    override fun onEffectRemoved(effectInstance: MobEffectInstance, entity: LivingEntity) {
+        removeAttributes(entity)
+
+        super.onEffectRemoved(effectInstance, entity)
+    }
+
+    override fun onEffectStarted(effectInstance: MobEffectInstance, entity: LivingEntity) {
+        applyAttributes(entity)
+
+        super.onEffectStarted(effectInstance, entity)
     }
 
     override fun applyEffectTick(level: ServerLevel, mob: LivingEntity, amplification: Int): Boolean {
 
         val duration = mob.getEffect(PazEffects.CHILLED)?.duration!!
 
-        val currentPercentage: Double = if (amplification > 0) (duration / (100.0/amplification)) else 0.0
+        val frozenCap = (1 shl amplification-1).toDouble()
+
+        val currentPercentage: Double = if (amplification > 0) (duration / 100.0) else 0.0
 
         if (mob.remainingFireTicks > 0) {
             mob.removeEffect(PazEffects.CHILLED)
@@ -40,22 +97,33 @@ class ChilledMobEffect(
 
         val isFrozen = (mob as PazEntityData).`plantz$getFrozenId`()
 
-        println("isFrozen = $isFrozen, current = ${currentPercentage*100}%, duration = $duration")
+        println("isFrozen = $isFrozen, current = $currentPercentage, duration = $duration, frozenCap: $frozenCap")
 
-        if (currentPercentage > 1.0 && !isFrozen) {
+        if (currentPercentage > frozenCap && amplification > 0) {
 
-            setFreezeMob(mob, true)
+            if (!isFrozen) {
+                setFreezeEntity(mob, true)
+            }
 
-        } else if (isFrozen) setFreezeMob(mob, false)
+        } else if (isFrozen) setFreezeEntity(mob, false)
 
-        particles(level, mob)
+        if (mob.tickCount % PARTICLE_INTERVAL == 0) particles(level, mob)
 
         return true
     }
 
-    fun setFreezeMob(mob: LivingEntity, isFrozen: Boolean) {
-        if (mob is Mob) mob.setNoAi(isFrozen)
-        (mob as PazEntityData).`plantz$setFrozenId`(isFrozen)
+    fun setFreezeEntity(entity: LivingEntity, isFrozen: Boolean) {
+        print("FREEZE FOR: $entity SET TO $isFrozen")
+
+        var mult = 1.0
+
+        if (isFrozen) mult = 2.0
+
+        applyAttributes(entity,mult)
+
+        if (entity is Mob) entity.setNoAi(isFrozen)
+
+        (entity as PazEntityData).`plantz$setFrozenId`(isFrozen)
     }
 
     override fun onEffectStarted(mob: LivingEntity, amplifier: Int) {
