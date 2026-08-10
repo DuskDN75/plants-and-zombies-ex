@@ -5,6 +5,7 @@ import duskdn.plantz.block.FlagBlock
 import duskdn.plantz.block.GardenGnomeBlock
 import duskdn.plantz.block.GravestoneBlock
 import duskdn.plantz.block.MailboxBlock
+import duskdn.plantz.block.ScreenDoorBlock
 import duskdn.plantz.block.SunBatteryBlock
 import duskdn.plantz.block.TimeMachineBlock
 import duskdn.plantz.block.WateringCanBlock
@@ -15,6 +16,7 @@ import duskdn.plantz.block.entity.MailboxBlockEntity
 import duskdn.plantz.block.entity.SunBatteryBlockEntity
 import duskdn.plantz.block.entity.TimeMachineBlockEntity
 import duskdn.plantz.entity.plant.init.PazPlant
+import duskdn.plantz.item.ScreenDoorItem
 import duskdn.plantz.item.component.BlocksProjectileDamage
 import duskdn.plantz.util.pazResource
 import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
@@ -37,6 +39,7 @@ import net.minecraft.world.item.Rarity
 import net.minecraft.world.item.component.ItemAttributeModifiers
 import net.minecraft.world.item.equipment.Equippable
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.DoorBlock
 import net.minecraft.world.level.block.SlabBlock
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.StairBlock
@@ -44,10 +47,12 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.properties.BlockSetType
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.level.material.PushReaction
+import java.util.function.Function
 
 object PazBlocks {
     @JvmField val HAS_WATER = BooleanProperty.create("has_water");
@@ -180,7 +185,7 @@ object PazBlocks {
             .component(DataComponents.MAX_DAMAGE, (PazPlant.PEA_DAMAGE*15).toInt())
             .component(DataComponents.MAX_STACK_SIZE, 1)
             .component(DataComponents.DAMAGE, 0)
-            .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage(breakChance = 0.12f))
+            .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage())
             .component(
                 DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.HEAD)
                     .setEquipSound(SoundEvents.ARMOR_EQUIP_LEATHER)
@@ -322,20 +327,66 @@ object PazBlocks {
         GRAVESTONE
     )
 
+    @JvmField val SCREEN_DOOR: Block = registerBlock(
+        "screen_door",
+        BlockBehaviour.Properties.of().sound(SoundType.WOOD)
+            .requiresCorrectToolForDrops()
+            .noOcclusion(),
+        { properties -> ScreenDoorBlock(BlockSetType.OAK, properties) },
+        Item.Properties()
+            .component(DataComponents.MAX_DAMAGE, (PazPlant.PEA_DAMAGE*42).toInt())
+            .component(DataComponents.MAX_STACK_SIZE, 1)
+            .component(DataComponents.DAMAGE, 0)
+            .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage(
+                slot = EquipmentSlotGroup.MAINHAND,
+                reflectsDamage = true,
+                tanksDamage = false,
+                mustBeUsing = true
+            ))
+            .component(
+                DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.MAINHAND)
+                    .setEquipSound(SoundEvents.SHIELD_BLOCK)
+                    .build()
+            ).component(
+                DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.builder()
+                    .add(
+                        Attributes.ARMOR,
+                        AttributeModifier(pazResource("screen_door_armor"), 0.5, AttributeModifier.Operation.ADD_VALUE),
+                        EquipmentSlotGroup.HEAD
+                    ).add(
+                        Attributes.KNOCKBACK_RESISTANCE,
+                        AttributeModifier(
+                            pazResource("screen_door_knockback_resistance"),
+                            0.1,
+                            AttributeModifier.Operation.ADD_VALUE
+                        ),
+                        EquipmentSlotGroup.HEAD
+                    ).build()
+            ),
+        ::ScreenDoorItem
+    )
+
+
     private fun registerBlock(
         name: String,
         properties: BlockBehaviour.Properties = BlockBehaviour.Properties.of(),
         blockFactory: (BlockBehaviour.Properties) -> Block = ::Block,
         itemProperties: Item.Properties? = Item.Properties(),
+        itemFactory: ((Block, Item.Properties) -> Item)? = { block, props ->
+            BlockItem(block, props)
+        },
+        folder: String? = null,
     ): Block {
+
+        val itemPath = if (folder != null) "$folder/$name" else name
+
         val key = ResourceKey.create(Registries.BLOCK, pazResource(name))
         val block = blockFactory(properties.setId(key))
         Registry.register(BuiltInRegistries.BLOCK, key, block)
 
-        // Also register the block item
-        if (itemProperties!=null) {
+        if (itemFactory!=null && itemProperties!=null) {
             val itemKey = ResourceKey.create(Registries.ITEM, pazResource(name))
-            val blockItem = BlockItem(block, itemProperties.setId(itemKey))
+            val blockItem = itemFactory(block, itemProperties.setId(itemKey))
             Registry.register(BuiltInRegistries.ITEM, itemKey, blockItem)
         }
 

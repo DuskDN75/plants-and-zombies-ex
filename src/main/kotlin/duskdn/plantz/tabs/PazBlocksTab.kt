@@ -38,6 +38,8 @@ object PazBlocksTab : PazCreativeTab() {
                     output.accept(PazBlocks.SMOOTH_BRAINZ_ALLOY_BLOCK)
                     output.accept(PazBlocks.TREADED_BRAINZ_ALLOY_BLOCK)
 
+                    output.accept(PazBlocks.SCREEN_DOOR)
+
                     output.accept(PazBlocks.BLUE_GARDEN_GNOME)
                     output.accept(PazBlocks.GREEN_GARDEN_GNOME)
                     output.accept(PazBlocks.RED_GARDEN_GNOME)

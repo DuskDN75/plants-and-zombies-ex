@@ -159,7 +159,8 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
             PazEntities.COFFEE_BEAN -> {
                 when {
                     plant.isGrowingSeeds -> {
-                        player.sendOverlayMessage(Component.translatable("message.plantz.growing").withStyle(ChatFormatting.RED))
+                        player.sendOverlayMessage(Component.translatable("message.plantz.growing", plant.name.copy().withStyle(
+                            ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED))
                         PacketInteractionResult.FAIL
                     }
                     !canAfford -> PacketInteractionResult.CANT_AFFORD

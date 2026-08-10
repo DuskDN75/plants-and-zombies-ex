@@ -105,7 +105,8 @@ object PlantSpawnUtils {
                 }
 
                 player.sendOverlayMessage(
-                    Component.translatable(messageKey).withStyle(ChatFormatting.RED)
+                    Component.translatable(messageKey, entity.name.copy().withStyle(
+                        ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED)
                 )
                 return InteractionResult.FAIL
             }

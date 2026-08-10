@@ -2,9 +2,11 @@ package duskdn.plantz.item.component
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import duskdn.plantz.entity.plant.init.PazPlant
 import io.netty.buffer.ByteBuf
 import net.minecraft.ChatFormatting
 import net.minecraft.core.component.DataComponentGetter
+import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
@@ -16,7 +18,8 @@ import java.util.function.Consumer
 
 class BlocksProjectileDamage(
     val slot: EquipmentSlotGroup = EquipmentSlotGroup.HEAD,
-    val breakChance: Float = 0.15f,
+    val tanksDamage: Boolean = true,
+    val reflectsDamage: Boolean = false,
     val mustBeUsing: Boolean = false
 ) : TooltipProvider {
 
@@ -26,8 +29,12 @@ class BlocksProjectileDamage(
         flag: TooltipFlag,
         components: DataComponentGetter
     ) {
-        consumer.accept(Component.translatable("component.blocks_damage.desc").withStyle(ChatFormatting.GRAY))
-        consumer.accept(Component.translatable("component.blocks_damage", (breakChance * 100).toInt()).withStyle(ChatFormatting.BLUE))
+        val maxHealth = components.get(DataComponents.MAX_DAMAGE)?.div(PazPlant.PEA_DAMAGE) ?: 0
+
+        val health = components.get(DataComponents.DAMAGE)?.div(PazPlant.PEA_DAMAGE) ?: 0
+
+        consumer.accept(Component.translatable("component.tanks_damage.desc").withStyle(ChatFormatting.GRAY))
+        consumer.accept(Component.translatable("component.tanks_damage", maxHealth, health).withStyle(ChatFormatting.BLUE))
     }
 
     companion object {
@@ -35,7 +42,8 @@ class BlocksProjectileDamage(
         val CODEC: Codec<BlocksProjectileDamage> = RecordCodecBuilder.create { inst ->
             inst.group(
                 EquipmentSlotGroup.CODEC.fieldOf("slot").forGetter { it.slot },
-                Codec.FLOAT.fieldOf("break_chance").forGetter { it.breakChance },
+                Codec.BOOL.fieldOf("tanksDamage").forGetter { it.tanksDamage },
+                Codec.BOOL.fieldOf("reflectsDamage").forGetter { it.reflectsDamage },
                 Codec.BOOL.optionalFieldOf("must_be_using", false).forGetter { it.mustBeUsing }
             ).apply(inst, ::BlocksProjectileDamage)
         }
@@ -43,8 +51,10 @@ class BlocksProjectileDamage(
         val STREAM_CODEC: StreamCodec<ByteBuf, BlocksProjectileDamage> = StreamCodec.composite(
             EquipmentSlotGroup.STREAM_CODEC,
             BlocksProjectileDamage::slot,
-            ByteBufCodecs.FLOAT,
-            BlocksProjectileDamage::breakChance,
+            ByteBufCodecs.BOOL,
+            BlocksProjectileDamage::tanksDamage,
+            ByteBufCodecs.BOOL,
+            BlocksProjectileDamage::reflectsDamage,
             ByteBufCodecs.BOOL,
             BlocksProjectileDamage::mustBeUsing,
             ::BlocksProjectileDamage

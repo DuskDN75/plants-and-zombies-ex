@@ -840,8 +840,9 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
     fun verifyOwner(player: Player): Boolean {
         if (!isTame || (player != owner && !PazConfig.COOP_PLANTING)) {
             player.sendOverlayMessage(
-                Component.translatable("message.plantz.not_yours", this.name).withStyle(
-                    ChatFormatting.RED))
+                Component.translatable("message.plantz.not_yours", this.name.copy().withStyle(
+                    ChatFormatting.RED)).withStyle(
+                    ChatFormatting.DARK_RED))
             return false
         }
         return true

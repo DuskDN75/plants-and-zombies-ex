@@ -4,9 +4,11 @@ import com.mojang.serialization.Codec;
 import duskdn.plantz.effect.PaintedMobEffect;
 import duskdn.plantz.entity.plant.init.PazPlant;
 import duskdn.plantz.entity.projectile.init.PazProjectile;
+import duskdn.plantz.entity.utils.ArmorUtil;
 import duskdn.plantz.init.PazEffects;
 import duskdn.plantz.init.PazItems;
 import duskdn.plantz.init.PazTags;
+import duskdn.plantz.item.component.BlocksProjectileDamage;
 import duskdn.plantz.util.PazEntityData;
 import duskdn.plantz.util.PlantHeadAttachment;
 import kotlin.Pair;
@@ -343,46 +345,13 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
     float leftoverDamage = 0;
 
     @Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
-    public void ignoreIfArmored(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
+    public void hurtArmorIfArmored(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
 
         LivingEntity self = (LivingEntity)(Object)this;
 
-        var armors = PazProjectile.Companion.checkForArmor(self);
+        boolean didDamageArmor = ArmorUtil.doArmorDamage(level, source, self, damage);
 
-        float damageMult = 1.0f;
-
-        if (!(source.getDirectEntity() instanceof Projectile)) {
-            damageMult = 3.0f;
-        }
-
-        float leftoverDamage = damage*damageMult;
-
-        if (!armors.isEmpty()) {
-
-            var accessor = ((LivingEntityAccessor)self);
-
-            for (@NotNull Pair<@NotNull EquipmentSlot, @NotNull ItemStack> armor : armors) {
-
-                if (leftoverDamage <= 0) {
-                    break;
-                }
-
-                leftoverDamage = (float) PazProjectile.Companion.damageArmor(
-                        self,
-                        armor.getFirst(),
-                        armor.getSecond(),
-                        leftoverDamage
-                );
-
-                IO.println(leftoverDamage);
-
-                accessor.invokeActuallyHurt(level, source, 0.001F);
-
-            }
-
-            accessor.invokeResolveMobResponsibleForDamage(source);
-            accessor.invokeResolvePlayerResponsibleForDamage(source);
-            ((LivingEntityAccessor)self).invokeActuallyHurt(level, source, leftoverDamage/damageMult);
+        if (didDamageArmor) {
 
             cir.setReturnValue(true);
             cir.cancel();

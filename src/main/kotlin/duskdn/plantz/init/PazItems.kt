@@ -83,7 +83,8 @@ object PazItems {
             .durability(24)
             .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage(
                 slot = EquipmentSlotGroup.HAND,
-                breakChance = 0.1f,
+                reflectsDamage = true,
+                tanksDamage = false,
                 mustBeUsing = true
             )
             ).component(DataComponents.BREAK_SOUND, SoundEvents.SHIELD_BREAK)
@@ -156,8 +157,7 @@ object PazItems {
         properties = Item.Properties()
             .durability((PazPlant.PEA_DAMAGE*70).toInt())
             .humanoidArmor(ArmorMaterials.CHAINMAIL, ArmorType.HELMET)
-            .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage(
-                breakChance = 0.025f)
+            .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage()
             )
             .component(
                 DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.HEAD)
@@ -208,7 +208,8 @@ object PazItems {
     )
 
     @JvmField val BROWN_COAT_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
-        PazEntities.BROWN_COAT
+        PazEntities.BROWN_COAT,
+        "browncoat"
     )
 
     @JvmField val NEWSPAPER_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.NEWSPAPER_ZOMBIE)
@@ -225,7 +226,8 @@ object PazItems {
     @JvmField val GARGANTUAR_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.GARGANTUAR)
 
     @JvmField val BALLOON_ZOMBIE_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
-        PazEntities.BALLOON_ZOMBIE
+        PazEntities.BALLOON_ZOMBIE,
+        "balloon"
     )
 
     @JvmField val PIRATE_CAPTAIN_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.PIRATE_CAPTAIN)
@@ -235,10 +237,13 @@ object PazItems {
     private fun registerItem(
         name: String,
         itemFactory: Function<Item.Properties, Item> = { p: Item.Properties -> Item(p) },
-        properties: Item.Properties = Item.Properties()
+        properties: Item.Properties = Item.Properties(),
+        folder: String? = null,
     ) : Item {
 
-        val key = ResourceKey.create(Registries.ITEM, pazResource(name))
+        val itemPath = if (folder != null) "$folder/$name" else name
+
+        val key = ResourceKey.create(Registries.ITEM, pazResource(itemPath))
         val item = itemFactory.apply(properties.setId(key))
         Registry.register(BuiltInRegistries.ITEM, key, item)
 
@@ -250,7 +255,11 @@ object PazItems {
         worker: (PazZombie) -> Unit = {},
         properties: Item.Properties = Item.Properties(),
         customId: String? = null,
+        folder: String? = null
     ): Item {
+
+        val folderPath = if (folder != null) "$folder/spawn_egg/zombie" else "spawn_egg/zombie"
+
         val entityId = if (customId != null) customId else EntityType.getKey(type).path
         return registerItem(
             "${entityId}_spawn_egg",
@@ -258,12 +267,14 @@ object PazItems {
                 PazZombieSpawnEgg(props, worker)
             },
             properties
-                .spawnEgg(type)
+                .spawnEgg(type),
+            folder = folderPath
         )
     }
 
     private fun registerPazZombieWithVariants(
         type: EntityType<*>,
+        folder: String? = null,
         properties: Item.Properties = Item.Properties(),
     ): MutableList<Item> {
 
@@ -285,7 +296,8 @@ object PazItems {
                         }
 
                     },
-                    customId = if (hatVariant.hatName != null) "${entityId}_${hatVariant.hatName}" else null
+                    customId = if (hatVariant.hatName != null) "${entityId}_${hatVariant.hatName}" else null,
+                    folder = folder
                 )
             )
         }
@@ -300,7 +312,23 @@ object PazItems {
                     )
                     it
                 },
-                customId = "${entityId}_flag"
+                customId = "${entityId}_flag",
+                folder = folder
+            )
+        )
+
+        spawnEggList.add(
+            registerPazZombieSpawnEgg(
+                type,
+                worker = {
+                    it.setItemSlot(
+                        EquipmentSlot.MAINHAND,
+                        PazBlocks.SCREEN_DOOR.asItem().defaultInstance
+                    )
+                    it
+                },
+                customId = "${entityId}_screen_door",
+                folder = folder
             )
         )
 
@@ -314,7 +342,7 @@ object PazItems {
     ): Item {
         val entityId = if (customId != null) customId else EntityType.getKey(type).path
         return registerItem(
-           "${entityId}_spawn_egg", ::SpawnEggItem,
+           "spawn_egg/${entityId}_spawn_egg", ::SpawnEggItem,
             properties
                 .spawnEgg(type)
         )
@@ -337,7 +365,7 @@ object PazItems {
 
         DefaultItemComponentEvents.MODIFY.register {
             it.modify(Items.BUCKET) { builder ->
-                builder.set(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage(breakChance = .05f))
+                builder.set(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage())
                 builder.set(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.HEAD)
                     .setEquipSound(SoundEvents.ARMOR_EQUIP_IRON)
                     .build()

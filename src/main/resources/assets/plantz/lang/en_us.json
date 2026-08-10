@@ -90,6 +90,8 @@
   "component.stored_water.desc": "Can be used to hydrate plants",
   "component.stored_water": "Water: %s / %s",
   "component.sun_cost": "Sun cost: %s",
+  "component.tanks_damage.desc": "Tanks Damage:",
+  "component.tanks_damage": "Health: %s / %s",
   "component.blocks_damage.desc": "Blocks Projectiles:",
   "component.blocks_damage": "Break Chance: %s%%",
   "item.plantz.zombie_banner": "Brainz Banner",

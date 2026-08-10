@@ -5,9 +5,9 @@
     "#": "plantz:brainz_alloy_block"
   },
   "pattern": [
+    "   ",
     "#  ",
-    "## ",
-    "###"
+    "## "
   ],
   "result": {
     "count": 4,
