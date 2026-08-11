@@ -1,7 +1,7 @@
 {
   "textures": [
-    "plantz:explosion_cloud1",
-    "plantz:explosion_cloud2",
-    "plantz:explosion_cloud3"
+    "plantz:explosion/cloud/1",
+    "plantz:explosion/cloud/2",
+    "plantz:explosion/cloud/3"
   ]
 }

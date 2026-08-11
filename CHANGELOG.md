@@ -1,15 +1,51 @@
-# Changelog (EX) 1.4
-### Additions
-#### General:
-- Updated to the latest version of Plants & Zombies
-#### Plants:
-- e
-#### Zombies:
-- e
-### Technical Changes
-- Generalized instant use plants (added InstantUseGoal and IInstantPlant for all instant use plants, and changed swell to active time and swell dir to active direction)
+# Changelog (EX) 0.4
+### General:
+###### ADDITIONS:
+- Blocks Tab in the creative menu.
+- Rebase to latest P&Z commit.
+- Screen Doors (blocks projectiles like a shield)
+###### REMOVALS:
+- N/A
+###### CHANGES:
+- N/A
+###### FIX:
+- N/A
+### Plants:
+###### ADDITIONS:
+- Ice Shroom
+  - Freezes nearby zombies in an area.
+###### REMOVALS:
+- N/A
+###### CHANGES:
+- Instant plants now explode instantly and do not wait for a target.
+###### FIX:
+- Skyshooter no longer floats down forever.
+### Zombies:
+###### ADDITIONS:
+- Screen Door Zombie
+- Browncoat and Balloon Zombie variant spawn eggs for cones, buckets, flags, basics, and screens.
+###### REMOVALS:
+- N/A
+###### CHANGES:
+- N/A
+###### FIX:
+- Balloon zombies above nearby any ground.
+### Technical:
+###### ADDITIONS:
+- Added InstantUseGoal
+- Added IInstantPlant
+- Added IExplosivePlant
+###### REMOVALS:
+- N/A
+###### CHANGES:
+- Changed Explosive to ExplosivePlant
+- Reorganization of the files
+- Chilled effect
+- Reworked how P&Z armor works, and updated BlocksProjectileDamage component to support reflecting projectiles only.
+###### FIX:
+- N/A
 
-# Changelog (EX) 1.3
+# Changelog (EX) 0.3
 ### Additions
 #### General:
 - Changed a few spawns for mushroom plants.
@@ -22,7 +58,7 @@
   - They now spawn a multitude of other zombies once a plant is detected
 ### Technical Changes
 
-# Changelog (EX) 1.2
+# Changelog (EX) 0.2
 ### Additions
 #### General:
 - Cherrybombs spawn in cherry groves, and doomshrooms can spawn in wastelands. Mushrooms plants can also spawn in wastelands.
@@ -40,7 +76,7 @@
 - Balloons make you hover above the ground until a certain height.
 - Updated Spawn Rules to be more modular and use layers (kind of?)
 
-# Changelog (EX) 1.1
+# Changelog (EX) 0.1
 ### Additions
 #### General:
 - Trying to shovel a carrier plant that has a plant ontop of itself will now shovel the plant first.
@@ -65,7 +101,7 @@
 - Organized the file structure more.
 - Created base classes for Peas, Attacking Plants
 
-# Changelog (EX) 1.0
+# Changelog (EX) 0.0
 ### Additions
 #### General:
 #### Plants:

@@ -1,5 +1,5 @@
 {
-	"parent": "plantz:block/mailbox/mailbox_wall",
+	"parent": "plantz:block/mailbox/white_mailbox_wall",
 	"textures": {
 		"0": "plantz:block/mailbox/purple_mailbox_open"
 	}

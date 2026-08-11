@@ -2,6 +2,7 @@
 	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
+	"texture_size": [32, 32],
 	"textures": {
 		"particle": "plantz:block/screen_door/screen_door_bottom",
 		"bottom": "plantz:block/screen_door/screen_door_bottom"
@@ -9,13 +10,13 @@
 	"elements": [
 		{
 			"from": [0, 0, 0],
-			"to": [2, 16, 16],
+			"to": [3, 16, 16],
 			"faces": {
-				"north": {"uv": [16, 0, 14.22222, 16], "texture": "#bottom", "cullface": "north"},
-				"east": {"uv": [0, 0, 14.22222, 16], "texture": "#bottom"},
-				"south": {"uv": [14.22222, 0, 16, 16], "texture": "#bottom", "cullface": "south"},
-				"west": {"uv": [0, 0, 14.22222, 16], "texture": "#bottom", "cullface": "west"},
-				"down": {"uv": [14.22222, 16, 16, 0], "rotation": 180, "texture": "#bottom", "cullface": "down"}
+				"north": {"uv": [9.5, 0, 8, 8], "texture": "#bottom", "cullface": "north"},
+				"east": {"uv": [0, 0, 8, 8], "texture": "#bottom"},
+				"south": {"uv": [8, 0, 9.5, 8], "texture": "#bottom", "cullface": "south"},
+				"west": {"uv": [0, 0, 8, 8], "texture": "#bottom", "cullface": "west"},
+				"down": {"uv": [8, 8, 9.5, 0], "rotation": 180, "texture": "#bottom", "cullface": "down"}
 			}
 		}
 	],

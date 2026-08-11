@@ -109,6 +109,8 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
          */
         const val PEA_DAMAGE = 2.5
 
+        const val PEA_ARMOR_DAMAGE: Int = (PEA_DAMAGE*10).toInt()
+
         const val NUTRIENT_SUPPLY_MAX = 160  // ticks before suffocating when on invalid ground
         private const val FLAG_POWER_RANGE = 5
 

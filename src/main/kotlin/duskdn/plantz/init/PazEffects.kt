@@ -82,6 +82,9 @@ object PazEffects {
             .addAttributeModifier(Attributes.BLOCK_INTERACTION_RANGE, pazResource("effect.tangled"), -999.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
     )
 
+    @JvmField val ENLIGHTENED: Holder<MobEffect> = register("enlightened",
+        HypnotizedMobEffect(MobEffectCategory.NEUTRAL, 0xFFFDD2, PazServerParticles.ENLIGHTENED))
+
     fun register(name: String, mobEffect: MobEffect): Holder<MobEffect> {
         return Registry.registerForHolder(
             BuiltInRegistries.MOB_EFFECT,
@@ -106,6 +109,9 @@ object PazEffects {
 
     val HYPNOTIZED_GOAL_ATTACHMENT: AttachmentType<Goal> =
         AttachmentRegistryImpl.builder<Goal>().buildAndRegister(pazResource("hypnotized_goal"))
+
+    val ENLIGHTENED_GOAL_ATTACHMENT: AttachmentType<Goal> =
+        AttachmentRegistryImpl.builder<Goal>().buildAndRegister(pazResource("enlightened_goal"))
 
     fun initialize() {
 

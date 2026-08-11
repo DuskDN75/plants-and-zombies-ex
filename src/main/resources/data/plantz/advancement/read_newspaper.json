@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "id": "plantz:newspaper"
+      "id": "plantz:armor/newspaper"
     },
     "title": {
       "translate": "advancements.plantz.read_newspaper"
@@ -16,7 +16,7 @@
       "trigger": "minecraft:using_item",
       "conditions": {
         "item": {
-          "items": "plantz:newspaper"
+          "items": "plantz:armor/newspaper"
         }
       }
     }

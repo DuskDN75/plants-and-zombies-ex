@@ -7,13 +7,13 @@
         "when": "head",
         "model": {
           "type": "minecraft:model",
-          "model": "plantz:block/football_helmet"
+          "model": "plantz:block/armor/football_helmet"
         }
       }
     ],
     "fallback": {
       "type": "minecraft:model",
-      "model": "plantz:item/football_helmet"
+      "model": "plantz:item/armor/football_helmet"
     }
   }
 }

@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "id": "plantz:football_helmet"
+      "id": "plantz:armor/football_helmet"
     },
     "title": {
       "translate": "advancements.plantz.big_three"

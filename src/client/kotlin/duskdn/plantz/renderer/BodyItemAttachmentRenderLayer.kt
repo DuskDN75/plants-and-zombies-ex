@@ -99,6 +99,14 @@ class DuckyTubeRenderLayer<S : LivingEntityRenderState, M : EntityModel<in S>>(
     stackSelector = { it.legsEquipment },
 )
 
+class ObsidianDuckyTubeRenderLayer<S : LivingEntityRenderState, M : EntityModel<in S>>(
+    parent: RenderLayerParent<S, M>
+) : BodyItemAttachmentRenderLayer<S, M>(
+    parent = parent,
+    expectedItem = PazItems.OBSIDIAN_DUCKY_TUBE,
+    stackSelector = { it.legsEquipment },
+)
+
 class DyeVatRenderLayer<S : LivingEntityRenderState, M : EntityModel<in S>>(
     parent: RenderLayerParent<S, M>
 ) : BodyItemAttachmentRenderLayer<S, M>(

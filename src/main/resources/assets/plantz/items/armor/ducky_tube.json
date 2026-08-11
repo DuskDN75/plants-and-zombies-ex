@@ -7,13 +7,13 @@
         "when": "head",
         "model": {
           "type": "minecraft:model",
-          "model": "plantz:block/ducky_tube"
+          "model": "plantz:block/armor/ducky_tube"
         }
       }
     ],
     "fallback": {
       "type": "minecraft:model",
-      "model": "plantz:item/ducky_tube"
+      "model": "plantz:item/armor/ducky_tube"
     }
   }
 }

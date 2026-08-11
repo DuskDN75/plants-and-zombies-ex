@@ -1,5 +1,5 @@
 {
-	"parent": "plantz:block/mailbox/mailbox_flag",
+	"parent": "plantz:block/mailbox/white_mailbox_flag",
 	"textures": {
 		"0": "plantz:block/mailbox/black_mailbox"
 	}

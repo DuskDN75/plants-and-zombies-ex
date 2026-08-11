@@ -3,6 +3,7 @@ package duskdn.plantz.effect
 import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.init.PazDamageTypes
 import duskdn.plantz.init.PazEffects
+import duskdn.plantz.init.PazServerParticles
 import duskdn.plantz.util.PazEntityData
 import duskdn.plantz.util.pazResource
 import net.minecraft.core.particles.ParticleTypes
@@ -139,7 +140,7 @@ class ChilledMobEffect(
 
     private fun particles(level: ServerLevel, target: LivingEntity) {
         level.sendParticles(
-            ParticleTypes.SNOWFLAKE,
+            PazServerParticles.FROZEN,
             target.x, target.y + target.boundingBox.ysize*0.5, target.z, 10,
             target.boundingBox.xsize*0.55,
             target.boundingBox.ysize*0.25,

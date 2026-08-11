@@ -35,13 +35,14 @@ object PazItemsTab : PazCreativeTab() {
                     output.accept(PazItems.PLANT_POT_MINECART)
                     output.accept(PazItems.PLANT_POT_HELMET)
                     output.accept(PazItems.DUCKY_TUBE)
+                    output.accept(PazItems.OBSIDIAN_DUCKY_TUBE)
                     output.accept(PazBlocks.CONE)
                     output.accept(PazItems.NEWSPAPER)
                     output.accept(PazItems.FOOTBALL_HELMET)
                     output.accept(PazItems.DYE_BLASTER)
 
                     // balloons
-                    PazItems.balloonByColor.forEach { output.accept(it.value) }
+                    PazItems.BALLOONS.forEach { output.accept(it.value) }
                 }
                 .build()
         )

@@ -205,7 +205,7 @@ class MailboxBlock(
     }
 
     override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState, includeData: Boolean): ItemStack {
-        return PazBlocks.mailboxByColor[color]?.asItem()?.defaultInstance?:
+        return PazBlocks.MAILBOXES[color]?.asItem()?.defaultInstance?:
         super.getCloneItemStack(level, pos, state, includeData)
     }
 }

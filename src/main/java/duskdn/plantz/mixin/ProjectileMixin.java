@@ -44,6 +44,8 @@ public class ProjectileMixin {
                         armor -> !armor.getSecond().getSecond().getReflectsDamage()
                 );
 
+                IO.println("ARMORS IS: "+armors);
+
                 if (armors.isEmpty()) return;
 
                 DamageSource source = projectile.damageSources().source(
@@ -63,6 +65,7 @@ public class ProjectileMixin {
                 var deflection = ProjectileDeflection.REVERSE;
                 deflection.deflect(projectile, entity, projectile.getRandom());
                 cir.setReturnValue(deflection);
+                cir.cancel();
             }
         }
     }

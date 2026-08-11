@@ -110,17 +110,17 @@
   "item.minecraft.splash_potion.effect.buttered": "噴濺牛油藥水",
   "item.minecraft.lingering_potion.effect.buttered": "滯留牛油藥水",
 
-  "item.plantz.browncoat_spawn_egg": "喪屍生成蛋",
-  "item.plantz.newspaper_zombie_spawn_egg": "讀報喪屍生成蛋",
-  "item.plantz.digger_zombie_spawn_egg": "掘地喪屍生成蛋",
-  "item.plantz.zombie_yeti_spawn_egg": "喪屍雪怪生成蛋",
-  "item.plantz.disco_zombie_spawn_egg": "舞動喪屍生成蛋",
-  "item.plantz.backup_dancer_spawn_egg": "伴舞喪屍生成蛋",
-  "item.plantz.all_star_spawn_egg": "全明星喪屍生成蛋",
-  "item.plantz.imp_spawn_egg": "小喪屍生成蛋",
-  "item.plantz.gargantuar_spawn_egg": "巨人喪屍生成蛋",
+  "item.plantz.browncoat": "喪屍生成蛋",
+  "item.plantz.newspaper_zombie": "讀報喪屍生成蛋",
+  "item.plantz.digger_zombie": "掘地喪屍生成蛋",
+  "item.plantz.zombie_yeti": "喪屍雪怪生成蛋",
+  "item.plantz.disco_zombie": "舞動喪屍生成蛋",
+  "item.plantz.backup_dancer": "伴舞喪屍生成蛋",
+  "item.plantz.all_star": "全明星喪屍生成蛋",
+  "item.plantz.imp": "小喪屍生成蛋",
+  "item.plantz.gargantuar": "巨人喪屍生成蛋",
 
-  "item.plantz.gnome_spawn_egg": "花園地精生成蛋",
+  "item.plantz.gnome": "花園地精生成蛋",
 
   "item.plantz.music_disc_grassy_groove": "唱片",
 

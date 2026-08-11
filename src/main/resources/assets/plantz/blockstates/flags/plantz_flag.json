@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "plantz:block/flags/plantz_flag_pole"
+    }
+  }
+}

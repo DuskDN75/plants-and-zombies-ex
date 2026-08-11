@@ -1,9 +1,9 @@
 {
   "textures": [
-    "plantz:fume_bubble1",
-    "plantz:fume_bubble2",
-    "plantz:fume_bubble3",
-    "plantz:fume_bubble4",
-    "plantz:fume_bubble5"
+    "plantz:projectiles/fume/1",
+    "plantz:projectiles/fume/2",
+    "plantz:projectiles/fume/3",
+    "plantz:projectiles/fume/4",
+    "plantz:projectiles/fume/5"
   ]
 }

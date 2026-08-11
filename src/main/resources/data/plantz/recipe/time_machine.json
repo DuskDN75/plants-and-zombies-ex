@@ -6,7 +6,7 @@
       "minecraft:amethyst_shard"
     ],
     "#": [
-      "plantz:brainz_alloy"
+      "plantz:brainz_alloy/brainz_alloy"
     ],
     "+": [
       "minecraft:netherite_ingot"
@@ -21,7 +21,7 @@
     "###"
   ],
   "result": {
-    "count": 0,
+    "count": 1,
     "id": "plantz:time_machine"
   }
 }

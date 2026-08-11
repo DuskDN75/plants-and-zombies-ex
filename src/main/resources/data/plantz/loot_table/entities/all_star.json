@@ -18,7 +18,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "plantz:football_helmet"
+          "name": "plantz:armor/football_helmet"
         }
       ],
       "rolls": 1,

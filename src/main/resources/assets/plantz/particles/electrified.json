@@ -1,13 +1,13 @@
 {
   "textures": [
-    "plantz:spark1",
+    "plantz:electric/spark/1",
     "plantz:empty",
-    "plantz:spark2",
+    "plantz:electric/spark/2",
     "plantz:empty",
-    "plantz:spark3",
+    "plantz:electric/spark/3",
     "plantz:empty",
-    "plantz:spark4",
+    "plantz:electric/spark/4",
     "plantz:empty",
-    "plantz:spark5"
+    "plantz:electric/spark/5"
   ]
 }

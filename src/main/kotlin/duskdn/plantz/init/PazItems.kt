@@ -1,5 +1,6 @@
 package duskdn.plantz.init
 
+import duskdn.plantz.block.MailboxBlock
 import duskdn.plantz.entity.plant.init.PazPlant
 import duskdn.plantz.entity.zombie.HatVariant
 import duskdn.plantz.entity.zombie.PazZombie
@@ -24,6 +25,7 @@ import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.EquipmentSlotGroup
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.item.*
@@ -34,6 +36,7 @@ import net.minecraft.world.item.equipment.ArmorMaterials
 import net.minecraft.world.item.equipment.ArmorType
 import net.minecraft.world.item.equipment.EquipmentAssets
 import net.minecraft.world.item.equipment.Equippable
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.ComposterBlock
 import net.minecraft.world.level.block.DispenserBlock
 import java.util.function.Consumer
@@ -69,7 +72,8 @@ object PazItems {
     @JvmField
     val BRAINZ_ALLOY: Item = registerItem(
         "brainz_alloy",
-        properties = Item.Properties()
+        properties = Item.Properties(),
+        folder = "brainz_alloy"
     )
     @JvmField
     val BOT_BLUEPRINT: Item = registerItem(
@@ -80,22 +84,26 @@ object PazItems {
     val NEWSPAPER: Item = registerItem(
         "newspaper", ::NewspaperItem,
         properties = Item.Properties()
-            .durability(24)
+            .durability(8*PazPlant.PEA_ARMOR_DAMAGE)
             .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage(
                 slot = EquipmentSlotGroup.HAND,
                 reflectsDamage = true,
                 tanksDamage = false,
                 mustBeUsing = true
             )
-            ).component(DataComponents.BREAK_SOUND, SoundEvents.SHIELD_BREAK)
+            ).component(DataComponents.BREAK_SOUND, SoundEvents.SHIELD_BREAK),
+        folder = "armor"
     )
     const val DUCKY_TUBE_DAMAGE_INTERVAL = 45
-    val DUCKY_EQUIP_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, pazResource("ducky_tube"))
+    val DUCKY_EQUIP_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, pazResource("armor/ducky_tube"))
+
+    val OBSIDIAN_DUCKY_EQUIP_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, pazResource("armor/obsidian_ducky_tube"))
+
     @JvmField
     val DUCKY_TUBE: Item = registerItem(
         "ducky_tube", ::DuckyTubeItem,
         properties = Item.Properties()
-            .durability(225)
+            .durability(9*PazPlant.PEA_ARMOR_DAMAGE)
             .attributes(
                 ItemAttributeModifiers.builder()
                     .add(
@@ -106,42 +114,37 @@ object PazItems {
             .component(DataComponents.EQUIPPABLE,
                 Equippable.builder(EquipmentSlot.LEGS)
                 .setAsset(DUCKY_EQUIP_ASSET)
-                .build())
+                .build()),
+        folder = "armor"
     )
-    @JvmField val WHITE_BALLOON: Item = registerItem("white_balloon", {BalloonItem(it, DyeColor.WHITE)}, properties = Item.Properties())
-    @JvmField val LIGHT_GRAY_BALLOON: Item = registerItem("light_gray_balloon", {BalloonItem(it, DyeColor.LIGHT_GRAY)}, properties = Item.Properties())
-    @JvmField val GRAY_BALLOON: Item = registerItem("gray_balloon", {BalloonItem(it, DyeColor.GRAY)}, properties = Item.Properties())
-    @JvmField val BLACK_BALLOON: Item = registerItem("black_balloon", {BalloonItem(it, DyeColor.BLACK)}, properties = Item.Properties())
-    @JvmField val BROWN_BALLOON: Item = registerItem("brown_balloon", {BalloonItem(it, DyeColor.BROWN)}, properties = Item.Properties())
-    @JvmField val RED_BALLOON: Item = registerItem("red_balloon", {BalloonItem(it, DyeColor.RED)}, properties = Item.Properties())
-    @JvmField val ORANGE_BALLOON: Item = registerItem("orange_balloon", {BalloonItem(it, DyeColor.ORANGE)}, properties = Item.Properties())
-    @JvmField val YELLOW_BALLOON: Item = registerItem("yellow_balloon", {BalloonItem(it, DyeColor.YELLOW)}, properties = Item.Properties())
-    @JvmField val LIME_BALLOON: Item = registerItem("lime_balloon", {BalloonItem(it, DyeColor.LIME)}, properties = Item.Properties())
-    @JvmField val GREEN_BALLOON: Item = registerItem("green_balloon", {BalloonItem(it, DyeColor.GREEN)}, properties = Item.Properties())
-    @JvmField val CYAN_BALLOON: Item = registerItem("cyan_balloon", {BalloonItem(it, DyeColor.CYAN)}, properties = Item.Properties())
-    @JvmField val LIGHT_BLUE_BALLOON: Item = registerItem("light_blue_balloon", {BalloonItem(it, DyeColor.LIGHT_BLUE)}, properties = Item.Properties())
-    @JvmField val BLUE_BALLOON: Item = registerItem("blue_balloon", {BalloonItem(it, DyeColor.BLUE)}, properties = Item.Properties())
-    @JvmField val PURPLE_BALLOON: Item = registerItem("purple_balloon", {BalloonItem(it, DyeColor.PURPLE)}, properties = Item.Properties())
-    @JvmField val MAGENTA_BALLOON: Item = registerItem("magenta_balloon", {BalloonItem(it, DyeColor.MAGENTA)}, properties = Item.Properties())
-    @JvmField val PINK_BALLOON: Item = registerItem("pink_balloon", {BalloonItem(it, DyeColor.PINK)}, properties = Item.Properties())
-    val balloonByColor = mapOf(
-        DyeColor.WHITE to      WHITE_BALLOON,
-        DyeColor.LIGHT_GRAY to LIGHT_GRAY_BALLOON,
-        DyeColor.GRAY to       GRAY_BALLOON,
-        DyeColor.BLACK to      BLACK_BALLOON,
-        DyeColor.BROWN to      BROWN_BALLOON,
-        DyeColor.RED to        RED_BALLOON,
-        DyeColor.ORANGE to     ORANGE_BALLOON,
-        DyeColor.YELLOW to     YELLOW_BALLOON,
-        DyeColor.LIME to       LIME_BALLOON,
-        DyeColor.GREEN to      GREEN_BALLOON,
-        DyeColor.CYAN to       CYAN_BALLOON,
-        DyeColor.LIGHT_BLUE to LIGHT_BLUE_BALLOON,
-        DyeColor.BLUE to       BLUE_BALLOON,
-        DyeColor.PURPLE to     PURPLE_BALLOON,
-        DyeColor.MAGENTA to    MAGENTA_BALLOON,
-        DyeColor.PINK to       PINK_BALLOON
+
+    @JvmField
+    val OBSIDIAN_DUCKY_TUBE: Item = registerItem(
+        "obsidian_ducky_tube", ::DuckyTubeItem,
+        properties = Item.Properties()
+            .durability(12*PazPlant.PEA_ARMOR_DAMAGE)
+            .attributes(
+                ItemAttributeModifiers.builder()
+                    .add(
+                        Attributes.WATER_MOVEMENT_EFFICIENCY,
+                        AttributeModifier(pazResource("obsidian_ducky_tube"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
+                        EquipmentSlotGroup.LEGS
+                    ).build())
+            .component(DataComponents.EQUIPPABLE,
+                Equippable.builder(EquipmentSlot.LEGS)
+                    .setAsset(OBSIDIAN_DUCKY_EQUIP_ASSET)
+                    .build()),
+        folder = "armor"
     )
+
+    @JvmField val BALLOONS: Map<DyeColor, Item> = DyeColor.entries.associateWith { color ->
+        registerItem(
+            "${color.name.lowercase()}_balloon",
+            { BalloonItem(it, DyeColor.WHITE) },
+            properties = Item.Properties(),
+            folder = "balloon"
+        )
+    }
 
     @JvmField
     val DYE_BLASTER: Item = registerItem(
@@ -175,7 +178,8 @@ object PazItems {
                         AttributeModifier(pazResource("football_knockback_resistance"), 0.1, AttributeModifier.Operation.ADD_VALUE),
                         EquipmentSlotGroup.HEAD
                     ).build()
-            )
+            ),
+        folder = "armor"
     )
     @JvmField
     val SEED_PACKET: Item = registerItem(
@@ -199,7 +203,8 @@ object PazItems {
             .component(
                 DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.HEAD)
                     .setEquipSound(SoundEvents.ARMOR_EQUIP_GENERIC)
-                    .build())
+                    .build()),
+        folder = "armor"
     )
     @JvmField
     val MUSIC_DISC_GRASSY_GROOVE: Item = registerItem(
@@ -232,7 +237,10 @@ object PazItems {
 
     @JvmField val PIRATE_CAPTAIN_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.PIRATE_CAPTAIN)
 
-    @JvmField val GNOME_SPAWN_EGG: Item = registerSpawnEgg(PazEntities.GNOME)
+    @JvmField val GNOME_SPAWN_EGG: Item = registerPazSpawnEgg(
+        PazEntities.GNOME,
+        folder="gnome"
+    )
 
     private fun registerItem(
         name: String,
@@ -252,19 +260,41 @@ object PazItems {
 
     private fun registerPazZombieSpawnEgg(
         type: EntityType<*>,
-        worker: (PazZombie) -> Unit = {},
+        worker: (LivingEntity) -> Unit = {},
         properties: Item.Properties = Item.Properties(),
         customId: String? = null,
         folder: String? = null
     ): Item {
 
-        val folderPath = if (folder != null) "$folder/spawn_egg/zombie" else "spawn_egg/zombie"
+        val folderPath = if (folder != null) "zombies/$folder" else "zombies"
+
+        registerPazSpawnEgg(type, worker, properties, customId, folder)
+
+        val entityId = if (customId != null) customId else EntityType.getKey(type).path
+        return registerPazSpawnEgg(
+            type,
+            worker,
+            properties,
+            customId,
+            folder = folderPath
+        )
+    }
+
+    private fun registerPazSpawnEgg(
+        type: EntityType<*>,
+        worker: (LivingEntity) -> Unit = {},
+        properties: Item.Properties = Item.Properties(),
+        customId: String? = null,
+        folder: String? = null
+    ): Item {
+
+        val folderPath = if (folder != null) "spawn_egg/$folder" else "spawn_egg"
 
         val entityId = if (customId != null) customId else EntityType.getKey(type).path
         return registerItem(
-            "${entityId}_spawn_egg",
+            entityId,
             { props ->
-                PazZombieSpawnEgg(props, worker)
+                PazSpawnEgg(props, worker)
             },
             properties
                 .spawnEgg(type),
@@ -276,6 +306,7 @@ object PazItems {
         type: EntityType<*>,
         folder: String? = null,
         properties: Item.Properties = Item.Properties(),
+        extraWorker: (LivingEntity) -> Unit = {},
     ): MutableList<Item> {
 
         val spawnEggList: MutableList<Item> = mutableListOf()
@@ -295,8 +326,10 @@ object PazItems {
                             )
                         }
 
+                        extraWorker(it)
+
                     },
-                    customId = if (hatVariant.hatName != null) "${entityId}_${hatVariant.hatName}" else null,
+                    customId = hatVariant.hatName,
                     folder = folder
                 )
             )
@@ -312,7 +345,7 @@ object PazItems {
                     )
                     it
                 },
-                customId = "${entityId}_flag",
+                customId = "flag",
                 folder = folder
             )
         )
@@ -327,25 +360,12 @@ object PazItems {
                     )
                     it
                 },
-                customId = "${entityId}_screen_door",
+                customId = "screen_door",
                 folder = folder
             )
         )
 
         return spawnEggList
-    }
-
-    private fun registerSpawnEgg(
-        type: EntityType<*>,
-        properties: Item.Properties = Item.Properties(),
-        customId: String? = null,
-    ): Item {
-        val entityId = if (customId != null) customId else EntityType.getKey(type).path
-        return registerItem(
-           "spawn_egg/${entityId}_spawn_egg", ::SpawnEggItem,
-            properties
-                .spawnEgg(type)
-        )
     }
 
     fun initialize() {

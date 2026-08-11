@@ -21,62 +21,62 @@
                 "threshold": 0.875,
                 "model": {
                   "type": "minecraft:model",
-                  "model": "plantz:item/newspaper/article_8"
+                  "model": "plantz:item/armor/newspaper/article_8"
                 }
               },
               {
                 "threshold": 0.75,
                 "model": {
                   "type": "minecraft:model",
-                  "model": "plantz:item/newspaper/article_7"
+                  "model": "plantz:item/armor/newspaper/article_7"
                 }
               },
               {
                 "threshold": 0.625,
                 "model": {
                   "type": "minecraft:model",
-                  "model": "plantz:item/newspaper/article_6"
+                  "model": "plantz:item/armor/newspaper/article_6"
                 }
               },
               {
                 "threshold": 0.5,
                 "model": {
                   "type": "minecraft:model",
-                  "model": "plantz:item/newspaper/article_5"
+                  "model": "plantz:item/armor/newspaper/article_5"
                 }
               },
               {
                 "threshold": 0.375,
                 "model": {
                   "type": "minecraft:model",
-                  "model": "plantz:item/newspaper/article_4"
+                  "model": "plantz:item/armor/newspaper/article_4"
                 }
               },
               {
                 "threshold": 0.25,
                 "model": {
                   "type": "minecraft:model",
-                  "model": "plantz:item/newspaper/article_3"
+                  "model": "plantz:item/armor/newspaper/article_3"
                 }
               },
               {
                 "threshold": 0.125,
                 "model": {
                   "type": "minecraft:model",
-                  "model": "plantz:item/newspaper/article_2"
+                  "model": "plantz:item/armor/newspaper/article_2"
                 }
               },
               {
                 "threshold": 0,
                 "model": {
                   "type": "minecraft:model",
-                  "model": "plantz:item/newspaper/article_1"
+                  "model": "plantz:item/armor/newspaper/article_1"
                 }
               }
             ],
             "fallback": {
               "type": "minecraft:model",
-              "model": "plantz:item/newspaper/article_1"
+              "model": "plantz:item/armor/newspaper/article_1"
             }
           }
         },
@@ -87,13 +87,13 @@
           ],
           "model": {
             "type": "minecraft:model",
-            "model": "plantz:item/newspaper/newspaper"
+            "model": "plantz:item/armor/newspaper/newspaper"
           }
         }
       ],
       "fallback": {
         "type": "minecraft:model",
-        "model": "plantz:item/newspaper/item"
+        "model": "plantz:item/armor/newspaper/item"
       }
     },
     "on_false": {
@@ -112,69 +112,69 @@
                 "threshold": 0.875,
                 "model": {
                   "type": "minecraft:model",
-                  "model": "plantz:item/newspaper/article_8"
+                  "model": "plantz:item/armor/newspaper/article_8"
                 }
               },
               {
                 "threshold": 0.75,
                 "model": {
                   "type": "minecraft:model",
-                  "model": "plantz:item/newspaper/article_7"
+                  "model": "plantz:item/armor/newspaper/article_7"
                 }
               },
               {
                 "threshold": 0.625,
                 "model": {
                   "type": "minecraft:model",
-                  "model": "plantz:item/newspaper/article_6"
+                  "model": "plantz:item/armor/newspaper/article_6"
                 }
               },
               {
                 "threshold": 0.5,
                 "model": {
                   "type": "minecraft:model",
-                  "model": "plantz:item/newspaper/article_5"
+                  "model": "plantz:item/armor/newspaper/article_5"
                 }
               },
               {
                 "threshold": 0.375,
                 "model": {
                   "type": "minecraft:model",
-                  "model": "plantz:item/newspaper/article_4"
+                  "model": "plantz:item/armor/newspaper/article_4"
                 }
               },
               {
                 "threshold": 0.25,
                 "model": {
                   "type": "minecraft:model",
-                  "model": "plantz:item/newspaper/article_3"
+                  "model": "plantz:item/armor/newspaper/article_3"
                 }
               },
               {
                 "threshold": 0.125,
                 "model": {
                   "type": "minecraft:model",
-                  "model": "plantz:item/newspaper/article_2"
+                  "model": "plantz:item/armor/newspaper/article_2"
                 }
               },
               {
                 "threshold": 0,
                 "model": {
                   "type": "minecraft:model",
-                  "model": "plantz:item/newspaper/article_1"
+                  "model": "plantz:item/armor/newspaper/article_1"
                 }
               }
             ],
             "fallback": {
               "type": "minecraft:model",
-              "model": "plantz:item/newspaper/article_1"
+              "model": "plantz:item/armor/newspaper/article_1"
             }
           }
         }
       ],
       "fallback": {
         "type": "minecraft:model",
-        "model": "plantz:item/newspaper/item"
+        "model": "plantz:item/armor/newspaper/item"
       }
     }
   }

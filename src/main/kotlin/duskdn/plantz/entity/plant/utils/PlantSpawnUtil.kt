@@ -182,14 +182,14 @@ object PlantSpawnUtils {
 
         val amphibious = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(plantType).`is`(PazTags.EntityTypes.AMPHIBIOUS)
 
-        println("PlantType: $plantType, carrier: $carrier, PlantableOnWater: $plantableOnWater, Amphibious: $amphibious")
+//        println("PlantType: $plantType, carrier: $carrier, PlantableOnWater: $plantableOnWater, Amphibious: $amphibious")
 
         val waterAllowed = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(carrierType).`is`(PazTags.EntityTypes.CARRIER_ALLOW_WATER)
 
         // if carrier and is not plantable on water, return true
         // else only return true if the carrier allows water plants
         if (plantableOnWater && !amphibious) {
-            println("Plant is plantable on water. Carrier allows water plants? : $waterAllowed")
+//            println("Plant is plantable on water. Carrier allows water plants? : $waterAllowed")
 
             return waterAllowed
         }

@@ -128,49 +128,32 @@ object PazBlocks {
         TIME_MACHINE
     )
 
-    @JvmField val BLUE_GARDEN_GNOME: Block = registerBlock("blue_garden_gnome", gardenGnomeProperties(), ::GardenGnomeBlock)
-    @JvmField val GREEN_GARDEN_GNOME: Block = registerBlock("green_garden_gnome", gardenGnomeProperties(), ::GardenGnomeBlock)
-    @JvmField val RED_GARDEN_GNOME: Block = registerBlock("red_garden_gnome", gardenGnomeProperties(), ::GardenGnomeBlock)
-    @JvmField val YELLOW_GARDEN_GNOME: Block = registerBlock("yellow_garden_gnome", gardenGnomeProperties(), ::GardenGnomeBlock)
-
-    @JvmField val MAILBOX: Block = registerBlock("mailbox", mailboxProperties(), ::MailboxBlock)
-    @JvmField val LIGHT_GRAY_MAILBOX: Block = registerBlock("light_gray_mailbox", mailboxProperties(MapColor.COLOR_LIGHT_GRAY), {MailboxBlock(it, DyeColor.LIGHT_GRAY)})
-    @JvmField val GRAY_MAILBOX: Block = registerBlock("gray_mailbox", mailboxProperties(MapColor.COLOR_GRAY), {MailboxBlock(it, DyeColor.GRAY)})
-    @JvmField val BLACK_MAILBOX: Block = registerBlock("black_mailbox", mailboxProperties(MapColor.COLOR_BLACK), {MailboxBlock(it, DyeColor.BLACK)})
-    @JvmField val BROWN_MAILBOX: Block = registerBlock("brown_mailbox", mailboxProperties(MapColor.COLOR_BROWN), {MailboxBlock(it, DyeColor.BROWN)})
-    @JvmField val RED_MAILBOX: Block = registerBlock("red_mailbox", mailboxProperties(MapColor.COLOR_RED), {MailboxBlock(it, DyeColor.RED)})
-    @JvmField val ORANGE_MAILBOX: Block = registerBlock("orange_mailbox", mailboxProperties(MapColor.COLOR_ORANGE), {MailboxBlock(it, DyeColor.ORANGE)})
-    @JvmField val YELLOW_MAILBOX: Block = registerBlock("yellow_mailbox", mailboxProperties(MapColor.COLOR_YELLOW), {MailboxBlock(it, DyeColor.YELLOW)})
-    @JvmField val LIME_MAILBOX: Block = registerBlock("lime_mailbox", mailboxProperties(MapColor.COLOR_LIGHT_GREEN), {MailboxBlock(it, DyeColor.LIME)})
-    @JvmField val GREEN_MAILBOX: Block = registerBlock("green_mailbox", mailboxProperties(MapColor.COLOR_GREEN), {MailboxBlock(it, DyeColor.GREEN)})
-    @JvmField val CYAN_MAILBOX: Block = registerBlock("cyan_mailbox", mailboxProperties(MapColor.COLOR_CYAN), {MailboxBlock(it, DyeColor.CYAN)})
-    @JvmField val LIGHT_BLUE_MAILBOX: Block = registerBlock("light_blue_mailbox", mailboxProperties(MapColor.COLOR_LIGHT_BLUE), {MailboxBlock(it, DyeColor.LIGHT_BLUE)})
-    @JvmField val BLUE_MAILBOX: Block = registerBlock("blue_mailbox", mailboxProperties(MapColor.COLOR_BLUE), {MailboxBlock(it, DyeColor.BLUE)})
-    @JvmField val PURPLE_MAILBOX: Block = registerBlock("purple_mailbox", mailboxProperties(MapColor.COLOR_PURPLE), {MailboxBlock(it, DyeColor.PURPLE)})
-    @JvmField val MAGENTA_MAILBOX: Block = registerBlock("magenta_mailbox", mailboxProperties(MapColor.COLOR_MAGENTA), {MailboxBlock(it, DyeColor.MAGENTA)})
-    @JvmField val PINK_MAILBOX: Block = registerBlock("pink_mailbox", mailboxProperties(MapColor.COLOR_PINK), {MailboxBlock(it, DyeColor.PINK)})
-    val mailboxByColor = mapOf(
-        DyeColor.WHITE to      MAILBOX,
-        DyeColor.LIGHT_GRAY to LIGHT_GRAY_MAILBOX,
-        DyeColor.GRAY to       GRAY_MAILBOX,
-        DyeColor.BLACK to      BLACK_MAILBOX,
-        DyeColor.BROWN to      BROWN_MAILBOX,
-        DyeColor.RED to        RED_MAILBOX,
-        DyeColor.ORANGE to     ORANGE_MAILBOX,
-        DyeColor.YELLOW to     YELLOW_MAILBOX,
-        DyeColor.LIME to       LIME_MAILBOX,
-        DyeColor.GREEN to      GREEN_MAILBOX,
-        DyeColor.CYAN to       CYAN_MAILBOX,
-        DyeColor.LIGHT_BLUE to LIGHT_BLUE_MAILBOX,
-        DyeColor.BLUE to       BLUE_MAILBOX,
-        DyeColor.PURPLE to     PURPLE_MAILBOX,
-        DyeColor.MAGENTA to    MAGENTA_MAILBOX,
-        DyeColor.PINK to       PINK_MAILBOX,
+    val gardenGnomeVariants = listOf<DyeColor>(
+        DyeColor.BLUE,
+        DyeColor.GREEN,
+        DyeColor.RED,
+        DyeColor.YELLOW
     )
+
+    @JvmField val GARDEN_GNOMES: Map<DyeColor, Block> = gardenGnomeVariants.associateWith { color ->
+        registerBlock("${color.name.lowercase()}_garden_gnome", gardenGnomeProperties(), {GardenGnomeBlock(it)},
+            folder = "garden_gnome"
+        )
+    }
+
+    @JvmField val MAILBOXES: Map<DyeColor, Block> = DyeColor.entries.associateWith { color ->
+        registerBlock("${color.name.lowercase()}_mailbox", mailboxProperties(
+            color.mapColor
+        ), {MailboxBlock(it, color)},
+            folder = "mailbox"
+        )
+    }
+
     val MAILBOX_ENTITY: BlockEntityType<MailboxBlockEntity> = registerBlockEntity(
         "mailbox",
         ::MailboxBlockEntity,
-        *mailboxByColor.values.toTypedArray()
+        *MAILBOXES.values.toTypedArray(),
+        folder = "mailbox"
     )
 
     @JvmField val CONE: Block = registerBlock(
@@ -205,40 +188,47 @@ object PazBlocks {
                         ),
                         EquipmentSlotGroup.HEAD
                     ).build()
-            )
+            ),
+        folder = "armor"
     )
 
     @JvmField val BRAINZ_ALLOY_BLOCK: Block = registerBlock(
         "brainz_alloy_block",
         BlockBehaviour.Properties.of().sound(SoundType.COPPER).requiresCorrectToolForDrops()
             .strength(3.0F, 6.0F),
+        folder = "brainz_alloy"
     )
     @JvmField val BRAINZ_ALLOY_STAIRS: Block = registerBlock(
         "brainz_alloy_stairs",
         BlockBehaviour.Properties.of().sound(SoundType.COPPER).requiresCorrectToolForDrops()
             .strength(3.0F, 6.0F),
-        { StairBlock(BRAINZ_ALLOY_BLOCK.defaultBlockState(), it) }
+        { StairBlock(BRAINZ_ALLOY_BLOCK.defaultBlockState(), it) },
+        folder = "brainz_alloy"
     )
     @JvmField val BRAINZ_ALLOY_SLAB: Block = registerBlock(
         "brainz_alloy_slab",
         BlockBehaviour.Properties.of().sound(SoundType.COPPER).requiresCorrectToolForDrops()
             .strength(3.25F, 6.0F),
-        ::SlabBlock
+        ::SlabBlock,
+        folder = "brainz_alloy"
     )
     @JvmField val SMOOTH_BRAINZ_ALLOY_BLOCK: Block = registerBlock(
         "smooth_brainz_alloy_block",
         BlockBehaviour.Properties.of().sound(SoundType.COPPER).requiresCorrectToolForDrops()
             .strength(3.25F, 6.0F),
+        folder = "brainz_alloy"
     )
     @JvmField val TREADED_BRAINZ_ALLOY_BLOCK: Block = registerBlock(
         "treaded_brainz_alloy_block",
         BlockBehaviour.Properties.of().sound(SoundType.COPPER).requiresCorrectToolForDrops()
             .strength(3.25F, 6.0F),
+        folder = "brainz_alloy"
     )
     @JvmField val REINFORCED_BRAINZ_ALLOY_BLOCK: Block = registerBlock(
         "reinforced_brainz_alloy_block",
         BlockBehaviour.Properties.of().sound(SoundType.COPPER).requiresCorrectToolForDrops()
             .strength(10.0F, 1200.0F),
+        folder = "brainz_alloy"
     )
 
     @JvmField val BRAINZ_FLAG: Block = registerBlock(
@@ -270,7 +260,8 @@ object PazBlocks {
                         ),
                         EquipmentSlotGroup.HAND
                     ).build()
-            )
+            ),
+        folder = "flags"
     )
     @JvmField val PLANTZ_FLAG: Block = registerBlock(
         "plantz_flag",
@@ -303,12 +294,14 @@ object PazBlocks {
                         ),
                         EquipmentSlotGroup.HAND
                     ).build()
-            )
+            ),
+        folder = "flags"
     )
     val FLAG_BLOCK_ENTITY: BlockEntityType<FlagBlockEntity> = registerBlockEntity(
         "flag_block",
         ::FlagBlockEntity,
-        PLANTZ_FLAG, BRAINZ_FLAG
+        PLANTZ_FLAG, BRAINZ_FLAG,
+        folder = "flags"
     )
     @JvmField val PLANTZ_FLAG_POI = PoiHelper.register(pazResource("plantz_flag"), 8, 32, PLANTZ_FLAG)
 
@@ -343,6 +336,7 @@ object PazBlocks {
                 tanksDamage = false,
                 mustBeUsing = true
             ))
+            .component(DataComponents.BREAK_SOUND, SoundEvents.SHIELD_BREAK)
             .component(
                 DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.MAINHAND)
                     .setEquipSound(SoundEvents.SHIELD_BLOCK)
@@ -352,7 +346,7 @@ object PazBlocks {
                     .add(
                         Attributes.ARMOR,
                         AttributeModifier(pazResource("screen_door_armor"), 0.5, AttributeModifier.Operation.ADD_VALUE),
-                        EquipmentSlotGroup.HEAD
+                        EquipmentSlotGroup.HAND
                     ).add(
                         Attributes.KNOCKBACK_RESISTANCE,
                         AttributeModifier(
@@ -360,10 +354,12 @@ object PazBlocks {
                             0.1,
                             AttributeModifier.Operation.ADD_VALUE
                         ),
-                        EquipmentSlotGroup.HEAD
+                        EquipmentSlotGroup.HAND
                     ).build()
             ),
-        ::ScreenDoorItem
+        ::ScreenDoorItem,
+        folder = "screen_door",
+        itemFolder = "armor"
     )
 
 
@@ -376,16 +372,19 @@ object PazBlocks {
             BlockItem(block, props)
         },
         folder: String? = null,
+        itemFolder: String? = null,
     ): Block {
 
-        val itemPath = if (folder != null) "$folder/$name" else name
+        val blockPath = if (folder != null) "$folder/$name" else name
 
-        val key = ResourceKey.create(Registries.BLOCK, pazResource(name))
+        val itemPath = if (itemFolder != null) "$itemFolder/$name" else blockPath
+
+        val key = ResourceKey.create(Registries.BLOCK, pazResource(blockPath))
         val block = blockFactory(properties.setId(key))
         Registry.register(BuiltInRegistries.BLOCK, key, block)
 
         if (itemFactory!=null && itemProperties!=null) {
-            val itemKey = ResourceKey.create(Registries.ITEM, pazResource(name))
+            val itemKey = ResourceKey.create(Registries.ITEM, pazResource(itemPath))
             val blockItem = itemFactory(block, itemProperties.setId(itemKey))
             Registry.register(BuiltInRegistries.ITEM, itemKey, blockItem)
         }
@@ -398,8 +397,12 @@ object PazBlocks {
         name: String,
         factory: (BlockPos, BlockState) -> T,
         vararg validBlocks: Block,
+        folder: String? = null,
     ): BlockEntityType<T> {
-        val key = ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, pazResource(name))
+
+        val blockPath = if (folder != null) "$folder/$name" else name
+
+        val key = ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, pazResource(blockPath))
         val builder = FabricBlockEntityTypeBuilder.create(
             factory,
             *validBlocks

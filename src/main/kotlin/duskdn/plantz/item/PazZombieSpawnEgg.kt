@@ -24,9 +24,9 @@ import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.HitResult
 import java.util.function.Consumer
 
-class PazZombieSpawnEgg(
+class PazSpawnEgg(
     properties: Properties,
-    val worker: (PazZombie) -> Unit = {}
+    val worker: (LivingEntity) -> Unit = {}
 ): SpawnEggItem(properties) {
 
     fun spawnMob(
@@ -57,7 +57,7 @@ class PazZombieSpawnEgg(
             if (entity != null) {
                 itemStack.consume(1, user)
                 level.gameEvent(user, GameEvent.ENTITY_PLACE, spawnPos)
-                worker(entity as PazZombie)
+                worker(entity as LivingEntity)
             }
 
             return InteractionResult.SUCCESS

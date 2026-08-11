@@ -339,6 +339,7 @@ object PazEntities {
         height = 0.8f,
         attributes = PazPlant.Companion.PlantAttributes(
             attackDamage = PazPlant.PEA_DAMAGE*2,
+            followRange = 20.0
         )
     )
     @JvmField val SUN_SHROOM: EntityType<SunShroom> = registerPlant(

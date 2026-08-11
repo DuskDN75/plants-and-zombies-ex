@@ -1,11 +1,11 @@
 {
   "textures": [
-    "plantz:ember1",
-    "plantz:ember2",
-    "plantz:ember3",
-    "plantz:ember4",
-    "plantz:ember5",
-    "plantz:ember6",
-    "plantz:ember7"
+    "plantz:fire/ember/1",
+    "plantz:fire/ember/2",
+    "plantz:fire/ember/3",
+    "plantz:fire/ember/4",
+    "plantz:fire/ember/5",
+    "plantz:fire/ember/6",
+    "plantz:fire/ember/7"
   ]
 }

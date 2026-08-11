@@ -6,6 +6,6 @@
   "material": "minecraft:purple_dye",
   "result": {
     "count": 1,
-    "id": "plantz:purple_mailbox"
+    "id": "plantz:mailbox/purple_mailbox"
   }
 }

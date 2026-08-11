@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.blaze3d.vertex.PoseStack;
 import duskdn.plantz.renderer.DuckyTubeRenderLayer;
 import duskdn.plantz.renderer.DyeVatRenderLayer;
+import duskdn.plantz.renderer.ObsidianDuckyTubeRenderLayer;
 import duskdn.plantz.renderer.PaintLayer;
 import duskdn.plantz.mixin.LivingEntityAccessor;
 import duskdn.plantz.util.PazEntityData;
@@ -38,6 +39,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     @Inject(method = "<init>", at = @At("TAIL"))
     private void plantz$addDuckyTubeLayer(EntityRendererProvider.Context context, M model, float shadow, CallbackInfo ci) {
         this.addLayer(new DuckyTubeRenderLayer<>(this));
+        this.addLayer(new ObsidianDuckyTubeRenderLayer<>(this));
         this.addLayer(new DyeVatRenderLayer<>(this));
         this.addLayer(new PaintLayer<>(this));
     }

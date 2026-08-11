@@ -3,10 +3,10 @@
   "category": "redstone",
   "key": {
     "#": [
-      "plantz:brainz_alloy"
+      "plantz:brainz_alloy/brainz_alloy"
     ],
     "=": [
-      "plantz:reinforced_brainz_alloy_block"
+      "plantz:brainz_alloy/reinforced_brainz_alloy_block"
     ],
     "@": [
       "minecraft:daylight_detector"

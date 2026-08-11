@@ -10,13 +10,14 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ItemUseAnimation
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.DoorBlock
 
 class ScreenDoorItem(block: Block, properties: Properties) : BlockItem(block, properties) {
 
     override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResult {
         player.startUsingItem(hand)
-        player.playSound(SoundEvents.BOOK_PAGE_TURN, 0.8f, 1.2f)
+        player.playSound(SoundEvents.WOODEN_DOOR_CLOSE, 0.8f, 1.2f)
         return InteractionResult.CONSUME
     }
 
@@ -38,6 +39,6 @@ class ScreenDoorItem(block: Block, properties: Properties) : BlockItem(block, pr
     }
 
     override fun getUseAnimation(itemStack: ItemStack): ItemUseAnimation {
-        return ItemUseAnimation.TOOT_HORN
+        return ItemUseAnimation.SPYGLASS
     }
 }

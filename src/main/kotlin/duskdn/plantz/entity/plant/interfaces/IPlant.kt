@@ -1,10 +1,11 @@
 package duskdn.plantz.entity.plant.interfaces
 
+import duskdn.plantz.entity.interfaces.IEntity
 import duskdn.plantz.entity.plant.init.PazPlant
 
-interface IPlant {
+interface IPlant: IEntity {
 
-    val entity: PazPlant
+    override val entity: PazPlant
         get() = this as PazPlant
 
 }

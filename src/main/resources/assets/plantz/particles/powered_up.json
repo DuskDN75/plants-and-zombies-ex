@@ -1,9 +1,9 @@
 {
   "textures": [
-    "plantz:powerup1",
-    "plantz:powerup2",
-    "plantz:powerup3",
-    "plantz:powerup4",
-    "plantz:powerup5"
+    "plantz:powerup/1",
+    "plantz:powerup/2",
+    "plantz:powerup/3",
+    "plantz:powerup/4",
+    "plantz:powerup/5"
   ]
 }

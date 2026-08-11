@@ -1,13 +1,13 @@
 {
   "textures": [
-    "plantz:explosion_core1",
-    "plantz:explosion_core2",
-    "plantz:explosion_core3",
-    "plantz:explosion_core4",
-    "plantz:explosion_core5",
-    "plantz:explosion_core6",
-    "plantz:explosion_core7",
-    "plantz:explosion_core8",
-    "plantz:explosion_core9"
+    "plantz:explosion/core/1",
+    "plantz:explosion/core/2",
+    "plantz:explosion/core/3",
+    "plantz:explosion/core/4",
+    "plantz:explosion/core/5",
+    "plantz:explosion/core/6",
+    "plantz:explosion/core/7",
+    "plantz:explosion/core/8",
+    "plantz:explosion/core/9"
   ]
 }

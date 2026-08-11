@@ -40,13 +40,10 @@ object PazBlocksTab : PazCreativeTab() {
 
                     output.accept(PazBlocks.SCREEN_DOOR)
 
-                    output.accept(PazBlocks.BLUE_GARDEN_GNOME)
-                    output.accept(PazBlocks.GREEN_GARDEN_GNOME)
-                    output.accept(PazBlocks.RED_GARDEN_GNOME)
-                    output.accept(PazBlocks.YELLOW_GARDEN_GNOME)
+                    PazBlocks.GARDEN_GNOMES.forEach { output.accept(it.value) }
 
                     // mailboxes
-                    PazBlocks.mailboxByColor.forEach { output.accept(it.value) }
+                    PazBlocks.MAILBOXES.forEach { output.accept(it.value) }
 
                     // other
                     output.accept(PazBlocks.GRAVESTONE)

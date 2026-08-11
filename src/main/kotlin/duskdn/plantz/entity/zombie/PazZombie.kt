@@ -135,6 +135,22 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
         super.onEquipItem(slot, oldStack, stack)
     }
 
+    override fun equipmentHasChanged(previous: ItemStack, current: ItemStack): Boolean {
+        if(mainHandItem.`is`(PazBlocks.SCREEN_DOOR.asItem())) {
+            this.startUsingItem(usedItemHand)
+            this.setLivingEntityFlag(LIVING_ENTITY_FLAG_IS_USING, true)
+        }
+        else if(mainHandItem.`is`(PazItems.NEWSPAPER)) {
+            this.startUsingItem(usedItemHand)
+            this.setLivingEntityFlag(LIVING_ENTITY_FLAG_IS_USING, true)
+        }
+        else {
+            this.setLivingEntityFlag(LIVING_ENTITY_FLAG_IS_USING, false)
+        }
+
+        return super.equipmentHasChanged(previous, current)
+    }
+
     var state: ZombieState
         get() = this.entityData.get(ZOMBIE_STATE)
         set(value) { this.entityData.set(ZOMBIE_STATE, value) }
@@ -194,20 +210,20 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
         super.tick()
         val serverLevel = level() as? ServerLevel
 
-        if (isEyeInFluid(FluidTags.WATER)) {
-            waterTime++
-            if (waterTime>=250 && canEquipDuckyInWater()) {
-                if(!getItemBySlot(EquipmentSlot.LEGS).isEmpty) {
-                    val currentLegs = getItemBySlot(EquipmentSlot.LEGS)
-                    val dropChance = dropChances.byEquipment(EquipmentSlot.LEGS)
-                    if (!currentLegs.isEmpty && max(this.random.nextFloat() - 0.1f, 0.0f).toDouble() < dropChance) {
-                        if (serverLevel!=null) spawnAtLocation(serverLevel, currentLegs)
-                    }
-                }
-                setItemSlot(EquipmentSlot.LEGS, PazItems.DUCKY_TUBE.defaultInstance)
-                setDropChance(EquipmentSlot.LEGS, 0.0f)
-            }
-        } else waterTime = -1
+//        if (isEyeInFluid(FluidTags.WATER)) {
+//            waterTime++
+//            if (waterTime>=250 && canEquipDuckyInWater()) {
+//                if(!getItemBySlot(EquipmentSlot.LEGS).isEmpty) {
+//                    val currentLegs = getItemBySlot(EquipmentSlot.LEGS)
+//                    val dropChance = dropChances.byEquipment(EquipmentSlot.LEGS)
+//                    if (!currentLegs.isEmpty && max(this.random.nextFloat() - 0.1f, 0.0f).toDouble() < dropChance) {
+//                        if (serverLevel!=null) spawnAtLocation(serverLevel, currentLegs)
+//                    }
+//                }
+//                setItemSlot(EquipmentSlot.LEGS, PazItems.DUCKY_TUBE.defaultInstance)
+//                setDropChance(EquipmentSlot.LEGS, 0.0f)
+//            }
+//        } else waterTime = -1
 
         when (state) {
             ZombieState.IDLE -> {

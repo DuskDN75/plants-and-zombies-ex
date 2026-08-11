@@ -29,12 +29,14 @@ class BlocksProjectileDamage(
         flag: TooltipFlag,
         components: DataComponentGetter
     ) {
-        val maxHealth = components.get(DataComponents.MAX_DAMAGE)?.div(PazPlant.PEA_DAMAGE) ?: 0
+        val maxHealth = (components.get(DataComponents.MAX_DAMAGE) ?: 0) / PazPlant.PEA_DAMAGE
 
-        val health = components.get(DataComponents.DAMAGE)?.div(PazPlant.PEA_DAMAGE) ?: 0
+        val damage = (components.get(DataComponents.DAMAGE) ?: 0) / PazPlant.PEA_DAMAGE
 
-        consumer.accept(Component.translatable("component.tanks_damage.desc").withStyle(ChatFormatting.GRAY))
-        consumer.accept(Component.translatable("component.tanks_damage", maxHealth, health).withStyle(ChatFormatting.BLUE))
+        val health = maxHealth-damage
+
+        consumer.accept(Component.translatable("component.blocks_damage.desc").withStyle(ChatFormatting.GRAY))
+        consumer.accept(Component.translatable("component.blocks_damage", health, maxHealth).withStyle(ChatFormatting.BLUE))
     }
 
     companion object {

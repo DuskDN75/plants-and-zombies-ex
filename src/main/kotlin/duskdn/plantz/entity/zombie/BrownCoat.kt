@@ -112,7 +112,7 @@ class BrownCoat(type: EntityType<out BrownCoat>, level: Level) : PazZombie(type,
 }
 
 enum class HatVariant(val hat: Item?, val hatName: String?) {
-    NONE(null, null),
+    NONE(null, "basic"),
     CONE(PazBlocks.CONE.asItem(), "cone"),
     BUCKET(Items.BUCKET, "bucket"),
 }

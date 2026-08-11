@@ -13,31 +13,6 @@ import net.minecraft.world.level.block.state.properties.BlockSetType
 
 class ScreenDoorBlock(type: BlockSetType, properties: Properties) : DoorBlock(type, properties) {
 
-    override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResult {
-        player.startUsingItem(hand)
-        player.playSound(SoundEvents.BOOK_PAGE_TURN, 0.8f, 1.2f)
-        return InteractionResult.CONSUME
-    }
 
-    override fun releaseUsing(
-        itemStack: ItemStack,
-        level: Level,
-        entity: LivingEntity,
-        remainingTime: Int
-    ): Boolean {
-        return super.releaseUsing(itemStack, level, entity, remainingTime)
-    }
-
-    override fun getUseDuration(itemStack: ItemStack, user: LivingEntity): Int {
-        return 72000
-    }
-
-    override fun onUseTick(level: Level, livingEntity: LivingEntity, itemStack: ItemStack, ticksRemaining: Int) {
-        super.onUseTick(level, livingEntity, itemStack, ticksRemaining)
-    }
-
-    override fun getUseAnimation(itemStack: ItemStack): ItemUseAnimation {
-        return ItemUseAnimation.TOOT_HORN
-    }
 
 }

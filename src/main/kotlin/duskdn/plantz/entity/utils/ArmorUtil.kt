@@ -1,19 +1,31 @@
 package duskdn.plantz.entity.utils
 
+import duskdn.plantz.init.PazBlocks
 import duskdn.plantz.init.PazComponents
 import duskdn.plantz.init.PazItems
 import duskdn.plantz.init.PazSounds
 import duskdn.plantz.item.component.BlocksProjectileDamage
+import duskdn.plantz.mixin.EntityAccessor
 import duskdn.plantz.mixin.LivingEntityAccessor
+import it.unimi.dsi.fastutil.doubles.DoubleDoubleImmutablePair
+import net.minecraft.advancements.CriteriaTriggers
+import net.minecraft.core.component.DataComponents
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.stats.Stats
+import net.minecraft.tags.DamageTypeTags
+import net.minecraft.tags.EntityTypeTags
 import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.projectile.Projectile
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.component.BlocksAttacks
 import kotlin.math.ceil
 
 object ArmorUtil {
@@ -54,7 +66,7 @@ object ArmorUtil {
 
         val component = item.second
 
-        if (!component.tanksDamage) return damage
+//        if (!component.tanksDamage) return damage
 
         val curArmorHealth = armor.maxDamage - armor.damageValue
 
@@ -68,7 +80,7 @@ object ArmorUtil {
             val hitSound: SoundEvent
 
             if (armor.`is`(PazItems.NEWSPAPER)) hitSound = PazSounds.PROJECTILE_HIT_PAPER
-            else if (armor.`is`(Items.BUCKET)) hitSound = PazSounds.PROJECTILE_HIT_BUCKET
+            else if (armor.`is`(Items.BUCKET) || armor.`is`(PazBlocks.SCREEN_DOOR.asItem())) hitSound = PazSounds.PROJECTILE_HIT_BUCKET
             else hitSound = PazSounds.PROJECTILE_HIT_CONE
 
             entity.playSound(hitSound)
@@ -78,13 +90,128 @@ object ArmorUtil {
 
     }
 
+    fun entityHurtServer(entity: LivingEntity, source: DamageSource, dmg: Float): Boolean {
+
+        var damage = dmg
+
+        val accessor = (entity as LivingEntityAccessor)
+
+        val level = entity.level() as ServerLevel
+
+        if (entity.isInvulnerableTo(level, source)) {
+            return false
+        } else if (entity.isDeadOrDying) {
+            return false
+        } else if (source.`is`(DamageTypeTags.IS_FIRE) && entity.hasEffect(MobEffects.FIRE_RESISTANCE)) {
+            return false
+        } else {
+            if (entity.isSleeping) {
+                entity.stopSleeping()
+            }
+
+            entity.noActionTime = 0
+
+            val itemInUse: ItemStack = entity.getUseItem()
+            val damageBlocked: Float = entity.applyItemBlocking(entity.level() as ServerLevel, source, damage)
+            damage -= damageBlocked
+            val blocked = damageBlocked > 0.0f
+            if (source.`is`(DamageTypeTags.IS_FREEZING) && entity.`is`(EntityTypeTags.FREEZE_HURTS_EXTRA_TYPES)) {
+                damage *= 5.0f
+            }
+
+            if (java.lang.Float.isNaN(damage) || java.lang.Float.isInfinite(damage)) {
+                damage = Float.MAX_VALUE
+            }
+
+            accessor.invokeSetLastHurt(damage)
+            entity.invulnerableTime = 20
+
+            accessor.invokeActuallyHurt(entity.level() as ServerLevel?, source, damage)
+
+            entity.hurtDuration = 10
+            entity.hurtTime = entity.hurtDuration
+
+            accessor.invokeResolvePlayerResponsibleForDamage(source)
+            accessor.invokeResolveMobResponsibleForDamage(source)
+
+            val blocksAttacks = itemInUse.get(DataComponents.BLOCKS_ATTACKS)
+            if (blocked && blocksAttacks != null) {
+                blocksAttacks.onBlocked(level, entity)
+            } else {
+                level.broadcastDamageEvent(entity, source)
+            }
+
+            if (!source.`is`(DamageTypeTags.NO_IMPACT) && (!blocked)) {
+                (entity as EntityAccessor).invokeMarkHurt()
+            }
+
+            if (!source.`is`(DamageTypeTags.NO_KNOCKBACK)) {
+                var xd = 0.0
+                var zd = 0.0
+                if (source.directEntity is Projectile) {
+
+                    val projectile = source.directEntity as Projectile
+
+                    val knockbackDirection: DoubleDoubleImmutablePair =
+                        projectile.calculateHorizontalHurtKnockbackDirection(entity, source)
+                    xd = -knockbackDirection.leftDouble()
+                    zd = -knockbackDirection.rightDouble()
+                } else if (source.sourcePosition != null) {
+                    xd = source.sourcePosition!!.x() - entity.x
+                    zd = source.sourcePosition!!.z() - entity.z
+                }
+
+                entity.knockback(0.4, xd, zd)
+                if (!blocked) {
+                    entity.indicateDamage(xd, zd)
+                }
+            }
+
+            if (entity.isDeadOrDying) {
+                if (!accessor.invokeCheckTotemDeathProtection(source)) {
+
+                    entity.makeSound(accessor.invokeGetDeathSound())
+                    accessor.invokePlaySecondaryHurtSound(source)
+
+                    entity.die(source)
+                }
+            } else if (damage > 0.0) {
+                accessor.invokePlayHurtSound(source)
+                accessor.invokePlaySecondaryHurtSound(source)
+            }
+
+            for (effect in entity.activeEffects) {
+                effect.onMobHurt(level, entity, source, damage)
+            }
+
+            if (entity is ServerPlayer) {
+
+                val serverPlayer = entity as ServerPlayer
+
+                CriteriaTriggers.ENTITY_HURT_PLAYER.trigger(serverPlayer, source, damage, damage, blocked)
+                if (damageBlocked > 0.0f && damageBlocked < 3.4028235E37f) {
+                    serverPlayer.awardStat(Stats.DAMAGE_BLOCKED_BY_SHIELD, Math.round(damageBlocked * 10.0f))
+                }
+            }
+
+            if (source.getEntity() is ServerPlayer) {
+
+                val sourcePlayer = entity as ServerPlayer
+
+                CriteriaTriggers.PLAYER_HURT_ENTITY.trigger(sourcePlayer, entity, source, damage, damage, blocked)
+            }
+
+            return true
+        }
+    }
+
     @JvmStatic
     fun goThroughArmorsAndDamage(level: ServerLevel, source: DamageSource, entity: LivingEntity, damage: Float, armors: MutableList<Pair<EquipmentSlot, Pair<ItemStack, BlocksProjectileDamage>>>, damageEntity: Boolean = true) {
 
         var damageMult = 1.0f
 
-        if (source.directEntity !is Projectile) {
-            damageMult = 3.0f
+        if (source.directEntity !is Projectile && source.directEntity is LivingEntity) {
+            damageMult = (source.directEntity as LivingEntity).attributes.getValue(Attributes.ATTACK_DAMAGE).toFloat()
         }
 
         var leftoverDamage: Float = damage * damageMult
@@ -96,20 +223,25 @@ object ArmorUtil {
                 break
             }
 
-            leftoverDamage = ArmorUtil.damageArmor(
-                entity,
-                armor.first,
-                armor.second,
-                leftoverDamage.toDouble()
-            ).toFloat()
+            if (armor.second.second.reflectsDamage && source.directEntity is Projectile || armor.second.second.tanksDamage) {
+
+                leftoverDamage = damageArmor(
+                    entity,
+                    armor.first,
+                    armor.second,
+                    leftoverDamage.toDouble()
+                ).toFloat()
+
+            }
 
             accessor.invokeActuallyHurt(level, source, 0.001f)
         }
 
+        accessor.invokeResolveMobResponsibleForDamage(source)
+        accessor.invokeResolvePlayerResponsibleForDamage(source)
+
         if (damageEntity) {
-            accessor.invokeResolveMobResponsibleForDamage(source)
-            accessor.invokeResolvePlayerResponsibleForDamage(source)
-            (entity as LivingEntityAccessor).invokeActuallyHurt(level, source, leftoverDamage / damageMult)
+            entityHurtServer(entity, source, leftoverDamage.coerceAtLeast(0f) / damageMult)
         }
     }
 

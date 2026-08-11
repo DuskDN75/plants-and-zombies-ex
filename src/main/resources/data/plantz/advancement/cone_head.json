@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "id": "plantz:cone"
+      "id": "plantz:armor/cone"
     },
     "title": {
       "translate": "advancements.plantz.cone_head"
@@ -19,7 +19,7 @@
           "equipment": {
             "head": {
               "items": [
-                "plantz:cone"
+                "plantz:armor/cone"
               ]
             }
           }

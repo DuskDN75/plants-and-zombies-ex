@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "plantz:brainz_alloy",
+          "name": "plantz:brainz_alloy/brainz_alloy",
           "weight": 1,
           "functions": [
             {

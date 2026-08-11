@@ -22,7 +22,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "plantz:plant_pot_helmet"
+          "name": "plantz:armor/plant_pot_helmet"
         }
       ],
       "rolls": 1

@@ -8,7 +8,7 @@ import net.minecraft.world.entity.PathfinderMob
 import java.util.function.Predicate
 
 class GenerateSunGoal(
-    usingEntity: PazPlant,
+    usingEntity: PathfinderMob,
     cooldownTime: Int = 500,
     actionDelay: Int = 0,
     actionStartEffect: (ActionData?) -> Unit = {},

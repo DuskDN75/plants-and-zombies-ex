@@ -107,17 +107,17 @@
   "item.minecraft.splash_potion.effect.buttered": "Poción de enmantequillado arrojadiza",
   "item.minecraft.lingering_potion.effect.buttered": "Poción de enmantequillado persistente",
 
-  "item.plantz.browncoat_spawn_egg": "Generar Zombi básico",
-  "item.plantz.newspaper_zombie_spawn_egg": "Generar Zombi con periódico",
-  "item.plantz.digger_zombie_spawn_egg": "Generar Zombi Minero",
-  "item.plantz.zombie_yeti_spawn_egg": "Generar Zombi Yeti",
-  "item.plantz.disco_zombie_spawn_egg": "Generar Zombi Disco",
-  "item.plantz.backup_dancer_spawn_egg": "Generar Bailarín de apoyo",
-  "item.plantz.all_star_spawn_egg": "Generar Zombi All-Star",
-  "item.plantz.imp_spawn_egg": "Generar Zombidito",
-  "item.plantz.gargantuar_spawn_egg": "Generar Zombistein",
+  "item.plantz.browncoat": "Generar Zombi básico",
+  "item.plantz.newspaper_zombie": "Generar Zombi con periódico",
+  "item.plantz.digger_zombie": "Generar Zombi Minero",
+  "item.plantz.zombie_yeti": "Generar Zombi Yeti",
+  "item.plantz.disco_zombie": "Generar Zombi Disco",
+  "item.plantz.backup_dancer": "Generar Bailarín de apoyo",
+  "item.plantz.all_star": "Generar Zombi All-Star",
+  "item.plantz.imp": "Generar Zombidito",
+  "item.plantz.gargantuar": "Generar Zombistein",
 
-  "item.plantz.gnome_spawn_egg": "Generar Gnomo de jardín",
+  "item.plantz.gnome": "Generar Gnomo de jardín",
 
   "item.plantz.music_disc_grassy_groove": "Disco de música",
 

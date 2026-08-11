@@ -22,7 +22,7 @@ class ElectricArcParticleGroup(engine: ParticleEngine) : ParticleGroup<ElectricA
         val RENDER_TYPE = RenderType.create(
             "electric_arc",
             RenderSetup.builder(RenderPipelines.BEACON_BEAM_TRANSLUCENT)
-                .withTexture("Sampler0", pazResource("textures/particle/electric_arc.png"))
+                .withTexture("Sampler0", pazResource("textures/particle/electric/electric_arc.png"))
                 .setOutputTarget(OutputTarget.MAIN_TARGET)
                 .createRenderSetup()
         )

@@ -16,7 +16,8 @@
     "VillagerHostilesSensorMixin",
     "ZombieMixin",
     "ZombieAccessor",
-    "MobMixin"
+    "MobMixin",
+    "EntityAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

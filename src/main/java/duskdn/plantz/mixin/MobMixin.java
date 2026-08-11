@@ -4,6 +4,7 @@ import duskdn.plantz.entity.projectile.init.PazProjectile;
 import duskdn.plantz.init.PazBlocks;
 import duskdn.plantz.init.PazItems;
 import duskdn.plantz.init.PazSounds;
+import duskdn.plantz.init.PazTags;
 import kotlin.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
@@ -11,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
@@ -19,6 +21,8 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
+import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.entity.monster.zombie.ZombifiedPiglin;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
@@ -33,6 +37,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import static java.lang.Math.max;
 
 /**
  * @author Josh
@@ -240,4 +246,40 @@ public class MobMixin {
         }
 
     }
+
+    @Unique
+    int waterTime = -1;
+
+    @Inject(method = "tick", at = @At(value = "TAIL"))
+    private void plantz$addDuckyTube(CallbackInfo ci) {
+        var self = (Mob) (Object) this;
+
+        if (!(self.level() instanceof ServerLevel level)) return;
+
+        var isEligible = (self instanceof Zombie || self instanceof AbstractSkeleton);
+
+        if (!isEligible) return;
+
+        boolean inWater = self.isEyeInFluid(FluidTags.WATER);
+        boolean inLava = self.isEyeInFluid(FluidTags.LAVA);
+
+        if ((inWater || inLava) && self.is(PazTags.EntityTypes.GETS_DUCKY_TUBE)) {
+            waterTime++;
+            if (waterTime>=250 && self.getItemBySlot(EquipmentSlot.LEGS).isEmpty()) {
+
+                if (!self.getItemBySlot(EquipmentSlot.LEGS).isEmpty()) {
+
+                    var currentLegs = self.getItemBySlot(EquipmentSlot.LEGS);
+                    var dropChance = self.getDropChances().byEquipment(EquipmentSlot.LEGS);
+                    if (!currentLegs.isEmpty() && ((double) max(self.getRandom().nextFloat() - 0.1f, 0.0f)) < dropChance) {
+                        if (level!=null) self.spawnAtLocation(level, currentLegs);
+                    }
+
+                }
+
+                self.setItemSlot(EquipmentSlot.LEGS, (inWater ? PazItems.DUCKY_TUBE : PazItems.OBSIDIAN_DUCKY_TUBE).getDefaultInstance());
+            }
+        } else waterTime = -1;
+    }
+
 }

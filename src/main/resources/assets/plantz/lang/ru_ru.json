@@ -107,17 +107,17 @@
   "item.minecraft.splash_potion.effect.buttered": "Взрывное зелье масла",
   "item.minecraft.lingering_potion.effect.buttered": "Оседающее зелье масла",
 
-  "item.plantz.browncoat_spawn_egg": "Яйцо призыва обычного зомби",
-  "item.plantz.newspaper_zombie_spawn_egg": "Яйцо призыва зомби с газетой",
-  "item.plantz.digger_zombie_spawn_egg": "Яйцо призыва зомби-шахтёра",
-  "item.plantz.zombie_yeti_spawn_egg": "Яйцо призыва зомби-йети",
-  "item.plantz.disco_zombie_spawn_egg": "Яйцо призыва зомби-танцора",
-  "item.plantz.backup_dancer_spawn_egg": "Яйцо призыва подтанцовщика",
-  "item.plantz.all_star_spawn_egg": "Яйцо призыва футболиста",
-  "item.plantz.imp_spawn_egg": "Яйцо призыва чертёнка",
-  "item.plantz.gargantuar_spawn_egg": "Яйцо призыва гаргантюа",
+  "item.plantz.browncoat": "Яйцо призыва обычного зомби",
+  "item.plantz.newspaper_zombie": "Яйцо призыва зомби с газетой",
+  "item.plantz.digger_zombie": "Яйцо призыва зомби-шахтёра",
+  "item.plantz.zombie_yeti": "Яйцо призыва зомби-йети",
+  "item.plantz.disco_zombie": "Яйцо призыва зомби-танцора",
+  "item.plantz.backup_dancer": "Яйцо призыва подтанцовщика",
+  "item.plantz.all_star": "Яйцо призыва футболиста",
+  "item.plantz.imp": "Яйцо призыва чертёнка",
+  "item.plantz.gargantuar": "Яйцо призыва гаргантюа",
 
-  "item.plantz.gnome_spawn_egg": "Яйцо призыва Гнома",
+  "item.plantz.gnome": "Яйцо призыва Гнома",
 
   "item.plantz.music_disc_grassy_groove": "Пластинка",
 

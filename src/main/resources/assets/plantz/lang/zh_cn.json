@@ -109,17 +109,17 @@
   "item.minecraft.splash_potion.effect.buttered": "喷溅型黄油药水",
   "item.minecraft.lingering_potion.effect.buttered": "滞留型黄油药水",
 
-  "item.plantz.browncoat_spawn_egg": "僵尸刷怪蛋",
-  "item.plantz.newspaper_zombie_spawn_egg": "报纸僵尸刷怪蛋",
-  "item.plantz.digger_zombie_spawn_egg": "矿工僵尸刷怪蛋",
-  "item.plantz.zombie_yeti_spawn_egg": "雪人僵尸刷怪蛋",
-  "item.plantz.disco_zombie_spawn_egg": "舞者僵尸刷怪蛋",
-  "item.plantz.backup_dancer_spawn_egg": "伴舞僵尸刷怪蛋",
-  "item.plantz.all_star_spawn_egg": "全明星僵尸刷怪蛋",
-  "item.plantz.imp_spawn_egg": "小鬼僵尸刷怪蛋",
-  "item.plantz.gargantuar_spawn_egg": "巨人僵尸刷怪蛋",
+  "item.plantz.browncoat": "僵尸刷怪蛋",
+  "item.plantz.newspaper_zombie": "报纸僵尸刷怪蛋",
+  "item.plantz.digger_zombie": "矿工僵尸刷怪蛋",
+  "item.plantz.zombie_yeti": "雪人僵尸刷怪蛋",
+  "item.plantz.disco_zombie": "舞者僵尸刷怪蛋",
+  "item.plantz.backup_dancer": "伴舞僵尸刷怪蛋",
+  "item.plantz.all_star": "全明星僵尸刷怪蛋",
+  "item.plantz.imp": "小鬼僵尸刷怪蛋",
+  "item.plantz.gargantuar": "巨人僵尸刷怪蛋",
 
-  "item.plantz.gnome_spawn_egg": "花园地精刷怪蛋",
+  "item.plantz.gnome": "花园地精刷怪蛋",
 
   "item.plantz.music_disc_grassy_groove": "音乐唱片",
 
