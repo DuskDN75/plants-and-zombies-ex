@@ -1,0 +1,267 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 8.0,
+        "min:": 4.0
+      },
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:group",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:water_bucket",
+              "weight": 7000
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:bone_meal",
+              "weight": 3000,
+              "functions": [
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "min": 0,
+                    "max": 16
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz_ex:sun",
+              "weight": 8000,
+              "functions": [
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "min": 0,
+                    "max": 8
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "farmersdelight:rich_soil_farmland",
+              "weight": 5000,
+              "functions": [
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "min": 0,
+                    "max": 4
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz_ex:watering_can",
+              "weight": 2000
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz_ex:seed_packet",
+              "weight": 8000,
+              "functions": [
+                {
+                  "function": "minecraft:set_components",
+                  "components": {
+                    "minecraft:entity_data": {
+                      "id": "plantz_ex:potatomine"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz_ex:seed_packet",
+              "weight": 8000,
+              "functions": [
+                {
+                  "function": "minecraft:set_components",
+                  "components": {
+                    "minecraft:entity_data": {
+                      "id": "plantz_ex:peashooter"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz_ex:seed_packet",
+              "weight": 7000,
+              "functions": [
+                {
+                  "function": "minecraft:set_components",
+                  "components": {
+                    "minecraft:entity_data": {
+                      "id": "plantz_ex:flower_pot"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz_ex:seed_packet",
+              "weight": 6000,
+              "functions": [
+                {
+                  "function": "minecraft:set_components",
+                  "components": {
+                    "minecraft:entity_data": {
+                      "id": "plantz_ex:cabbagepult"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz_ex:seed_packet",
+              "weight": 5000,
+              "functions": [
+                {
+                  "function": "minecraft:set_components",
+                  "components": {
+                    "minecraft:entity_data": {
+                      "id": "plantz_ex:kernelpult"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz_ex:seed_packet",
+              "weight": 4000,
+              "functions": [
+                {
+                  "function": "minecraft:set_components",
+                  "components": {
+                    "minecraft:entity_data": {
+                      "id": "plantz_ex:cherrybomb"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz_ex:seed_packet",
+              "weight": 500,
+              "functions": [
+                {
+                  "function": "minecraft:set_components",
+                  "components": {
+                    "minecraft:entity_data": {
+                      "id": "plantz_ex:water_pot"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz_ex:seed_packet",
+              "weight": 500,
+              "functions": [
+                {
+                  "function": "minecraft:set_components",
+                  "components": {
+                    "minecraft:entity_data": {
+                      "id": "plantz_ex:plantern"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz_ex:seed_packet",
+              "weight": 500,
+              "functions": [
+                {
+                  "function": "minecraft:set_components",
+                  "components": {
+                    "minecraft:entity_data": {
+                      "id": "plantz_ex:grave_buster"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz_ex:seed_packet",
+              "weight": 300,
+              "functions": [
+                {
+                  "function": "minecraft:set_components",
+                  "components": {
+                    "minecraft:entity_data": {
+                      "id": "plantz_ex:cactus"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz_ex:seed_packet",
+              "weight": 5,
+              "functions": [
+                {
+                  "function": "minecraft:set_components",
+                  "components": {
+                    "minecraft:entity_data": {
+                      "id": "plantz_ex:melonpult"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz_ex:seed_packet",
+              "weight": 2,
+              "functions": [
+                {
+                  "function": "minecraft:set_components",
+                  "components": {
+                    "minecraft:entity_data": {
+                      "id": "plantz_ex:doomshroom"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz_ex:seed_packet",
+              "weight": 2,
+              "functions": [
+                {
+                  "function": "minecraft:set_components",
+                  "components": {
+                    "minecraft:entity_data": {
+                      "id": "plantz_ex:electric_peashooter"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

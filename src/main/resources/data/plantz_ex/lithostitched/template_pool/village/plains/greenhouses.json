@@ -1,0 +1,15 @@
+{
+  "name": "greenhouses",
+  "fallback": "minecraft:village/plains/houses",
+  "elements": [
+    {
+      "weight": 100,
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "projection": "rigid",
+        "location": "plantz_ex:village/plains/houses/greenhouses/greenhouse_01",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

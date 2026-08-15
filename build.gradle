@@ -20,6 +20,10 @@ repositories {
 	maven { url = 'https://maven.minecraftforge.net/' }
 
 	maven {
+		url = "https://api.modrinth.com/maven"
+	}
+
+	maven {
 		name = "Gegy"
 		url = uri("https://maven.gegy.dev")
 	}
@@ -52,6 +56,10 @@ dependencies {
 	implementation "dev.lambdaurora.lambdynamiclights:lambdynamiclights-api:${project.lambdynamiclights_version}"
 
 	implementation "dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime:${project.lambdynamiclights_version}"
+
+	implementation "dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime:${project.lambdynamiclights_version}"
+
+	implementation "maven.modrinth:lithostitched:${project.lithostitched_version}"
 }
 
 processResources {

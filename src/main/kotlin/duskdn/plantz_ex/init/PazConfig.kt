@@ -20,6 +20,16 @@ data class PlantDataConfig(
     var cooldownTime: Double = 5.0
 )
 
+object CooldownTime {
+    const val VSHORT = 2.0
+    const val SHORT = 5.0
+    const val MEDIUM = 10.0
+    const val MLONG = 15.0
+    const val LONG = 30.0
+    const val VLONG = 45.0
+    const val VVLONG = 60.0
+}
+
 data class ServerConfig(
     var coopPlanting: Boolean = true,
     var playerCreditForPlantKills: Boolean = false,
@@ -30,43 +40,145 @@ data class ServerConfig(
     var plantPotDamageReduction: Double = 0.5,
     var coffeeBuffDuration: Int = 48_000,
     var sunCostTamingThreshold: Int = 30,
-    var plantCooldownEnabled: Boolean = false,
-    var plantCooldownTime: Double = 4.0,
-    var plantCooldownTimePerSun: Double = 2.5,
+    var plantCooldownEnabled: Boolean = true,
     var solarBatteryMax: Int = 800,
     var plantData: MutableMap<String, PlantDataConfig> = mutableMapOf(
-        "plantz_ex:sunflower"              to PlantDataConfig(),
-        "plantz_ex:peashooter"             to PlantDataConfig(),
-        "plantz_ex:wallnut"                to PlantDataConfig(),
-        "plantz_ex:explode_o_nut"          to PlantDataConfig(),
-        "plantz_ex:chomper"                to PlantDataConfig(),
-        "plantz_ex:cherrybomb"             to PlantDataConfig(),
-        "plantz_ex:potatomine"             to PlantDataConfig(),
-        "plantz_ex:repeater"               to PlantDataConfig(),
-        "plantz_ex:ice_peashooter"         to PlantDataConfig(),
-        "plantz_ex:fire_peashooter"        to PlantDataConfig(),
-        "plantz_ex:electric_peashooter"    to PlantDataConfig(),
-        "plantz_ex:cactus"                 to PlantDataConfig(),
-        "plantz_ex:lightning_reed"         to PlantDataConfig(),
-        "plantz_ex:cabbagepult"            to PlantDataConfig(),
-        "plantz_ex:kernelpult"             to PlantDataConfig(),
-        "plantz_ex:melonpult"              to PlantDataConfig(),
-        "plantz_ex:bonkchoy"               to PlantDataConfig(),
-        "plantz_ex:tanglekelp"             to PlantDataConfig(),
-        "plantz_ex:puffshroom"             to PlantDataConfig(),
-        "plantz_ex:scaredyshroom"          to PlantDataConfig(),
-        "plantz_ex:fumeshroom"             to PlantDataConfig(),
-        "plantz_ex:sunshroom"              to PlantDataConfig(),
-        "plantz_ex:hypnoshroom"            to PlantDataConfig(),
-        "plantz_ex:doomshroom"             to PlantDataConfig(),
-        "plantz_ex:lilypad"                to PlantDataConfig(),
-        "plantz_ex:water_peashooter"       to PlantDataConfig(),
-        "plantz_ex:seashroom"              to PlantDataConfig(),
-        "plantz_ex:coffeebean"             to PlantDataConfig(),
-        "plantz_ex:flower_pot"             to PlantDataConfig(),
-        "plantz_ex:water_pot"              to PlantDataConfig(),
-        "plantz_ex:lavalily"               to PlantDataConfig(),
-        "plantz_ex:plantern"               to PlantDataConfig(),
+        "plantz_ex:sunflower"              to PlantDataConfig(
+            50,
+            CooldownTime.SHORT
+        ),
+        "plantz_ex:peashooter"             to PlantDataConfig(
+            75,
+            CooldownTime.SHORT
+        ),
+        "plantz_ex:wallnut"                to PlantDataConfig(
+            50,
+            CooldownTime.LONG
+        ),
+        "plantz_ex:explode_o_nut"          to PlantDataConfig(
+            150,
+            CooldownTime.VLONG
+        ),
+        "plantz_ex:chomper"                to PlantDataConfig(
+            150,
+            CooldownTime.MEDIUM
+        ),
+        "plantz_ex:cherrybomb"             to PlantDataConfig(
+            150,
+            CooldownTime.VLONG
+        ),
+        "plantz_ex:potatomine"             to PlantDataConfig(
+            25,
+            CooldownTime.LONG
+        ),
+        "plantz_ex:repeater"               to PlantDataConfig(
+            200,
+            CooldownTime.MEDIUM
+        ),
+        "plantz_ex:ice_peashooter"         to PlantDataConfig(
+            175,
+            CooldownTime.SHORT
+        ),
+        "plantz_ex:fire_peashooter"        to PlantDataConfig(
+            175,
+            CooldownTime.MEDIUM
+        ),
+        "plantz_ex:electric_peashooter"    to PlantDataConfig(
+            250,
+            CooldownTime.MEDIUM
+        ),
+        "plantz_ex:cactus"                 to PlantDataConfig(
+            175,
+            CooldownTime.SHORT
+        ),
+        "plantz_ex:lightning_reed"         to PlantDataConfig(
+            100,
+            CooldownTime.SHORT
+        ),
+        "plantz_ex:cabbagepult"            to PlantDataConfig(
+            100,
+            CooldownTime.SHORT
+        ),
+        "plantz_ex:kernelpult"             to PlantDataConfig(
+            100,
+            CooldownTime.SHORT
+        ),
+        "plantz_ex:melonpult"              to PlantDataConfig(
+            300,
+            CooldownTime.MEDIUM
+        ),
+        "plantz_ex:bonkchoy"               to PlantDataConfig(
+            150,
+            CooldownTime.SHORT
+        ),
+        "plantz_ex:tanglekelp"             to PlantDataConfig(
+            25,
+            CooldownTime.VLONG
+        ),
+        "plantz_ex:puffshroom"             to PlantDataConfig(
+            0,
+            CooldownTime.VSHORT
+        ),
+        "plantz_ex:scaredyshroom"          to PlantDataConfig(
+            50,
+            CooldownTime.SHORT
+        ),
+        "plantz_ex:fumeshroom"             to PlantDataConfig(
+            125,
+            CooldownTime.SHORT
+        ),
+        "plantz_ex:sunshroom"              to PlantDataConfig(
+            25,
+            CooldownTime.SHORT
+        ),
+        "plantz_ex:hypnoshroom"            to PlantDataConfig(
+            75,
+            CooldownTime.VLONG
+        ),
+        "plantz_ex:doomshroom"             to PlantDataConfig(
+            250,
+            CooldownTime.VVLONG
+        ),
+        "plantz_ex:lilypad"                to PlantDataConfig(
+            25,
+            CooldownTime.SHORT
+        ),
+        "plantz_ex:water_peashooter"       to PlantDataConfig(
+            175,
+            CooldownTime.SHORT
+        ),
+        "plantz_ex:seashroom"              to PlantDataConfig(
+            0,
+            CooldownTime.VSHORT
+        ),
+        "plantz_ex:coffeebean"             to PlantDataConfig(
+            75,
+            CooldownTime.SHORT
+        ),
+        "plantz_ex:flower_pot"             to PlantDataConfig(
+            50, 
+            5.0
+        ),
+        "plantz_ex:water_pot"              to PlantDataConfig(
+            75,
+            CooldownTime.SHORT
+        ),
+        "plantz_ex:lavalily"               to PlantDataConfig(
+            75,
+            CooldownTime.SHORT
+        ),
+        "plantz_ex:plantern"               to PlantDataConfig(
+            75,
+            CooldownTime.MEDIUM
+        ),
+        "plantz_ex:sky_peashooter"               to PlantDataConfig(
+            75,
+            CooldownTime.MEDIUM
+        ),
+        "plantz_ex:grave_buster"               to PlantDataConfig(
+            75,
+            CooldownTime.MLONG
+        ),
     ),
 )
 data class ClientConfig(
@@ -176,11 +288,15 @@ object PazConfig {
     }
 
     fun getSunCost(type: EntityType<*>?): Int {
-        val id = type?.let { BuiltInRegistries.ENTITY_TYPE.getKey(it) }
-        return getSunCost(id)
+        return getTrueSunCost(type)/25
     }
 
-    fun getSunCost(entityId: Identifier?): Int {
+    fun getTrueSunCost(type: EntityType<*>?): Int {
+        val id = type?.let { BuiltInRegistries.ENTITY_TYPE.getKey(it) }
+        return getTrueSunCost(id)
+    }
+
+    fun getTrueSunCost(entityId: Identifier?): Int {
         if (entityId == null) return 0
         val key = entityId.toString()
         debugPrint(key)
@@ -191,7 +307,7 @@ object PazConfig {
             it
         }
         ?: 0) // not in id list
-        return value.coerceAtLeast(0)/25
+        return value.coerceAtLeast(0)
     }
 
     fun getTameChance(type: EntityType<*>?): Double {

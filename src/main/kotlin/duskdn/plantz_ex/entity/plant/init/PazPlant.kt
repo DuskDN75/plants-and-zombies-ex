@@ -650,7 +650,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
     }
 
     fun timeRequiredForSeeds() : Int {
-        val sunCost = PazConfig.getSunCost(type)
+        val sunCost = PazConfig.getTrueSunCost(type)
         val cooldownTime = PazConfig.getCooldownTime(type)
         val zenBuff = level().hasChunkAt(blockPosition()) && getBlockBelow().`is`(PazBlocks.ZEN_POT)
         return PazConfig.getGrowTime(sunCost, cooldownTime, zenBuff)
