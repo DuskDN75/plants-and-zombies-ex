@@ -1,7 +1,0 @@
-{
-	"parent": "plantz:item/armor/newspaper/article_1",
-	"texture_size": [32, 32],
-	"textures": {
-		"0": "plantz:item/armor/newspaper/article_2"
-	}
-}

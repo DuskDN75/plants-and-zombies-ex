@@ -1,0 +1,10 @@
+{
+  "values": [
+    "#plantz_ex:plant",
+    "plantz_ex:gargantuar",
+    {
+      "id": "#c:bosses",
+      "required": false
+    }
+  ]
+}

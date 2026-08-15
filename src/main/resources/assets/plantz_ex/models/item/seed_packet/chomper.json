@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "plantz_ex:item/seed_packet/seed_packet",
+    "layer1": "plantz_ex:item/seed_packet/chomper"
+  }
+}

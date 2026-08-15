@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "plantz_ex:block/gravestone" },
+    "facing=south": { "model": "plantz_ex:block/gravestone", "y": 180 },
+    "facing=east":  { "model": "plantz_ex:block/gravestone", "y": 90 },
+    "facing=west":  { "model": "plantz_ex:block/gravestone", "y": 270 }
+  }
+}

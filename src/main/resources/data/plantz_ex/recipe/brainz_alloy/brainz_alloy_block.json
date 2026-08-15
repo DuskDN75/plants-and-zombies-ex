@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": "plantz_ex:brainz_alloy/brainz_alloy"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "plantz_ex:brainz_alloy/brainz_alloy_block"
+  }
+}

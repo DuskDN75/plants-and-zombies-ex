@@ -1,0 +1,43 @@
+package duskdn.plantz_ex.entity.projectile
+
+import duskdn.plantz_ex.entity.projectile.init.PazProjectile
+import duskdn.plantz_ex.init.PazDamageTypes
+import duskdn.plantz_ex.init.PazEntities
+import net.minecraft.core.particles.BlockParticleOption
+import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.phys.HitResult
+import net.minecraft.world.phys.Vec2
+import net.minecraft.world.phys.Vec3
+
+class Cabbage(
+    level: Level,
+    owner: LivingEntity? = null,
+    spawnOffset: Vec2 = Vec2.ZERO,
+) : PazProjectile(
+    PazEntities.CABBAGE, level, owner, spawnOffset,
+    PazDamageTypes.PLANT
+) {
+    override fun getDefaultGravity(): Double = 0.05
+    override fun getHitSound(): SoundEvent = SoundEvents.BIG_DRIPLEAF_BREAK
+
+    override fun getKnockback(): Float = 0.15f
+
+    override fun onHit(hitResult: HitResult) {
+        super.onHit(hitResult)
+        knockbackNearby(0.25f)
+        spawnParticle(
+            BlockParticleOption(
+                ParticleTypes.BLOCK,
+                Blocks.MOSS_BLOCK.defaultBlockState()
+            ),
+            amount = 30,
+            speed = 0.13,
+            spread = Vec3(0.5, 0.2, 0.5)
+        )
+    }
+}

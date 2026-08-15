@@ -1,0 +1,271 @@
+{
+  "display": {
+    "icon": {
+      "id": "plantz_ex:seed_packet",
+      "components": {
+        "minecraft:entity_data": {
+          "id": "plantz_ex:melonpult"
+        }
+      }
+    },
+    "title": {
+      "translate": "advancements.plantz_ex.plant_all_plants"
+    },
+    "description": {
+      "translate": "advancements.plantz_ex.plant_all_plants.description"
+    },
+    "frame": "challenge"
+  },
+  "parent": "plantz_ex:grow_plant_seeds",
+  "criteria": {
+    "plantz_ex:sunflower": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:sunflower"
+        }
+      }
+    },
+    "plantz_ex:peashooter": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:peashooter"
+        }
+      }
+    },
+    "plantz_ex:wallnut": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:wallnut"
+        }
+      }
+    },
+    "plantz_ex:explode_o_nut": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:explode_o_nut"
+        }
+      }
+    },
+    "plantz_ex:chomper": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:chomper"
+        }
+      }
+    },
+    "plantz_ex:cherrybomb": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:cherrybomb"
+        }
+      }
+    },
+    "plantz_ex:potatomine": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:potatomine"
+        }
+      }
+    },
+    "plantz_ex:repeater": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:repeater"
+        }
+      }
+    },
+    "plantz_ex:ice_peashooter": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:ice_peashooter"
+        }
+      }
+    },
+    "plantz_ex:fire_peashooter": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:fire_peashooter"
+        }
+      }
+    },
+    "plantz_ex:electric_peashooter": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:electric_peashooter"
+        }
+      }
+    },
+    "plantz_ex:cactus": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:cactus"
+        }
+      }
+    },
+    "plantz_ex:lightning_reed": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:lightning_reed"
+        }
+      }
+    },
+    "plantz_ex:cabbagepult": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:cabbagepult"
+        }
+      }
+    },
+    "plantz_ex:kernelpult": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:kernelpult"
+        }
+      }
+    },
+    "plantz_ex:melonpult": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:melonpult"
+        }
+      }
+    },
+    "plantz_ex:bonkchoy": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:bonkchoy"
+        }
+      }
+    },
+    "plantz_ex:tanglekelp": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:tanglekelp"
+        }
+      }
+    },
+    "plantz_ex:puffshroom": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:puffshroom"
+        }
+      }
+    },
+    "plantz_ex:fumeshroom": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:fumeshroom"
+        }
+      }
+    },
+    "plantz_ex:scaredyshroom": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:scaredyshroom"
+        }
+      }
+    },
+    "plantz_ex:sunshroom": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:sunshroom"
+        }
+      }
+    },
+    "plantz_ex:hypnoshroom": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:hypnoshroom"
+        }
+      }
+    },
+    "plantz_ex:doomshroom": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:doomshroom"
+        }
+      }
+    },
+    "plantz_ex:lilypad": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:lilypad"
+        }
+      }
+    },
+    "plantz_ex:water_peashooter": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:water_peashooter"
+        }
+      }
+    },
+    "plantz_ex:seashroom": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:seashroom"
+        }
+      }
+    },
+    "plantz_ex:coffeebean": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:coffeebean"
+        }
+      }
+    },
+    "plantz_ex:flower_pot": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:flower_pot"
+        }
+      }
+    },
+    "plantz_ex:water_pot": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:water_pot"
+        }
+      }
+    },
+    "plantz_ex:grave_buster": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "plantz_ex:grave_buster"
+        }
+      }
+    }
+  },
+  "sends_telemetry_event": false
+}

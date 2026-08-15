@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "plantz_ex:puffshroom",
+    "plantz_ex:fumeshroom",
+    "plantz_ex:scaredyshroom",
+    "plantz_ex:sunshroom",
+    "plantz_ex:hypnoshroom",
+    "plantz_ex:doomshroom",
+    "plantz_ex:seashroom"
+  ]
+}

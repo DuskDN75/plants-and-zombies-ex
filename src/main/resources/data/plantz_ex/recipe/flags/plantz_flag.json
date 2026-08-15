@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": [
+      "plantz_ex:flags/brainz_flag"
+    ],
+    "*": [
+      "plantz_ex:sun"
+    ]
+  },
+  "pattern": [
+    "***",
+    "*#*",
+    "***"
+  ],
+  "result": {
+    "count": 1,
+    "id": "plantz_ex:flags/plantz_flag"
+  }
+}

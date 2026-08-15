@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "@": [
+      "minecraft:glass_bottle"
+    ],
+    "*": [
+      "plantz_ex:sun"
+    ]
+  },
+  "pattern": [
+    "***",
+    "*@*",
+    "***"
+  ],
+  "result": {
+    "count": 1,
+    "id": "plantz_ex:sun_bottle"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "display": {
+    "icon": {
+      "id": "plantz_ex:watering_can"
+    },
+    "title": {
+      "translate": "advancements.plantz_ex.grow_plant_seeds"
+    },
+    "description": {
+      "translate": "advancements.plantz_ex.grow_plant_seeds.description"
+    }
+  },
+  "parent": "plantz_ex:relocation",
+  "criteria": {
+    "grow_seeds": {
+      "trigger": "plantz_ex:grow_seeds"
+    }
+  },
+  "sends_telemetry_event": false
+}

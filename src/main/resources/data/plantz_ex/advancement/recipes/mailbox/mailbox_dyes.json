@@ -1,0 +1,46 @@
+{
+  "parent": "plantz_ex:recipes/mailbox",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "plantz_ex:mailbox/white_mailbox"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_mailbox": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "plantz_ex:mailbox/white_mailbox"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_mailbox"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "plantz_ex:mailbox/light_gray_mailbox",
+      "plantz_ex:mailbox/gray_mailbox",
+      "plantz_ex:mailbox/black_mailbox",
+      "plantz_ex:mailbox/brown_mailbox",
+      "plantz_ex:mailbox/red_mailbox",
+      "plantz_ex:mailbox/orange_mailbox",
+      "plantz_ex:mailbox/yellow_mailbox",
+      "plantz_ex:mailbox/lime_mailbox",
+      "plantz_ex:mailbox/green_mailbox",
+      "plantz_ex:mailbox/cyan_mailbox",
+      "plantz_ex:mailbox/light_blue_mailbox",
+      "plantz_ex:mailbox/blue_mailbox",
+      "plantz_ex:mailbox/purple_mailbox",
+      "plantz_ex:mailbox/magenta_mailbox",
+      "plantz_ex:mailbox/pink_mailbox"
+    ]
+  }
+}

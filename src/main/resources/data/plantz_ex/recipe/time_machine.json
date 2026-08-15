@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "@": [
+      "minecraft:amethyst_shard"
+    ],
+    "#": [
+      "plantz_ex:brainz_alloy/brainz_alloy"
+    ],
+    "+": [
+      "minecraft:netherite_ingot"
+    ],
+    "*": [
+      "minecraft:redstone"
+    ]
+  },
+  "pattern": [
+    "#@#",
+    "*+*",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "plantz_ex:time_machine"
+  }
+}

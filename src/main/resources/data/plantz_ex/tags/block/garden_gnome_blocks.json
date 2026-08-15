@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "plantz_ex:garden_gnome/blue_garden_gnome",
+    "plantz_ex:garden_gnome/green_garden_gnome",
+    "plantz_ex:garden_gnome/red_garden_gnome",
+    "plantz_ex:garden_gnome/yellow_garden_gnome"
+  ]
+}

@@ -1,0 +1,84 @@
+package duskdn.plantz_ex.renderer.entity
+
+import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.math.Axis
+import duskdn.plantz_ex.entity.projectile.PaintBall
+import duskdn.plantz_ex.util.pazResource
+import net.minecraft.client.model.EntityModel
+import net.minecraft.client.renderer.RenderPipelines
+import net.minecraft.client.renderer.SubmitNodeCollector
+import net.minecraft.client.renderer.entity.EntityRendererProvider
+import net.minecraft.client.renderer.rendertype.RenderSetup
+import net.minecraft.client.renderer.rendertype.RenderType
+import net.minecraft.client.renderer.state.level.CameraRenderState
+import net.minecraft.client.renderer.texture.OverlayTexture
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.resources.Identifier
+import net.minecraft.world.entity.projectile.Projectile
+import net.minecraft.world.item.DyeColor
+
+class ProjectileRenderer(
+    val model: EntityModel<ProjectileRenderState>,
+    context: EntityRendererProvider.Context,
+    val emissive: Boolean = false,
+) : net.minecraft.client.renderer.entity.EntityRenderer<Projectile, ProjectileRenderState>(
+    context
+) {
+    override fun submit(
+        state: ProjectileRenderState,
+        poseStack: PoseStack,
+        submitNodeCollector: SubmitNodeCollector,
+        camera: CameraRenderState
+    ) {
+        poseStack.pushPose()
+        poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot - 90.0f))
+        poseStack.mulPose(Axis.ZP.rotationDegrees(state.xRot))
+        poseStack.translate(0.0, -1.5, 0.0)
+        val tint = state.color?.fireworkColor?: -1
+        submitNodeCollector.submitModel(
+            this.model,
+            state,
+            poseStack,
+            RenderType.create(
+                "plant_projectile",
+                RenderSetup.builder(if (emissive) RenderPipelines.ENERGY_SWIRL else RenderPipelines.ENTITY_CUTOUT)
+                    .withTexture("Sampler0", getTextureLocation(state))
+                    .useLightmap()
+                    .sortOnUpload()
+                    .createRenderSetup()
+            ),
+            state.lightCoords,
+            OverlayTexture.NO_OVERLAY,
+            tint,
+            null,
+            state.outlineColor,
+            null
+        )
+        poseStack.popPose()
+        super.submit(state, poseStack, submitNodeCollector, camera)
+    }
+
+    override fun createRenderState(): ProjectileRenderState {
+        return ProjectileRenderState()
+    }
+
+    override fun extractRenderState(entity: Projectile, state: ProjectileRenderState, partialTick: Float) {
+        super.extractRenderState(entity, state, partialTick)
+        if (entity is PaintBall) state.color = entity.dyeColor
+        state.xRot = entity.getXRot(partialTick)
+        state.yRot = entity.getYRot(partialTick)
+        state.texturePath = BuiltInRegistries.ENTITY_TYPE.getKey(entity.type).path
+    }
+
+    fun getTextureLocation(state: ProjectileRenderState): Identifier {
+        val baseTexture = "textures/entity/projectile/${state.texturePath}.png"
+        return pazResource(baseTexture)
+    }
+}
+
+class ProjectileRenderState : net.minecraft.client.renderer.entity.state.EntityRenderState() {
+    var xRot: Float = 0f
+    var yRot: Float = 0f
+    var texturePath: String = "default"
+    var color: DyeColor? = null
+}

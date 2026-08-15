@@ -1,0 +1,37 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "plantz_ex:zen_pot"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_flower_pot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "plantz_ex:seed_packet"
+          }
+        ],
+        "predicates": {
+          "minecraft:entity_data": {
+            "id": "plantz_ex:flower_pot"
+          }
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_flower_pot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "plantz_ex:zen_pot"
+    ]
+  }
+}

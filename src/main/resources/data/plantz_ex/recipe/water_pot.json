@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": [
+      "minecraft:glass"
+    ],
+    "@": [
+      "minecraft:water_bucket"
+    ],
+    "*": [
+      "plantz_ex:sun"
+    ]
+  },
+  "pattern": [
+    " * ",
+    "#@#",
+    " # "
+  ],
+  "result": {
+    "count": 1,
+    "id": "plantz_ex:seed_packet",
+    "components": {
+      "minecraft:entity_data": {
+        "id": "plantz_ex:water_pot"
+      }
+    }
+  }
+}

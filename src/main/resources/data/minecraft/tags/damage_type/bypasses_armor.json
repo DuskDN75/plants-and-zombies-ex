@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "plantz:plant_fume",
-    "#plantz:is_electric"
+    "plantz_ex:plant_fume",
+    "#plantz_ex:is_electric"
   ]
 }

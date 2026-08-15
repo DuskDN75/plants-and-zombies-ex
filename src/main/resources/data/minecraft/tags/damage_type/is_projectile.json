@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "#plantz:plant_projectile"
+    "#plantz_ex:plant_projectile"
   ]
 }

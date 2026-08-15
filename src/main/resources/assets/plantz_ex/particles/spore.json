@@ -1,0 +1,10 @@
+{
+  "textures": [
+    "plantz_ex:projectile/spore/move/1",
+    "plantz_ex:projectile/spore/move/2",
+    "plantz_ex:projectile/spore/move/3",
+    "plantz_ex:projectile/spore/move/4",
+    "plantz_ex:projectile/spore/move/5",
+    "plantz_ex:projectile/spore/move/6"
+  ]
+}

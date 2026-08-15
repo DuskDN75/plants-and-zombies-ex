@@ -1,0 +1,78 @@
+package duskdn.plantz_ex.entity.plant.init
+
+import duskdn.plantz_ex.ai.goal.PlantTargetGoal
+import duskdn.plantz_ex.entity.Balloon
+import duskdn.plantz_ex.init.PazTags
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.monster.Enemy
+import net.minecraft.world.entity.monster.zombie.Zombie
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.Level
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+/**
+ * Base class for all plant entities that attack.
+ * Provides basic behavior for all attacking plants.
+ */
+abstract class AttackingPlant(type: EntityType<out AttackingPlant>, level: Level) : PazPlant(type, level) {
+    companion object {
+        val LOGGER: Logger = LoggerFactory.getLogger(AttackingPlant::class.java)
+    }
+
+    open fun mustSeeTarget(): Boolean {
+        return true
+    }
+
+    override fun registerGoals() {
+        super.registerGoals()
+
+        registerAttackGoal();
+    }
+
+    open fun attacksPlayers(): Boolean {
+        return false
+    }
+
+    override fun setTarget(target: LivingEntity?) {
+        super.setTarget(target)
+
+//        debugPrint("TARGET IS $target")
+    }
+
+    override fun canAttack(target: LivingEntity): Boolean {
+        return target.isAlive && target !is PazPlant
+    }
+
+    override fun wantsToAttack(target: LivingEntity, owner: LivingEntity): Boolean {
+        return target.isAlive && target !is PazPlant
+    }
+
+    fun enemyCheck(target: LivingEntity): Boolean {
+        return target.isAlive && target !is PazPlant // target is not plant
+                && (
+                target is Zombie // target is a zombie
+                        || ( target is Enemy ) // or an enem
+                        || ( target is Player && !isTame && attacksPlayers() ) // or a player, IF they are not tame
+                        || ( BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(target.type).`is`(PazTags.EntityTypes.ATTACKS_PLANTS) )
+                        || (target is Balloon && target.leashHolder != null && target.leashHolder is LivingEntity && enemyCheck(
+                    target.leashHolder as LivingEntity
+                ))
+                )
+    }
+
+    open fun registerAttackGoal() {
+
+//        debugPrint("follow range = ${this.getAttributeValue(Attributes.FOLLOW_RANGE)}")
+
+        this.targetSelector.addGoal(4,
+            PlantTargetGoal(this, LivingEntity::class.java, 5, mustSeeTarget(), false) { target, level ->
+
+//            debugPrint("FOUND TARGET: $target, ${target is Enemy}, ${BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(target.type).`is`(PazTags.EntityTypes.ATTACKS_PLANTS)}")
+
+                enemyCheck(target) || target is Balloon
+            })
+    }
+}

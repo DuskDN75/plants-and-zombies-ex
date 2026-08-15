@@ -29,7 +29,7 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"plants-and-zombies" {
+		"plants-and-zombies-ex" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}

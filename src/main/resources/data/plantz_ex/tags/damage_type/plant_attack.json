@@ -1,0 +1,8 @@
+{
+  "values": [
+    "plantz_ex:plant_chomp",
+    "plantz_ex:plant_explode",
+    "plantz_ex:plant_fume",
+    "#plantz_ex:plant_projectile"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "display": {
+    "icon": {
+      "id": "plantz_ex:seed_packet",
+      "components": {
+        "minecraft:entity_data": {
+          "id": "plantz_ex:hypnoshroom"
+        }
+      }
+    },
+    "title": {
+      "translate": "advancements.plantz_ex.disco_hypno"
+    },
+    "description": {
+      "translate": "advancements.plantz_ex.disco_hypno.description"
+    },
+    "frame": "challenge",
+    "hidden": true
+  },
+  "parent": "plantz_ex:big_three",
+  "criteria": {
+    "disco_hypno": {
+      "trigger": "plantz_ex:disco_hypno"
+    }
+  },
+  "sends_telemetry_event": false
+}

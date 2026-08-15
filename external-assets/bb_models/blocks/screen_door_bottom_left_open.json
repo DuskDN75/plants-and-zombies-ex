@@ -3,8 +3,8 @@
 	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"textures": {
-		"particle": "plantz:block/screen_door/screen_door_bottom",
-		"bottom": "plantz:block/screen_door/screen_door_bottom"
+		"particle": "plantz_ex:block/screen_door/screen_door_bottom",
+		"bottom": "plantz_ex:block/screen_door/screen_door_bottom"
 	},
 	"elements": [
 		{

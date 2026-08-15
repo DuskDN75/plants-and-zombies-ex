@@ -1,8 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "plantz:plant_electric",
-    "plantz:electric_zap",
-    "#minecraft:is_lightning"
-  ]
-}

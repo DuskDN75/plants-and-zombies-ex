@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "#plantz:plant_attack",
-    "#plantz:is_electric",
-    "plantz:toxic"
+    "#plantz_ex:plant_attack",
+    "#plantz_ex:is_electric",
+    "plantz_ex:toxic"
   ]
 }

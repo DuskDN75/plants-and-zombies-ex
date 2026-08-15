@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "plantz_ex:item/spawn_egg/zombies/browncoat/cone"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "description": {
+    "translate": "jukebox_song.plantz_ex.grassy_groove"
+  },
+  "comparator_output": 0,
+  "length_in_seconds": 117,
+  "sound_event": "plantz_ex:music_disc.grassy_groove"
+}

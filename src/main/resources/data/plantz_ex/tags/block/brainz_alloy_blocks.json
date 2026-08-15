@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "plantz_ex:brainz_alloy/brainz_alloy_block",
+    "plantz_ex:brainz_alloy/smooth_brainz_alloy_block",
+    "plantz_ex:brainz_alloy/treaded_brainz_alloy_block",
+    "plantz_ex:brainz_alloy/reinforced_brainz_alloy_block",
+    "plantz_ex:brainz_alloy/brainz_alloy_stairs",
+    "plantz_ex:brainz_alloy/brainz_alloy_slab"
+  ]
+}

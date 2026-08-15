@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "plantz_ex:plant_pot_minecart",
+    "plantz_ex:lilypad",
+    "plantz_ex:flower_pot",
+    "plantz_ex:water_pot"
+  ]
+}

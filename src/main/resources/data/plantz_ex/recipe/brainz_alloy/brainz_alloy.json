@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "brainz_alloy",
+  "ingredients": [
+    "plantz_ex:brainz_alloy/brainz_alloy_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "plantz_ex:brainz_alloy/brainz_alloy"
+  }
+}

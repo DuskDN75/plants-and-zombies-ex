@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": "plantz_ex:brainz_alloy/brainz_alloy_block"
+  },
+  "pattern": [
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "id": "plantz_ex:brainz_alloy/brainz_alloy_slab"
+  }
+}

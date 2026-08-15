@@ -1,0 +1,45 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"texture_size": [32, 32],
+	"textures": {
+		"particle": "plantz_ex:block/screen_door/screen_door_top",
+		"top": "plantz_ex:block/screen_door/screen_door_top"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [3, 16, 16],
+			"faces": {
+				"north": {"uv": [8, 0, 9.5, 8], "texture": "#top", "cullface": "north"},
+				"east": {"uv": [8, 0, 0, 8], "texture": "#top"},
+				"south": {"uv": [9.5, 0, 8, 8], "texture": "#top", "cullface": "south"},
+				"west": {"uv": [0, 0, 8, 8], "texture": "#top"},
+				"up": {"uv": [9.5, 0, 8, 8], "texture": "#top"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [0, 90, 0],
+			"translation": [-6, 6, -8]
+		}
+	},
+	"groups": [
+		{
+			"name": "bottom",
+			"origin": [0, -8, 0],
+			"scope": 0,
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "top",
+			"origin": [0, 16, 0],
+			"scope": 0,
+			"color": 0,
+			"children": [0]
+		}
+	]
+}

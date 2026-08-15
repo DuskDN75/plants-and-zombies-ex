@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "plantz_ex:block/brainz_alloy/treaded_brainz_alloy_block"
+  }
+}

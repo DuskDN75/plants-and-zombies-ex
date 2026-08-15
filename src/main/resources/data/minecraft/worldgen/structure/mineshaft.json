@@ -7,7 +7,7 @@
       "bounding_box": "full",
       "spawns": [
         {
-          "type": "plantz:digger_zombie",
+          "type": "plantz_ex:digger_zombie",
           "maxCount": 1,
           "minCount": 1,
           "weight": 1
