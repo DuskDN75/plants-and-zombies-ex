@@ -2,6 +2,7 @@ package duskdn.plantz_ex.mixin.client;
 
 import duskdn.plantz_ex.PazModels;
 import duskdn.plantz_ex.effect.PaintedMobEffect;
+import duskdn.plantz_ex.init.PazEffects;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -30,20 +31,34 @@ public abstract class GuiMixin {
 //    @Shadow
 //    protected abstract void extractTextureOverlay(GuiGraphicsExtractor graphics, Identifier texture, float alpha);
 //
+//    @Unique
+//    private final Identifier CHILLED_OUTLINE_LOCATION = Identifier.withDefaultNamespace("textures/misc/powder_snow_outline.png");
+//
 //    @Shadow
 //    @Final
 //    private Minecraft minecraft;
 //
 //    @Inject(method = "extractRenderState", at = @At("HEAD"))
 //    public void extractCameraOverlays(DeltaTracker deltaTracker, boolean shouldRenderLevel, boolean resourcesLoaded, CallbackInfo ci) {
+//
+//        Gui self = (Gui) (Object) this;
+//
+//        int xMouse = (int)this.minecraft.mouseHandler.getScaledXPos(this.minecraft.getWindow());
+//        int yMouse = (int)this.minecraft.mouseHandler.getScaledYPos(this.minecraft.getWindow());
+//
+//        GuiGraphicsExtractor graphics = new GuiGraphicsExtractor(this.minecraft, self.guiRenderState, xMouse, yMouse);
+//
 //        LocalPlayer player = this.minecraft.player;
 //        if (player == null) return;
 //        var effects = PaintedMobEffect.getPaintEffects(player, null);
 //        effects.forEach( it -> {
-//            if (it.getEffect().value() instanceof PaintedMobEffect paintedMobEffect) {
+//            var effect = it.getEffect().value();
+//            if (effect instanceof PaintedMobEffect paintedMobEffect) {
 //                extractPaintOverlay(graphics, paintedMobEffect.getRandomness(), paintedMobEffect.getPaintColor(), it.getAmplifier(), (it.getDuration()/80f));
 //            }
 //        });
+//        var chilledEffect = player.getEffect(PazEffects.CHILLED);
+//        if (chilledEffect != null) extractTextureOverlay(graphics, CHILLED_OUTLINE_LOCATION, chilledEffect.getDuration() / 20f);
 //    }
 //
 //    @Unique

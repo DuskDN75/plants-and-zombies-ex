@@ -219,7 +219,7 @@ object PlantSpawnUtils {
         val searchBox = AABB(pos).inflate(1.0, 0.0, 1.0)
 
         val plants = level.getEntitiesOfClass(PazPlant::class.java, searchBox) { plant ->
-            plant.blockPosition() != pos && plant.isAlive && (ogPlant == null || (ogPlant != plant && plant != ogPlant.vehicle))
+            plant.isAlive && (ogPlant != null && (ogPlant != plant && plant != ogPlant.vehicle) || plant.blockPosition() != pos)
         }
 
         return plants.isNotEmpty()

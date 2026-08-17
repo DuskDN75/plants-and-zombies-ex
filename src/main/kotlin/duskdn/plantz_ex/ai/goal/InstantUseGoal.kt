@@ -48,14 +48,14 @@ abstract class InstantUseGoal<T>(
 
     override fun canUse(): Boolean {
 
-//        if (!usingEntity.isTame) return false
-
         if (requireTarget) {
             target = usingEntity.target
             target?.let {
                 return (!it.isDeadOrDying && usingEntity.distanceToSqr(it) < activateRange * activateRange) || actionTimer < maxActionTime
             }
         }
+
+        if (!usingEntity.isTame && target == null) return false
 
         if (!actionPredicate.test(usingEntity)) return false
         if ((usingEntity.isAsleep || usingEntity.isGrowingSeeds)) return false

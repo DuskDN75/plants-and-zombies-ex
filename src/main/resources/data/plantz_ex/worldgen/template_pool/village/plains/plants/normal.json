@@ -1,0 +1,60 @@
+{
+  "name": "greenhouse_entities",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "plantz_ex:plants/peashooter",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 50
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "plantz_ex:plants/chomper",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 5
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "plantz_ex:plants/ice_peashooter",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "plantz_ex:plants/kernel_pult",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 20
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "plantz_ex:plants/cabbage_pult",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 50
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "plantz_ex:plants/wallnut",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 50
+    }
+  ]
+}

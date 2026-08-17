@@ -4,8 +4,8 @@
     {
       "rolls": {
         "type": "minecraft:uniform",
-        "max": 8.0,
-        "min:": 4.0
+        "max": 16.0,
+        "min": 8.0
       },
       "bonus_rolls": 0,
       "entries": [
@@ -15,31 +15,60 @@
             {
               "type": "minecraft:item",
               "name": "minecraft:water_bucket",
-              "weight": 7000
+              "weight": 200
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:wooden_hoe",
+              "weight": 4000
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:iron_hoe",
+              "weight": 500
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:diamond_hoe",
+              "weight": 20
             },
             {
               "type": "minecraft:item",
               "name": "minecraft:bone_meal",
-              "weight": 3000,
+              "weight": 8000,
               "functions": [
                 {
                   "function": "minecraft:set_count",
                   "count": {
-                    "min": 0,
-                    "max": 16
+                    "min": 4,
+                    "max": 64
                   }
                 }
               ]
             },
             {
               "type": "minecraft:item",
-              "name": "plantz_ex:sun",
-              "weight": 8000,
+              "name": "minecraft:wheat_seeds",
+              "weight": 5000,
               "functions": [
                 {
                   "function": "minecraft:set_count",
                   "count": {
-                    "min": 0,
+                    "min": 4,
+                    "max": 32
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:wheat",
+              "weight": 5000,
+              "functions": [
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "min": 4,
                     "max": 8
                   }
                 }
@@ -47,13 +76,97 @@
             },
             {
               "type": "minecraft:item",
-              "name": "farmersdelight:rich_soil_farmland",
+              "name": "minecraft:carrot",
+              "weight": 100,
+              "functions": [
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "min": 4,
+                    "max": 8
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:potato",
+              "weight": 100,
+              "functions": [
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "min": 4,
+                    "max": 8
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:dirt",
+              "weight": 8000,
+              "functions": [
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "min": 4,
+                    "max": 8
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz_ex:sun",
+              "weight": 4000,
+              "functions": [
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "min": 1,
+                    "max": 8
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:beetroot_seeds",
               "weight": 5000,
               "functions": [
                 {
                   "function": "minecraft:set_count",
                   "count": {
-                    "min": 0,
+                    "min": 4,
+                    "max": 32
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:beetroot",
+              "weight": 3000,
+              "functions": [
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "min": 4,
+                    "max": 8
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "farmersdelight:rich_soil",
+              "weight": 100,
+              "functions": [
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "min": 1,
                     "max": 4
                   }
                 }
@@ -62,7 +175,7 @@
             {
               "type": "minecraft:item",
               "name": "plantz_ex:watering_can",
-              "weight": 2000
+              "weight": 100
             },
             {
               "type": "minecraft:item",
@@ -73,23 +186,15 @@
                   "function": "minecraft:set_components",
                   "components": {
                     "minecraft:entity_data": {
-                      "id": "plantz_ex:potatomine"
+                      "id": "plantz_ex:ice_peashooter"
                     }
                   }
-                }
-              ]
-            },
-            {
-              "type": "minecraft:item",
-              "name": "plantz_ex:seed_packet",
-              "weight": 8000,
-              "functions": [
+                },
                 {
-                  "function": "minecraft:set_components",
-                  "components": {
-                    "minecraft:entity_data": {
-                      "id": "plantz_ex:peashooter"
-                    }
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "min": 1,
+                    "max": 4
                   }
                 }
               ]
@@ -103,8 +208,15 @@
                   "function": "minecraft:set_components",
                   "components": {
                     "minecraft:entity_data": {
-                      "id": "plantz_ex:flower_pot"
+                      "id": "plantz_ex:puffshroom"
                     }
+                  }
+                },
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "min": 1,
+                    "max": 4
                   }
                 }
               ]
@@ -118,8 +230,15 @@
                   "function": "minecraft:set_components",
                   "components": {
                     "minecraft:entity_data": {
-                      "id": "plantz_ex:cabbagepult"
+                      "id": "plantz_ex:flower_pot"
                     }
+                  }
+                },
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "min": 1,
+                    "max": 4
                   }
                 }
               ]
@@ -133,8 +252,15 @@
                   "function": "minecraft:set_components",
                   "components": {
                     "minecraft:entity_data": {
-                      "id": "plantz_ex:kernelpult"
+                      "id": "plantz_ex:seashroom"
                     }
+                  }
+                },
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "min": 1,
+                    "max": 4
                   }
                 }
               ]
@@ -148,8 +274,15 @@
                   "function": "minecraft:set_components",
                   "components": {
                     "minecraft:entity_data": {
-                      "id": "plantz_ex:cherrybomb"
+                      "id": "plantz_ex:sunshroom"
                     }
+                  }
+                },
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "min": 1,
+                    "max": 4
                   }
                 }
               ]
@@ -157,13 +290,35 @@
             {
               "type": "minecraft:item",
               "name": "plantz_ex:seed_packet",
-              "weight": 500,
+              "weight": 1000,
               "functions": [
                 {
                   "function": "minecraft:set_components",
                   "components": {
                     "minecraft:entity_data": {
-                      "id": "plantz_ex:water_pot"
+                      "id": "plantz_ex:iceshroom"
+                    }
+                  }
+                },
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "min": 1,
+                    "max": 4
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "plantz_ex:seed_packet",
+              "weight": 10,
+              "functions": [
+                {
+                  "function": "minecraft:set_components",
+                  "components": {
+                    "minecraft:entity_data": {
+                      "id": "plantz_ex:cabbagepult"
                     }
                   }
                 }
@@ -187,7 +342,7 @@
             {
               "type": "minecraft:item",
               "name": "plantz_ex:seed_packet",
-              "weight": 500,
+              "weight": 10,
               "functions": [
                 {
                   "function": "minecraft:set_components",
@@ -202,13 +357,13 @@
             {
               "type": "minecraft:item",
               "name": "plantz_ex:seed_packet",
-              "weight": 300,
+              "weight": 100,
               "functions": [
                 {
                   "function": "minecraft:set_components",
                   "components": {
                     "minecraft:entity_data": {
-                      "id": "plantz_ex:cactus"
+                      "id": "plantz_ex:wallnut"
                     }
                   }
                 }
@@ -217,13 +372,13 @@
             {
               "type": "minecraft:item",
               "name": "plantz_ex:seed_packet",
-              "weight": 5,
+              "weight": 1,
               "functions": [
                 {
                   "function": "minecraft:set_components",
                   "components": {
                     "minecraft:entity_data": {
-                      "id": "plantz_ex:melonpult"
+                      "id": "plantz_ex:sky_peashooter"
                     }
                   }
                 }
@@ -232,7 +387,7 @@
             {
               "type": "minecraft:item",
               "name": "plantz_ex:seed_packet",
-              "weight": 2,
+              "weight": 1,
               "functions": [
                 {
                   "function": "minecraft:set_components",
@@ -247,13 +402,13 @@
             {
               "type": "minecraft:item",
               "name": "plantz_ex:seed_packet",
-              "weight": 2,
+              "weight": 10,
               "functions": [
                 {
                   "function": "minecraft:set_components",
                   "components": {
                     "minecraft:entity_data": {
-                      "id": "plantz_ex:electric_peashooter"
+                      "id": "plantz_ex:coffeebean"
                     }
                   }
                 }

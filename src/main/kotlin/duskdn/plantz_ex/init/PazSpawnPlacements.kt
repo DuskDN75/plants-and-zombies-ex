@@ -73,7 +73,7 @@ object PazSpawnPlacements {
             weight = 8, minGroupSize = 1, maxGroupSize = 3)
         addBiomeSpawn(PazTags.Biomes.HAS_WATER_PEASHOOTER_WATER, PazEntities.WATER_PEA_SHOOTER,
             weight = 2, minGroupSize = 1, maxGroupSize = 1)
-        registerSpawnPlacement(PazEntities.WATER_PEA_SHOOTER, PLANT_WATER_LAND_SPAWN_RULES::spawnCheck, spawnPlacements = SpawnPlacementTypes.ON_GROUND)
+        registerSpawnPlacement(PazEntities.WATER_PEA_SHOOTER, PLANT_WATER_LAND_SPAWN_RULES::spawnCheck, spawnPlacements = SpawnPlacementTypes.NO_RESTRICTIONS)
 
         addBiomeSpawn(PazTags.Biomes.HAS_LILYPAD, PazEntities.LILYPAD,
             weight = 5, minGroupSize = 1, maxGroupSize = 3)

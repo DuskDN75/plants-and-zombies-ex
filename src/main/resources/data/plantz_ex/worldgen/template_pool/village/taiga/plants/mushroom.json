@@ -5,7 +5,16 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "plantz_ex:village/plains/plants/peashooter",
+        "location": "plantz_ex:plants/puffshroom",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 50
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "plantz_ex:plants/fumeshroom",
         "processors": "minecraft:empty",
         "projection": "rigid"
       },
@@ -14,7 +23,7 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "plantz_ex:village/plains/plants/chomper",
+        "location": "plantz_ex:plants/iceshroom",
         "processors": "minecraft:empty",
         "projection": "rigid"
       },
@@ -23,29 +32,29 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "plantz_ex:village/plains/plants/ice_peashooter",
+        "location": "plantz_ex:plants/scaredyshroom",
         "processors": "minecraft:empty",
         "projection": "rigid"
       },
-      "weight": 2
+      "weight": 20
     },
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "plantz_ex:village/plains/plants/cabbage_pult",
+        "location": "plantz_ex:plants/sunshroom",
         "processors": "minecraft:empty",
         "projection": "rigid"
       },
-      "weight": 5
+      "weight": 20
     },
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "plantz_ex:village/plains/plants/wallnut",
+        "location": "plantz_ex:plants/hypnoshroom",
         "processors": "minecraft:empty",
         "projection": "rigid"
       },
-      "weight": 5
+      "weight": 10
     }
-  ],
+  ]
 }
