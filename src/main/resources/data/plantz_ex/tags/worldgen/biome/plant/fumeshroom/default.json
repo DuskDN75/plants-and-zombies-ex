@@ -1,6 +1,7 @@
 {
   "values": [
     "minecraft:mushroom_fields",
+    "plantz_ex:graveyard",
     {
       "id": "#c:is_old_growth",
       "required": false

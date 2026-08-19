@@ -11,6 +11,10 @@
       "required": false
     },
     {
+      "id": "wilderwild:frozen_caves",
+      "required": false
+    },
+    {
       "id": "#c:is_cold",
       "required": false
     }

@@ -678,7 +678,10 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
     open fun sleepsDuringNight(): Boolean = false
     open fun sleepsIfUntamed(): Boolean = false
     open fun sleepsDuringDay(): Boolean = this.`is`(PazTags.EntityTypes.MUSHROOM)
-    open fun canPlaceOn(block: BlockState) : Boolean = canSurviveOn(block)
+    open fun canPlaceOn(block: BlockState, carrier: PazPlant?) : Boolean {
+        return true
+    }
+
 
     open fun canSurviveOn(block: BlockState) : Boolean = PlantSpawnUtils.canSurviveDefault(block)
 
@@ -847,7 +850,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
             this.saveWithoutId(output)
             output.putString("id", this.encodeId!!)
             if (entity.tryToSetPlantOnHead(output.buildResult())) {
-                (entity as PlantHeadAttachment).`plantz$setPlant`(this)
+                (entity as PlantHeadAttachment).`plantzex$setPlant`(this)
                 attachedEntity = entity
                 return true
             }
@@ -857,8 +860,8 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
 
     fun detachFromEntity() {
         if (attachedEntity!=null) {
-            (attachedEntity as PlantHeadAttachment).`plantz$setPlantData`(CompoundTag())
-            (attachedEntity as PlantHeadAttachment).`plantz$setPlant`(null)
+            (attachedEntity as PlantHeadAttachment).`plantzex$setPlantData`(CompoundTag())
+            (attachedEntity as PlantHeadAttachment).`plantzex$setPlant`(null)
             attachedEntity = null
         }
     }

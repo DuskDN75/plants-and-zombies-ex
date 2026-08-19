@@ -1,21 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
+  "group": "seed_packets",
   "category": "misc",
   "key": {
-    "#": [
-      "minecraft:glass"
-    ],
-    "@": [
-      "minecraft:water_bucket"
-    ],
-    "*": [
-      "plantz_ex:sun"
-    ]
+    "#": "minecraft:glass",
+    "@": "plantz_ex:seed_packet",
+    "$": "minecraft:water_bucket",
+    "*": "plantz_ex:sun"
   },
   "pattern": [
-    " * ",
+    "*$*",
     "#@#",
-    " # "
+    "*#*"
   ],
   "result": {
     "count": 1,

@@ -37,7 +37,7 @@ public abstract class ServerLevelMixin {
 
     @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true)
     public void tickCancel(Entity entity, CallbackInfo ci) {
-//        if (entity instanceof LivingEntity && ((PlantHeadAttachment) entity).plantz$hasPlantOnHead()) {
+//        if (entity instanceof LivingEntity && ((PlantHeadAttachment) entity).plantzex$hasPlantOnHead()) {
 //            ci.cancel();
 //        }
     }

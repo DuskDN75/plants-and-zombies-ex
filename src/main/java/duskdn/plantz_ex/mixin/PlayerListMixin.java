@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PlayerListMixin {
     @Inject(method = "remove", at = @At(value = "TAIL"))
     public void removePlantAttachment(ServerPlayer player, CallbackInfo ci) {
-        if (((PlantHeadAttachment) player).plantz$hasPlantOnHead()) {
-            var plant = ((PlantHeadAttachment) player).plantz$getPlant();
+        if (((PlantHeadAttachment) player).plantzex$hasPlantOnHead()) {
+            var plant = ((PlantHeadAttachment) player).plantzex$getPlant();
             if (plant!=null) {
                 plant.setRemoved(Entity.RemovalReason.UNLOADED_WITH_PLAYER);
             }

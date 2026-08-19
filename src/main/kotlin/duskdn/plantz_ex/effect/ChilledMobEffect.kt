@@ -95,7 +95,7 @@ class ChilledMobEffect(
             return false
         }
 
-        val isFrozen = (mob as PazEntityData).`plantz$getFrozenId`()
+        val isFrozen = (mob as PazEntityData).`plantzex$getFrozenId`()
 
         debugPrint("isFrozen = $isFrozen, current = $currentPercentage, duration = $duration, frozenCap: $frozenCap")
 
@@ -123,7 +123,7 @@ class ChilledMobEffect(
 
         if (entity is Mob) entity.setNoAi(isFrozen)
 
-        (entity as PazEntityData).`plantz$setFrozenId`(isFrozen)
+        (entity as PazEntityData).`plantzex$setFrozenId`(isFrozen)
     }
 
     override fun onEffectStarted(mob: LivingEntity, amplifier: Int) {

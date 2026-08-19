@@ -204,25 +204,9 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
         moveControl = getMoveControl()
     }
 
-    var waterTime = -1
     override fun tick() {
         super.tick()
         val serverLevel = level() as? ServerLevel
-
-//        if (isEyeInFluid(FluidTags.WATER)) {
-//            waterTime++
-//            if (waterTime>=250 && canEquipDuckyInWater()) {
-//                if(!getItemBySlot(EquipmentSlot.LEGS).isEmpty) {
-//                    val currentLegs = getItemBySlot(EquipmentSlot.LEGS)
-//                    val dropChance = dropChances.byEquipment(EquipmentSlot.LEGS)
-//                    if (!currentLegs.isEmpty && max(this.random.nextFloat() - 0.1f, 0.0f).toDouble() < dropChance) {
-//                        if (serverLevel!=null) spawnAtLocation(serverLevel, currentLegs)
-//                    }
-//                }
-//                setItemSlot(EquipmentSlot.LEGS, PazItems.DUCKY_TUBE.defaultInstance)
-//                setDropChance(EquipmentSlot.LEGS, 0.0f)
-//            }
-//        } else waterTime = -1
 
         when (state) {
             ZombieState.IDLE -> {
@@ -236,7 +220,13 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
             ZombieState.FLOATING -> {
                 floatAnimation.startIfStopped(tickCount)
                 if (serverLevel!=null) {
-                    balloons.removeIf { !it.isAlive || it.leashHolder != this }
+
+                    val snapshot = ArrayList(balloons)
+
+                    val toRemove = snapshot.filter { !it.isAlive || it.leashHolder != this }
+
+                    if (balloons.isNotEmpty()) balloons.removeAll(toRemove)
+
                     if (balloons.isEmpty()) {
 //                        debugPrint("CHANGED TO IDLE")
                         state = ZombieState.IDLE

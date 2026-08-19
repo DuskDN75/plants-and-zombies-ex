@@ -95,13 +95,35 @@ class BrownCoat(type: EntityType<out BrownCoat>, level: Level) : PazZombie(type,
             random
         )
 
-        if (getItemBySlot(EquipmentSlot.HEAD).isEmpty && spawnReason != EntitySpawnReason.COMMAND && spawnReason != EntitySpawnReason.SPAWN_ITEM_USE){
-            if (random.nextFloat() < 0.25) {
-                setItemSlot(EquipmentSlot.HEAD, PazBlocks.CONE.asItem().defaultInstance)
-                setDropChance(EquipmentSlot.HEAD, 0.2f)
+        if (spawnReason != EntitySpawnReason.COMMAND && spawnReason != EntitySpawnReason.SPAWN_ITEM_USE){
+
+            val headSlot = getItemBySlot(EquipmentSlot.HEAD)
+
+            val mainHandSlot = getItemBySlot(EquipmentSlot.MAINHAND)
+
+            var screenDoorChance = 0.05
+
+            if (headSlot.isEmpty) {
+
+                if (random.nextFloat() < 0.25) {
+                    setItemSlot(EquipmentSlot.HEAD, PazBlocks.CONE.asItem().defaultInstance)
+                    screenDoorChance *= 0.1
+                    setDropChance(EquipmentSlot.HEAD, 0.2f)
+                }
+                else if (random.nextFloat() < 0.1) {
+                    setItemSlot(EquipmentSlot.HEAD, Items.BUCKET.defaultInstance)
+                    screenDoorChance *= 0.01
+                    setDropChance(EquipmentSlot.HEAD, 0.1f)
+                }
+
             }
-            else if (random.nextFloat() < 0.1 && getItemBySlot(EquipmentSlot.HEAD).isEmpty) {
-                setItemSlot(EquipmentSlot.HEAD, Items.BUCKET.defaultInstance)
+
+            if (mainHandSlot.isEmpty) {
+
+                if (random.nextFloat() < screenDoorChance) {
+                    setItemSlot(EquipmentSlot.MAINHAND, PazBlocks.SCREEN_DOOR.asItem().defaultInstance)
+                    setDropChance(EquipmentSlot.MAINHAND, 0.1f)
+                }
             }
         }
 

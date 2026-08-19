@@ -1,5 +1,6 @@
 {
   "values": [
+    "plantz_ex:graveyard",
     {
       "id": "#c:is_dead",
       "required": false

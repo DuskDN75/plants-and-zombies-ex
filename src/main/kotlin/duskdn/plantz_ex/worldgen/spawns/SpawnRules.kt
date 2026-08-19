@@ -1,8 +1,12 @@
 package duskdn.plantz_ex.worldgen.spawns
 
+import duskdn.plantz_ex.entity.plant.all.Plantern
+import duskdn.plantz_ex.entity.plant.all.Sunflower
+import duskdn.plantz_ex.entity.plant.all.mushrooms.SunShroom
 import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.entity.plant.utils.PlantSpawnUtils
 import duskdn.plantz_ex.entity.plant.utils.PlantSpawnUtils.hasAdjacentPlant
+import duskdn.plantz_ex.worldgen.spawns.SpawnRules.IS_VALID_SPAWN
 import duskdn.plantz_ex.worldgen.spawns.init.SpawnRule
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.tags.FluidTags
@@ -24,11 +28,14 @@ object SpawnRules {
 
         if (EntitySpawnReason.isSpawner(spawnReason)) return@SpawnRule true
 
-        return@SpawnRule (level.getEntitiesOfClass(
+        val hasNearby = (level.getEntitiesOfClass(
             PazPlant::class.java,
-            AABB(pos).inflate(16.0, 5.0, 16.0)
-        ) { it.tickCount > 0 }.isEmpty()
-                && (blockAtPos.getCollisionShape(level, pos.above()).isEmpty))
+            AABB(pos).inflate(16.0, 8.0, 16.0)
+        ) {
+            it.tickCount > 0
+        }.size > 10)
+
+        return@SpawnRule (blockAtPos.getCollisionShape(level, pos.above()).isEmpty) && !hasNearby
     }
 
     val IS_VALID_SPAWN_WATER = SpawnRule { context ->
@@ -41,14 +48,14 @@ object SpawnRules {
 
         if (EntitySpawnReason.isSpawner(spawnReason)) return@SpawnRule true
 
-        return@SpawnRule (level.getEntitiesOfClass(
+        val hasNearby = (level.getEntitiesOfClass(
             PazPlant::class.java,
-            AABB(pos).inflate(16.0, 5.0, 16.0)
-        ) { it.tickCount > 0 }.isEmpty()
-                && (blockAtPos.getCollisionShape(
-            level,
-            pos.above()
-        ).isEmpty || blockAtPos.fluidState.`is`(FluidTags.WATER)))
+            AABB(pos).inflate(16.0, 16.0, 16.0)
+        ) {
+            it.tickCount > 0
+        }.size > 10)
+
+        return@SpawnRule IS_VALID_SPAWN.testRule(context) || (blockAtPos.fluidState.`is`(FluidTags.WATER) && !hasNearby)
     }
 
     val IS_VALID_SPAWN_LAVA = SpawnRule { context ->
@@ -61,14 +68,14 @@ object SpawnRules {
 
         if (EntitySpawnReason.isSpawner(spawnReason)) return@SpawnRule true
 
-        return@SpawnRule (level.getEntitiesOfClass(
+        val hasNearby = (level.getEntitiesOfClass(
             PazPlant::class.java,
-            AABB(pos).inflate(16.0, 5.0, 16.0)
-        ) { it.tickCount > 0 }.isEmpty()
-                && (blockAtPos.getCollisionShape(
-            level,
-            pos.above()
-        ).isEmpty || blockAtPos.fluidState.`is`(FluidTags.LAVA)))
+            AABB(pos).inflate(16.0, 8.0, 16.0)
+        ) {
+            it.tickCount > 0
+        }.size > 10)
+
+        return@SpawnRule blockAtPos.fluidState.`is`(FluidTags.LAVA) && !hasNearby
     }
 
     val IS_VALID_SPAWN_AIR = SpawnRule { context ->
@@ -81,11 +88,14 @@ object SpawnRules {
 
         if (EntitySpawnReason.isSpawner(spawnReason)) return@SpawnRule true
 
-        return@SpawnRule (level.getEntitiesOfClass(
+        val hasNearby = (level.getEntitiesOfClass(
             PazPlant::class.java,
-            AABB(pos).inflate(16.0, 5.0, 16.0)
-        ) { it.tickCount > 0 }.isEmpty()
-                && (blockAtPos.getCollisionShape(level, pos.above()).isEmpty || blockAtPos.`is`(Blocks.AIR)))
+            AABB(pos).inflate(16.0, 8.0, 16.0)
+        ) {
+            it.tickCount > 0
+        }.size > 10)
+
+        return@SpawnRule blockAtPos.`is`(Blocks.AIR) && !hasNearby
     }
 
     val IS_PLANTABLE_DEFAULT = SpawnRule { context ->
@@ -98,6 +108,12 @@ object SpawnRules {
         val blockBelow = context.level.getBlockState(context.pos.below())
 
         return@SpawnRule PlantSpawnUtils.canSurviveSand(blockBelow)
+    }
+
+    val IS_PLANTABLE_GRAVEL = SpawnRule { context ->
+        val blockBelow = context.level.getBlockState(context.pos.below())
+
+        return@SpawnRule PlantSpawnUtils.canSurviveGravel(blockBelow)
     }
 
     val IS_PLANTABLE_FIRE = SpawnRule { context ->
@@ -149,7 +165,7 @@ object SpawnRules {
         return@SpawnRule context.level.getBrightness(LightLayer.SKY, context.pos) < 10 || context.level.getBrightness(
             LightLayer.BLOCK,
             context.pos
-        ) < 15 || context.level.level.isDarkOutside
+        ) < 10 || context.level.level.isDarkOutside
     }
 
     val IS_LIGHT = SpawnRule { context ->
@@ -227,7 +243,7 @@ object SpawnRules {
 
     val HAS_NO_ADJACENT = SpawnRule { context ->
         return@SpawnRule !hasAdjacentPlant(
-            context.level as Level, context.pos
+            context.level, context.pos
         )
     }
 

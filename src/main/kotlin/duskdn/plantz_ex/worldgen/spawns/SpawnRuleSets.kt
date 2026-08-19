@@ -8,6 +8,9 @@ import duskdn.plantz_ex.worldgen.spawns.plant.rules.ground.PlantSandSpawnRules
 import duskdn.plantz_ex.worldgen.spawns.plant.rules.ground.PlantSnowSpawnRules
 import duskdn.plantz_ex.worldgen.spawns.plant.rules.water.PlantWaterSpawnRules
 import duskdn.plantz_ex.worldgen.spawns.plant.init.PlantSpawnRules
+import duskdn.plantz_ex.worldgen.spawns.plant.rules.air.PlantAirSpawnRules
+import duskdn.plantz_ex.worldgen.spawns.plant.rules.ground.PlantGravelSpawnRules
+import duskdn.plantz_ex.worldgen.spawns.plant.rules.ground.PlantSandGravelSpawnRules
 import duskdn.plantz_ex.worldgen.spawns.plant.rules.water.PlantWaterLandSpawnRules
 
 object SpawnRuleSets {
@@ -20,9 +23,19 @@ object SpawnRuleSets {
 
     val PLANT_MUSHROOM_SPAWN_RULES = PlantNormalSpawnRules().apply {
         isMushroom = true
+        addRule { context ->
+            SpawnRules.IS_PLANTABLE_SNOW.testRule(context)
+        }
+        addRule { context ->
+            SpawnRules.IS_PLANTABLE_GRAVEL.testRule(context)
+        }
     }
 
     val PLANT_SAND_SPAWN_RULES = PlantSandSpawnRules()
+
+    val PLANT_GRAVEL_SPAWN_RULES = PlantGravelSpawnRules()
+
+    val PLANT_SAND_GRAVEL_SPAWN_RULES = PlantSandGravelSpawnRules()
 
     val PLANT_SNOW_SPAWN_RULES = PlantSnowSpawnRules()
 
@@ -50,6 +63,8 @@ object SpawnRuleSets {
     val PLANT_LAVA_RARE_SPAWN_RULES = PlantLavaSpawnRules().apply {
         lavaSpawnChance = 0.1f
     }
+
+    val PLANT_AIR_SPAWN_RULES = PlantAirSpawnRules()
 
     val PLANT_LIGHTNING_SPAWN_RULES = PlantLightningSpawnRules()
 

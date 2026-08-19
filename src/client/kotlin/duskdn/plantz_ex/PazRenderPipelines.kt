@@ -51,7 +51,7 @@ object PazRenderPipelines {
             .withCull(false)
             .withVertexBinding(0, DefaultVertexFormat.ENTITY)
             .withPrimitiveTopology(PrimitiveTopology.QUADS)
-            .withDepthStencilState(DepthStencilState(CompareOp.GREATER_THAN_OR_EQUAL, false))
+            .withDepthStencilState(DepthStencilState.DEFAULT)
             .build()
     )
 

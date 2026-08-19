@@ -83,12 +83,16 @@ object PlantSpawnUtils {
 
             val validGround = entity.onValidGround(spawnPos.x.toDouble(), spawnPos.y.toDouble(), spawnPos.z.toDouble(), carrier)
 
+            val belowBlock = entity.getBlockBelow(spawnPos.x.toDouble(), spawnPos.y.toDouble(), spawnPos.z.toDouble())
+
+            val canPlace = entity.canPlaceOn(belowBlock, carrier)
+
             val invalidSpace = !(validGround == null || checkFluid)
                     || !(spawnBlockCollisionShape==null || !entityBox.intersects(spawnBlockCollisionShape))
 
             debugPrint("ValidGround: $validGround, InvalidSpace: $invalidSpace")
 
-            if (validGround != null) {
+            if (validGround != null && canPlace) {
 
                 var messageKey = when {
                     validGround.tooClose -> "message.plantz_ex.too_close"

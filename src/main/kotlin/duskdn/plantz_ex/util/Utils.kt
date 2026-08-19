@@ -30,21 +30,21 @@ import java.lang.reflect.Field
 fun pazResource(path: String): Identifier = Identifier.fromNamespaceAndPath(MODID, path)
 
 interface PlantHeadAttachment {
-    fun `plantz$hasPlantOnHead`(): Boolean
-    fun `plantz$getPlant`(): PazPlant?
-    fun `plantz$setPlant`(value: PazPlant?)
-    fun `plantz$getPlantData`(): CompoundTag
-    fun `plantz$setPlantData`(value: CompoundTag)
+    fun `plantzex$hasPlantOnHead`(): Boolean
+    fun `plantzex$getPlant`(): PazPlant?
+    fun `plantzex$setPlant`(value: PazPlant?)
+    fun `plantzex$getPlantData`(): CompoundTag
+    fun `plantzex$setPlantData`(value: CompoundTag)
 }
 
 interface PazEntityData {
-    fun `plantz$getHypnoId`(): Boolean
-    fun `plantz$getChilledId`(): Boolean
-    fun `plantz$getDrenchedId`(): Boolean
-    fun `plantz$getFrozenId`(): Boolean
-    fun `plantz$setFrozenId`(isFrozen: Boolean)
-    fun `plantz$getEnlightenedId`(): Boolean
-    fun `plantz$getPaintedColors`(): Map<Integer, Integer>
+    fun `plantzex$getHypnoId`(): Boolean
+    fun `plantzex$getChilledId`(): Boolean
+    fun `plantzex$getDrenchedId`(): Boolean
+    fun `plantzex$getFrozenId`(): Boolean
+    fun `plantzex$setFrozenId`(isFrozen: Boolean)
+    fun `plantzex$getEnlightenedId`(): Boolean
+    fun `plantzex$getPaintedColors`(): Map<Integer, Integer>
 }
 
 fun Entity.canWearPlant(): Boolean {
@@ -53,8 +53,8 @@ fun Entity.canWearPlant(): Boolean {
             && !(this is ServerPlayer && (this.isSpectator))
 }
 fun Entity.tryToSetPlantOnHead(entityTag: CompoundTag): Boolean {
-    if (this.canWearPlant() && !(this as PlantHeadAttachment).`plantz$hasPlantOnHead`()) {
-        this.`plantz$setPlantData`(entityTag)
+    if (this.canWearPlant() && !(this as PlantHeadAttachment).`plantzex$hasPlantOnHead`()) {
+        this.`plantzex$setPlantData`(entityTag)
         return true
     }
     return false

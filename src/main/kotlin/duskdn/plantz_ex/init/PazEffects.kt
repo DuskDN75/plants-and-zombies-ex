@@ -12,20 +12,28 @@ import duskdn.plantz_ex.effect.ToxicMobEffect
 import duskdn.plantz_ex.effect.ZombieOmenMobEffect
 import duskdn.plantz_ex.util.pazResource
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType
+import net.fabricmc.fabric.api.registry.FabricPotionBrewingBuilder
 import net.fabricmc.fabric.impl.attachment.AttachmentRegistryImpl
 import net.minecraft.core.Holder
 import net.minecraft.core.Registry
+import net.minecraft.core.component.DataComponents
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectCategory
 import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.item.DyeColor
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.alchemy.Potion
+import net.minecraft.world.item.alchemy.PotionContents
+import net.minecraft.world.item.alchemy.Potions
+import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.block.Blocks
 
 object PazEffects {
@@ -100,8 +108,46 @@ object PazEffects {
     @JvmField val CHILLED_POTION: Holder<Potion> = registerPotion("chilled", MobEffectInstance(CHILLED, 100))
     @JvmField val DRENCHED_POTION: Holder<Potion> = registerPotion("drenched", MobEffectInstance(DRENCHED, 100))
     @JvmField val ENLIGHTENED_POTION: Holder<Potion> = registerPotion("enlightened", MobEffectInstance(ENLIGHTENED, 100))
-    fun registerPotion(name: String, effects: MobEffectInstance): Holder<Potion> {
-        val potion = Potion(name, effects)
+    @JvmField val CURSED_POTION: Holder<Potion> = registerPotion(
+        "cursed",
+        MobEffectInstance(MobEffects.UNLUCK, 1200),
+        MobEffectInstance(MobEffects.SLOWNESS, 1200),
+        MobEffectInstance(MobEffects.WEAKNESS, 1200)
+    )
+    @JvmField val AWAKENING_POTION: Holder<Potion> = registerPotion(
+        "awakening",
+        MobEffectInstance(MobEffects.SPEED, 1200),
+        MobEffectInstance(MobEffects.INFESTED, 1200),
+        MobEffectInstance(MobEffects.HUNGER, 1200),
+        MobEffectInstance(MobEffects.NAUSEA, 1200),
+        MobEffectInstance(MobEffects.BLINDNESS, 1200),
+        MobEffectInstance(MobEffects.HASTE, 1200),
+        MobEffectInstance(MobEffects.POISON, 1200),
+        MobEffectInstance(MobEffects.MINING_FATIGUE, 1200),
+        MobEffectInstance(MobEffects.SLOWNESS, 1200),
+        MobEffectInstance(MobEffects.WEAKNESS, 1200),
+        MobEffectInstance(MobEffects.STRENGTH, 1200)
+    )
+    @JvmField val SPROUTING_POTION: Holder<Potion> = registerPotion(
+        "sprouting",
+        MobEffectInstance(MobEffects.SPEED, 600),
+        MobEffectInstance(MobEffects.STRENGTH, 600),
+        MobEffectInstance(MobEffects.HEALTH_BOOST, 1200),
+        MobEffectInstance(MobEffects.ABSORPTION, 1200),
+        MobEffectInstance(MobEffects.LUCK, 200)
+    )
+
+    fun registerBasicPotion(name: String): Holder<Potion> {
+        val potion = Potion(name)
+        return Registry.registerForHolder(
+            BuiltInRegistries.POTION,
+            pazResource(name),
+            potion
+        )
+    }
+
+    fun registerPotion(name: String, vararg effects: MobEffectInstance): Holder<Potion> {
+        val potion = Potion(name, *effects)
         return Registry.registerForHolder(
             BuiltInRegistries.POTION,
             pazResource(name),
@@ -113,6 +159,70 @@ object PazEffects {
         AttachmentRegistryImpl.builder<Goal>().buildAndRegister(pazResource("hypnotized_goal"))
 
     fun initialize() {
+
+        FabricPotionBrewingBuilder.BUILD.register { builder ->
+            builder.registerPotionRecipe(
+                Potions.WEAKNESS,
+                Ingredient.of(Items.MILK_BUCKET),
+                BUTTERED_POTION
+            )
+        }
+
+        FabricPotionBrewingBuilder.BUILD.register { builder ->
+            builder.registerPotionRecipe(
+                Potions.MUNDANE,
+                Ingredient.of(Blocks.SOUL_SAND.asItem()),
+                CURSED_POTION
+            )
+        }
+
+        FabricPotionBrewingBuilder.BUILD.register { builder ->
+            builder.registerPotionRecipe(
+                CURSED_POTION,
+                Ingredient.of(Blocks.CARVED_PUMPKIN.asItem()),
+                AWAKENING_POTION
+            )
+        }
+
+        FabricPotionBrewingBuilder.BUILD.register { builder ->
+            builder.registerPotionRecipe(
+                Potions.REGENERATION,
+                Ingredient.of(PazItems.SUN),
+                ENLIGHTENED_POTION
+            )
+        }
+
+        FabricPotionBrewingBuilder.BUILD.register { builder ->
+            builder.registerPotionRecipe(
+                Potions.POISON,
+                Ingredient.of(Items.RED_MUSHROOM),
+                HYPNOTIZE_POTION
+            )
+        }
+
+        FabricPotionBrewingBuilder.BUILD.register { builder ->
+            builder.registerPotionRecipe(
+                Potions.AWKWARD,
+                Ingredient.of(Items.WET_SPONGE),
+                DRENCHED_POTION
+            )
+        }
+
+        FabricPotionBrewingBuilder.BUILD.register { builder ->
+            builder.registerPotionRecipe(
+                Potions.AWKWARD,
+                Ingredient.of(Blocks.ICE.asItem()),
+                CHILLED_POTION
+            )
+        }
+
+//        FabricPotionBrewingBuilder.BUILD.register { builder ->
+//            builder.registerPotionRecipe(
+//                AWAKENING_POTION,
+//                Ingredient.of(ItemStack(Items.POTION).apply { set(DataComponents.POTION_CONTENTS, PotionContents(ENLIGHTENED_POTION)) }.item),
+//                SPROUTING_POTION
+//            )
+//        }
 
     }
 }

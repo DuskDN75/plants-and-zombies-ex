@@ -4,6 +4,7 @@ import duskdn.plantz_ex.init.PazBlocks;
 import duskdn.plantz_ex.init.PazItems;
 import duskdn.plantz_ex.init.PazSounds;
 import duskdn.plantz_ex.init.PazTags;
+import duskdn.plantz_ex.util.MobHatWeights;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -210,25 +211,62 @@ public class MobMixin {
 
     }
 
-    @Inject(method = "finalizeSpawn", at = @At("HEAD"), cancellable = true)
-    public void addArmor(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnReason, SpawnGroupData groupData, CallbackInfoReturnable<SpawnGroupData> cir) {
+    @Inject(method = "finalizeSpawn", at = @At("TAIL"))
+    public void plantzex$addArmor(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnReason, SpawnGroupData groupData, CallbackInfoReturnable<SpawnGroupData> cir) {
 
         if (spawnReason == EntitySpawnReason.COMMAND || spawnReason == EntitySpawnReason.SPAWN_ITEM_USE || spawnReason == EntitySpawnReason.MOB_SUMMONED) return;
 
-        LivingEntity self = (LivingEntity)(Object)this;
+        Mob self = (Mob) (Object)this;
 
-        if (self instanceof ZombifiedPiglin zombie) {
+        if (!(self.level() instanceof ServerLevel serverLevel)) return;
 
-            if (zombie.getItemBySlot(EquipmentSlot.HEAD).isEmpty()){
-                if (zombie.getRandom().nextFloat() < 0.25) {
-                    zombie.setItemSlot(EquipmentSlot.HEAD, PazBlocks.CONE.asItem().getDefaultInstance());
-                    zombie.setDropChance(EquipmentSlot.HEAD, 0.2f);
+        boolean getsArmor = self.is(PazTags.EntityTypes.GETS_ARMOR);
+
+        if (getsArmor) {
+
+            var headSlot = self.getItemBySlot(EquipmentSlot.HEAD);
+
+            var mainHandSlot = self.getItemBySlot(EquipmentSlot.MAINHAND);
+
+            var shouldGiveFlag = false;
+
+            double screenDoorChance = 0.05;
+
+            MobHatWeights.getRandomizer().getRandom(self.getRandom());
+
+            if (self.getRandom().nextFloat() < 0.25 && headSlot.isEmpty()) {
+                self.setItemSlot(EquipmentSlot.HEAD, PazBlocks.CONE.asItem().getDefaultInstance());
+                self.setDropChance(EquipmentSlot.HEAD, 0.2f);
+            }
+            else if (self.getRandom().nextFloat() < 0.1 && headSlot.isEmpty()) {
+                self.setItemSlot(EquipmentSlot.HEAD, Items.BUCKET.getDefaultInstance());
+                self.setDropChance(EquipmentSlot.HEAD, 0.1f);
+            }
+            else if (self.getRandom().nextFloat() < 0.1 && self.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
+                self.setItemSlot(EquipmentSlot.MAINHAND, PazBlocks.BRAINZ_FLAG.asItem().getDefaultInstance());
+                self.setDropChance(EquipmentSlot.MAINHAND, 0.01f);
+            }
+
+            if (headSlot.isEmpty()){
+                if (self.getRandom().nextFloat() < 0.25) {
+                    self.setItemSlot(EquipmentSlot.HEAD, PazBlocks.CONE.asItem().getDefaultInstance());
+                    self.setDropChance(EquipmentSlot.HEAD, 0.2f);
                 }
-                else if (zombie.getRandom().nextFloat() < 0.1 && zombie.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
-                    zombie.setItemSlot(EquipmentSlot.HEAD, Items.BUCKET.getDefaultInstance());
+                else if (self.getRandom().nextFloat() < 0.1 && self.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
+                    self.setItemSlot(EquipmentSlot.HEAD, Items.BUCKET.getDefaultInstance());
+                    self.setDropChance(EquipmentSlot.HEAD, 0.1f);
                 }
-                else if (zombie.getRandom().nextFloat() < 0.1 && zombie.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
-                    zombie.setItemSlot(EquipmentSlot.MAINHAND, PazBlocks.BRAINZ_FLAG.asItem().getDefaultInstance());
+                else if (self.getRandom().nextFloat() < 0.1 && self.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
+                    self.setItemSlot(EquipmentSlot.MAINHAND, PazBlocks.BRAINZ_FLAG.asItem().getDefaultInstance());
+                    self.setDropChance(EquipmentSlot.MAINHAND, 0.01f);
+                }
+            }
+
+            if (mainHandSlot.isEmpty()) {
+
+                if (self.getRandom().nextFloat() < screenDoorChance) {
+                    setItemSlot(EquipmentSlot.MAINHAND, PazBlocks.SCREEN_DOOR.asItem().defaultInstance)
+                    setDropChance(EquipmentSlot.MAINHAND, 0.1f)
                 }
             }
 
@@ -240,7 +278,7 @@ public class MobMixin {
     int waterTime = -1;
 
     @Inject(method = "tick", at = @At(value = "TAIL"))
-    private void plantz$addDuckyTube(CallbackInfo ci) {
+    private void plantzex$addDuckyTube(CallbackInfo ci) {
         var self = (Mob) (Object) this;
 
         if (!(self.level() instanceof ServerLevel level)) return;
@@ -248,20 +286,22 @@ public class MobMixin {
         boolean inWater = self.isEyeInFluid(FluidTags.WATER);
         boolean inLava = self.isEyeInFluid(FluidTags.LAVA);
 
-        if ((inWater || inLava) && self.is(PazTags.EntityTypes.GETS_DUCKY_TUBE)) {
+        boolean getsDuckyTube = self.is(PazTags.EntityTypes.GETS_DUCKY_TUBE);
+
+        if ((inWater || inLava) && getsDuckyTube) {
             waterTime++;
             if (waterTime>=250) {
 
                 debugPrint("WATER TIME IS "+waterTime);
 
                 var currentLegs = self.getItemBySlot(EquipmentSlot.LEGS);
-                var dropChance = self.getDropChances().byEquipment(EquipmentSlot.LEGS);
-                if (!currentLegs.isEmpty() && ((double) max(self.getRandom().nextFloat() - 0.1f, 0.0f)) < dropChance) {
-                    if (level!=null) self.spawnAtLocation(level, currentLegs);
-                }
+//                if (!currentLegs.isEmpty() && ((double) max(self.getRandom().nextFloat() - 0.1f, 0.0f)) < dropChance) {
+//                    if (level!=null) self.spawnAtLocation(level, currentLegs);
+//                }
 
-                if (self.getItemBySlot(EquipmentSlot.LEGS).isEmpty()) {
+                if (currentLegs.isEmpty()) {
                     self.setItemSlot(EquipmentSlot.LEGS, (inWater ? PazItems.DUCKY_TUBE : PazItems.OBSIDIAN_DUCKY_TUBE).getDefaultInstance());
+                    self.setDropChance(EquipmentSlot.LEGS, 0.2f);
                 }
 
             }

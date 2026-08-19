@@ -3,6 +3,7 @@
     "minecraft:flower_forest",
     "minecraft:plains",
     "minecraft:sunflower_plains",
+    "plantz_ex:graveyard",
     {
       "id": "#c:is_savanna",
       "required": false

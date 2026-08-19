@@ -1,7 +1,7 @@
 {
   "values": [
     {
-      "id": "#c:is_wet/overworld",
+      "id": "#c:is_aquatic",
       "required": false
     }
   ]

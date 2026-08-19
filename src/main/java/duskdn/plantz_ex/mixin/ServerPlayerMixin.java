@@ -29,7 +29,7 @@ public abstract class ServerPlayerMixin {
 
     @Inject(method = "loadAndSpawnParentVehicle", at = @At(value = "HEAD"))
     public void respawnAttachedPlant(ValueInput playerInput, CallbackInfo ci) {
-        if ( !((PlantHeadAttachment) this).plantz$getPlantData().isEmpty() ) {
+        if ( !((PlantHeadAttachment) this).plantzex$getPlantData().isEmpty() ) {
             Optional<ValueInput> rootTag = playerInput.child("plantz_ex:AttachedPlant");
             if (rootTag.isPresent()) {
                 ServerLevel serverLevel = this.level();
@@ -47,7 +47,7 @@ public abstract class ServerPlayerMixin {
     @Inject(method = "teleport(Lnet/minecraft/world/level/portal/TeleportTransition;)Lnet/minecraft/server/level/ServerPlayer;", at = @At(value = "RETURN"))
     public void teleportAttachedPlant(TeleportTransition transition, CallbackInfoReturnable<ServerPlayer> cir) {
         ServerPlayer targetPlayer = cir.getReturnValue() != null ? cir.getReturnValue() : (ServerPlayer) (Object) this;
-        if ( ((PlantHeadAttachment) this).plantz$getPlant() instanceof PazPlant plantAttachment ) {
+        if ( ((PlantHeadAttachment) this).plantzex$getPlant() instanceof PazPlant plantAttachment ) {
                 plantAttachment.detachFromEntity();
                 plantAttachment.teleport(
                     new TeleportTransition(

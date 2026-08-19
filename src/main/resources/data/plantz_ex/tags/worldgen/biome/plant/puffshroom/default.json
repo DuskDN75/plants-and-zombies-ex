@@ -1,16 +1,13 @@
 {
   "values": [
     "minecraft:mushroom_fields",
+    "plantz_ex:graveyard",
     {
       "id": "#c:is_old_growth",
       "required": false
     },
     {
       "id": "#c:is_mushroom",
-      "required": false
-    },
-    {
-      "id": "#c:is_underground",
       "required": false
     },
     {
@@ -23,6 +20,12 @@
     },
     {
       "id": "#c:vegetation_dense",
+      "required": false
+    }
+  ],
+  "fabric:remove": [
+    {
+      "id": "#c:is_underground",
       "required": false
     }
   ]

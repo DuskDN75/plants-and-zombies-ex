@@ -47,6 +47,7 @@ object PazTags {
         @JvmField val CANNOT_HYPNOTIZE = tag("cannot_be_hypnotized")
         @JvmField val ZOMBIE_RAIDERS = tag("zombie_raider")
         @JvmField val GETS_DUCKY_TUBE = tag("gets_ducky_tube")
+        @JvmField val GETS_ARMOR = tag("gets_armor")
         @JvmField val ATTACKS_PLANTS = tag("attacks_plants")
         @JvmField val IGNORED_BY_PLANT_ATTACKERS = tag("ignored_by_plant_attackers")
         @JvmField val FLYING_ENEMY = tag("flying_enemy")
@@ -64,38 +65,55 @@ object PazTags {
     object Biomes {
         val GRAVESTONE_IGNORE_BRIGHTNESS = tag("gravestone_ignore_brightness")
 
-        val HAS_SUNFLOWER = tag("plant/has_sunflower")
-        val HAS_SUNFLOWER_ALT = tag("plant/has_sunflower_alt")
-        val HAS_PEASHOOTER = tag("plant/has_peashooter")
-        val HAS_WALLNUT = tag("plant/has_wallnut")
-        val HAS_CACTUS = tag("plant/has_cactus")
-        val HAS_LIGHTNING_REED = tag("plant/has_lightning_reed")
-        val HAS_CHERRYBOMB = tag("plant/has_cherrybomb")
-        val HAS_CHOMPER = tag("plant/has_chomper")
-        val HAS_COFFEE_BEAN = tag("plant/has_coffeebean")
-        val HAS_FIRE_PEASHOOTER = tag("plant/has_fire_peashooter")
-        val HAS_REPEATER = tag("plant/has_repeater")
-        val HAS_ICE_PEASHOOTER = tag("plant/has_ice_peashooter")
-        val HAS_CABBAGEPULT = tag("plant/has_cabbagepult")
-        val HAS_KERNELPULT = tag("plant/has_kernelpult")
-        val HAS_MELONPULT = tag("plant/has_melonpult")
-        val HAS_POTATOMINE = tag("plant/has_potatomine")
-        val HAS_BONK_CHOY = tag("plant/has_bonkchoy")
-        val HAS_TANGLE_KELP = tag("plant/has_tanglekelp")
-        val HAS_PUFFSHROOM = tag("plant/has_puffshroom")
-        val HAS_SUNSHROOM = tag("plant/has_sunshroom")
-        val HAS_SUNSHROOM_ALT = tag("plant/has_sunshroom_alt")
-        val HAS_FUMESHROOM = tag("plant/has_fumeshroom")
-        val HAS_HYPNOSHROOM = tag("plant/has_hypnoshroom")
-        val HAS_DOOM_SHROOM = tag("plant/has_doomshroom")
-        val HAS_WATER_PEASHOOTER_GROUND = tag("plant/has_water_peashooter_ground")
-        val HAS_WATER_PEASHOOTER_WATER = tag("plant/has_water_peashooter_water")
-        val HAS_LILYPAD = tag("plant/has_lilypad")
-        val HAS_SEA_SHROOM = tag("plant/has_seashroom")
-        val HAS_SCAREDYSHROOM = tag("plant/has_scaredyshroom")
-        val HAS_LAVALILY = tag("plant/has_lavalily")
-        val HAS_GRAVE_BUSTER = tag("plant/has_grave_buster")
-        val HAS_PLANTERN = tag("plant/has_plantern")
+        val HAS_SUNFLOWER = plantTag("sunflower")
+        val HAS_SUNFLOWER_ALT = plantTag("sunflower", "alt")
+
+        val HAS_PEASHOOTER = plantTag("peashooter")
+
+        val HAS_WALLNUT = plantTag("wallnut")
+        val HAS_CACTUS = plantTag("cactus")
+        val HAS_LIGHTNING_REED = plantTag("lightning_reed")
+        val HAS_CHERRYBOMB = plantTag("cherrybomb")
+        val HAS_CHOMPER = plantTag("chomper")
+        val HAS_COFFEE_BEAN = plantTag("coffeebean")
+        val HAS_FIRE_PEASHOOTER = plantTag("fire_peashooter")
+        val HAS_REPEATER = plantTag("repeater")
+        val HAS_ICE_PEASHOOTER = plantTag("ice_peashooter")
+        val HAS_CABBAGEPULT = plantTag("cabbagepult")
+        val HAS_KERNELPULT = plantTag("kernelpult")
+        val HAS_MELONPULT = plantTag("melonpult")
+        val HAS_POTATOMINE = plantTag("potatomine")
+        val HAS_BONK_CHOY = plantTag("bonkchoy")
+        val HAS_TANGLE_KELP = plantTag("tanglekelp")
+
+        val HAS_PUFFSHROOM = plantTag("puffshroom")
+        val HAS_PUFFSHROOM_CAVES = plantTag("puffshroom", "caves")
+
+        val HAS_SUNSHROOM = plantTag("sunshroom")
+        val HAS_SUNSHROOM_ALT = plantTag("sunshroom", "alt")
+
+        val HAS_FUMESHROOM = plantTag("fumeshroom")
+        val HAS_HYPNOSHROOM = plantTag("hypnoshroom")
+        val HAS_DOOM_SHROOM = plantTag("doomshroom")
+        val HAS_ICE_SHROOM = plantTag("doomshroom")
+
+        val HAS_WATER_PEASHOOTER_GROUND = plantTag("water_peashooter", "ground")
+        val HAS_WATER_PEASHOOTER_WATER = plantTag("water_peashooter", "water")
+
+        val HAS_LILYPAD = plantTag("lilypad")
+
+        val HAS_SEA_SHROOM = plantTag("seashroom")
+        val HAS_SEA_SHROOM_CAVES = plantTag("seashroom", "caves")
+
+        val HAS_SCAREDYSHROOM = plantTag("scaredyshroom")
+        val HAS_LAVALILY = plantTag("lavalily")
+        val HAS_SKY_PEASHOOTER = plantTag("sky_peashooter")
+        val HAS_GRAVE_BUSTER = plantTag("grave_buster")
+        val HAS_PLANTERN = plantTag("plantern")
+
+
+
+
 
         val COMMON_SPAWNS = tag("zombie/common_spawns")
         val WATER_SPAWNS = tag("zombie/water_spawns")
@@ -116,6 +134,8 @@ object PazTags {
         val HAS_BALLOON_ZOMBIE_ALT = tag("zombie/has_balloon_zombie_alt")
 
         private fun tag(name: String): TagKey<Biome>  = TagKey.create(Registries.BIOME, pazResource(name))
+
+        private fun plantTag(plant: String, type: String = "default"): TagKey<Biome> = tag("plant/$plant/$type")
     }
 
     fun initialize() {}

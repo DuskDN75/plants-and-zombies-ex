@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "fabric:type": "fabric:components",
+      "base": "minecraft:potion",
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "plantz_ex:enlightened"
+        }
+      },
+      "strict": false
+    },
+    {
+      "fabric:type": "fabric:components",
+      "base": "minecraft:potion",
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "plantz_ex:awakening"
+        }
+      },
+      "strict": false
+    },
+    "#minecraft:chicken_food",
+    "#minecraft:chicken_food"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "plantz_ex:sprouting"
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": "minecraft:paper",
+    "@": "plantz_ex:sun",
+    "*": {
+      "fabric:type": "fabric:components",
+      "base": "minecraft:potion",
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "plantz_ex:sprouting"
+        }
+      },
+      "strict": false
+    }
+  },
+  "pattern": [
+    "@#@",
+    "#*#",
+    "@#@"
+  ],
+  "result": {
+    "count": 1,
+    "id": "plantz_ex:seed_packet"
+  }
+}

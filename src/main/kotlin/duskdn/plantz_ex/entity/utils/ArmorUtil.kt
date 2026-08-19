@@ -17,17 +17,110 @@ import net.minecraft.sounds.SoundEvents
 import net.minecraft.stats.Stats
 import net.minecraft.tags.DamageTypeTags
 import net.minecraft.tags.EntityTypeTags
+import net.minecraft.util.RandomSource
+import net.minecraft.util.random.WeightedList
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.projectile.Projectile
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import kotlin.math.ceil
 
+enum class NullVariant(val item: Item?, val itemName: String?, val equipmentSlot: EquipmentSlot = EquipmentSlot.HEAD) {
+    NONE(null, "basic"),
+}
+
+enum class HatVariant(val item: Item?, val itemName: String?, val equipmentSlot: EquipmentSlot = EquipmentSlot.HEAD) {
+    CONE(PazBlocks.CONE.asItem(), "cone"),
+    BUCKET(Items.BUCKET, "bucket"),
+}
+
+enum class ShieldVariant(val item: Item?, val itemName: String?, val equipmentSlot: EquipmentSlot = EquipmentSlot.OFFHAND) {
+    SCREEN_DOOR(PazBlocks.SCREEN_DOOR.asItem(), "screen_door"),
+}
+
+enum class FlagVariant(val item: Item?, val itemName: String?, val equipmentSlot: EquipmentSlot = EquipmentSlot.MAINHAND) {
+    FLAG(PazBlocks.PLANTZ_FLAG.asItem(), "flag")
+}
+
+object MobHatWeights {
+
+    @JvmStatic
+    var randomizer: WeightedList<Any>
+
+    init {
+
+        val builder = WeightedList.builder<Any>().apply {
+            add(NullVariant.NONE, 400)
+            add(HatVariant.CONE, 200)
+            add(HatVariant.BUCKET, 100)
+        }
+
+        randomizer = builder.build()
+
+    }
+
+}
+
+object MobShieldWeights {
+
+    @JvmStatic
+    var randomizer: WeightedList<Any>
+
+    init {
+
+        val builder = WeightedList.builder<Any>().apply {
+            add(NullVariant.NONE, 500)
+            add(ShieldVariant.SCREEN_DOOR, 100)
+        }
+
+        randomizer = builder.build()
+
+    }
+
+}
+
+object MobFlagWeights {
+
+    @JvmStatic
+    var randomizer: WeightedList<Any>
+
+    init {
+
+        val builder = WeightedList.builder<Any>().apply {
+            add(NullVariant.NONE, 100)
+            add(FlagVariant.FLAG, 5)
+        }
+
+        randomizer = builder.build()
+
+    }
+
+}
+
 object ArmorUtil {
+
+    @JvmStatic
+    fun getArmor(mob: Mob, random: RandomSource): MutableList<Pair<EquipmentSlot, ItemStack>> {
+
+        val equipment: MutableList<Pair<EquipmentSlot, ItemStack>> = mutableListOf()
+
+        val mobHat = MobHatWeights.randomizer.getRandom(random)
+
+        val mobShield = MobShieldWeights.randomizer.getRandom(random)
+
+        val mobFlag = MobFlagWeights.randomizer.getRandom(random)
+
+        val randomCull: Float = 1.0f
+
+        if (mobFlag.)
+
+    }
 
     @JvmStatic
     fun checkForArmor(entity: LivingEntity): MutableList<Pair<EquipmentSlot, Pair<ItemStack, BlocksProjectileDamage>>> {

@@ -12,17 +12,17 @@ import org.spongepowered.asm.mixin.Unique;
 public abstract class BalloonMixin implements Leashable {
 
     @Unique
-    private Leashable.LeashData plantz$leashData;
+    private Leashable.LeashData plantzex$leashData;
 
     @Override
     @Nullable
     public Leashable.LeashData getLeashData() {
-        return this.plantz$leashData;
+        return this.plantzex$leashData;
     }
 
     @Override
     public void setLeashData(@Nullable Leashable.LeashData leashData) {
-        this.plantz$leashData = leashData;
+        this.plantzex$leashData = leashData;
     }
 }
 

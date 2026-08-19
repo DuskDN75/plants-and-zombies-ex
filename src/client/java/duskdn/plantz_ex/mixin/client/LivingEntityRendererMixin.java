@@ -37,7 +37,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     protected abstract boolean addLayer(RenderLayer<S, M> layer);
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void plantz$addDuckyTubeLayer(EntityRendererProvider.Context context, M model, float shadow, CallbackInfo ci) {
+    private void plantzex$addDuckyTubeLayer(EntityRendererProvider.Context context, M model, float shadow, CallbackInfo ci) {
         this.addLayer(new DuckyTubeRenderLayer<>(this));
         this.addLayer(new ObsidianDuckyTubeRenderLayer<>(this));
         this.addLayer(new DyeVatRenderLayer<>(this));
@@ -46,22 +46,22 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 
     @Inject(method = "extractRenderState*", at = @At("TAIL"))
     private void checkForEffects(T entity, S state, float partialTicks, CallbackInfo ci) {
-        boolean hasHypno = ((PazEntityData) entity).plantz$getHypnoId();
+        boolean hasHypno = ((PazEntityData) entity).plantzex$getHypnoId();
         state.setData(IS_HYPNOTIZED_KEY, hasHypno);
 
-        boolean hasChilled = ((PazEntityData) entity).plantz$getChilledId();
+        boolean hasChilled = ((PazEntityData) entity).plantzex$getChilledId();
         state.setData(IS_CHILLED_KEY, hasChilled);
 
-        boolean hasDrenched = ((PazEntityData) entity).plantz$getDrenchedId();
+        boolean hasDrenched = ((PazEntityData) entity).plantzex$getDrenchedId();
         state.setData(IS_DRENCHED_KEY, hasDrenched);
 
-        boolean hasFrozen = ((PazEntityData) entity).plantz$getFrozenId();
+        boolean hasFrozen = ((PazEntityData) entity).plantzex$getFrozenId();
         state.setData(IS_FROZEN_KEY, hasFrozen);
 
-        boolean hasEnlightened = ((PazEntityData) entity).plantz$getEnlightenedId();
+        boolean hasEnlightened = ((PazEntityData) entity).plantzex$getEnlightenedId();
         state.setData(IS_ENLIGHTENED_KEY, hasEnlightened);
 
-        Map<Integer, Integer> paintColors = ((PazEntityData) entity).plantz$getPaintedColors();
+        Map<Integer, Integer> paintColors = ((PazEntityData) entity).plantzex$getPaintedColors();
         state.setData(PAINT_COLORS_KEY, paintColors);
     }
 
@@ -84,7 +84,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 //            method = "submit*",
 //            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IIILnet/minecraft/client/renderer/texture/TextureAtlasSprite;ILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V")
 //    )
-//    private int plantz$applyTint(int tintedColor, S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
+//    private int plantzex$applyTint(int tintedColor, S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
 //
 //        if (state.getDataOrDefault(IS_HYPNOTIZED_KEY, false)) {
 //            tintedColor = (ARGB.multiply(tintedColor, PLANTZ_HYPNO_TINT));
@@ -113,7 +113,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
             method = "submit*",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;multiply(II)I")
     )
-    private int plantz$applyTint(int tintedColor, S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
+    private int plantzex$applyTint(int tintedColor, S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
 
         if (state.getDataOrDefault(IS_HYPNOTIZED_KEY, false)) {
             tintedColor = ARGB.multiply(tintedColor, PLANTZ_HYPNO_TINT);

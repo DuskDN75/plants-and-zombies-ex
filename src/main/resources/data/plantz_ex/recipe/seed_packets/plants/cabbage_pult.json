@@ -1,0 +1,42 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "farmersdelight"
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "group": "seed_packets",
+  "category": "misc",
+  "key": {
+    "#": "farmersdelight:cabbage",
+    "@": "plantz_ex:seed_packet",
+    "$": {
+      "fabric:type": "fabric:components",
+      "base": "minecraft:potion",
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "plantz_ex:enlightened"
+        }
+      },
+      "strict": false
+    },
+    "*": "plantz_ex:sun"
+  },
+  "pattern": [
+    "*$*",
+    "#@#",
+    "*#*"
+  ],
+  "result": {
+    "count": 1,
+    "id": "plantz_ex:seed_packet",
+    "components": {
+      "minecraft:entity_data": {
+        "id": "plantz_ex:cabbagepult"
+      }
+    }
+  }
+}

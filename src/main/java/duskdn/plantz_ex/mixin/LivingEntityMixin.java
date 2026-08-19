@@ -83,56 +83,56 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
     private @Nullable PazPlant plantEntity = null;
 
     @Override
-    public @Nullable PazPlant plantz$getPlant() {
+    public @Nullable PazPlant plantzex$getPlant() {
         return plantEntity;
     }
 
     @Override
-    public void plantz$setPlant(@Nullable PazPlant value) {
+    public void plantzex$setPlant(@Nullable PazPlant value) {
         plantEntity = value;
     }
 
     @Override
-    public @NotNull CompoundTag plantz$getPlantData() {
+    public @NotNull CompoundTag plantzex$getPlantData() {
         return plantData;
     }
 
     @Override
-    public void plantz$setPlantData(@NotNull CompoundTag value) {
+    public void plantzex$setPlantData(@NotNull CompoundTag value) {
         plantData = value;
     }
 
     @Override
-    public boolean plantz$hasPlantOnHead() {
+    public boolean plantzex$hasPlantOnHead() {
         return plantEntity != null &&  plantEntity.isAlive() && !plantEntity.isRemoved();
     }
 
     @Unique
-    public boolean plantz$getHypnoId() {
+    public boolean plantzex$getHypnoId() {
         return ((Entity) (Object) this).getEntityData().get(DATA_HYPNO_ID);
     }
     @Unique
-    public boolean plantz$getChilledId() {
+    public boolean plantzex$getChilledId() {
         return ((Entity) (Object) this).getEntityData().get(DATA_CHILLED_ID);
     }
     @Unique
-    public boolean plantz$getFrozenId() {
+    public boolean plantzex$getFrozenId() {
         return ((Entity) (Object) this).getEntityData().get(DATA_FROZEN_ID);
     }
     @Unique
-    public void plantz$setFrozenId(boolean value) {
+    public void plantzex$setFrozenId(boolean value) {
         ((Entity) (Object) this).getEntityData().set(DATA_FROZEN_ID, value);
     }
     @Unique
-    public boolean plantz$getDrenchedId() {
+    public boolean plantzex$getDrenchedId() {
         return ((Entity) (Object) this).getEntityData().get(DATA_DRENCHED_ID);
     }
     @Unique
-    public boolean plantz$getEnlightenedId() {
+    public boolean plantzex$getEnlightenedId() {
         return ((Entity) (Object) this).getEntityData().get(DATA_ENLIGHTENED_ID);
     }
     @Unique
-    public Map<Integer, Integer> plantz$getPaintedColors() {
+    public Map<Integer, Integer> plantzex$getPaintedColors() {
         return ((Entity) (Object) this).getEntityData().get(DATA_PAINTED_COLORS);
     }
 
@@ -142,7 +142,7 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
     private float prevWaterMalus = 0f;
 
     @Inject(method = "onEquipItem", at = @At("TAIL"))
-    private void plantz$checkFloatTag(EquipmentSlot slot, ItemStack oldStack, ItemStack stack, CallbackInfo ci) {
+    private void plantzex$checkFloatTag(EquipmentSlot slot, ItemStack oldStack, ItemStack stack, CallbackInfo ci) {
         if ((LivingEntity) (Object) this instanceof PathfinderMob mob) {
             if (stack.is(PazItems.DUCKY_TUBE) && slot == EquipmentSlot.LEGS) {
                 prevFloatTag = mob.getNavigation().canFloat();
@@ -157,7 +157,7 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
     }
 
     @Inject(method = "aiStep", at = @At("HEAD"))
-    private void plantz$applyDuckyTubeBuoyancy(CallbackInfo ci) {
+    private void plantzex$applyDuckyTubeBuoyancy(CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
 
         var item = entity.getItemBySlot(EquipmentSlot.LEGS);
@@ -190,7 +190,7 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
     }
 
     @Inject(method = "aiStep", at = @At("TAIL"))
-    private void plantz$applyDuckyTubeSpeed(CallbackInfo ci) {
+    private void plantzex$applyDuckyTubeSpeed(CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
 
         var item = entity.getItemBySlot(EquipmentSlot.LEGS);
@@ -230,8 +230,8 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
         output.putBoolean("plantz_ex:IsFrozen", self.getEntityData().get(DATA_FROZEN_ID));
         output.putBoolean("plantz_ex:IsEnlightened", self.getEntityData().get(DATA_ENLIGHTENED_ID));
         output.store("plantz_ex:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT), self.getEntityData().get(DATA_PAINTED_COLORS));
-        if (!this.plantz$getPlantData().isEmpty()) {
-            output.store("plantz_ex:AttachedPlant", CompoundTag.CODEC, this.plantz$getPlantData());
+        if (!this.plantzex$getPlantData().isEmpty()) {
+            output.store("plantz_ex:AttachedPlant", CompoundTag.CODEC, this.plantzex$getPlantData());
         }
     }
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
@@ -243,7 +243,7 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
         self.getEntityData().set(DATA_FROZEN_ID, input.getBooleanOr("plantz_ex:IsFrozen", false));
         self.getEntityData().set(DATA_ENLIGHTENED_ID, input.getBooleanOr("plantz_ex:IsEnlightened", false));
         self.getEntityData().set(DATA_PAINTED_COLORS, input.read("plantz_ex:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT)).orElseGet(HashMap::new));
-        plantz$setPlantData(input.read("plantz_ex:AttachedPlant", CompoundTag.CODEC).orElseGet(CompoundTag::new));
+        plantzex$setPlantData(input.read("plantz_ex:AttachedPlant", CompoundTag.CODEC).orElseGet(CompoundTag::new));
         if (self instanceof PathfinderMob mob) {
             prevFloatTag = mob.getNavigation().canFloat();
             prevWaterMalus = mob.getPathfindingMalus(PathType.WATER);

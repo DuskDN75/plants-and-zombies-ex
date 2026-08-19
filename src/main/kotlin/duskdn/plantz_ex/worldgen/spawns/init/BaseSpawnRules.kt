@@ -34,7 +34,9 @@ abstract class BaseSpawnRules {
     ): Boolean {
         if (EntitySpawnReason.isSpawner(spawnReason)) return true
 
-        val context = SpawnContext(type, level as ServerLevel, spawnReason, pos, random)
+        if (level !is ServerLevel) return false
+
+        val context = SpawnContext(type, level, spawnReason, pos, random)
 
         for (rule in spawnRules) {
             if (!rule.testRule(context)) return false
