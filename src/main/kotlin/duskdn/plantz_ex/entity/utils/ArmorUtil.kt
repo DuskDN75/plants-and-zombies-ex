@@ -31,34 +31,44 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import kotlin.math.ceil
 
-enum class NullVariant(val item: Item?, val itemName: String?, val equipmentSlot: EquipmentSlot = EquipmentSlot.HEAD) {
-    NONE(null, "basic"),
+enum class ArmorVariant(val item: Item?, val itemName: String?, val equipmentSlot: EquipmentSlot? = null) {
+    NONE(null, "basic", null),
+    CONE(PazBlocks.CONE.asItem(), "cone", EquipmentSlot.HEAD),
+    BUCKET(Items.BUCKET, "bucket", EquipmentSlot.HEAD),
+    SCREEN_DOOR(PazBlocks.SCREEN_DOOR.asItem(), "screen_door", EquipmentSlot.OFFHAND),
+    FLAG(PazBlocks.PLANTZ_FLAG.asItem(), "flag", EquipmentSlot.MAINHAND)
 }
 
-enum class HatVariant(val item: Item?, val itemName: String?, val equipmentSlot: EquipmentSlot = EquipmentSlot.HEAD) {
-    CONE(PazBlocks.CONE.asItem(), "cone"),
-    BUCKET(Items.BUCKET, "bucket"),
+data object HatVariants {
+    val variants: List<ArmorVariant> = listOf(
+        ArmorVariant.CONE,
+        ArmorVariant.BUCKET
+    )
 }
 
-enum class ShieldVariant(val item: Item?, val itemName: String?, val equipmentSlot: EquipmentSlot = EquipmentSlot.OFFHAND) {
-    SCREEN_DOOR(PazBlocks.SCREEN_DOOR.asItem(), "screen_door"),
+data object ShieldVariants {
+    val variants: List<ArmorVariant> = listOf(
+        ArmorVariant.SCREEN_DOOR,
+    )
 }
 
-enum class FlagVariant(val item: Item?, val itemName: String?, val equipmentSlot: EquipmentSlot = EquipmentSlot.MAINHAND) {
-    FLAG(PazBlocks.PLANTZ_FLAG.asItem(), "flag")
+data object FlagVariants {
+    val variants: List<ArmorVariant> = listOf(
+        ArmorVariant.FLAG,
+    )
 }
 
 object MobHatWeights {
 
     @JvmStatic
-    var randomizer: WeightedList<Any>
+    var randomizer: WeightedList<ArmorVariant>
 
     init {
 
-        val builder = WeightedList.builder<Any>().apply {
-            add(NullVariant.NONE, 400)
-            add(HatVariant.CONE, 200)
-            add(HatVariant.BUCKET, 100)
+        val builder = WeightedList.builder<ArmorVariant>().apply {
+            add(ArmorVariant.NONE, 400)
+            add(ArmorVariant.CONE, 200)
+            add(ArmorVariant.BUCKET, 100)
         }
 
         randomizer = builder.build()
@@ -70,13 +80,13 @@ object MobHatWeights {
 object MobShieldWeights {
 
     @JvmStatic
-    var randomizer: WeightedList<Any>
+    var randomizer: WeightedList<ArmorVariant>
 
     init {
 
-        val builder = WeightedList.builder<Any>().apply {
-            add(NullVariant.NONE, 500)
-            add(ShieldVariant.SCREEN_DOOR, 100)
+        val builder = WeightedList.builder<ArmorVariant>().apply {
+            add(ArmorVariant.NONE, 500)
+            add(ArmorVariant.SCREEN_DOOR, 100)
         }
 
         randomizer = builder.build()
@@ -88,13 +98,13 @@ object MobShieldWeights {
 object MobFlagWeights {
 
     @JvmStatic
-    var randomizer: WeightedList<Any>
+    var randomizer: WeightedList<ArmorVariant>
 
     init {
 
-        val builder = WeightedList.builder<Any>().apply {
-            add(NullVariant.NONE, 100)
-            add(FlagVariant.FLAG, 5)
+        val builder = WeightedList.builder<ArmorVariant>().apply {
+            add(ArmorVariant.NONE, 100)
+            add(ArmorVariant.FLAG, 5)
         }
 
         randomizer = builder.build()
@@ -110,15 +120,23 @@ object ArmorUtil {
 
         val equipment: MutableList<Pair<EquipmentSlot, ItemStack>> = mutableListOf()
 
-        val mobHat = MobHatWeights.randomizer.getRandom(random)
+        val mobHat = MobHatWeights.randomizer.getRandom(random).get()
 
-        val mobShield = MobShieldWeights.randomizer.getRandom(random)
+        val mobShield = MobShieldWeights.randomizer.getRandom(random).get()
 
-        val mobFlag = MobFlagWeights.randomizer.getRandom(random)
+        val mobFlag = MobFlagWeights.randomizer.getRandom(random).get()
 
         val randomCull: Float = 1.0f
 
-        if (mobFlag.)
+        if (mobFlag.item != null && mobFlag.equipmentSlot != null) {
+
+            equipment.add(
+                mobFlag.equipmentSlot to mobFlag.item.defaultInstance
+            )
+
+        }
+
+        return equipment
 
     }
 
