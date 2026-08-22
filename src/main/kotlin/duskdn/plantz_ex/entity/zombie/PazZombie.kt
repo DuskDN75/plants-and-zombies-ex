@@ -16,6 +16,7 @@ import net.minecraft.tags.FluidTags
 import net.minecraft.util.RandomSource
 import net.minecraft.world.Difficulty
 import net.minecraft.world.DifficultyInstance
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.*
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
@@ -37,6 +38,7 @@ import net.minecraft.world.entity.npc.villager.AbstractVillager
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.ServerLevelAccessor
@@ -135,15 +137,24 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
     }
 
     override fun equipmentHasChanged(previous: ItemStack, current: ItemStack): Boolean {
-        if(mainHandItem.`is`(PazBlocks.SCREEN_DOOR.asItem())) {
+
+        val mainhandComponents = mainHandItem.components.get(PazComponents.BLOCKS_PROJECTILE_DAMAGE)
+
+        val offhandComponents = offhandItem.components.get(PazComponents.BLOCKS_PROJECTILE_DAMAGE)
+
+        if (mainhandComponents != null) {
             this.startUsingItem(usedItemHand)
             this.setLivingEntityFlag(LIVING_ENTITY_FLAG_IS_USING, true)
-        }
-        else if(mainHandItem.`is`(PazItems.NEWSPAPER)) {
+        } else if (offhandComponents != null) {
+            this.startUsingItem(InteractionHand.OFF_HAND)
+            this.setLivingEntityFlag(LIVING_ENTITY_FLAG_IS_USING, true)
+        } else if (mainHandItem.`is`(Items.SHIELD)) {
             this.startUsingItem(usedItemHand)
             this.setLivingEntityFlag(LIVING_ENTITY_FLAG_IS_USING, true)
-        }
-        else {
+        } else if (offhandItem.`is`(Items.SHIELD)) {
+            this.startUsingItem(InteractionHand.OFF_HAND)
+            this.setLivingEntityFlag(LIVING_ENTITY_FLAG_IS_USING, true)
+        } else {
             this.setLivingEntityFlag(LIVING_ENTITY_FLAG_IS_USING, false)
         }
 

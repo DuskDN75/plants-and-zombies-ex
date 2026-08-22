@@ -2,6 +2,7 @@ package duskdn.plantz_ex.entity.zombie
 
 import duskdn.plantz_ex.ai.ZombieState
 import duskdn.plantz_ex.entity.interfaces.IFloatingMob
+import duskdn.plantz_ex.entity.utils.ArmorVariant
 import duskdn.plantz_ex.init.PazBlocks
 import duskdn.plantz_ex.init.PazEntities
 import duskdn.plantz_ex.init.PazSounds
@@ -110,8 +111,28 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
     var spawnedBalloons: Boolean = false
 
     override fun spawnBalloons(count: Int) {
+
+        var countModifier: Int = 0
+
+        countModifier += when (getItemBySlot(EquipmentSlot.HEAD)) {
+            ArmorVariant.CONE.item!!.defaultInstance -> 3
+            ArmorVariant.BUCKET.item!!.defaultInstance -> 7
+            ArmorVariant.FOOTBALL_HELEMT.item!!.defaultInstance -> 7
+            else -> 0
+        }
+
+        countModifier += when (getItemBySlot(EquipmentSlot.OFFHAND)) {
+            ArmorVariant.SCREEN_DOOR.item!!.defaultInstance -> 5
+            else -> 0
+        }
+
+        countModifier += when (getItemBySlot(EquipmentSlot.MAINHAND)) {
+            ArmorVariant.FLAG.item!!.defaultInstance -> 5
+            else -> 0
+        }
+
         spawnedBalloons = true
-        super.spawnBalloons(count)
+        super.spawnBalloons(count + countModifier)
     }
 
     override fun tick() {
@@ -218,18 +239,6 @@ class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZO
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
         val data = super.finalizeSpawn(level, difficulty, spawnReason, groupData)
-
-        if (getItemBySlot(EquipmentSlot.HEAD).isEmpty && spawnReason != EntitySpawnReason.COMMAND){
-            if (random.nextFloat() < 0.25) {
-                balloonCount = 3
-                setItemSlot(EquipmentSlot.HEAD, PazBlocks.CONE.asItem().defaultInstance)
-                setDropChance(EquipmentSlot.HEAD, 0.2f)
-            }
-            else if (random.nextFloat() < 0.1 && getItemBySlot(EquipmentSlot.HEAD).isEmpty) {
-                balloonCount = 7
-                setItemSlot(EquipmentSlot.HEAD, Items.BUCKET.defaultInstance)
-            }
-        }
 
         if (level is ServerLevel) {
 

@@ -3,7 +3,10 @@ package duskdn.plantz_ex.ai.goal
 import duskdn.plantz_ex.init.PazSounds
 import duskdn.plantz_ex.util.applyImpulse
 import duskdn.plantz_ex.entity.plant.init.PazPlant
+import duskdn.plantz_ex.init.PazConfig.SHOW_DEBUG_INFO
+import duskdn.plantz_ex.util.blueDustParticle
 import duskdn.plantz_ex.util.debugPrint
+import duskdn.plantz_ex.util.trackVector
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.util.Mth
@@ -197,9 +200,9 @@ open class ProjectileAttackGoal(
         var alphaMult = 0.5
 
         if (target != lastTarget || targetDistance < lastTargetDistance) {
-            alphaMult= 5.0
+            alphaMult= 3.0
         } else {
-            alphaMult=0.5
+            alphaMult=0.2
         }
 
         val distanceChange = abs((lastTargetDistance - targetDistance))
@@ -241,7 +244,15 @@ open class ProjectileAttackGoal(
 //            debugPrint("vel=$targetMoveVelocity time=$time prediction=$predicted")
         }
 
-        return basePos.add(targetMoveVelocity.scale(time))
+        val targetPos = basePos.add(targetMoveVelocity.scale(time))
+
+        val testingPos = projectile.position().add(targetPos)
+
+        println("POS IS: $testingPos")
+
+        if (SHOW_DEBUG_INFO) trackVector(projectile.level(), blueDustParticle, testingPos)
+
+        return targetPos
     }
 
     /**

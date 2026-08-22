@@ -183,6 +183,10 @@ data class ServerConfig(
 )
 data class ClientConfig(
     var showDebugInfo: Boolean = false,
+
+    var showDebugPrints: Boolean = false,
+
+    var showDebugTrackers: Boolean = false,
 )
 
 object PazConfig {
@@ -243,6 +247,12 @@ object PazConfig {
 
     val SHOW_DEBUG_INFO: Boolean
         get() = client.showDebugInfo
+
+    val SHOW_DEBUG_PRINTS: Boolean
+        get() = client.showDebugPrints
+
+    val SHOW_DEBUG_TRACKERS: Boolean
+        get() = client.showDebugTrackers
 
     val COFFEE_BUFF_DURATION: Int
         get() = server.coffeeBuffDuration.coerceAtLeast(0)

@@ -49,7 +49,17 @@ object PazZombiesTab : PazCreativeTab() {
                     output.accept(PazItems.PIRATE_CAPTAIN_SPAWN_EGG)
 
                     // gnome
-                    if (parameters.hasPermissions()) output.accept(PazItems.GNOME_SPAWN_EGG)
+                    if (parameters.hasPermissions()) {
+
+                        output.accept(PazItems.GNOME_SPAWN_EGG)
+
+                        PazItems.BROWN_COAT_SCREEN_DOOR_VARIANTS_SPAWN_EGGS.forEach { output.accept(it) }
+
+                        PazItems.BROWN_COAT_FLAG_VARIANTS_SPAWN_EGGS.forEach { output.accept(it) }
+
+                        PazItems.BROWN_COAT_FLAG_SCREEN_DOOR_VARIANTS_SPAWN_EGGS.forEach { output.accept(it) }
+
+                    }
                 }
                 .build()
         )

@@ -30,7 +30,7 @@ object SpawnRules {
 
         val hasNearby = (level.getEntitiesOfClass(
             PazPlant::class.java,
-            AABB(pos).inflate(16.0, 8.0, 16.0)
+            AABB(pos).inflate(32.0, 8.0, 32.0)
         ) {
             it.tickCount > 0
         }.size > 10)
@@ -50,7 +50,7 @@ object SpawnRules {
 
         val hasNearby = (level.getEntitiesOfClass(
             PazPlant::class.java,
-            AABB(pos).inflate(16.0, 16.0, 16.0)
+            AABB(pos).inflate(32.0, 16.0, 32.0)
         ) {
             it.tickCount > 0
         }.size > 10)
@@ -70,7 +70,7 @@ object SpawnRules {
 
         val hasNearby = (level.getEntitiesOfClass(
             PazPlant::class.java,
-            AABB(pos).inflate(16.0, 8.0, 16.0)
+            AABB(pos).inflate(32.0, 32.0, 32.0)
         ) {
             it.tickCount > 0
         }.size > 10)

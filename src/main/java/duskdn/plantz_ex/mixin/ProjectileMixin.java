@@ -30,6 +30,7 @@ public class ProjectileMixin {
             if (!(entity.level() instanceof ServerLevel serverLevel)) return;
 
             var projectile = (Projectile) (Object) this;
+
             if (entity instanceof LivingEntity livingEntity) {
 
                 var armors = ArmorUtil.checkForArmor(livingEntity);
@@ -37,8 +38,6 @@ public class ProjectileMixin {
                 armors.removeIf(
                         armor -> !armor.getSecond().getSecond().getReflectsDamage()
                 );
-
-                debugPrint("ARMORS IS: "+armors);
 
                 if (armors.isEmpty()) return;
 
@@ -54,7 +53,16 @@ public class ProjectileMixin {
                     damage = pazProj.getDamage();
                 }
 
-                ArmorUtil.goThroughArmorsAndDamage(serverLevel, source, livingEntity, damage, armors, false);
+                boolean reflected = !ArmorUtil.goThroughArmorsAndDamage(serverLevel,
+                        source,
+                        livingEntity,
+                        damage,
+                        armors,
+                        false,
+                        hitResult.getLocation()
+                );
+
+                if (reflected) return;
 
                 var deflection = ProjectileDeflection.REVERSE;
                 deflection.deflect(projectile, entity, projectile.getRandom());

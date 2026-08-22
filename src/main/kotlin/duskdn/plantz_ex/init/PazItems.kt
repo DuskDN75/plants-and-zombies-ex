@@ -1,6 +1,7 @@
 package duskdn.plantz_ex.init
 
 import duskdn.plantz_ex.entity.plant.init.PazPlant
+import duskdn.plantz_ex.entity.utils.ArmorVariant
 import duskdn.plantz_ex.entity.zombie.HatVariant
 import duskdn.plantz_ex.item.*
 import duskdn.plantz_ex.item.component.BlocksProjectileDamage
@@ -210,7 +211,49 @@ object PazItems {
 
     @JvmField val BROWN_COAT_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
         PazEntities.BROWN_COAT,
-        "browncoat"
+        variants = ArmorVariant.defaultArmorVariantsWithNone,
+        folder = "browncoat"
+    )
+
+    @JvmField val BROWN_COAT_SCREEN_DOOR_VARIANTS_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
+        PazEntities.BROWN_COAT,
+        variants = listOf(ArmorVariant.CONE, ArmorVariant.BUCKET),
+        extraWorker = {
+            it.setItemSlot(
+                ArmorVariant.SCREEN_DOOR.equipmentSlot as EquipmentSlot,
+                ArmorVariant.SCREEN_DOOR.item!!.defaultInstance
+            )
+        },
+        folder = "browncoat/screen_door"
+    )
+
+    @JvmField val BROWN_COAT_FLAG_VARIANTS_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
+        PazEntities.BROWN_COAT,
+        variants = listOf(ArmorVariant.CONE, ArmorVariant.BUCKET),
+        extraWorker = {
+            it.setItemSlot(
+                ArmorVariant.FLAG.equipmentSlot as EquipmentSlot,
+                ArmorVariant.FLAG.item!!.defaultInstance
+            )
+        },
+        folder = "browncoat/flag"
+    )
+
+    @JvmField val BROWN_COAT_FLAG_SCREEN_DOOR_VARIANTS_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
+        PazEntities.BROWN_COAT,
+        variants = listOf(ArmorVariant.CONE, ArmorVariant.BUCKET),
+        extraWorker = {
+            it.setItemSlot(
+                ArmorVariant.SCREEN_DOOR.equipmentSlot as EquipmentSlot,
+                ArmorVariant.SCREEN_DOOR.item!!.defaultInstance
+            )
+
+            it.setItemSlot(
+                ArmorVariant.FLAG.equipmentSlot as EquipmentSlot,
+                ArmorVariant.FLAG.item!!.defaultInstance
+            )
+        },
+        folder = "browncoat/flag_screen_door"
     )
 
     @JvmField val NEWSPAPER_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.NEWSPAPER_ZOMBIE)
@@ -228,7 +271,8 @@ object PazItems {
 
     @JvmField val BALLOON_ZOMBIE_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
         PazEntities.BALLOON_ZOMBIE,
-        "balloon"
+        variants = ArmorVariant.defaultArmorVariantsWithNone,
+        folder = "balloon"
     )
 
     @JvmField val PIRATE_CAPTAIN_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.PIRATE_CAPTAIN)
@@ -298,66 +342,41 @@ object PazItems {
 
     private fun registerPazZombieWithVariants(
         type: EntityType<*>,
+        variants: List<ArmorVariant>,
         folder: String? = null,
         properties: Item.Properties = Item.Properties(),
         extraWorker: (LivingEntity) -> Unit = {},
+        prefix: String? = null
     ): MutableList<Item> {
 
         val spawnEggList: MutableList<Item> = mutableListOf()
 
         val entityId = EntityType.getKey(type).path
 
-        HatVariant.entries.forEach { hatVariant ->
+        val idPrefix = if (prefix != null) prefix + "_" else ""
+
+        variants.forEach { hatVariant ->
             spawnEggList.add(
                 registerPazZombieSpawnEgg(
                     type,
                     worker = {
 
-                        if (hatVariant.hat != null) {
+                        if (hatVariant.item != null && hatVariant.equipmentSlot != null) {
                             it.setItemSlot(
-                                EquipmentSlot.HEAD,
-                                hatVariant.hat.defaultInstance
+                                hatVariant.equipmentSlot,
+                                hatVariant.item.defaultInstance
                             )
                         }
 
                         extraWorker(it)
 
                     },
-                    customId = hatVariant.hatName,
+                    properties = properties,
+                    customId = idPrefix + hatVariant.itemName,
                     folder = folder
                 )
             )
         }
-
-        spawnEggList.add(
-            registerPazZombieSpawnEgg(
-                type,
-                worker = {
-                    it.setItemSlot(
-                        EquipmentSlot.MAINHAND,
-                        PazBlocks.BRAINZ_FLAG.asItem().defaultInstance
-                    )
-                    it
-                },
-                customId = "flag",
-                folder = folder
-            )
-        )
-
-        spawnEggList.add(
-            registerPazZombieSpawnEgg(
-                type,
-                worker = {
-                    it.setItemSlot(
-                        EquipmentSlot.MAINHAND,
-                        PazBlocks.SCREEN_DOOR.asItem().defaultInstance
-                    )
-                    it
-                },
-                customId = "screen_door",
-                folder = folder
-            )
-        )
 
         return spawnEggList
     }
@@ -403,6 +422,18 @@ object PazItems {
                 builder.set(DataComponents.MAX_STACK_SIZE, 1)
 
                 builder.set(DataComponents.DAMAGE, 0)
+            }
+        }
+
+        DefaultItemComponentEvents.MODIFY.register {
+            it.modify(Items.SHIELD) { builder ->
+                builder.set(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage(
+                    slot = EquipmentSlotGroup.OFFHAND,
+                    reflectsDamage = true,
+                    reflectDistance = -0.8,
+                    tanksDamage = false,
+                    mustBeUsing = true
+                ))
             }
         }
 

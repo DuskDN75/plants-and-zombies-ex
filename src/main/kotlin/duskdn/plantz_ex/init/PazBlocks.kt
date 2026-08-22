@@ -336,8 +336,9 @@ object PazBlocks {
             .component(DataComponents.MAX_STACK_SIZE, 1)
             .component(DataComponents.DAMAGE, 0)
             .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage(
-                slot = EquipmentSlotGroup.MAINHAND,
+                slot = EquipmentSlotGroup.OFFHAND,
                 reflectsDamage = true,
+                reflectDistance = -0.5,
                 tanksDamage = false,
                 mustBeUsing = true
             ))
@@ -345,8 +346,12 @@ object PazBlocks {
             .component(
                 DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.MAINHAND)
                     .setEquipSound(SoundEvents.SHIELD_BLOCK)
-                    .build()
-            ).component(
+                    .build())
+            .component(
+                DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.OFFHAND)
+                    .setEquipSound(SoundEvents.SHIELD_BLOCK)
+                    .build())
+            .component(
                 DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.builder()
                     .add(
                         Attributes.ARMOR,

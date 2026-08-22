@@ -1,6 +1,7 @@
 package duskdn.plantz_ex.util
 
 import duskdn.plantz_ex.init.PazConfig
+import net.fabricmc.loader.impl.lib.sat4j.core.Vec
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.DustParticleOptions
 import net.minecraft.server.level.ServerLevel
@@ -20,16 +21,16 @@ val yellowDustParticle = DustParticleOptions(ARGB.color(Vec3(1.0,0.8,0.2)), 2.0f
 
 val orangeDustParticle = DustParticleOptions(ARGB.color(Vec3(0.8,0.5,0.2)), 2.0f)
 
-fun trackVector(level: Level, dustParticle: DustParticleOptions = defaultDustParticle, targetPos: Vec3) {
+fun trackVector(level: Level, dustParticle: DustParticleOptions = defaultDustParticle, targetPos: Vec3, offsetPos: Vec3 = Vec3.ZERO) {
 
-    if (!PazConfig.SHOW_DEBUG_INFO) return
+    if (!PazConfig.SHOW_DEBUG_TRACKERS) return
 
     if (level.isClientSide) return
 
     (level as ServerLevel).sendParticles(
         dustParticle,
-        targetPos.x, targetPos.y, targetPos.z,
-        1, 0.0, 0.0, 0.0, 5.0
+        targetPos.x+offsetPos.x, targetPos.y+offsetPos.y, targetPos.z+offsetPos.z,
+        20, 0.0, 0.0, 0.0, 0.0
     )
 }
 
@@ -87,7 +88,7 @@ var Any.trackers: MutableList<DebugTracker>
 
 fun Any.updateTrackers(level: Level) {
 
-    if (!PazConfig.SHOW_DEBUG_INFO) return
+    if (!PazConfig.SHOW_DEBUG_TRACKERS) return
 
     val activeTrackers = entityTrackerCache[this] ?: return
     for (tracker in activeTrackers) {
@@ -98,7 +99,7 @@ fun Any.updateTrackers(level: Level) {
 
 fun Any.trackVariable(variable: String, color: Vec3 = Vec3(1.0, 1.0, 1.0), thing: Any = this) {
 
-    if (!PazConfig.SHOW_DEBUG_INFO) return
+    if (!PazConfig.SHOW_DEBUG_TRACKERS) return
 
     try {
         val tracker = DebugTracker(parent = thing, variable = variable, colorVec = color)
@@ -111,7 +112,7 @@ fun Any.trackVariable(variable: String, color: Vec3 = Vec3(1.0, 1.0, 1.0), thing
 }
 
 fun debugPrint(message: Any?) {
-    if (!PazConfig.SHOW_DEBUG_INFO) return
+    if (!PazConfig.SHOW_DEBUG_PRINTS) return
 
     println(message)
 }

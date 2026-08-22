@@ -1,5 +1,6 @@
 package duskdn.plantz_ex.worldgen.spawns.init
 
+import duskdn.plantz_ex.util.debugPrint
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
@@ -39,6 +40,9 @@ abstract class BaseSpawnRules {
         val context = SpawnContext(type, level, spawnReason, pos, random)
 
         for (rule in spawnRules) {
+
+            debugPrint(rule)
+
             if (!rule.testRule(context)) return false
         }
 

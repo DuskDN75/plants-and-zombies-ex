@@ -311,7 +311,7 @@ object PazEntities {
         )
     )
     @JvmField val PUFF_SHROOM: EntityType<PuffShroom> = registerPlant(
-        "puffshroom", EntityType.Builder.of(::PuffShroom, MobCategory.CREATURE),
+        "puffshroom", EntityType.Builder.of(::PuffShroom, MobCategory.MONSTER),
         width = 0.5f,
         height = 0.65f,
         eyeHeight = 0.3f,
@@ -322,7 +322,7 @@ object PazEntities {
         )
     )
     @JvmField val SCAREDY_SHROOM: EntityType<ScaredyShroom> = registerPlant(
-        "scaredyshroom", EntityType.Builder.of(::ScaredyShroom, MobCategory.CREATURE),
+        "scaredyshroom", EntityType.Builder.of(::ScaredyShroom, MobCategory.MONSTER),
         width = 0.5f,
         height = 0.9f,
         eyeHeight = 0.5f,
@@ -334,7 +334,7 @@ object PazEntities {
     )
     @JvmField val FUME_SHROOM: EntityType<FumeShroom> = registerPlant(
         "fumeshroom",
-        EntityType.Builder.of(::FumeShroom, MobCategory.CREATURE),
+        EntityType.Builder.of(::FumeShroom, MobCategory.MONSTER),
         width = 0.8f,
         height = 0.8f,
         attributes = PazPlant.Companion.PlantAttributes(

@@ -1,10 +1,10 @@
 package duskdn.plantz_ex.mixin;
 
+import duskdn.plantz_ex.entity.utils.ArmorUtil;
 import duskdn.plantz_ex.init.PazBlocks;
 import duskdn.plantz_ex.init.PazItems;
 import duskdn.plantz_ex.init.PazSounds;
 import duskdn.plantz_ex.init.PazTags;
-import duskdn.plantz_ex.util.MobHatWeights;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -224,51 +224,7 @@ public class MobMixin {
 
         if (getsArmor) {
 
-            var headSlot = self.getItemBySlot(EquipmentSlot.HEAD);
-
-            var mainHandSlot = self.getItemBySlot(EquipmentSlot.MAINHAND);
-
-            var shouldGiveFlag = false;
-
-            double screenDoorChance = 0.05;
-
-            MobHatWeights.getRandomizer().getRandom(self.getRandom());
-
-            if (self.getRandom().nextFloat() < 0.25 && headSlot.isEmpty()) {
-                self.setItemSlot(EquipmentSlot.HEAD, PazBlocks.CONE.asItem().getDefaultInstance());
-                self.setDropChance(EquipmentSlot.HEAD, 0.2f);
-            }
-            else if (self.getRandom().nextFloat() < 0.1 && headSlot.isEmpty()) {
-                self.setItemSlot(EquipmentSlot.HEAD, Items.BUCKET.getDefaultInstance());
-                self.setDropChance(EquipmentSlot.HEAD, 0.1f);
-            }
-            else if (self.getRandom().nextFloat() < 0.1 && self.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
-                self.setItemSlot(EquipmentSlot.MAINHAND, PazBlocks.BRAINZ_FLAG.asItem().getDefaultInstance());
-                self.setDropChance(EquipmentSlot.MAINHAND, 0.01f);
-            }
-
-            if (headSlot.isEmpty()){
-                if (self.getRandom().nextFloat() < 0.25) {
-                    self.setItemSlot(EquipmentSlot.HEAD, PazBlocks.CONE.asItem().getDefaultInstance());
-                    self.setDropChance(EquipmentSlot.HEAD, 0.2f);
-                }
-                else if (self.getRandom().nextFloat() < 0.1 && self.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
-                    self.setItemSlot(EquipmentSlot.HEAD, Items.BUCKET.getDefaultInstance());
-                    self.setDropChance(EquipmentSlot.HEAD, 0.1f);
-                }
-                else if (self.getRandom().nextFloat() < 0.1 && self.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
-                    self.setItemSlot(EquipmentSlot.MAINHAND, PazBlocks.BRAINZ_FLAG.asItem().getDefaultInstance());
-                    self.setDropChance(EquipmentSlot.MAINHAND, 0.01f);
-                }
-            }
-
-            if (mainHandSlot.isEmpty()) {
-
-                if (self.getRandom().nextFloat() < screenDoorChance) {
-                    setItemSlot(EquipmentSlot.MAINHAND, PazBlocks.SCREEN_DOOR.asItem().defaultInstance)
-                    setDropChance(EquipmentSlot.MAINHAND, 0.1f)
-                }
-            }
+            ArmorUtil.addArmor(self, spawnReason);
 
         }
 
