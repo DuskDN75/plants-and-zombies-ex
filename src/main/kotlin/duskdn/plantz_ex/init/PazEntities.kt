@@ -311,7 +311,7 @@ object PazEntities {
         )
     )
     @JvmField val PUFF_SHROOM: EntityType<PuffShroom> = registerPlant(
-        "puffshroom", EntityType.Builder.of(::PuffShroom, MobCategory.MONSTER),
+        "puffshroom", EntityType.Builder.of(::PuffShroom, MobCategory.CREATURE),
         width = 0.5f,
         height = 0.65f,
         eyeHeight = 0.3f,
@@ -322,7 +322,7 @@ object PazEntities {
         )
     )
     @JvmField val SCAREDY_SHROOM: EntityType<ScaredyShroom> = registerPlant(
-        "scaredyshroom", EntityType.Builder.of(::ScaredyShroom, MobCategory.MONSTER),
+        "scaredyshroom", EntityType.Builder.of(::ScaredyShroom, MobCategory.CREATURE),
         width = 0.5f,
         height = 0.9f,
         eyeHeight = 0.5f,
@@ -334,7 +334,7 @@ object PazEntities {
     )
     @JvmField val FUME_SHROOM: EntityType<FumeShroom> = registerPlant(
         "fumeshroom",
-        EntityType.Builder.of(::FumeShroom, MobCategory.MONSTER),
+        EntityType.Builder.of(::FumeShroom, MobCategory.CREATURE),
         width = 0.8f,
         height = 0.8f,
         attributes = PazPlant.Companion.PlantAttributes(
@@ -470,7 +470,7 @@ object PazEntities {
     // region Zombies
     @JvmField val BROWN_COAT: EntityType<BrownCoat> =  registerZombie(
         "browncoat",
-        EntityType.Builder.of(::BrownCoat, MobCategory.MONSTER)
+        EntityType.Builder.of(::BrownCoat, MobCategory.CREATURE)
             .sized(0.6f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
@@ -480,7 +480,7 @@ object PazEntities {
     )
     @JvmField val NEWSPAPER_ZOMBIE: EntityType<NewspaperZombie> =  registerZombie(
         "newspaper_zombie",
-        EntityType.Builder.of(::NewspaperZombie, MobCategory.MONSTER)
+        EntityType.Builder.of(::NewspaperZombie, MobCategory.CREATURE)
             .sized(0.6f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
@@ -490,7 +490,7 @@ object PazEntities {
     )
     @JvmField val DIGGER_ZOMBIE: EntityType<DiggerZombie> =  registerZombie(
         "digger_zombie",
-        EntityType.Builder.of(::DiggerZombie, MobCategory.MONSTER)
+        EntityType.Builder.of(::DiggerZombie, MobCategory.CREATURE)
             .sized(0.63f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
@@ -500,7 +500,7 @@ object PazEntities {
     )
     @JvmField val ENGINEER_ZOMBIE: EntityType<EngineerZombie> =  registerZombie(
         "engineer_zombie",
-        EntityType.Builder.of(::EngineerZombie, MobCategory.MONSTER)
+        EntityType.Builder.of(::EngineerZombie, MobCategory.CREATURE)
             .sized(0.63f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
@@ -510,7 +510,7 @@ object PazEntities {
     )
     @JvmField val ZOMBIE_YETI: EntityType<ZombieYeti> =  registerZombie(
         "zombie_yeti",
-        EntityType.Builder.of(::ZombieYeti, MobCategory.MONSTER)
+        EntityType.Builder.of(::ZombieYeti, MobCategory.CREATURE)
             .sized(1.25f, 2.6f)
             .clientTrackingRange(8),
         attributes = PazZombie.Companion.ZombieAttributes(
@@ -524,7 +524,7 @@ object PazEntities {
     )
     @JvmField val DISCO_ZOMBIE: EntityType<DiscoZombie> =  registerZombie(
         "disco_zombie",
-        EntityType.Builder.of(::DiscoZombie, MobCategory.MONSTER)
+        EntityType.Builder.of(::DiscoZombie, MobCategory.CREATURE)
             .sized(0.64f, 2.2f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
@@ -536,7 +536,7 @@ object PazEntities {
     )
     @JvmField val BACKUP_DANCER: EntityType<BackupDancer> =  registerZombie(
         "backup_dancer",
-        EntityType.Builder.of(::BackupDancer, MobCategory.MONSTER)
+        EntityType.Builder.of(::BackupDancer, MobCategory.CREATURE)
             .sized(0.64f, 1.96f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
@@ -547,7 +547,7 @@ object PazEntities {
     )
     @JvmField val ALL_STAR: EntityType<AllStar> =  registerZombie(
         "all_star",
-        EntityType.Builder.of(::AllStar, MobCategory.MONSTER)
+        EntityType.Builder.of(::AllStar, MobCategory.CREATURE)
             .sized(0.6f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
@@ -560,7 +560,7 @@ object PazEntities {
     )
     @JvmField val SOLDIER_ZOMBIE: EntityType<SoldierZombie> = registerZombie(
         "soldier_zombie",
-        EntityType.Builder.of(::SoldierZombie, MobCategory.MONSTER)
+        EntityType.Builder.of(::SoldierZombie, MobCategory.CREATURE)
             .sized(0.6f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
@@ -573,7 +573,7 @@ object PazEntities {
     )
     @JvmField val PIRATE_CAPTAIN: EntityType<PirateCaptain> =  registerZombie(
         "pirate_captain",
-        EntityType.Builder.of(::PirateCaptain, MobCategory.MONSTER)
+        EntityType.Builder.of(::PirateCaptain, MobCategory.CREATURE)
             .sized(0.6f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
@@ -587,7 +587,7 @@ object PazEntities {
     )
     @JvmField val PIRATE_CAPTAIN_GHOST: EntityType<PirateCaptainGhost> =  registerZombie(
         "pirate_captain_ghost",
-        EntityType.Builder.of(::PirateCaptainGhost, MobCategory.MONSTER)
+        EntityType.Builder.of(::PirateCaptainGhost, MobCategory.CREATURE)
             .sized(0.6f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
@@ -601,7 +601,7 @@ object PazEntities {
     )
     @JvmField val ROBO_ZOMBIE: EntityType<RoboZombie> =  registerZombie(
         "robo_zombie",
-        EntityType.Builder.of(::RoboZombie, MobCategory.MONSTER)
+        EntityType.Builder.of(::RoboZombie, MobCategory.CREATURE)
             .sized(1.3f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
@@ -617,7 +617,7 @@ object PazEntities {
     )
     @JvmField val SUPER_BRAINZ: EntityType<SuperBrainz> =  registerZombie(
         "super_brainz",
-        EntityType.Builder.of(::SuperBrainz, MobCategory.MONSTER)
+        EntityType.Builder.of(::SuperBrainz, MobCategory.CREATURE)
             .sized(1.0f, 2.2f)
             .eyeHeight(2.0f)
             .clientTrackingRange(8),
@@ -633,7 +633,7 @@ object PazEntities {
     )
     @JvmField val IMP: EntityType<Imp> =  registerZombie(
         "imp",
-        EntityType.Builder.of(::Imp, MobCategory.MONSTER)
+        EntityType.Builder.of(::Imp, MobCategory.CREATURE)
             .sized(0.45f, 0.95f)
             .passengerAttachments(2.075f)
             .ridingOffset(-0.7f)
@@ -647,7 +647,7 @@ object PazEntities {
     )
     @JvmField val GARGANTUAR: EntityType<Gargantuar> =  registerZombie(
         "gargantuar",
-        EntityType.Builder.of(::Gargantuar, MobCategory.MONSTER)
+        EntityType.Builder.of(::Gargantuar, MobCategory.CREATURE)
             .sized(1.7f, 3.2f)
             .passengerAttachments(2.0f)
             .clientTrackingRange(8),
@@ -665,7 +665,7 @@ object PazEntities {
     )
     @JvmField val BALLOON_ZOMBIE: EntityType<BalloonZombie> = registerZombie(
         "balloon_zombie",
-        EntityType.Builder.of(::BalloonZombie, MobCategory.MONSTER)
+        EntityType.Builder.of(::BalloonZombie, MobCategory.CREATURE)
             .sized(0.6f, 1.95f)
             .eyeHeight(1.74f)
             .clientTrackingRange(8),
@@ -692,7 +692,7 @@ object PazEntities {
 
     @JvmField val GNOME: EntityType<Gnome> =  registerGnome(
         "gnome",
-        EntityType.Builder.of(::Gnome, MobCategory.MONSTER)
+        EntityType.Builder.of(::Gnome, MobCategory.CREATURE)
             .sized(0.4f, 0.78f)
             .ridingOffset(-0.15f),
         attributes = createMobAttributes()
@@ -783,7 +783,7 @@ object PazEntities {
 
     private fun <T : Zombie> registerZombie(
         name: String,
-        builder: EntityType.Builder<T> = EntityType.Builder.createNothing(MobCategory.MONSTER),
+        builder: EntityType.Builder<T> = EntityType.Builder.createNothing(MobCategory.CREATURE),
         attributes: PazZombie.Companion.ZombieAttributes = PazZombie.Companion.ZombieAttributes()
     ): EntityType<T> {
         val type = register(name, builder
@@ -795,7 +795,7 @@ object PazEntities {
 
     private fun <T : Gnome> registerGnome(
         name : String,
-        builder: EntityType.Builder<T> = EntityType.Builder.createNothing(MobCategory.MONSTER),
+        builder: EntityType.Builder<T> = EntityType.Builder.createNothing(MobCategory.CREATURE),
         attributes: AttributeSupplier.Builder = createMobAttributes()
     ): EntityType<T> {
         val type = register(name, builder)
@@ -805,7 +805,7 @@ object PazEntities {
 
     private fun <T : Turret> registerTurret(
         name : String,
-        builder: EntityType.Builder<T> = EntityType.Builder.createNothing(MobCategory.MONSTER),
+        builder: EntityType.Builder<T> = EntityType.Builder.createNothing(MobCategory.CREATURE),
         attributes: AttributeSupplier.Builder = createMobAttributes()
     ): EntityType<T> {
         val type = register(name, builder

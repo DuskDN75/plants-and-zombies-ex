@@ -11,6 +11,8 @@ import duskdn.plantz_ex.worldgen.spawns.init.SpawnRule
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.tags.FluidTags
 import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.SpawnPlacements
+import net.minecraft.world.entity.animal.squid.GlowSquid
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LightLayer
 import net.minecraft.world.level.block.Blocks
@@ -30,12 +32,12 @@ object SpawnRules {
 
         val hasNearby = (level.getEntitiesOfClass(
             PazPlant::class.java,
-            AABB(pos).inflate(32.0, 8.0, 32.0)
+            AABB(pos).inflate(16.0, 8.0, 16.0)
         ) {
-            it.tickCount > 0
+            it.tickCount > 1
         }.size > 10)
 
-        return@SpawnRule (blockAtPos.getCollisionShape(level, pos.above()).isEmpty) && !hasNearby
+        return@SpawnRule (blockAtPos.getCollisionShape(level, pos).isEmpty) && !hasNearby
     }
 
     val IS_VALID_SPAWN_WATER = SpawnRule { context ->
@@ -50,7 +52,7 @@ object SpawnRules {
 
         val hasNearby = (level.getEntitiesOfClass(
             PazPlant::class.java,
-            AABB(pos).inflate(32.0, 16.0, 32.0)
+            AABB(pos).inflate(16.0, 16.0, 16.0)
         ) {
             it.tickCount > 0
         }.size > 10)
@@ -162,10 +164,20 @@ object SpawnRules {
     }
 
     val IS_DARK = SpawnRule { context ->
-        return@SpawnRule context.level.getBrightness(LightLayer.SKY, context.pos) < 10 || context.level.getBrightness(
-            LightLayer.BLOCK,
-            context.pos
-        ) < 10 || context.level.level.isDarkOutside
+
+        val skyLight = context.level.getBrightness(LightLayer.SKY, context.pos)
+
+        val blockLight = context.level.getBrightness(LightLayer.BLOCK, context.pos)
+
+        val darkOutside = context.level.level.isDarkOutside
+
+        val rawLight = context.level.level.getRawBrightness(context.pos, 0)
+
+        val isDark = skyLight <= 0
+
+        println("skyLight: $skyLight, blockLight: $blockLight, darkOutside: $darkOutside, rawLight: $rawLight, isDark: $isDark, pos: ${context.pos}")
+
+        return@SpawnRule isDark
     }
 
     val IS_LIGHT = SpawnRule { context ->

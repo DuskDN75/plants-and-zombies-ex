@@ -43,6 +43,8 @@ open class ProjectileAttackGoal(
 
     var targetMoveVelocity: Vec3 = Vec3(0.0, 0.0, 0.0)
 
+    var targetLastMoveVelocity: Vec3 = Vec3(0.0, 0.0, 0.0)
+
     var lastTarget: LivingEntity? = null
 
     var targetDistance: Double = 0.0
@@ -200,7 +202,7 @@ open class ProjectileAttackGoal(
         var alphaMult = 0.5
 
         if (target != lastTarget || targetDistance < lastTargetDistance) {
-            alphaMult= 3.0
+            alphaMult=3.0
         } else {
             alphaMult=0.2
         }
@@ -210,6 +212,8 @@ open class ProjectileAttackGoal(
         val distanceAlpha = Math.clamp(distanceChange*alphaMult,0.0,1.0)
 
         targetMoveVelocity = targetMoveVelocity.lerp(relativeVel, distanceAlpha)
+
+        targetLastMoveVelocity = targetMoveVelocity
 
 
     }
@@ -248,7 +252,7 @@ open class ProjectileAttackGoal(
 
         val testingPos = projectile.position().add(targetPos)
 
-        println("POS IS: $testingPos")
+        debugPrint("POS IS: $testingPos")
 
         if (SHOW_DEBUG_INFO) trackVector(projectile.level(), blueDustParticle, testingPos)
 

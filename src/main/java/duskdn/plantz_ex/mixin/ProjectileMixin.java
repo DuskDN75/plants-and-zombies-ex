@@ -2,6 +2,7 @@ package duskdn.plantz_ex.mixin;
 
 import duskdn.plantz_ex.entity.projectile.init.PazProjectile;
 import duskdn.plantz_ex.entity.utils.ArmorUtil;
+import duskdn.plantz_ex.entity.zombie.PazZombie;
 import duskdn.plantz_ex.init.PazDamageTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -31,7 +32,15 @@ public class ProjectileMixin {
 
             var projectile = (Projectile) (Object) this;
 
+            var deflection = ProjectileDeflection.REVERSE;
+
             if (entity instanceof LivingEntity livingEntity) {
+
+                if (entity instanceof PazZombie zombie && !zombie.getBalloons().isEmpty()) {
+                    deflection.deflect(projectile, entity, projectile.getRandom());
+                    cir.setReturnValue(deflection);
+                    cir.cancel();
+                }
 
                 var armors = ArmorUtil.checkForArmor(livingEntity);
 
@@ -64,7 +73,6 @@ public class ProjectileMixin {
 
                 if (reflected) return;
 
-                var deflection = ProjectileDeflection.REVERSE;
                 deflection.deflect(projectile, entity, projectile.getRandom());
                 cir.setReturnValue(deflection);
                 cir.cancel();

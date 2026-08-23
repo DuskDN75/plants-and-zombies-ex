@@ -59,6 +59,12 @@ object PazZombiesTab : PazCreativeTab() {
 
                         PazItems.BROWN_COAT_FLAG_SCREEN_DOOR_VARIANTS_SPAWN_EGGS.forEach { output.accept(it) }
 
+                        PazItems.BALLOON_ZOMBIE_SCREEN_DOOR_VARIANTS_SPAWN_EGGS.forEach { output.accept(it) }
+
+                        PazItems.BALLOON_ZOMBIE_FLAG_VARIANTS_SPAWN_EGGS.forEach { output.accept(it) }
+
+                        PazItems.BALLOON_ZOMBIE_FLAG_SCREEN_DOOR_VARIANTS_SPAWN_EGGS.forEach { output.accept(it) }
+
                     }
                 }
                 .build()

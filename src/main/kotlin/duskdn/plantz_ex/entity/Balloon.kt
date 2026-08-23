@@ -2,6 +2,7 @@ package duskdn.plantz_ex.entity
 
 import duskdn.plantz_ex.entity.plant.init.PazPlant.Companion.PEA_DAMAGE
 import duskdn.plantz_ex.entity.zombie.BalloonZombie
+import duskdn.plantz_ex.entity.zombie.PazZombie
 import duskdn.plantz_ex.init.PazDataSerializers.DATA_DYE_COLOR
 import duskdn.plantz_ex.init.PazEffects
 import duskdn.plantz_ex.init.PazServerParticles
@@ -76,10 +77,7 @@ class Balloon(
     override fun tick() {
 
         if (!level().isClientSide && firstTick) {
-
-            val randomPitch = random.nextInt(80,120).toFloat()/100
-
-            playSound(PazSounds.BALLOON_INFLATE, 1f, randomPitch)
+            makeSound(PazSounds.BALLOON_INFLATE)
         }
 
         super.tick()
@@ -123,22 +121,21 @@ class Balloon(
 
         val groundDistance = y - groundHeight
 
-        val groundPull = groundDistance / 100
-
-        val groundPullForce = groundPull.coerceIn(0.0, 1.0)
-
-//        debugPrint("groundHeight: $groundHeight, groundDistance: $groundDistance, groundPullForce: $groundPullForce")
-
-        val mult = if (holder.hasEffect(PazEffects.CHILLED)) 0.5 else 0.0
+        println("groundHeight: $groundHeight, groundDistance: $groundDistance")
 
         val crouchMultiplier = if (holder.isCrouching) 0.5 else 1.0
+        val jumpMultiplier = if (holder.isJumping) 2.0 else 1.0
         val gravityLift = holder.getAttributeValue(Attributes.GRAVITY) * HOLDER_GRAVITY_LIFT_MULTIPLIER
         val springLift = verticalStretch * HOLDER_PULL_STIFFNESS
-        var totalLift = ((gravityLift + springLift) * (crouchMultiplier - groundPullForce - mult))
+        var totalLift = ((gravityLift + springLift) * (crouchMultiplier * jumpMultiplier))
             .coerceAtMost(MAX_HOLDER_PULL_FORCE)
 
-        if (holder is BalloonZombie) {
-            totalLift *= if (groundDistance < 8 && groundHeight > -64.0) (1-groundDistance/8) else 0.0
+        println("TOTAL LIFT START IS: $totalLift")
+
+        if (holder is PazZombie) {
+            totalLift = if (groundDistance < 12 && groundHeight > -64 && holder.target == null) totalLift else gravityLift
+
+            println("TOTAL LIFT IS: $totalLift")
         }
 
         var currentYVelocity = holder.deltaMovement.y

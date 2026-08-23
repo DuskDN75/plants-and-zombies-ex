@@ -18,6 +18,10 @@ open class PlantSpawnRules: BaseSpawnRules() {
         return SpawnRules.IS_PLANTABLE_DEFAULT.testRule(context)
     }
 
+    open fun getExtraRule(context: SpawnContext): Boolean {
+        return true
+    }
+
     override fun addRules() {
         addRule { context ->
             getValidRule(context)
@@ -29,6 +33,10 @@ open class PlantSpawnRules: BaseSpawnRules() {
 
         addRule { context ->
             getPlantableRule(context)
+        }
+
+        addRule { context ->
+            getExtraRule(context)
         }
     }
 

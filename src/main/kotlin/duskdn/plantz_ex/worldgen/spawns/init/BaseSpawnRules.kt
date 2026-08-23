@@ -35,7 +35,9 @@ abstract class BaseSpawnRules {
     ): Boolean {
         if (EntitySpawnReason.isSpawner(spawnReason)) return true
 
-        if (level !is ServerLevel) return false
+        if (level !is ServerLevel) {
+            return false
+        }
 
         val context = SpawnContext(type, level, spawnReason, pos, random)
 
@@ -43,7 +45,11 @@ abstract class BaseSpawnRules {
 
             debugPrint(rule)
 
-            if (!rule.testRule(context)) return false
+            val ruleResult = rule.testRule(context)
+
+            println("RULE RESULT IS: $ruleResult")
+
+            if (!ruleResult) return false
         }
 
         return true

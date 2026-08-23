@@ -81,6 +81,7 @@ import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.LightLayer
 import net.minecraft.world.level.ServerLevelAccessor
@@ -176,6 +177,10 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
                     .add(Attributes.SCALE, scale)
             }
         }
+    }
+
+    override fun checkSpawnRules(level: LevelAccessor, spawnReason: EntitySpawnReason): Boolean {
+        return true
     }
 
     fun spawnParticle(

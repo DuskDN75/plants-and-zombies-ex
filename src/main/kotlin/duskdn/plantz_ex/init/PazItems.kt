@@ -215,6 +215,33 @@ object PazItems {
         folder = "browncoat"
     )
 
+    @JvmField val NEWSPAPER_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.NEWSPAPER_ZOMBIE)
+    @JvmField val DIGGER_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.DIGGER_ZOMBIE)
+    @JvmField val ENGINEER_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.ENGINEER_ZOMBIE)
+    @JvmField val ZOMBIE_YETI_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.ZOMBIE_YETI)
+    @JvmField val DISCO_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.DISCO_ZOMBIE)
+    @JvmField val BACKUP_DANCER_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.BACKUP_DANCER)
+    @JvmField val ALL_STAR_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.ALL_STAR)
+    @JvmField val SOLDIER_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.SOLDIER_ZOMBIE)
+    @JvmField val ROBO_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.ROBO_ZOMBIE)
+    @JvmField val SUPER_BRAINZ_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.SUPER_BRAINZ)
+    @JvmField val IMP_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.IMP)
+    @JvmField val GARGANTUAR_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.GARGANTUAR)
+
+    @JvmField val BALLOON_ZOMBIE_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
+        PazEntities.BALLOON_ZOMBIE,
+        variants = ArmorVariant.defaultArmorVariantsWithNone,
+        folder = "balloon"
+    )
+
+    @JvmField val PIRATE_CAPTAIN_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.PIRATE_CAPTAIN)
+
+    @JvmField val GNOME_SPAWN_EGG: Item = registerPazSpawnEgg(
+        PazEntities.GNOME,
+        folder="gnome"
+    )
+
+    // region EXTRA BROWN COAT VARIANTS
     @JvmField val BROWN_COAT_SCREEN_DOOR_VARIANTS_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
         PazEntities.BROWN_COAT,
         variants = listOf(ArmorVariant.CONE, ArmorVariant.BUCKET),
@@ -241,7 +268,7 @@ object PazItems {
 
     @JvmField val BROWN_COAT_FLAG_SCREEN_DOOR_VARIANTS_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
         PazEntities.BROWN_COAT,
-        variants = listOf(ArmorVariant.CONE, ArmorVariant.BUCKET),
+        variants = listOf(ArmorVariant.NONE, ArmorVariant.CONE, ArmorVariant.BUCKET),
         extraWorker = {
             it.setItemSlot(
                 ArmorVariant.SCREEN_DOOR.equipmentSlot as EquipmentSlot,
@@ -255,31 +282,48 @@ object PazItems {
         },
         folder = "browncoat/flag_screen_door"
     )
+    // endregion
 
-    @JvmField val NEWSPAPER_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.NEWSPAPER_ZOMBIE)
-    @JvmField val DIGGER_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.DIGGER_ZOMBIE)
-    @JvmField val ENGINEER_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.ENGINEER_ZOMBIE)
-    @JvmField val ZOMBIE_YETI_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.ZOMBIE_YETI)
-    @JvmField val DISCO_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.DISCO_ZOMBIE)
-    @JvmField val BACKUP_DANCER_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.BACKUP_DANCER)
-    @JvmField val ALL_STAR_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.ALL_STAR)
-    @JvmField val SOLDIER_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.SOLDIER_ZOMBIE)
-    @JvmField val ROBO_ZOMBIE_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.ROBO_ZOMBIE)
-    @JvmField val SUPER_BRAINZ_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.SUPER_BRAINZ)
-    @JvmField val IMP_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.IMP)
-    @JvmField val GARGANTUAR_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.GARGANTUAR)
-
-    @JvmField val BALLOON_ZOMBIE_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
-        PazEntities.BALLOON_ZOMBIE,
-        variants = ArmorVariant.defaultArmorVariantsWithNone,
-        folder = "balloon"
+    // region EXTRA BALLOON ZOMBIE VARIANTS
+    @JvmField val BALLOON_ZOMBIE_SCREEN_DOOR_VARIANTS_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
+        PazEntities.BROWN_COAT,
+        variants = listOf(ArmorVariant.CONE, ArmorVariant.BUCKET),
+        extraWorker = {
+            it.setItemSlot(
+                ArmorVariant.SCREEN_DOOR.equipmentSlot as EquipmentSlot,
+                ArmorVariant.SCREEN_DOOR.item!!.defaultInstance
+            )
+        },
+        folder = "balloon/screen_door"
     )
 
-    @JvmField val PIRATE_CAPTAIN_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.PIRATE_CAPTAIN)
+    @JvmField val BALLOON_ZOMBIE_FLAG_VARIANTS_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
+        PazEntities.BROWN_COAT,
+        variants = listOf(ArmorVariant.CONE, ArmorVariant.BUCKET),
+        extraWorker = {
+            it.setItemSlot(
+                ArmorVariant.FLAG.equipmentSlot as EquipmentSlot,
+                ArmorVariant.FLAG.item!!.defaultInstance
+            )
+        },
+        folder = "balloon/flag"
+    )
 
-    @JvmField val GNOME_SPAWN_EGG: Item = registerPazSpawnEgg(
-        PazEntities.GNOME,
-        folder="gnome"
+    @JvmField val BALLOON_ZOMBIE_FLAG_SCREEN_DOOR_VARIANTS_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
+        PazEntities.BROWN_COAT,
+        variants = listOf(ArmorVariant.NONE, ArmorVariant.CONE, ArmorVariant.BUCKET),
+        extraWorker = {
+            it.setItemSlot(
+                ArmorVariant.SCREEN_DOOR.equipmentSlot as EquipmentSlot,
+                ArmorVariant.SCREEN_DOOR.item!!.defaultInstance
+            )
+
+            it.setItemSlot(
+                ArmorVariant.FLAG.equipmentSlot as EquipmentSlot,
+                ArmorVariant.FLAG.item!!.defaultInstance
+            )
+        },
+        folder = "balloon/flag_screen_door"
     )
 
     private fun registerItem(

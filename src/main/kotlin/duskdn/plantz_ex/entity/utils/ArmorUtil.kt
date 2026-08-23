@@ -60,7 +60,7 @@ enum class ArmorVariant(val item: Item?, val itemName: String?, val equipmentSlo
             FLAG
         )
 
-        val defaultArmorVariantsWithNone: List<ArmorVariant> = defaultArmorVariants.plus(NONE)
+        val defaultArmorVariantsWithNone: List<ArmorVariant> = listOf(NONE) + defaultArmorVariants
 
         fun getByItem(item: Item?): ArmorVariant = ITEM_KEY[item] ?: NONE
     }
@@ -95,7 +95,7 @@ object MobHatWeights {
         val builder = WeightedList.builder<ArmorVariant>().apply {
             add(ArmorVariant.NONE, 400)
             add(ArmorVariant.CONE, 200)
-            add(ArmorVariant.BUCKET, 100)
+            add(ArmorVariant.BUCKET, 20)
         }
 
         randomizer = builder.build()
