@@ -43,7 +43,7 @@ class LilyPad(type: EntityType<out CarrierPlant>, level: Level) : CarrierPlant(P
         super.aiStep()
     }
 
-    override fun canBreatheUnderwater(): Boolean = true
+    override fun canBreatheUnderwater(): Boolean = false
 
     override fun canSurviveOn(block: BlockState): Boolean {
         return waterSurvivalCheck(block)

@@ -23,9 +23,49 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.entity.projectile.Projectile
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.SnowLayerBlock
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.pathfinder.Path
 import net.minecraft.world.phys.Vec3
 import java.lang.reflect.Field
+
+object Utils {
+
+    @JvmStatic
+    fun subtractSnowLayerOrDelete(level: Level, pos: BlockPos, blockState: BlockState, amount: Int = 1) {
+
+        println("SUBSTRACTING SNOW LAYER FOR $blockState!")
+
+        if (blockState.`is`(Blocks.SNOW_BLOCK)) {
+
+            val subAmount = SnowLayerBlock.MAX_HEIGHT-amount
+
+            if (subAmount > 0) {
+                val newState = Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, subAmount)
+
+                level.setBlockAndUpdate(pos, newState)
+            } else {
+                level.destroyBlock(pos, false)
+            }
+        } else if (blockState.`is`(Blocks.SNOW)) {
+            val currentLayers = blockState.getValue(SnowLayerBlock.LAYERS)
+
+            val subAmount = currentLayers-amount
+
+            if (currentLayers > 1 && subAmount > 0) {
+                val newState = blockState.setValue(SnowLayerBlock.LAYERS, currentLayers-1)
+
+                level.setBlockAndUpdate(pos, newState)
+            } else {
+                level.destroyBlock(pos, false)
+            }
+        }
+
+    }
+}
 
 fun pazResource(path: String): Identifier = Identifier.fromNamespaceAndPath(MODID, path)
 

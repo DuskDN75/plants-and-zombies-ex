@@ -6,16 +6,18 @@ import duskdn.plantz_ex.init.NukeWaveParticleOptions
 import duskdn.plantz_ex.init.PazEntities
 import duskdn.plantz_ex.ai.goal.ExplodeGoal
 import duskdn.plantz_ex.entity.plant.init.ExplosivePlant
+import duskdn.plantz_ex.entity.plant.interfaces.IWarmingPlant
 import duskdn.plantz_ex.entity.plant.utils.fireSurvivalCheck
 import duskdn.plantz_ex.entity.plant.utils.mushroomSurvivalCheck
 import duskdn.plantz_ex.entity.plant.utils.sandSurvivalCheck
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class CherryBomb(type: EntityType<out ExplosivePlant>, level: Level) : ExplosivePlant(PazEntities.CHERRY_BOMB, level) {
+class CherryBomb(type: EntityType<out ExplosivePlant>, level: Level) : ExplosivePlant(PazEntities.CHERRY_BOMB, level), IWarmingPlant {
 
     override fun registerGoals() {
         super.registerGoals()
@@ -37,6 +39,7 @@ class CherryBomb(type: EntityType<out ExplosivePlant>, level: Level) : Explosive
                 level.sendParticles(NukeSmokeParticleOptions(color = 0xB87878, scale = 0.7f),
                     x, y+1, z, 16, 0.0, 0.5, 0.0, 0.0
                 )
+                meltSnowAround()
             }
         ))
     }

@@ -18,6 +18,9 @@ public interface LivingEntityAccessor {
     @Invoker("playHurtSound")
     void invokePlayHurtSound(DamageSource source);
 
+    @Invoker("setLivingEntityFlag")
+    void invokeSetLivingEntityFlag(int flag, boolean value);
+
     @Invoker("playSecondaryHurtSound")
     void invokePlaySecondaryHurtSound(DamageSource source);
 
@@ -38,5 +41,10 @@ public interface LivingEntityAccessor {
 
     @Accessor("lastHurt")
     void invokeSetLastHurt(float value);
+
+    @Accessor("LIVING_ENTITY_FLAG_IS_USING")
+    static int getLivingEntityFlagIsUsing() {
+        throw new AssertionError();
+    };
 
 }

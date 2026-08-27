@@ -21,8 +21,8 @@ data class PlantDataConfig(
 )
 
 object CooldownTime {
-    const val VSHORT = 2.0
-    const val SHORT = 5.0
+    const val VSHORT = 3.0
+    const val SHORT = 7.5
     const val MEDIUM = 10.0
     const val MLONG = 15.0
     const val LONG = 30.0
@@ -80,7 +80,7 @@ data class ServerConfig(
             CooldownTime.SHORT
         ),
         "plantz_ex:fire_peashooter"        to PlantDataConfig(
-            175,
+            225,
             CooldownTime.MEDIUM
         ),
         "plantz_ex:electric_peashooter"    to PlantDataConfig(
@@ -169,7 +169,7 @@ data class ServerConfig(
         ),
         "plantz_ex:plantern"               to PlantDataConfig(
             75,
-            CooldownTime.MEDIUM
+            CooldownTime.MLONG
         ),
         "plantz_ex:sky_peashooter"               to PlantDataConfig(
             75,

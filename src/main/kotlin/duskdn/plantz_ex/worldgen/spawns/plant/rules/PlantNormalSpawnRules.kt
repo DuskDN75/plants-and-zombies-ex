@@ -1,5 +1,6 @@
 package duskdn.plantz_ex.worldgen.spawns.plant.rules
 
+import duskdn.plantz_ex.util.debugPrint
 import duskdn.plantz_ex.worldgen.spawns.SpawnRules
 import duskdn.plantz_ex.worldgen.spawns.init.SpawnContext
 import duskdn.plantz_ex.worldgen.spawns.plant.init.PlantSpawnRules
@@ -25,7 +26,7 @@ open class PlantNormalSpawnRules(): PlantSpawnRules() {
 
         if (isMushroom) {
             val isDark = SpawnRules.IS_DARK.testRule(context)
-            println("IsDark: $isDark")
+            debugPrint("IsDark: $isDark")
             return isDark
         } else {
             return SpawnRules.ABOVE_SEALEVEL.testRule(context) && SpawnRules.IS_LIGHT.testRule(context)
@@ -35,7 +36,7 @@ open class PlantNormalSpawnRules(): PlantSpawnRules() {
     override fun getValidRule(context: SpawnContext): Boolean {
         val result = super.getValidRule(context)
 
-        println("VALID RULE RESULT IS: $result")
+        debugPrint("VALID RULE RESULT IS: $result")
 
         return result
     }
@@ -44,7 +45,7 @@ open class PlantNormalSpawnRules(): PlantSpawnRules() {
 
         val result = super.getAdjacentRule(context)
 
-        println("ADJACENT RULE RESULT IS: $result")
+        debugPrint("ADJACENT RULE RESULT IS: $result")
 
         return result
     }
@@ -52,7 +53,7 @@ open class PlantNormalSpawnRules(): PlantSpawnRules() {
     override fun getPlantableRule(context: SpawnContext): Boolean {
         val result = super.getPlantableRule(context)
 
-        println("PLANTABLE RULE RESULT IS: $result")
+        debugPrint("PLANTABLE RULE RESULT IS: $result")
 
         return result
     }
@@ -65,11 +66,11 @@ open class PlantNormalSpawnRules(): PlantSpawnRules() {
         random: RandomSource
     ): Boolean {
 
-        println("-----> BEGINNING CHECK FOR TYPE: $type ----->")
+        debugPrint("-----> BEGINNING CHECK FOR TYPE: $type ----->")
 
         val check = super.spawnCheck(type, level, spawnReason, pos, random)
 
-        println("-----> CHECK VALUE IS: $check FOR TYPE: $type AT $pos -----|")
+        debugPrint("-----> CHECK VALUE IS: $check FOR TYPE: $type AT $pos -----|")
 
         return check
     }

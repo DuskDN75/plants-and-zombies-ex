@@ -11,10 +11,6 @@ import net.minecraft.world.level.block.state.BlockState
 
 class LavaLily(type: EntityType<out CarrierPlant>, level: Level) : CarrierPlant(PazEntities.LAVALILY, level), IIgneousPlant {
 
-    override fun setRider(plant: PazPlant) {
-        super.setRider(plant)
-    }
-
     override fun attackGoals() {}
 
     override fun isPushedByFluid(): Boolean {

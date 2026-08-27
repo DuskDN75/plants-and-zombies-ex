@@ -47,7 +47,7 @@ abstract class BaseSpawnRules {
 
             val ruleResult = rule.testRule(context)
 
-            println("RULE RESULT IS: $ruleResult")
+            debugPrint("RULE RESULT IS: $ruleResult")
 
             if (!ruleResult) return false
         }

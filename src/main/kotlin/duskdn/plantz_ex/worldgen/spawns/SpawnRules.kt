@@ -1,18 +1,14 @@
 package duskdn.plantz_ex.worldgen.spawns
 
-import duskdn.plantz_ex.entity.plant.all.Plantern
-import duskdn.plantz_ex.entity.plant.all.Sunflower
-import duskdn.plantz_ex.entity.plant.all.mushrooms.SunShroom
 import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.entity.plant.utils.PlantSpawnUtils
 import duskdn.plantz_ex.entity.plant.utils.PlantSpawnUtils.hasAdjacentPlant
-import duskdn.plantz_ex.worldgen.spawns.SpawnRules.IS_VALID_SPAWN
+import duskdn.plantz_ex.init.PazTags
+import duskdn.plantz_ex.util.debugPrint
 import duskdn.plantz_ex.worldgen.spawns.init.SpawnRule
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.tags.FluidTags
 import net.minecraft.world.entity.EntitySpawnReason
-import net.minecraft.world.entity.SpawnPlacements
-import net.minecraft.world.entity.animal.squid.GlowSquid
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LightLayer
 import net.minecraft.world.level.block.Blocks
@@ -32,12 +28,12 @@ object SpawnRules {
 
         val hasNearby = (level.getEntitiesOfClass(
             PazPlant::class.java,
-            AABB(pos).inflate(16.0, 8.0, 16.0)
+            AABB(pos).inflate(32.0, 8.0, 32.0)
         ) {
             it.tickCount > 1
         }.size > 10)
 
-        return@SpawnRule (blockAtPos.getCollisionShape(level, pos).isEmpty) && !hasNearby
+        return@SpawnRule (blockAtPos.getCollisionShape(level, pos.above()).isEmpty) && !hasNearby
     }
 
     val IS_VALID_SPAWN_WATER = SpawnRule { context ->
@@ -52,7 +48,7 @@ object SpawnRules {
 
         val hasNearby = (level.getEntitiesOfClass(
             PazPlant::class.java,
-            AABB(pos).inflate(16.0, 16.0, 16.0)
+            AABB(pos).inflate(32.0, 16.0, 32.0)
         ) {
             it.tickCount > 0
         }.size > 10)
@@ -98,6 +94,21 @@ object SpawnRules {
         }.size > 10)
 
         return@SpawnRule blockAtPos.`is`(Blocks.AIR) && !hasNearby
+    }
+
+    val IS_ON_CARRIER = SpawnRule { context ->
+
+        val level = context.level
+        val pos = context.pos
+
+        val carriers = (level.getEntitiesOfClass(
+            PazPlant::class.java,
+            AABB(pos).inflate(0.0, 1.0, 0.0)
+        ) {
+            it.tickCount > 1 && it.`is`(PazTags.EntityTypes.CARRIER)
+        })
+
+        return@SpawnRule carriers.isNotEmpty() && PlantSpawnUtils.vehicleTypeTest(context.type, carriers.first().type)
     }
 
     val IS_PLANTABLE_DEFAULT = SpawnRule { context ->
@@ -175,7 +186,7 @@ object SpawnRules {
 
         val isDark = skyLight <= 0
 
-        println("skyLight: $skyLight, blockLight: $blockLight, darkOutside: $darkOutside, rawLight: $rawLight, isDark: $isDark, pos: ${context.pos}")
+        debugPrint("skyLight: $skyLight, blockLight: $blockLight, darkOutside: $darkOutside, rawLight: $rawLight, isDark: $isDark, pos: ${context.pos}")
 
         return@SpawnRule isDark
     }

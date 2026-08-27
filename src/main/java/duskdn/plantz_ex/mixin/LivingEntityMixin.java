@@ -4,9 +4,7 @@ import com.mojang.serialization.Codec;
 import duskdn.plantz_ex.effect.PaintedMobEffect;
 import duskdn.plantz_ex.entity.plant.init.PazPlant;
 import duskdn.plantz_ex.entity.utils.ArmorUtil;
-import duskdn.plantz_ex.init.PazEffects;
-import duskdn.plantz_ex.init.PazItems;
-import duskdn.plantz_ex.init.PazTags;
+import duskdn.plantz_ex.init.*;
 import duskdn.plantz_ex.util.PazEntityData;
 import duskdn.plantz_ex.util.PlantHeadAttachment;
 import net.minecraft.core.BlockPos;
@@ -17,17 +15,18 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.storage.ValueInput;
@@ -154,6 +153,37 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
                 mob.setPathfindingMalus(PathType.WATER, 0.0F);
             }
         }
+    }
+
+    @Inject(method = "equipmentHasChanged", at = @At("TAIL"))
+    public void updateEquipmentUsing(ItemStack previous, ItemStack current, CallbackInfoReturnable<Boolean> cir) {
+
+        LivingEntity entity = (LivingEntity) (Object) this;
+
+        LivingEntityAccessor accessor = (LivingEntityAccessor) (Object) this;
+
+        var mainhandComponents = entity.getMainHandItem().getComponents().get(PazComponents.BLOCKS_PROJECTILE_DAMAGE);
+
+        var offhandComponents = entity.getOffhandItem().getComponents().get(PazComponents.BLOCKS_PROJECTILE_DAMAGE);
+
+        var usingFlag = LivingEntityAccessor.getLivingEntityFlagIsUsing();
+
+        if (mainhandComponents != null) {
+            entity.startUsingItem(entity.getUsedItemHand());
+            accessor.invokeSetLivingEntityFlag(usingFlag, true);
+        } else if (offhandComponents != null) {
+            entity.startUsingItem(InteractionHand.OFF_HAND);
+            accessor.invokeSetLivingEntityFlag(usingFlag, true);
+        } else if (entity.getMainHandItem().is(Items.SHIELD)) {
+            entity.startUsingItem(entity.getUsedItemHand());
+            accessor.invokeSetLivingEntityFlag(usingFlag, true);
+        } else if (entity.getOffhandItem().is(Items.SHIELD)) {
+            entity.startUsingItem(InteractionHand.OFF_HAND);
+            accessor.invokeSetLivingEntityFlag(usingFlag, true);
+        } else {
+            accessor.invokeSetLivingEntityFlag(usingFlag, false);
+        }
+
     }
 
     @Inject(method = "aiStep", at = @At("HEAD"))

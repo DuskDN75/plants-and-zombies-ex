@@ -3,6 +3,7 @@ package duskdn.plantz_ex.entity.plant.all.mushrooms
 import duskdn.plantz_ex.init.PazEntities
 import duskdn.plantz_ex.init.PazSounds
 import duskdn.plantz_ex.ai.goal.ProjectileAttackGoal
+import duskdn.plantz_ex.entity.plant.init.AttackingPlant
 import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.entity.plant.utils.mushroomSurvivalCheck
 import duskdn.plantz_ex.entity.projectile.Spore
@@ -22,7 +23,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.AABB
 
-class ScaredyShroom(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntities.SCAREDY_SHROOM, level) {
+class ScaredyShroom(type: EntityType<out PazPlant>, level: Level) : AttackingPlant(PazEntities.SCAREDY_SHROOM, level) {
 
     companion object {
         val HIDING_FLAG: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(ScaredyShroom::class.java, EntityDataSerializers.BOOLEAN)
@@ -62,12 +63,6 @@ class ScaredyShroom(type: EntityType<out PazPlant>, level: Level) : PazPlant(Paz
         this.goalSelector.addGoal(3, HideGoal(this, LivingEntity::class.java) { target, _ ->
             (!isTame && target is Player)
                 || target is Enemy
-        })
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, _ ->
-            target !is PazPlant
-                    
-                    && (target is Zombie
-                    || (target is Enemy && isTame))
         })
     }
 

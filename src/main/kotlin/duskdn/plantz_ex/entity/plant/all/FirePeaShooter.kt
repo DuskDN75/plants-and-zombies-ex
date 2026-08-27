@@ -4,6 +4,7 @@ import duskdn.plantz_ex.init.PazEntities
 import duskdn.plantz_ex.init.PazServerParticles
 import duskdn.plantz_ex.ai.goal.ProjectileAttackGoal
 import duskdn.plantz_ex.entity.plant.init.PazPlant
+import duskdn.plantz_ex.entity.plant.interfaces.IWarmingPlant
 import duskdn.plantz_ex.entity.plant.utils.fireSurvivalCheck
 import duskdn.plantz_ex.entity.projectile.peas.PeaFire
 import net.minecraft.world.entity.EntityType
@@ -15,7 +16,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class FirePeaShooter(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntities.FIRE_PEA_SHOOTER, level) {
+class FirePeaShooter(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntities.FIRE_PEA_SHOOTER, level), IWarmingPlant {
     override fun registerGoals() {
         super.registerGoals()
 
@@ -37,6 +38,10 @@ class FirePeaShooter(type: EntityType<out PazPlant>, level: Level) : PazPlant(Pa
         return if (isAsleep) 8 else 15
     }
 
+    override fun getMeltRadius(): Double = 3.0
+
+    override fun getMeltChance(): Double = 0.2
+
     override fun tick() {
         super.tick()
 
@@ -51,6 +56,10 @@ class FirePeaShooter(type: EntityType<out PazPlant>, level: Level) : PazPlant(Pa
                 0.0, 0.0, 0.0,
             )
 
+        }
+
+        if (!level().isClientSide) {
+            meltSnowAround()
         }
     }
 

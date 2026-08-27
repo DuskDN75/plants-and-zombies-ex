@@ -20,6 +20,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.BlockTags
+import net.minecraft.tags.EntityTypeTags
 import net.minecraft.tags.FluidTags
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.Entity
@@ -49,9 +50,7 @@ object PlantSpawnUtils {
         carrier: PazPlant? = null
     ): InteractionResult {
 
-        debugPrint(carrier)
-
-        if (level !is ServerLevel || player == null) return InteractionResult.PASS
+        if (level.isClientSide || level !is ServerLevel || player == null) return InteractionResult.PASS
 
         val component = itemStack.get(DataComponents.ENTITY_DATA)
         val entityType = component?.type()
@@ -81,28 +80,18 @@ object PlantSpawnUtils {
             val spawnBlockCollisionShape = level.getBlockState(spawnPos).getCollisionShape(level, spawnPos).let { if (it.isEmpty.not()) it.bounds() else null }
             val entityBox = entity.boundingBox.move(spawnPos.multiply(-1))
 
-            val validGround = entity.onValidGround(spawnPos.x.toDouble(), spawnPos.y.toDouble(), spawnPos.z.toDouble(), carrier)
+            val (valid, reasons) = entity.validPlace(spawnPos.x.toDouble(), spawnPos.y.toDouble(), spawnPos.z.toDouble(), carrier)
 
-            val belowBlock = entity.getBlockBelow(spawnPos.x.toDouble(), spawnPos.y.toDouble(), spawnPos.z.toDouble())
+            val validPlace = valid && (spawnBlockCollisionShape == null || !entityBox.intersects(spawnBlockCollisionShape))
 
-            val canPlace = entity.canPlaceOn(belowBlock, carrier)
+            debugPrint("ValidGround: $validPlace")
 
-            val invalidSpace = !(validGround == null || checkFluid)
-                    || !(spawnBlockCollisionShape==null || !entityBox.intersects(spawnBlockCollisionShape))
+            if (!validPlace) {
 
-            debugPrint("ValidGround: $validGround, InvalidSpace: $invalidSpace")
-
-            if (validGround != null && canPlace) {
-
-                var messageKey = when {
-                    validGround.tooClose -> "message.plantz_ex.too_close"
-                    validGround.invalidCarrier -> "message.plantz_ex.cannot_be_placed"
+                val messageKey = when {
+                    reasons.tooClose -> "message.plantz_ex.too_close"
+                    reasons.invalidCarrier -> "message.plantz_ex.cannot_be_placed"
                     else -> {"message.plantz_ex.cannot_survive"}
-                }
-
-                when {
-                    validGround.tooClose -> messageKey = "message.plantz_ex.too_close"
-                    validGround.invalidCarrier -> messageKey = "message.plantz_ex.cannot_be_placed"
                 }
 
                 player.sendOverlayMessage(
@@ -123,7 +112,7 @@ object PlantSpawnUtils {
 
         entity.let {
             val existingPlants = level.getEntitiesOfClass(PazPlant::class.java, AABB(it.blockPosition()))
-            if (existingPlants.isNotEmpty() && (carrier == null || carrier::class.java == entity::class.java || carrier.passengers.isNotEmpty())) {
+            if (existingPlants.isNotEmpty() && (carrier == null || (carrier::class.java == entity::class.java || carrier.passengers.isNotEmpty()) )) {
                 player.sendOverlayMessage(
                     Component.translatable("message.plantz_ex.already_planted").withStyle(ChatFormatting.RED)
                 )
@@ -133,6 +122,9 @@ object PlantSpawnUtils {
 
         if (!level.addFreshEntity(entity)) {
             entity.discard()
+
+            debugPrint("DISCARDING ENTITY!")
+
             return InteractionResult.FAIL
         }
 
@@ -146,7 +138,7 @@ object PlantSpawnUtils {
         if (entity is TamableAnimal) entity.tame(player)
         level.gameEvent(player, GameEvent.ENTITY_PLACE, spawnPos)
 
-        debugPrint("CARRIER IS: $carrier")
+        debugPrint("(END) CARRIER IS: $carrier")
 
         if (carrier != null && carrier is CarrierPlant && entity is PazPlant) carrier.setRider(entity)
 
@@ -155,43 +147,23 @@ object PlantSpawnUtils {
         return InteractionResult.SUCCESS
     }
 
-    fun validVehicle(plant: PazPlant, carrier: PazPlant? = null): Boolean {
-
-        val plantType = plant.type
-
-        if (carrier == null) {
-//            debugPrint("Carrier doesn't exist")
-            return false
-        } // if no carrier, return true
-
-        val carrierType = carrier.type
-
-        if (carrier !is CarrierPlant) {
-//            debugPrint("Carrier is not a Carrier Plant")
-            return false
-        }
-
-        if (carrier.passengers.isNotEmpty() && carrier.firstPassenger != plant) {
-            return false
-        }
+    fun vehicleTypeTest(plantType: EntityType<*>, carrierType: EntityType<*>): Boolean {
 
         if (carrierType == plantType) {
+            debugPrint("CARRIER TYPE IS SAME AS PLANT TYPE")
             return false
         }
 
         val plantableOnWater = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(plantType).`is`(PazTags.EntityTypes.PLANTABLE_ON_WATER)
 
-        val amphibious = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(plantType).`is`(PazTags.EntityTypes.AMPHIBIOUS)
+        val plantableOnLava = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(plantType).`is`(PazTags.EntityTypes.PLANTABLE_ON_LAVA)
 
-//        debugPrint("PlantType: $plantType, carrier: $carrier, PlantableOnWater: $plantableOnWater, Amphibious: $amphibious")
+        val amphibious = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(plantType).`is`(PazTags.EntityTypes.AMPHIBIOUS)
 
         val waterAllowed = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(carrierType).`is`(PazTags.EntityTypes.CARRIER_ALLOW_WATER)
 
-        // if carrier and is not plantable on water, return true
-        // else only return true if the carrier allows water plants
         if (plantableOnWater && !amphibious) {
-//            debugPrint("Plant is plantable on water. Carrier allows water plants? : $waterAllowed")
-
+            debugPrint("PLANT IS PLANTABLE ON WATER AND IS NOT AMPHIBIOUS AND THE CARRIER ALLOWS WATER? $waterAllowed")
             return waterAllowed
         }
 
@@ -199,9 +171,32 @@ object PlantSpawnUtils {
             return false
         }
 
-//        debugPrint("Plant is normal")
+        return true
 
-        return carrier.checkRider(plant)
+    }
+
+    fun validVehicle(plant: PazPlant, carrier: PazPlant? = null): Boolean {
+
+        if (carrier == null) {
+            debugPrint("Carrier doesn't exist")
+            return false
+        } // if no carrier, return true
+
+        if (carrier !is CarrierPlant) {
+            debugPrint("Carrier is not a Carrier Plant")
+            return false
+        }
+
+        val deadPassengers = carrier.passengers.filter { !it.isAlive || it.isRemoved }
+
+        deadPassengers.forEach { it.stopRiding() }
+
+        if (carrier.passengers.isNotEmpty() && carrier.firstPassenger != plant) {
+            debugPrint("Carrier already has a passenger, and it is not this plant.")
+            return false
+        }
+
+        return vehicleTypeTest(plant.type, carrier.type)
 
     }
 
@@ -218,12 +213,12 @@ object PlantSpawnUtils {
     /**
      * Checks for nearby plants in a 3x3 radius, and excludes itself.
      */
-    fun hasAdjacentPlant(level: Level, pos: BlockPos, ogPlant: PazPlant? = null) : Boolean {
+    fun hasAdjacentPlant(level: Level, pos: BlockPos, ogPlant: PazPlant? = null, carrierPlant: PazPlant? = null) : Boolean {
 
         val searchBox = AABB(pos).inflate(1.0, 0.0, 1.0)
 
         val plants = level.getEntitiesOfClass(PazPlant::class.java, searchBox) { plant ->
-            plant.isAlive && (ogPlant != null && (ogPlant != plant && plant != ogPlant.vehicle) || plant.blockPosition() != pos)
+            plant.isAlive && ( ogPlant == null || (ogPlant != plant && plant != ogPlant.vehicle && plant.vehicle != ogPlant) ) && plant != carrierPlant
         }
 
         return plants.isNotEmpty()
@@ -299,9 +294,9 @@ object PlantSpawnUtils {
 }
 
 data class InvalidGroundReasons (
-    val tooClose: Boolean = false,
-    val invalidSpace: Boolean = false,
-    val invalidCarrier: Boolean = false
+    var tooClose: Boolean = false,
+    var invalidSpace: Boolean = false,
+    var invalidCarrier: Boolean = false
 )
 
 // PLANT SPAWN CHECKING
@@ -316,14 +311,29 @@ fun PazPlant.checkValidGround(x: Double = this.x, y: Double = this.y, z: Double 
 
     val canSurvive = if (carrier == null) canSurviveOn(belowBlock) else false
 
-    val hasAdjacent = hasAdjacentPlant(level(), blockPosition, this) && checkForAdjacent && !isGrowingSeeds
+    val hasAdjacent = hasAdjacentPlant(level(), blockPosition, this, carrier) && checkForAdjacent && !isGrowingSeeds
 
 //    debugPrint("Plant: ${this.type}, attachedEntity: $attachedEntity, canSurvive: $canSurvive, hasValidVehicle: $hasValidVehicle, hasAdjacent: $hasAdjacent, carrier: $carrier")
 
     return InvalidGroundReasons(hasAdjacent, !canSurvive, !hasValidVehicle)
 }
 
-fun PazPlant.onValidGround(x: Double = this.x, y: Double = this.y, z: Double = this.z, carrier: PazPlant? = vehicle as PazPlant?, print: Boolean = false) : InvalidGroundReasons? {
+fun PazPlant.validPlace(x: Double = this.x, y: Double = this.y, z: Double = this.z, carrier: PazPlant? = vehicle as PazPlant?): Pair<Boolean, InvalidGroundReasons> {
+
+    val (validGround, reasons) = getValidGround(x, y, z, carrier)
+
+    val belowBlock = getBlockBelow(x,y,z)
+
+    if (carrier != null && carrier is CarrierPlant && !carrier.checkRider(this, true)) reasons.invalidCarrier = true
+
+    if (!this.canPlaceOn(belowBlock, carrier)) reasons.invalidSpace = true
+
+    return (validGround to reasons)
+
+}
+
+fun PazPlant.getValidGround(x: Double = this.x, y: Double = this.y, z: Double = this.z, carrier: PazPlant? = vehicle as PazPlant?) : Pair<Boolean, InvalidGroundReasons> {
+
     val reasons = checkValidGround(x,y,z,carrier)
 
     val validSpace = !reasons.invalidSpace
@@ -336,9 +346,11 @@ fun PazPlant.onValidGround(x: Double = this.x, y: Double = this.y, z: Double = t
 
 //    debugPrint("type: ${this.type}, validSpace: $validSpace, validCarrier: $validCarrier, validDistance: $validDistance, validGround: $validGround")
 
-    if (!validGround) return reasons
+    return (validGround to reasons)
+}
 
-    return null
+fun PazPlant.onValidGround() : Boolean {
+    return getValidGround().first
 }
 
 fun PazPlant.waterSurvivalCheck(block: BlockState): Boolean {

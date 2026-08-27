@@ -4,20 +4,22 @@
   "package": "duskdn.plantz_ex.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
+    "BlockMixin",
+    "EntityAccessor",
     "LevelAccessor",
     "LivingEntityAccessor",
     "LivingEntityMixin",
     "MobAccessor",
+    "MobMixin",
     "PlayerListMixin",
     "ProjectileMixin",
     "ServerLevelMixin",
     "ServerPlayerMixin",
+    "SnowLayerMixin",
     "SpawnPlacementsInvoker",
     "VillagerHostilesSensorMixin",
-    "ZombieMixin",
     "ZombieAccessor",
-    "MobMixin",
-    "EntityAccessor"
+    "ZombieMixin"
   ],
   "injectors": {
     "defaultRequire": 1

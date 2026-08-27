@@ -21,6 +21,7 @@ class BlocksProjectileDamage(
     val tanksDamage: Boolean = true,
     val reflectsDamage: Boolean = false,
     val reflectDistance: Double = 0.0,
+    val reflectDistanceY: Double = 0.0,
     val mustBeUsing: Boolean = false
 ) : TooltipProvider {
 
@@ -48,6 +49,7 @@ class BlocksProjectileDamage(
                 Codec.BOOL.fieldOf("tanksDamage").forGetter { it.tanksDamage },
                 Codec.BOOL.fieldOf("reflectsDamage").forGetter { it.reflectsDamage },
                 Codec.DOUBLE.fieldOf("reflectDistance").forGetter { it.reflectDistance },
+                Codec.DOUBLE.fieldOf("reflectDistanceY").forGetter { it.reflectDistanceY },
                 Codec.BOOL.optionalFieldOf("must_be_using", false).forGetter { it.mustBeUsing }
             ).apply(inst, ::BlocksProjectileDamage)
         }
@@ -61,6 +63,8 @@ class BlocksProjectileDamage(
             BlocksProjectileDamage::reflectsDamage,
             ByteBufCodecs.DOUBLE,
             BlocksProjectileDamage::reflectDistance,
+            ByteBufCodecs.DOUBLE,
+            BlocksProjectileDamage::reflectDistanceY,
             ByteBufCodecs.BOOL,
             BlocksProjectileDamage::mustBeUsing,
             ::BlocksProjectileDamage

@@ -5,30 +5,14 @@ import duskdn.plantz_ex.ai.goal.SleepGoal
 import duskdn.plantz_ex.entity.Sun
 import duskdn.plantz_ex.entity.interfaces.ILuminousEntity
 import duskdn.plantz_ex.entity.plant.all.WaterPot
-import duskdn.plantz_ex.entity.plant.utils.PlantGrowNeeds
-import duskdn.plantz_ex.entity.plant.utils.PlantSpawnUtils
-import duskdn.plantz_ex.entity.plant.utils.onValidGround
-import duskdn.plantz_ex.entity.plant.utils.processSunItem
-import duskdn.plantz_ex.entity.plant.utils.processWateringItem
-import duskdn.plantz_ex.init.PazBlocks
-import duskdn.plantz_ex.init.PazConfig
-import duskdn.plantz_ex.init.PazCriteria
-import duskdn.plantz_ex.init.PazDamageTypes
-import duskdn.plantz_ex.init.PazDataSerializers
+import duskdn.plantz_ex.entity.plant.utils.*
+import duskdn.plantz_ex.entity.plant.utils.PlantUtils.getPlantsAt
+import duskdn.plantz_ex.init.*
 import duskdn.plantz_ex.init.PazDataSerializers.DATA_ACTIVE
 import duskdn.plantz_ex.init.PazDataSerializers.DATA_SWELL
 import duskdn.plantz_ex.init.PazDataSerializers.DATA_SWELL_OLD
-import duskdn.plantz_ex.init.PazEffects
-import duskdn.plantz_ex.init.PazServerParticles
-import duskdn.plantz_ex.init.PazSounds
-import duskdn.plantz_ex.init.PazTags
 import duskdn.plantz_ex.item.SeedPacketItem
-import duskdn.plantz_ex.util.PlantHeadAttachment
-import duskdn.plantz_ex.util.canWearPlant
-import duskdn.plantz_ex.util.hasSameRootOwner
-import duskdn.plantz_ex.util.pazResource
-import duskdn.plantz_ex.util.positionPlant
-import duskdn.plantz_ex.util.tryToSetPlantOnHead
+import duskdn.plantz_ex.util.*
 import net.minecraft.ChatFormatting
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -54,16 +38,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
-import net.minecraft.world.entity.AgeableMob
-import net.minecraft.world.entity.AnimationState
-import net.minecraft.world.entity.ConversionParams
-import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EntityReference
-import net.minecraft.world.entity.EntitySpawnReason
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.SpawnGroupData
-import net.minecraft.world.entity.TamableAnimal
+import net.minecraft.world.entity.*
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
@@ -80,11 +55,7 @@ import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.Level
-import net.minecraft.world.level.LevelAccessor
-import net.minecraft.world.level.LevelReader
-import net.minecraft.world.level.LightLayer
-import net.minecraft.world.level.ServerLevelAccessor
+import net.minecraft.world.level.*
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.portal.TeleportTransition
 import net.minecraft.world.level.storage.TagValueOutput
@@ -94,7 +65,7 @@ import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.Optional
+import java.util.*
 import kotlin.jvm.optionals.getOrElse
 import kotlin.jvm.optionals.getOrNull
 
@@ -224,6 +195,10 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
 
     val enlightened: Boolean
         get() = this.hasEffect(PazEffects.ENLIGHTENED)
+//        set(value) = this.entityData.set(ENLIGHTENED, value)
+
+    val chilled: Boolean
+        get() = this.hasEffect(PazEffects.CHILLED)
 //        set(value) = this.entityData.set(ENLIGHTENED, value)
 
     val damagedPercent: Float
@@ -511,7 +486,8 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
                 if (cooldown == 0) cooldownFinished()
                 cooldown--
             }
-            if (onValidGround() != null) {
+
+            if (!onValidGround() || snowCheck()) {
                 if (--nutrientSupply <= 0) {
                     if (tickCount % 20 == 0) hurtServer(level, damageSources().dryOut(), 2.0f)
                 }
@@ -720,13 +696,33 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
 
     // whether another plant is overlapping with this one
     private fun isOverlappingWithOther(pos: BlockPos): Boolean {
-        val otherPlantsAtPos = level().getEntitiesOfClass(PazPlant::class.java, AABB(pos)) { it != this }
+        val otherPlantsAtPos = getPlantsAt(level(), AABB(pos), this) {true}
         otherPlantsAtPos.forEach {
-            if (!it.isAlive || it.isDeadOrDying) return false
-            if (it == this.vehicle) return false
             if(boundingBox.intersects(it.boundingBox)) return true
         }
         return false
+    }
+
+    fun rideNearestCarrier() {
+
+        if (this.vehicle != null) return
+
+        val carrierPlants = getPlantsAt(level(), AABB(blockPosition()).inflate(0.0,1.0,0.0), this) {
+            it.`is`(PazTags.EntityTypes.CARRIER) && it.passengers.isEmpty()
+        }
+
+        if (carrierPlants.isEmpty()) return
+
+        val carrier = carrierPlants.first()
+
+        if (carrier is CarrierPlant) {
+
+            if (!carrier.checkRider(this)) return
+
+            carrier.setRider(this)
+
+        }
+
     }
 
     override fun finalizeSpawn(
@@ -742,6 +738,8 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
             yBodyRot = yaw
             yRot = yaw
         }
+
+        if (spawnReason != EntitySpawnReason.SPAWN_ITEM_USE) rideNearestCarrier()
 
         return groupData
     }

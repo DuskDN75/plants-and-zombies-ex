@@ -46,6 +46,7 @@ class Sun(type: EntityType<out Sun>, level: Level) : Entity(type, level), ILumin
     private var health = 5
     private var count = 1
     private var followingEntity: LivingEntity? = null
+    private var ownerEntity: LivingEntity? = null
     private var batteryPos: Vec3? = null
     private var batteryState: BlockState? = null
     private val interpolation = InterpolationHandler(this)
@@ -62,11 +63,12 @@ class Sun(type: EntityType<out Sun>, level: Level) : Entity(type, level), ILumin
         private const val DEFAULT_AGE: Short = 0
         private const val DEFAULT_VALUE: Short = 0
         private const val DEFAULT_COUNT = 1
-        fun award(level: ServerLevel, pos: Vec3, amount: Int) {
-            awardWithDirection(level, pos, Vec3.Y_AXIS, amount)
+
+        fun award(level: ServerLevel, pos: Vec3, amount: Int, entity: LivingEntity? = null) {
+            awardWithDirection(level, pos, Vec3.Y_AXIS, amount, entity)
         }
 
-        fun awardWithDirection(level: ServerLevel, pos: Vec3, roughDirection: Vec3, amount: Int) {
+        fun awardWithDirection(level: ServerLevel, pos: Vec3, roughDirection: Vec3, amount: Int, entity: LivingEntity? = null) {
             var amount = amount
             while (amount > 0) {
                 val newCount = getExperienceValue(amount)
@@ -118,7 +120,10 @@ class Sun(type: EntityType<out Sun>, level: Level) : Entity(type, level), ILumin
             if (value <= 0) discard()
         }
 
-    constructor(level: Level, pos: Vec3, roughly: Vec3, value: Int) : this(PazEntities.SUN, level) {
+    constructor(level: Level, pos: Vec3, roughly: Vec3, value: Int, owner: LivingEntity? = null) : this(PazEntities.SUN, level) {
+
+        ownerEntity = owner
+
         setPos(pos)
         if (!level.isClientSide) {
             yRot = random.nextFloat() * 360.0f
@@ -262,6 +267,8 @@ class Sun(type: EntityType<out Sun>, level: Level) : Entity(type, level), ILumin
     private fun touchedEntity(entity: LivingEntity?) {
         if (entity !is Player && entity !is PazPlant || entity.isDeadOrDying) return
 
+        if (!sunCanGoToPlayer()) return
+
         val serverLevel = level() as? ServerLevel
         if (serverLevel!=null) {
             var successCount = 0
@@ -286,6 +293,12 @@ class Sun(type: EntityType<out Sun>, level: Level) : Entity(type, level), ILumin
         return (!entity.hasInfiniteMaterials() && entity.inventory.add(itemStack)) || entity.isCreative
     }
 
+    fun sunCanGoToPlayer(): Boolean {
+        if (ownerEntity is PazPlant && !(ownerEntity as PazPlant).isTame && entity is Player) return false
+
+        return true
+    }
+
     fun getNearestEntity(range: Double = 3.5) : LivingEntity? {
         var best = -1.0
         var result: LivingEntity? = null
@@ -293,7 +306,7 @@ class Sun(type: EntityType<out Sun>, level: Level) : Entity(type, level), ILumin
             LivingEntity::class.java,
             boundingBox.inflate(range),
             Predicate {
-                (it is Player && it.hasSpaceForSun(PazItems.SUN.defaultInstance)) ||
+                (it is Player && it.hasSpaceForSun(PazItems.SUN.defaultInstance) && sunCanGoToPlayer()) ||
                 (it is PazPlant && it.health != it.maxHealth)
             }
         )

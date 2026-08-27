@@ -109,7 +109,7 @@ object PazEntities {
                 (entity as MobAccessor).targetSelector.addGoal(0, NearestAttackableTargetGoal(entity, WallNut::class.java, 2, false, true) { target, level -> ((target as? WallNut
                     ?: target as? ExplodeONut)?.let { it.distanceToSqr(entity) < 16 } ?: false)})
                 (entity as MobAccessor).targetSelector.addGoal(1, NearestAttackableTargetGoal(entity, PazPlant::class.java, 6, false, true) { target, level ->
-                    target !is WallNut && target.passengers.isEmpty() && !target.`is`(PazTags.EntityTypes.IGNORED_BY_PLANT_ATTACKERS)
+                    target.passengers.isEmpty() && !target.`is`(PazTags.EntityTypes.IGNORED_BY_PLANT_ATTACKERS)
                 })
             }
 
@@ -450,7 +450,7 @@ object PazEntities {
         )
     )
     @JvmField val SKY_PEA_SHOOTER: EntityType<SkyPeaShooter> = registerPlant(
-        "sky_peashooter", EntityType.Builder.of(::SkyPeaShooter, MobCategory.CREATURE).fireImmune(),
+        "sky_peashooter", EntityType.Builder.of(::SkyPeaShooter, MobCategory.CREATURE),
         attributes = PazPlant.Companion.PlantAttributes(
             flyingSpeed = 0.2
         )

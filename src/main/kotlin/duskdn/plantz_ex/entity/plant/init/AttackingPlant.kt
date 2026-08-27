@@ -1,17 +1,15 @@
 package duskdn.plantz_ex.entity.plant.init
 
-import duskdn.plantz_ex.ai.goal.PlantTargetGoal
 import duskdn.plantz_ex.entity.Balloon
 import duskdn.plantz_ex.init.PazTags
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.Mob
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
-import net.minecraft.world.scores.Team
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -38,17 +36,17 @@ abstract class AttackingPlant(type: EntityType<out AttackingPlant>, level: Level
         return false
     }
 
-//    override fun considersEntityAsAlly(other: Entity): Boolean {
-//
-//        if (other is PazPlant) return true
-//
-//        if (isTame) {
-//            val owner = rootOwner
-//            if (other === owner) return true
-//        }
-//
-//        return false
-//    }
+    override fun considersEntityAsAlly(other: Entity): Boolean {
+
+        if (other is PazPlant) return true
+
+        if (isTame) {
+            val owner = rootOwner
+            if (other === owner) return true
+        }
+
+        return false
+    }
 
     override fun canAttack(target: LivingEntity): Boolean {
         return target.isAlive && target !is PazPlant
@@ -70,15 +68,22 @@ abstract class AttackingPlant(type: EntityType<out AttackingPlant>, level: Level
                 )
     }
 
+    override fun asValidTarget(target: LivingEntity?): LivingEntity? {
+        if (target is Player) {
+            if (target.isCreative || target.isSpectator) {
+                return null
+            }
+        }
+
+        return target
+    }
+
     open fun registerAttackGoal() {
 
 //        debugPrint("follow range = ${this.getAttributeValue(Attributes.FOLLOW_RANGE)}")
 
         this.targetSelector.addGoal(4,
-            PlantTargetGoal(this, LivingEntity::class.java, 5, mustSeeTarget(), false) { target, level ->
-
-//            debugPrint("FOUND TARGET: $target, ${target is Enemy}, ${BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(target.type).`is`(PazTags.EntityTypes.ATTACKS_PLANTS)}")
-
+            NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, mustSeeTarget(), false) { target, level ->
                 enemyCheck(target) || target is Balloon
             })
     }

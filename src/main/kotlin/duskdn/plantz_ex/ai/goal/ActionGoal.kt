@@ -58,9 +58,23 @@ abstract class ActionGoal(
             && actionTimer == -1
             && actionDelay >= 0
         ) {
+
+            var cooldownMult = 1.0
+
+            if (usingEntity is PazPlant) {
+
+                val plant = usingEntity as PazPlant
+
+                if (plant.poweredUp) cooldownMult *= 0.8
+
+                if (plant.enlightened) cooldownMult *= 0.8
+
+                if (plant.chilled) cooldownMult *= 0.8
+
+            }
+
             (usingEntity as? PazPlant)?.cooldown = Mth.floor(
-                (cooldownTime+cooldownVariationRange.random()) *
-                        if ((usingEntity as PazPlant).poweredUp) 0.8 else 1.0 * if ((usingEntity as PazPlant).enlightened) 0.8 else 1.0
+                (cooldownTime+cooldownVariationRange.random()) * cooldownMult
             ).coerceAtLeast(actionDelay)
             startAction()
             actionTimer = actionDelay.coerceAtLeast(0)

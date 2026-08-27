@@ -1,5 +1,6 @@
 package duskdn.plantz_ex.entity.projectile.peas
 
+import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.entity.projectile.init.BasePea
 import duskdn.plantz_ex.init.PazDamageTypes
 import duskdn.plantz_ex.init.PazEntities

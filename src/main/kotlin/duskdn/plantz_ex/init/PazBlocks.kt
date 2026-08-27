@@ -338,7 +338,8 @@ object PazBlocks {
             .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage(
                 slot = EquipmentSlotGroup.OFFHAND,
                 reflectsDamage = true,
-                reflectDistance = -0.5,
+                reflectDistance = 0.2,
+                reflectDistanceY = 0.9,
                 tanksDamage = false,
                 mustBeUsing = true
             ))

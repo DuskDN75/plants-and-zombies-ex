@@ -8,6 +8,7 @@ import duskdn.plantz_ex.item.component.BlocksProjectileDamage
 import duskdn.plantz_ex.mixin.EntityAccessor
 import duskdn.plantz_ex.mixin.LivingEntityAccessor
 import duskdn.plantz_ex.util.blueDustParticle
+import duskdn.plantz_ex.util.debugPrint
 import duskdn.plantz_ex.util.defaultDustParticle
 import duskdn.plantz_ex.util.orangeDustParticle
 import duskdn.plantz_ex.util.redDustParticle
@@ -219,7 +220,7 @@ object ArmorUtil {
 
             val component = item.components.get(PazComponents.BLOCKS_PROJECTILE_DAMAGE) ?: continue
 
-            println("mustBeUsing: ${component.mustBeUsing} EntityUsing: ${entity.isUsingItem}")
+            debugPrint("mustBeUsing: ${component.mustBeUsing} EntityUsing: ${entity.isUsingItem}")
 
             if (component.mustBeUsing && !entity.isUsingItem) continue
 
@@ -229,7 +230,7 @@ object ArmorUtil {
 
             val armorVariant: ArmorVariant = ArmorVariant.getByItem(item.item)
 
-            println("Variant: $armorVariant VariantSlot: ${armorVariant.equipmentSlot} Slot: $slot")
+            debugPrint("Variant: $armorVariant VariantSlot: ${armorVariant.equipmentSlot} Slot: $slot")
 
             armors.add(slot to (item to component))
         }
@@ -428,13 +429,15 @@ object ArmorUtil {
 
             if (armor.second.second.reflectsDamage && source.directEntity is Projectile && !reflectsDamage && !damageEntity) {
 
-                val reflectDistance = armor.second.second.reflectDistance
+                val components = armor.second.second
 
-                reflectsDamage = ((xzDot < reflectDistance) && (yDot.absoluteValue < 0.8))
+                val reflectDistance = components.reflectDistance
 
-                println("TESTING: ${xzDot < reflectDistance}, ${yDot.absoluteValue < 0.8}")
+                val reflectDistanceY = components.reflectDistanceY
 
-                println("REFLECTS DAMAGE: $reflectsDamage, REFLECT DISTANCE IS: $reflectDistance, xzDot: $xzDot, yDot: $yDot, xzDirection $xzDirection, xzLookDirection: $xzLookDirection")
+                reflectsDamage = ((xzDot < reflectDistance) && (yDot.absoluteValue < reflectDistanceY))
+
+                debugPrint("REFLECTS DAMAGE: $reflectsDamage, REFLECT DISTANCE IS: $reflectDistance, xzDot: $xzDot, yDot: $yDot, xzDirection $xzDirection, xzLookDirection: $xzLookDirection")
 
                 if (!reflectsDamage) return false
 

@@ -143,7 +143,7 @@ object PazSpawnPlacements {
         addBiomeSpawn(PazTags.Biomes.HAS_PUFFSHROOM, PazEntities.PUFF_SHROOM,
             weight = 12, minGroupSize = 2, maxGroupSize = 4)
         addBiomeSpawn(PazTags.Biomes.HAS_PUFFSHROOM_CAVES, PazEntities.PUFF_SHROOM,
-            weight = 24, minGroupSize = 2, maxGroupSize = 4)
+            weight = 12, minGroupSize = 2, maxGroupSize = 4)
         registerSpawnPlacement(PazEntities.PUFF_SHROOM, PLANT_MUSHROOM_SPAWN_RULES::spawnCheck)
 
         addBiomeSpawn(PazTags.Biomes.HAS_SCAREDYSHROOM, PazEntities.SCAREDY_SHROOM,

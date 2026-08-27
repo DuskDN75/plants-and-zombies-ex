@@ -198,8 +198,6 @@ abstract class PazProjectile(
                 if (nearest == null) emptyList() else listOf(nearest)
             }
 
-            debugPrint(entitiesHit)
-
             val firstEntityHit = if (entitiesHit.isEmpty()) null else entitiesHit[0]
             val nextLocation = (firstEntityHit ?: blockHitResult).location
             this.setPos(nextLocation)
@@ -215,6 +213,9 @@ abstract class PazProjectile(
             } else if (this.isAlive && !this.noPhysics) {
                 var deflection: ProjectileDeflection = ProjectileDeflection.NONE
                 for (hit in entitiesHit) {
+
+                    if (entityOwner is PazPlant && hit == entityOwner.owner) continue
+
                     val d = hitTargetOrDeflectSelf(hit)
                     if (d != ProjectileDeflection.NONE) {
                         deflection = d
@@ -253,6 +254,9 @@ abstract class PazProjectile(
 
         val target = hitResult.entity
         val serverLevel = this.level() as? ServerLevel
+
+        if (entityOwner is PazPlant && target == entityOwner.owner) return
+
         if (serverLevel != null) {
             val owner = getOwner().let {
                 if (it is OwnableEntity && PazConfig.PLAYER_CREDIT_FOR_PLANT_KILLS) it.rootOwner
@@ -425,7 +429,10 @@ abstract class PazProjectile(
 //            debugPrint("SAME ROOT OWNER")
             return false
         }
-        if (entity is Player && owner is PazPlant && owner.owner == entity) return false
+
+        println("OWNER IS: $owner, ENTITY IS: $entity")
+
+        if (owner is PazPlant && owner.owner == entity) return false
 //        debugPrint("CAN HIT ENTITY!")
         return super.canHitEntity(entity)
     }

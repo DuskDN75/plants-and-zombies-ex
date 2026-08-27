@@ -24,6 +24,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Map;
 
@@ -42,6 +43,14 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
         this.addLayer(new ObsidianDuckyTubeRenderLayer<>(this));
         this.addLayer(new DyeVatRenderLayer<>(this));
         this.addLayer(new PaintLayer<>(this));
+    }
+
+    @Inject(method = "isShaking", at = @At("RETURN"), cancellable = true)
+    private void plantzex$shaking(S state, CallbackInfoReturnable<Boolean> cir) {
+
+        if (state.getDataOrDefault(IS_CHILLED_KEY, false)) {
+            cir.setReturnValue(true);
+        }
     }
 
     @Inject(method = "extractRenderState*", at = @At("TAIL"))
@@ -79,35 +88,6 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 
     @Unique
     private static final int PLANTZ_ENLIGHTENED_TINT = 0xFFFFFDD2;
-
-//    @ModifyVariable(
-//            method = "submit*",
-//            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IIILnet/minecraft/client/renderer/texture/TextureAtlasSprite;ILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V")
-//    )
-//    private int plantzex$applyTint(int tintedColor, S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
-//
-//        if (state.getDataOrDefault(IS_HYPNOTIZED_KEY, false)) {
-//            tintedColor = (ARGB.multiply(tintedColor, PLANTZ_HYPNO_TINT));
-//        }
-//
-//        if (state.getDataOrDefault(IS_CHILLED_KEY, false)) {
-//            tintedColor = (ARGB.multiply(tintedColor, PLANTZ_CHILLED_TINT));
-//        }
-//
-//        if (state.getDataOrDefault(IS_DRENCHED_KEY, false)) {
-//            tintedColor = (ARGB.srgbLerp(0.8f, tintedColor, PLANTZ_DRENCHED_TINT));
-//        }
-//
-//        if (state.getDataOrDefault(IS_FROZEN_KEY, false)) {
-//            tintedColor = (ARGB.srgbLerp(0.8f, tintedColor, PLANTZ_FROZEN_TINT));
-//        }
-//
-//        if (state.getDataOrDefault(IS_ENLIGHTENED_KEY, false)) {
-//            tintedColor = (ARGB.linearLerp(1.0f, tintedColor, PLANTZ_ENLIGHTENED_TINT));
-//        }
-//
-//        return tintedColor;
-//    }
 
     @ModifyExpressionValue(
             method = "submit*",

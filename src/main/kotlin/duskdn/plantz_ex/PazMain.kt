@@ -19,15 +19,24 @@ import duskdn.plantz_ex.init.PazNetwork
 import duskdn.plantz_ex.init.PazServerParticles
 import duskdn.plantz_ex.init.PazSounds
 import duskdn.plantz_ex.init.PazSpawnPlacements
+import duskdn.plantz_ex.init.PazSunManager
+import duskdn.plantz_ex.init.PazSunManager.checkSpawnSun
 import duskdn.plantz_ex.networking.ServerConfigResponsePayload
 import duskdn.plantz_ex.raid.getZombieRaids
 import duskdn.plantz_ex.tabs.PazCreativeTabs
+import duskdn.plantz_ex.util.Utils
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
@@ -49,8 +58,6 @@ object PazMain : ModInitializer {
 
 		ServerTickEvents.END_LEVEL_TICK.register {
 			it.getZombieRaids().tick(it)
-
-			
 		}
 
 		// mailbox managing
@@ -82,5 +89,6 @@ object PazMain : ModInitializer {
 		PazMenus.initialize()
 		PazNetwork.initialize()
 		PazJukeboxSongs.initialize()
+		PazSunManager.initialize()
 	}
 }

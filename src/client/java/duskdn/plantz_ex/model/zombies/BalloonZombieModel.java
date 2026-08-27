@@ -12,6 +12,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.world.entity.AnimationState;
 import org.jetbrains.annotations.NotNull;
 
 import static duskdn.plantz_ex.util.UtilsKt.pazResource;
@@ -67,6 +68,11 @@ public class BalloonZombieModel extends PazZombieModel {
 	@Override
 	public void setupAnim(@NotNull PazZombieRenderState state) {
 		super.setupAnim(state);
-		this.propeller.yRot = state.ageInTicks;
+
+		AnimationState floatingAnimState = state.getFloatAnimationState();
+
+		double mult = floatingAnimState.isStarted() ? 1.0 : 0.2;
+
+		this.propeller.yRot = (float) (state.ageInTicks*mult);
 	}
 }

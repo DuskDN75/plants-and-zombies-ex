@@ -1,17 +1,22 @@
 package duskdn.plantz_ex.entity.plant.utils
 
+import com.google.common.base.Predicate
 import duskdn.plantz_ex.entity.Balloon
 import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.init.PazComponents
 import duskdn.plantz_ex.init.PazConfig
+import duskdn.plantz_ex.init.PazEffects
 import duskdn.plantz_ex.init.PazItems
 import duskdn.plantz_ex.init.PazSounds
 import duskdn.plantz_ex.init.PazTags
+import net.minecraft.core.BlockPos
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.tags.EntityTypeTags
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
@@ -20,8 +25,19 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ItemUtils
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.alchemy.Potions
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.phys.AABB
 
 object PlantUtils {
+
+    fun getPlantsAt(level: Level, aabb: AABB, plant: PazPlant?, predicate: Predicate<PazPlant>): MutableList<PazPlant> {
+        val otherPlantsAtPos = level.getEntitiesOfClass(PazPlant::class.java, aabb) {
+            (plant != null && it != plant && it != plant.vehicle) && it.isAlive && !it.isDeadOrDying && predicate.test(it)
+        }
+        return otherPlantsAtPos
+    }
+
 }
 
 // PLANT ITEM INTERACTIONS
@@ -102,6 +118,35 @@ fun PazPlant.enemyCheck(target: LivingEntity): Boolean {
                 target.leashHolder as LivingEntity
             ))
             )
+}
+
+fun PazPlant.snowCheck(): Boolean {
+
+    val cannotChill = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(type).`is`(PazTags.EntityTypes.CANNOT_CHILL)
+
+    println("CANNOT CHILL: $cannotChill")
+
+    if (cannotChill) return false
+
+    val blockIn = level().getBlockState(blockPosition())
+
+    if (blockIn.`is`(Blocks.SNOW)) {
+
+        println("IS IN SNOW: ${this.type}")
+
+        if (!hasEffect(PazEffects.CHILLED)) addEffect(MobEffectInstance(PazEffects.CHILLED, 20))
+
+        setIsInPowderSnow(true)
+
+        if (ticksFrozen < ticksRequiredToFreeze) {
+            ticksFrozen++
+        }
+
+        return true
+
+    }
+
+    return false
 }
 
 enum class PlantGrowNeeds {

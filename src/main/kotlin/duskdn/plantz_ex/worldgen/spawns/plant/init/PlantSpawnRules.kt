@@ -6,6 +6,10 @@ import duskdn.plantz_ex.worldgen.spawns.SpawnRules
 
 open class PlantSpawnRules: BaseSpawnRules() {
 
+//    open fun getCarrierRule(context: SpawnContext): Boolean {
+//        return SpawnRules.IS_ON_CARRIER.testRule(context)
+//    }
+
     open fun getValidRule(context: SpawnContext): Boolean {
         return SpawnRules.IS_VALID_SPAWN.testRule(context)
     }
@@ -15,7 +19,7 @@ open class PlantSpawnRules: BaseSpawnRules() {
     }
 
     open fun getPlantableRule(context: SpawnContext): Boolean {
-        return SpawnRules.IS_PLANTABLE_DEFAULT.testRule(context)
+        return SpawnRules.IS_PLANTABLE_DEFAULT.testRule(context) || SpawnRules.IS_ON_CARRIER.testRule(context)
     }
 
     open fun getExtraRule(context: SpawnContext): Boolean {

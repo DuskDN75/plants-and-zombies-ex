@@ -136,31 +136,6 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
         super.onEquipItem(slot, oldStack, stack)
     }
 
-    override fun equipmentHasChanged(previous: ItemStack, current: ItemStack): Boolean {
-
-        val mainhandComponents = mainHandItem.components.get(PazComponents.BLOCKS_PROJECTILE_DAMAGE)
-
-        val offhandComponents = offhandItem.components.get(PazComponents.BLOCKS_PROJECTILE_DAMAGE)
-
-        if (mainhandComponents != null) {
-            this.startUsingItem(usedItemHand)
-            this.setLivingEntityFlag(LIVING_ENTITY_FLAG_IS_USING, true)
-        } else if (offhandComponents != null) {
-            this.startUsingItem(InteractionHand.OFF_HAND)
-            this.setLivingEntityFlag(LIVING_ENTITY_FLAG_IS_USING, true)
-        } else if (mainHandItem.`is`(Items.SHIELD)) {
-            this.startUsingItem(usedItemHand)
-            this.setLivingEntityFlag(LIVING_ENTITY_FLAG_IS_USING, true)
-        } else if (offhandItem.`is`(Items.SHIELD)) {
-            this.startUsingItem(InteractionHand.OFF_HAND)
-            this.setLivingEntityFlag(LIVING_ENTITY_FLAG_IS_USING, true)
-        } else {
-            this.setLivingEntityFlag(LIVING_ENTITY_FLAG_IS_USING, false)
-        }
-
-        return super.equipmentHasChanged(previous, current)
-    }
-
     var state: ZombieState
         get() = this.entityData.get(ZOMBIE_STATE)
         set(value) { this.entityData.set(ZOMBIE_STATE, value) }

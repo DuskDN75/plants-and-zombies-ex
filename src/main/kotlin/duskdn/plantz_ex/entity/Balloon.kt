@@ -7,6 +7,7 @@ import duskdn.plantz_ex.init.PazDataSerializers.DATA_DYE_COLOR
 import duskdn.plantz_ex.init.PazEffects
 import duskdn.plantz_ex.init.PazServerParticles
 import duskdn.plantz_ex.init.PazSounds
+import duskdn.plantz_ex.util.debugPrint
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
@@ -121,7 +122,7 @@ class Balloon(
 
         val groundDistance = y - groundHeight
 
-        println("groundHeight: $groundHeight, groundDistance: $groundDistance")
+        debugPrint("groundHeight: $groundHeight, groundDistance: $groundDistance")
 
         val crouchMultiplier = if (holder.isCrouching) 0.5 else 1.0
         val jumpMultiplier = if (holder.isJumping) 2.0 else 1.0
@@ -130,12 +131,10 @@ class Balloon(
         var totalLift = ((gravityLift + springLift) * (crouchMultiplier * jumpMultiplier))
             .coerceAtMost(MAX_HOLDER_PULL_FORCE)
 
-        println("TOTAL LIFT START IS: $totalLift")
-
         if (holder is PazZombie) {
             totalLift = if (groundDistance < 12 && groundHeight > -64 && holder.target == null) totalLift else gravityLift
 
-            println("TOTAL LIFT IS: $totalLift")
+            debugPrint("TOTAL LIFT IS: $totalLift")
         }
 
         var currentYVelocity = holder.deltaMovement.y

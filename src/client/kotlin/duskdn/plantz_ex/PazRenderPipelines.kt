@@ -40,7 +40,7 @@ object PazRenderPipelines {
             .withLocation("pipeline/energy_swirl")
             .withVertexShader("core/entity")
             .withFragmentShader("core/entity")
-//            .withShaderDefine("ALPHA_CUTOUT", 0.1f)
+            .withShaderDefine("ALPHA_CUTOUT", 0.1f)
             .withShaderDefine("EMISSIVE")
             .withShaderDefine("NO_OVERLAY")
             .withShaderDefine("NO_CARDINAL_LIGHTING")
@@ -51,7 +51,7 @@ object PazRenderPipelines {
             .withCull(false)
             .withVertexBinding(0, DefaultVertexFormat.ENTITY)
             .withPrimitiveTopology(PrimitiveTopology.QUADS)
-            .withDepthStencilState(DepthStencilState.DEFAULT)
+            .withDepthStencilState(DepthStencilState(CompareOp.GREATER_THAN_OR_EQUAL, false))
             .build()
     )
 

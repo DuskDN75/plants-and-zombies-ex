@@ -46,6 +46,7 @@ class DoomShroom(type: EntityType<out PazPlant>, level: Level) : ExplosivePlant(
                 level.sendParticles(NukeSmokeParticleOptions(color = 0x7425A3, scale = 0.85f),
                     x, y+2.5, z, 17, 0.0, 1.0, 0.0, 0.0
                 )
+                meltSnowAround()
             }
         ))
     }

@@ -24,7 +24,12 @@ abstract class CarrierPlant(type: EntityType<out CarrierPlant>, level: Level) : 
         return false
     }
 
-    open fun checkRider(plant: PazPlant): Boolean = !isGrowingSeeds && !isAsleep && isTame
+    open fun checkRider(plant: PazPlant, isTameOverride: Boolean? = null): Boolean {
+
+        val plantIsTame = if (isTameOverride != null) isTameOverride else plant.isTame
+
+        return !isGrowingSeeds && !isAsleep && plantIsTame == isTame
+    }
 
     open fun setRider(plant: PazPlant) {
 
