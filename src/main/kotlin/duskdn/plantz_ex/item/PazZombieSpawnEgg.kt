@@ -11,6 +11,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.SpawnEggItem
@@ -42,20 +43,43 @@ class PazSpawnEgg(
             return InteractionResult.FAIL
         } else {
 
-            val entity = type.spawn(
+//            val entity = type.spawn(
+//                level,
+//                itemStack,
+//                user,
+//                spawnPos,
+//                EntitySpawnReason.SPAWN_ITEM_USE,
+//                tryMoveDown,
+//                movedUp
+//            )
+
+            val entity = type.create(
                 level,
-                itemStack,
-                user,
-                spawnPos,
-                EntitySpawnReason.SPAWN_ITEM_USE,
-                tryMoveDown,
-                movedUp
+                EntitySpawnReason.SPAWN_ITEM_USE
             )
 
             if (entity != null) {
+
+                if (entity is LivingEntity) {
+
+                    entity.snapTo(spawnPos, 0f, 0f)
+
+                    worker(entity)
+
+                    if (entity is Mob) {
+
+                        println("FINALIZING SPAWN")
+
+                        entity.finalizeSpawn(level, level.getCurrentDifficultyAt(spawnPos), EntitySpawnReason.SPAWN_ITEM_USE, null)
+
+                    }
+
+                }
+
+                level.addFreshEntity(entity)
+
                 itemStack.consume(1, user)
                 level.gameEvent(user, GameEvent.ENTITY_PLACE, spawnPos)
-                worker(entity as LivingEntity)
             }
 
             return InteractionResult.SUCCESS

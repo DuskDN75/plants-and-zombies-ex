@@ -1,7 +1,9 @@
 package duskdn.plantz_ex.entity.zombie
 
 import duskdn.plantz_ex.ai.ZombieState
+import duskdn.plantz_ex.ai.goal.FloatingPathfindGoal
 import duskdn.plantz_ex.entity.interfaces.IFloatingMob
+import duskdn.plantz_ex.entity.utils.ArmorUtil.getArmorBalloonCountModifier
 import duskdn.plantz_ex.entity.utils.ArmorVariant
 import duskdn.plantz_ex.init.PazBlocks
 import duskdn.plantz_ex.init.PazEntities
@@ -20,6 +22,7 @@ import net.minecraft.world.Difficulty
 import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.*
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.phys.Vec3
@@ -27,6 +30,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
+import java.util.EnumSet
 
 open class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLOON_ZOMBIE, level: Level) : PazZombie(type, level), IFloatingMob {
 
@@ -112,24 +116,9 @@ open class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLO
 
     override fun spawnBalloons(count: Int) {
 
-        var countModifier: Int = 0
+        var countModifier: Int = getArmorBalloonCountModifier(this, listOf(EquipmentSlot.HEAD, EquipmentSlot.OFFHAND, EquipmentSlot.MAINHAND))
 
-        countModifier += when (getItemBySlot(EquipmentSlot.HEAD)) {
-            ArmorVariant.CONE.item!!.defaultInstance -> 3
-            ArmorVariant.BUCKET.item!!.defaultInstance -> 7
-            ArmorVariant.FOOTBALL_HELEMT.item!!.defaultInstance -> 7
-            else -> 0
-        }
-
-        countModifier += when (getItemBySlot(EquipmentSlot.OFFHAND)) {
-            ArmorVariant.SCREEN_DOOR.item!!.defaultInstance -> 5
-            else -> 0
-        }
-
-        countModifier += when (getItemBySlot(EquipmentSlot.MAINHAND)) {
-            ArmorVariant.FLAG.item!!.defaultInstance -> 5
-            else -> 0
-        }
+        println("BALLOON COUNT IS: $countModifier")
 
         spawnedBalloons = true
         super.spawnBalloons(count + countModifier)
@@ -240,7 +229,7 @@ open class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLO
     ): SpawnGroupData? {
         val data = super.finalizeSpawn(level, difficulty, spawnReason, groupData)
 
-        if (level is ServerLevel) {
+        if (level is ServerLevel && !spawnedBalloons) {
 
             spawnBalloons()
 
@@ -253,41 +242,41 @@ open class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLO
         super.actuallyHurt(level, source, damage)
     }
 
-//    private class BalloonZombieChaseGoal(
-//        entity: BalloonZombie
-//    ): FloatingPathfindGoal<BalloonZombie>(entity) {
-//
-//        init {
-//            this.flags = EnumSet.of(Flag.MOVE, Flag.LOOK)
-//        }
-//
-//        override fun canUse(): Boolean {
-//            return entity.target != null && entity.target?.isAlive == true
-//        }
-//
-//        override fun getEntityDelta(direction: Vec3, speed: Double): Vec3 {
-//
-//            val dis = direction.normalize()
-//
-//            val delta = Vec3(
-//                dis.x * speed,
-//                dis.y * speed * (2*entity.balloonCount),
-//                dis.z * speed
-//            )
-//
-//            return delta
-//
-//        }
-//
-//        override fun slowApproach(distance: Double): Double {
-//
-//            if (distance <= 0.2) return 0.0
-//
-//            if (distance <= 3.0) return distance/3.0
-//
-//            return 1.0
-//
-//        }
-//
-//    }
+    private class BalloonZombieChaseGoal(
+        entity: BalloonZombie
+    ): FloatingPathfindGoal<BalloonZombie>(entity) {
+
+        init {
+            this.flags = EnumSet.of(Flag.MOVE, Flag.LOOK)
+        }
+
+        override fun canUse(): Boolean {
+            return entity.target != null && entity.target?.isAlive == true
+        }
+
+        override fun getEntityDelta(direction: Vec3, speed: Double): Vec3 {
+
+            val dis = direction.normalize()
+
+            val delta = Vec3(
+                dis.x * speed,
+                dis.y * speed * (2*entity.balloonCount),
+                dis.z * speed
+            )
+
+            return delta
+
+        }
+
+        override fun slowApproach(distance: Double): Double {
+
+            if (distance <= 0.2) return 0.0
+
+            if (distance <= 3.0) return distance/3.0
+
+            return 1.0
+
+        }
+
+    }
 }

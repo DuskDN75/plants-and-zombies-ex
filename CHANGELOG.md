@@ -24,6 +24,7 @@
 ###### ADDITIONS:
 - Screen Door Zombie
 - Browncoat and Balloon Zombie variant spawn eggs for cones, buckets, flags, basics, and screens.
+- Extra variants for flag, screen door, and both.
 ###### REMOVALS:
 - N/A
 ###### CHANGES:

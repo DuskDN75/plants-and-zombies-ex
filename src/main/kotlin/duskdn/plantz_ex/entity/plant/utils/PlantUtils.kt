@@ -122,9 +122,7 @@ fun PazPlant.enemyCheck(target: LivingEntity): Boolean {
 
 fun PazPlant.snowCheck(): Boolean {
 
-    val cannotChill = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(type).`is`(PazTags.EntityTypes.CANNOT_CHILL)
-
-    println("CANNOT CHILL: $cannotChill")
+    val cannotChill = this.`is`(PazTags.EntityTypes.CANNOT_CHILL)
 
     if (cannotChill) return false
 

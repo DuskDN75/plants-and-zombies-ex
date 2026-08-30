@@ -28,6 +28,7 @@ import net.minecraft.util.RandomSource
 import net.minecraft.util.random.WeightedList
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.effect.MobEffects
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
@@ -45,7 +46,7 @@ enum class ArmorVariant(val item: Item?, val itemName: String?, val equipmentSlo
     NONE(null, "basic", null),
     CONE(PazBlocks.CONE.asItem(), "cone", EquipmentSlot.HEAD),
     BUCKET(Items.BUCKET, "bucket", EquipmentSlot.HEAD),
-    FOOTBALL_HELEMT(PazItems.FOOTBALL_HELMET, "football_helmet", EquipmentSlot.HEAD),
+    FOOTBALL_HELMET(PazItems.FOOTBALL_HELMET, "football_helmet", EquipmentSlot.HEAD),
     SCREEN_DOOR(PazBlocks.SCREEN_DOOR.asItem(), "screen_door", EquipmentSlot.OFFHAND),
     FLAG(PazBlocks.BRAINZ_FLAG.asItem(), "flag", EquipmentSlot.MAINHAND);
 
@@ -142,6 +143,61 @@ object MobFlagWeights {
 }
 
 object ArmorUtil {
+
+    fun getArmorBalloonCountModifier(armor: ArmorVariant): Int {
+
+        return when (armor) {
+            ArmorVariant.CONE -> 2
+            ArmorVariant.BUCKET -> 6
+            ArmorVariant.FOOTBALL_HELMET -> 6
+            ArmorVariant.SCREEN_DOOR -> 6
+            ArmorVariant.FLAG -> 2
+            else -> 0
+        }
+
+    }
+
+    fun getArmorBalloonCountModifier(entity: LivingEntity, slot: EquipmentSlot): Int {
+
+        val armor = ArmorVariant.getByItem(entity.getItemBySlot(slot).item)
+
+        if (slot != armor.equipmentSlot) return 0
+
+        return getArmorBalloonCountModifier(armor)
+
+    }
+
+    fun getArmorBalloonCountModifier(item: ItemStack): Int {
+
+        val armor = ArmorVariant.getByItem(item.item)
+
+        return getArmorBalloonCountModifier(armor)
+
+    }
+
+    fun getArmorBalloonCountModifier(entity: LivingEntity, slots: List<EquipmentSlot>): Int {
+
+        var countModifier: Int = 0
+
+        for (slot in slots) {
+            countModifier += getArmorBalloonCountModifier(entity, slot)
+        }
+
+        return countModifier
+
+    }
+
+    fun getArmorBalloonCountModifier(armors: List<ArmorVariant>): Int {
+
+        var countModifier: Int = 0
+
+        for (armor in armors) {
+            countModifier += getArmorBalloonCountModifier(armor)
+        }
+
+        return countModifier
+
+    }
 
     @JvmStatic
     fun getArmor(random: RandomSource, spawnReason: EntitySpawnReason = EntitySpawnReason.MOB_SUMMONED): MutableList<Pair<EquipmentSlot, ItemStack>> {

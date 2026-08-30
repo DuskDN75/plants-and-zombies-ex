@@ -207,8 +207,8 @@
   "item.plantz_ex.spawn_egg.zombies.browncoat.screen_door.bucket": "Screen Door Buckethead Spawn Egg",
   "item.plantz_ex.spawn_egg.zombies.browncoat.flag.cone": "Flag Conehead Spawn Egg",
   "item.plantz_ex.spawn_egg.zombies.browncoat.flag.bucket": "Flag Buckethead Spawn Egg",
-  "item.plantz_ex.spawn_egg.zombies.browncoat.screen_door_flag.cone": "Screen Door Flag Conehead Spawn Egg",
-  "item.plantz_ex.spawn_egg.zombies.browncoat.screen_door_flag.bucket": "Screen Door Flag Buckethead Spawn Egg",
+  "item.plantz_ex.spawn_egg.zombies.browncoat.flag_screen_door.cone": "Screen Door Flag Conehead Spawn Egg",
+  "item.plantz_ex.spawn_egg.zombies.browncoat.flag_screen_door.bucket": "Screen Door Flag Buckethead Spawn Egg",
   "item.plantz_ex.spawn_egg.zombies.digger_zombie": "Digger Spawn Egg",
   "item.plantz_ex.spawn_egg.zombies.engineer_zombie": "Engineer Spawn Egg",
   "item.plantz_ex.spawn_egg.zombies.zombie_yeti": "Zombie Yeti Spawn Egg",
@@ -230,8 +230,8 @@
   "item.plantz_ex.spawn_egg.zombies.balloon.screen_door.bucket": "Screen Door Buckethead Balloon Zombie Spawn Egg",
   "item.plantz_ex.spawn_egg.zombies.balloon.flag.cone": "Flag Conehead Balloon Zombie Spawn Egg",
   "item.plantz_ex.spawn_egg.zombies.balloon.flag.bucket": "Flag Buckethead Balloon Zombie Spawn Egg",
-  "item.plantz_ex.spawn_egg.zombies.balloon.screen_door_flag.cone": "Screen Door Flag Conehead Balloon Zombie Spawn Egg",
-  "item.plantz_ex.spawn_egg.zombies.balloon.screen_door_flag.bucket": "Screen Door Flag Buckethead Balloon Zombie Spawn Egg",
+  "item.plantz_ex.spawn_egg.zombies.balloon.flag_screen_door.cone": "Screen Door Flag Conehead Balloon Zombie Spawn Egg",
+  "item.plantz_ex.spawn_egg.zombies.balloon.flag_screen_door.bucket": "Screen Door Flag Buckethead Balloon Zombie Spawn Egg",
 
   "item.plantz_ex.spawn_egg.gnome": "Gnome Spawn Egg",
 

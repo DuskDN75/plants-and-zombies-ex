@@ -1,7 +1,9 @@
 package duskdn.plantz_ex.init
 
 import duskdn.plantz_ex.entity.plant.init.PazPlant
+import duskdn.plantz_ex.entity.utils.ArmorUtil.getArmorBalloonCountModifier
 import duskdn.plantz_ex.entity.utils.ArmorVariant
+import duskdn.plantz_ex.entity.zombie.BalloonZombie
 import duskdn.plantz_ex.entity.zombie.HatVariant
 import duskdn.plantz_ex.item.*
 import duskdn.plantz_ex.item.component.BlocksProjectileDamage
@@ -232,7 +234,7 @@ object PazItems {
     @JvmField val BALLOON_ZOMBIE_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
         PazEntities.BALLOON_ZOMBIE,
         variants = ArmorVariant.defaultArmorVariantsWithNone,
-        folder = "balloon"
+        folder = "balloon",
     )
 
     @JvmField val PIRATE_CAPTAIN_SPAWN_EGG: Item = registerPazZombieSpawnEgg(PazEntities.PIRATE_CAPTAIN)
@@ -246,8 +248,8 @@ object PazItems {
     @JvmField val BROWN_COAT_SCREEN_DOOR_VARIANTS_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
         PazEntities.BROWN_COAT,
         variants = listOf(ArmorVariant.CONE, ArmorVariant.BUCKET),
-        extraWorker = {
-            it.setItemSlot(
+        extraWorker = { entity, armor ->
+            entity.setItemSlot(
                 ArmorVariant.SCREEN_DOOR.equipmentSlot as EquipmentSlot,
                 ArmorVariant.SCREEN_DOOR.item!!.defaultInstance
             )
@@ -258,8 +260,8 @@ object PazItems {
     @JvmField val BROWN_COAT_FLAG_VARIANTS_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
         PazEntities.BROWN_COAT,
         variants = listOf(ArmorVariant.CONE, ArmorVariant.BUCKET),
-        extraWorker = {
-            it.setItemSlot(
+        extraWorker = { entity, armor ->
+            entity.setItemSlot(
                 ArmorVariant.FLAG.equipmentSlot as EquipmentSlot,
                 ArmorVariant.FLAG.item!!.defaultInstance
             )
@@ -270,13 +272,13 @@ object PazItems {
     @JvmField val BROWN_COAT_FLAG_SCREEN_DOOR_VARIANTS_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
         PazEntities.BROWN_COAT,
         variants = listOf(ArmorVariant.NONE, ArmorVariant.CONE, ArmorVariant.BUCKET),
-        extraWorker = {
-            it.setItemSlot(
+        extraWorker = { entity, armor ->
+            entity.setItemSlot(
                 ArmorVariant.SCREEN_DOOR.equipmentSlot as EquipmentSlot,
                 ArmorVariant.SCREEN_DOOR.item!!.defaultInstance
             )
 
-            it.setItemSlot(
+            entity.setItemSlot(
                 ArmorVariant.FLAG.equipmentSlot as EquipmentSlot,
                 ArmorVariant.FLAG.item!!.defaultInstance
             )
@@ -287,42 +289,54 @@ object PazItems {
 
     // region EXTRA BALLOON ZOMBIE VARIANTS
     @JvmField val BALLOON_ZOMBIE_SCREEN_DOOR_VARIANTS_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
-        PazEntities.BROWN_COAT,
+        PazEntities.BALLOON_ZOMBIE,
         variants = listOf(ArmorVariant.CONE, ArmorVariant.BUCKET),
-        extraWorker = {
-            it.setItemSlot(
+        extraWorker = { entity, armor ->
+            entity.setItemSlot(
                 ArmorVariant.SCREEN_DOOR.equipmentSlot as EquipmentSlot,
                 ArmorVariant.SCREEN_DOOR.item!!.defaultInstance
             )
+
+            var countModifier: Int = getArmorBalloonCountModifier(listOf(armor, ArmorVariant.SCREEN_DOOR))
+
+            if ((entity as BalloonZombie).balloons.size < countModifier) entity.spawnBalloons(countModifier)
         },
         folder = "balloon/screen_door"
     )
 
     @JvmField val BALLOON_ZOMBIE_FLAG_VARIANTS_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
-        PazEntities.BROWN_COAT,
+        PazEntities.BALLOON_ZOMBIE,
         variants = listOf(ArmorVariant.CONE, ArmorVariant.BUCKET),
-        extraWorker = {
-            it.setItemSlot(
+        extraWorker = { entity, armor ->
+            entity.setItemSlot(
                 ArmorVariant.FLAG.equipmentSlot as EquipmentSlot,
                 ArmorVariant.FLAG.item!!.defaultInstance
             )
+
+            var countModifier: Int = getArmorBalloonCountModifier(listOf(armor, ArmorVariant.FLAG))
+
+            if ((entity as BalloonZombie).balloons.size < countModifier) entity.spawnBalloons(countModifier)
         },
         folder = "balloon/flag"
     )
 
     @JvmField val BALLOON_ZOMBIE_FLAG_SCREEN_DOOR_VARIANTS_SPAWN_EGGS: MutableList<Item> = registerPazZombieWithVariants(
-        PazEntities.BROWN_COAT,
+        PazEntities.BALLOON_ZOMBIE,
         variants = listOf(ArmorVariant.NONE, ArmorVariant.CONE, ArmorVariant.BUCKET),
-        extraWorker = {
-            it.setItemSlot(
+        extraWorker = { entity, armor ->
+            entity.setItemSlot(
                 ArmorVariant.SCREEN_DOOR.equipmentSlot as EquipmentSlot,
                 ArmorVariant.SCREEN_DOOR.item!!.defaultInstance
             )
 
-            it.setItemSlot(
+            entity.setItemSlot(
                 ArmorVariant.FLAG.equipmentSlot as EquipmentSlot,
                 ArmorVariant.FLAG.item!!.defaultInstance
             )
+
+            var countModifier: Int = getArmorBalloonCountModifier(listOf(armor, ArmorVariant.SCREEN_DOOR, ArmorVariant.FLAG))
+
+            if ((entity as BalloonZombie).balloons.size < countModifier) entity.spawnBalloons(countModifier)
         },
         folder = "balloon/flag_screen_door"
     )
@@ -390,7 +404,7 @@ object PazItems {
         variants: List<ArmorVariant>,
         folder: String? = null,
         properties: Item.Properties = Item.Properties(),
-        extraWorker: (LivingEntity) -> Unit = {},
+        extraWorker: (LivingEntity, ArmorVariant) -> Unit = { _, _ -> },
         prefix: String? = null
     ): MutableList<Item> {
 
@@ -413,7 +427,7 @@ object PazItems {
                             )
                         }
 
-                        extraWorker(it)
+                        extraWorker(it, hatVariant)
 
                     },
                     properties = properties,

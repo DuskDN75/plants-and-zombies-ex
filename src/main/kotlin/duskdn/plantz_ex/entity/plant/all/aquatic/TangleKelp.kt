@@ -4,6 +4,7 @@ import duskdn.plantz_ex.ai.goal.MeleeAttackActionGoal
 import duskdn.plantz_ex.init.ElectricArcParticleOptions
 import duskdn.plantz_ex.entity.plant.init.AttackingPlant
 import duskdn.plantz_ex.entity.plant.init.PazPlant
+import duskdn.plantz_ex.entity.plant.interfaces.IAquaticPlant
 import duskdn.plantz_ex.entity.plant.utils.waterSurvivalCheck
 import duskdn.plantz_ex.init.PazDamageTypes
 import duskdn.plantz_ex.init.PazEffects
@@ -32,7 +33,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 import kotlin.math.sqrt
 
-class TangleKelp(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlant(PazEntities.TANGLE_KELP, level) {
+class TangleKelp(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlant(PazEntities.TANGLE_KELP, level), IAquaticPlant {
 
     companion object {
 //        private val TANGLE_ATTACK_MODIFIER = AttributeModifier(
@@ -44,6 +45,8 @@ class TangleKelp(type: EntityType<out AttackingPlant>, level: Level) : Attacking
     var tangleTime: Int
         get() = this.entityData.get(TangleKelp.TANGLE_TIME_ID)
         set(value) = this.entityData.set(TangleKelp.TANGLE_TIME_ID, value)
+
+    override var buoyancyHeight: Double = 0.9
 
     override fun isPushable(): Boolean = false
 
@@ -90,6 +93,17 @@ class TangleKelp(type: EntityType<out AttackingPlant>, level: Level) : Attacking
 
     override fun canSurviveOn(block: BlockState): Boolean {
         return waterSurvivalCheck(block)
+    }
+
+    override fun doWaterSplashEffect() {
+
+    }
+
+
+    override fun aiStep() {
+        applyBuoyancy()
+
+        super.aiStep()
     }
 
     private fun canTargetBePulled(target: LivingEntity): Boolean {

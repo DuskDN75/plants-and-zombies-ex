@@ -122,20 +122,29 @@ class Balloon(
 
         val groundDistance = y - groundHeight
 
+        val groundPull = groundDistance / 100
+
+        val groundPullForce = groundPull.coerceIn(0.0, 1.0)
+
         debugPrint("groundHeight: $groundHeight, groundDistance: $groundDistance")
 
         val crouchMultiplier = if (holder.isCrouching) 0.5 else 1.0
         val jumpMultiplier = if (holder.isJumping) 2.0 else 1.0
-        val gravityLift = holder.getAttributeValue(Attributes.GRAVITY) * HOLDER_GRAVITY_LIFT_MULTIPLIER
+        var gravityLift = holder.getAttributeValue(Attributes.GRAVITY) * HOLDER_GRAVITY_LIFT_MULTIPLIER
+
+        var liftDiv = if (holder is PazZombie) sqrt(holder.balloons.size.toDouble()) else 1.0
+
         val springLift = verticalStretch * HOLDER_PULL_STIFFNESS
-        var totalLift = ((gravityLift + springLift) * (crouchMultiplier * jumpMultiplier))
-            .coerceAtMost(MAX_HOLDER_PULL_FORCE)
+        var totalLift = ((gravityLift + springLift) * ( (crouchMultiplier * jumpMultiplier) - groundPullForce))
+            .coerceAtMost(MAX_HOLDER_PULL_FORCE/liftDiv)
 
         if (holder is PazZombie) {
-            totalLift = if (groundDistance < 12 && groundHeight > -64 && holder.target == null) totalLift else gravityLift
+            totalLift = if (groundDistance > 20 || holder.target == null) totalLift/groundDistance else totalLift
 
-            debugPrint("TOTAL LIFT IS: $totalLift")
+            if (holder.target != null && holder.moveControl.wantedY < holder.y) totalLift /= liftDiv
         }
+
+        println("TOTAL LIFT IS: $totalLift")
 
         var currentYVelocity = holder.deltaMovement.y
         val availableLift = (MAX_HOLDER_UPWARD_VELOCITY - currentYVelocity).coerceAtLeast(0.0)
