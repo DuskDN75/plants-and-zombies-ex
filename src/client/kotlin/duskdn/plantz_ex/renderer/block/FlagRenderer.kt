@@ -66,7 +66,7 @@ class FlagRenderer(
         if (PazConfig.SHOW_DEBUG_INFO) submitNodeCollector.submitNameTag(
             poseStack, Vec3(0.5,1.0,0.5), -20,
             Component.literal("${state.health} / $MAX_HEALTH").withColor(0xFFFFFFF),
-            true, -1, camera
+            true, -1, -20.0, camera
         )
 
         val material = state.sprite?: return

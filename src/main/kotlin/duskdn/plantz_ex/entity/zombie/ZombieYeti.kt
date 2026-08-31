@@ -90,7 +90,7 @@ class ZombieYeti(type: EntityType<out ZombieYeti>, level: Level) : PazZombie(typ
                 val level = level() as? ServerLevel?: return
                 entity.hurtServer(level, source, 2.5f)
                 entity.knockback(
-                    0.2, position().x - entity.position().x, position().z - entity.position().z, source, 0f
+                    0.2, position().x - entity.position().x, position().z - entity.position().z
                 )
             }
         }
@@ -120,7 +120,7 @@ class ZombieYeti(type: EntityType<out ZombieYeti>, level: Level) : PazZombie(typ
             }
 
             if (random.nextFloat() < 0.001) {
-                val polarBear = EntityTypes.POLAR_BEAR.create(level(), EntitySpawnReason.JOCKEY)
+                val polarBear = EntityType.POLAR_BEAR.create(level(), EntitySpawnReason.JOCKEY)
                 if (polarBear != null) {
                     polarBear.snapTo(x, y, z, yRot, 0.0f)
                     polarBear.finalizeSpawn(level, difficulty, EntitySpawnReason.JOCKEY, null)

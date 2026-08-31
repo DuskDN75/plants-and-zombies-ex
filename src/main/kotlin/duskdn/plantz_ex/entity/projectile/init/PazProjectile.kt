@@ -272,7 +272,7 @@ abstract class PazProjectile(
                     if (knockback > 0.0) {
                         debugPrint("KNOCKBACK ACTIVATED")
                         val knockbackDirection = calculateHorizontalHurtKnockbackDirection(target, source)
-                        target.knockback(knockback, -knockbackDirection.leftDouble(), -knockbackDirection.rightDouble(), source, damage)
+                        target.knockback(knockback, -knockbackDirection.leftDouble(), -knockbackDirection.rightDouble())
                     }
 
                     playSound(getHitSound(), 0.3f, 1.8f)
@@ -371,7 +371,7 @@ abstract class PazProjectile(
 
             if(nearby.hurtServer(serverLevel, source, (damage/direction.length()*distance).toFloat())) {
                 val knockbackDirection = calculateHorizontalHurtKnockbackDirection(nearby, source)
-                nearby.knockback(knockback, -knockbackDirection.leftDouble(), -knockbackDirection.rightDouble(), source, damage)
+                nearby.knockback(knockback, -knockbackDirection.leftDouble(), -knockbackDirection.rightDouble())
                 if (nearby is ServerPlayer) nearby.connection.send(ClientboundSetEntityMotionPacket(nearby))
             }
         }

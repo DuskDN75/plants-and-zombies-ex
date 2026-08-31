@@ -1,9 +1,9 @@
 package duskdn.plantz_ex.advancement
 
 import com.mojang.serialization.Codec
-import net.minecraft.advancements.predicates.ContextAwarePredicate
+import net.minecraft.advancements.criterion.ContextAwarePredicate
+import net.minecraft.advancements.criterion.SimpleCriterionTrigger
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.advancements.triggers.SimpleCriterionTrigger
 import java.util.Optional
 
 class SimpleCriterionTrigger<T, C : SimpleCriterionCondition<T>>(

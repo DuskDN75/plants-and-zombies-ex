@@ -237,7 +237,7 @@ object PlantSpawnUtils {
     }
 
     fun canSurviveGravel(block: BlockState): Boolean {
-        return block.`is`(BlockTags.CONCRETE_POWDERS) || block.`is`(Blocks.GRAVEL)
+        return block.`is`(BlockTags.CONCRETE_POWDER) || block.`is`(Blocks.GRAVEL)
     }
 
     fun canSurviveSnow(block: BlockState): Boolean {

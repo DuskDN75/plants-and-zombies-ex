@@ -62,7 +62,7 @@ class PlantRenderer(
         if (PazConfig.SHOW_DEBUG_INFO) collector.submitNameTag(
             poseStack, Vec3(0.0,state.eyeHeight.toDouble(),0.0), -20,
             Component.literal("${state.plantState.name}, ${state.cooldown}").withColor(0xFFFFFFF),
-            true, -1, camera
+            true, -1, 20.0, camera
         )
 
         model = if (state.isBaby && babyModel != null) babyModel else defaultModel

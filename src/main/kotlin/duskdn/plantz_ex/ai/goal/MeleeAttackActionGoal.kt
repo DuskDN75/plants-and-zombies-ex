@@ -54,9 +54,7 @@ open class MeleeAttackActionGoal(
             target.knockback(
                 knockback,
                 usingEntity.x - target.x,
-                usingEntity.z - target.z,
-                source,
-                damage
+                usingEntity.z - target.z
             )
             afterHitEntityEffect(target)
             return true

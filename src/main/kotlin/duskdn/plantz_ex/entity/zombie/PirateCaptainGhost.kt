@@ -92,7 +92,7 @@ class PirateCaptainGhost(type: EntityType<out PirateCaptainGhost>, level: Level)
         return data
     }
 
-    private class GhostMoveControl(val ghost: PirateCaptainGhost) : MoveControl<PirateCaptainGhost>(ghost) {
+    private class GhostMoveControl(val ghost: PirateCaptainGhost) : MoveControl(ghost) {
         override fun tick() {
             if (operation != Operation.MOVE_TO) return
             val delta = Vec3(

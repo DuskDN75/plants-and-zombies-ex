@@ -5,7 +5,7 @@ import net.minecraft.core.particles.ExplosionParticleInfo
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.random.WeightedList
-import net.minecraft.world.entity.EntityTypes
+import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.item.FallingBlockEntity
 import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile
@@ -23,7 +23,7 @@ import java.util.*
 class PowderSnowChunk(
     val level: Level,
     val mob: Mob
-) : ThrowableItemProjectile(EntityTypes.SNOWBALL, mob, level, Items.AIR.defaultInstance) {
+) : ThrowableItemProjectile(EntityType.SNOWBALL, mob, level, Items.AIR.defaultInstance) {
 
     companion object {
         val EXPLOSION_DAMAGE_CALCULATOR: ExplosionDamageCalculator = SimpleExplosionDamageCalculator(false, true, Optional.ofNullable(null), Optional.ofNullable(null))

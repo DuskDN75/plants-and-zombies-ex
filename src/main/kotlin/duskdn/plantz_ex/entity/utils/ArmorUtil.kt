@@ -14,7 +14,7 @@ import duskdn.plantz_ex.util.orangeDustParticle
 import duskdn.plantz_ex.util.redDustParticle
 import duskdn.plantz_ex.util.trackVector
 import it.unimi.dsi.fastutil.doubles.DoubleDoubleImmutablePair
-import net.minecraft.advancements.triggers.CriteriaTriggers
+import net.minecraft.advancements.CriteriaTriggers
 import net.minecraft.core.Direction
 import net.minecraft.core.component.DataComponents
 import net.minecraft.server.level.ServerLevel
@@ -340,7 +340,7 @@ object ArmorUtil {
                     zd = source.sourcePosition!!.z() - entity.z
                 }
 
-                entity.knockback(0.4, xd, zd, source, damage)
+                entity.knockback(0.4, xd, zd)
                 if (!blocked) {
                     entity.indicateDamage(xd, zd)
                 }

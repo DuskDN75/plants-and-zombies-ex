@@ -38,7 +38,7 @@ open class PazZombieRenderer(
     context,
     defaultModel,
     babyModel,
-    ArmorModelSet.bake<PazZombieModel>(armorSet, context.modelSet) { root: ModelPart -> PazZombieModel(null, root) },
+    ArmorModelSet.bake(armorSet, context.modelSet) { root: ModelPart -> PazZombieModel(null, root) },
     ArmorModelSet.bake<PazZombieModel>(babyArmorSet, context.modelSet) { root: ModelPart -> PazZombieModel(null, root) }
 ) {
 
@@ -55,8 +55,8 @@ open class PazZombieRenderer(
         // debug info text
         if (PazConfig.SHOW_DEBUG_INFO) collector.submitNameTag(
             poseStack, Vec3(0.0,state.eyeHeight.toDouble(),0.0), -20,
-            Component.literal("${state.zombieState.name}").withColor(0xFFFFFFF),
-            true, -1, camera
+            Component.literal(state.zombieState.name).withColor(0xFFFFFFF),
+            true, -1, -20.0, camera
         )
         if (state.zombieState != ZombieState.EMERGING || state.ageInTicks>1) super.submit(state, poseStack, collector, camera)
     }

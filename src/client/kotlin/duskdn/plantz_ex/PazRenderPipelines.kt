@@ -1,19 +1,15 @@
 package duskdn.plantz_ex
 
-import com.mojang.blaze3d.PrimitiveTopology
-import com.mojang.blaze3d.pipeline.*
+import com.mojang.blaze3d.pipeline.BlendFunction
+import com.mojang.blaze3d.pipeline.ColorTargetState
+import com.mojang.blaze3d.pipeline.DepthStencilState
+import com.mojang.blaze3d.pipeline.RenderPipeline
 import com.mojang.blaze3d.platform.CompareOp
-import com.mojang.blaze3d.shaders.UniformType
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
+import com.mojang.blaze3d.vertex.VertexFormat
 import net.minecraft.client.renderer.RenderPipelines
 
-
 object PazRenderPipelines {
-
-    val BASIC_LAYOUT: BindGroupLayout =
-        BindGroupLayout.builder() // Specifies that the shaders have a 'Sampler0' sampler
-            .withSampler("Sampler0") // Specifies that the shaders have access to the 'Globals' uniform
-            .build()
 
     @JvmField
     val ELECTRIC_ARC = RenderPipelines.register(
@@ -26,11 +22,10 @@ object PazRenderPipelines {
             .withShaderDefine("NO_OVERLAY")
             .withShaderDefine("NO_CARDINAL_LIGHTING")
             .withShaderDefine("APPLY_TEXTURE_MATRIX")
-            .withBindGroupLayout(BASIC_LAYOUT)
+            .withSampler("Sampler0")
             .withColorTargetState(ColorTargetState(BlendFunction.ADDITIVE))
             .withCull(false)
-            .withVertexBinding(0, DefaultVertexFormat.ENTITY)
-            .withPrimitiveTopology(PrimitiveTopology.QUADS)
+            .withVertexFormat(DefaultVertexFormat.ENTITY, VertexFormat.Mode.QUADS)
             .withDepthStencilState(DepthStencilState.DEFAULT)
             .build())
 
@@ -46,11 +41,10 @@ object PazRenderPipelines {
             .withShaderDefine("NO_CARDINAL_LIGHTING")
             .withShaderDefine("APPLY_TEXTURE_MATRIX")
             .withShaderDefine("PER_FACE_LIGHTING")
-            .withBindGroupLayout(BASIC_LAYOUT)
+            .withSampler("Sampler0")
             .withColorTargetState(ColorTargetState(BlendFunction.ADDITIVE))
             .withCull(false)
-            .withVertexBinding(0, DefaultVertexFormat.ENTITY)
-            .withPrimitiveTopology(PrimitiveTopology.QUADS)
+            .withVertexFormat(DefaultVertexFormat.ENTITY, VertexFormat.Mode.QUADS)
             .withDepthStencilState(DepthStencilState(CompareOp.GREATER_THAN_OR_EQUAL, false))
             .build()
     )

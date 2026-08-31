@@ -85,11 +85,11 @@ class Gargantuar(type: EntityType<out Gargantuar>, level: Level) : PazZombie(typ
         this.goalSelector.setControlFlag(Goal.Flag.TARGET, noController)
     }
 
-    private val noMoveControl = object : MoveControl<Mob>(this) { override fun getSpeedModifier(): Double = 0.0 }
+    private val noMoveControl = object : MoveControl(this) { override fun getSpeedModifier(): Double = 0.0 }
     private val noLookControl = object : LookControl(this) {}
 
     override fun getLookControl(): LookControl =  if (smashAttackTime>0) noLookControl else super.getLookControl()
-    override fun getMoveControl(): MoveControl<Mob> = if (smashAttackTime>0) noMoveControl else super.getMoveControl()
+    override fun getMoveControl(): MoveControl = if (smashAttackTime>0) noMoveControl else super.getMoveControl()
     override fun isWithinMeleeAttackRange(target: LivingEntity): Boolean = if (smashAttackTime>0) false else super.isWithinMeleeAttackRange(target)
 
     override fun tick() {
@@ -151,7 +151,7 @@ class Gargantuar(type: EntityType<out Gargantuar>, level: Level) : PazZombie(typ
                 val level = level() as? ServerLevel?: return
                 entity.hurtServer(level, source, 2.5f)
                 entity.knockback(
-                    0.2, position().x - entity.position().x, position().z - entity.position().z, source, 0f
+                    0.2, position().x - entity.position().x, position().z - entity.position().z,
                 )
             }
         }

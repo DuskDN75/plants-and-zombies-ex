@@ -58,7 +58,7 @@ class SuperBrainz(type: EntityType<out SuperBrainz>, level: Level) : PazZombie(t
         return if (isFlying) FlyingPathNavigation(this, level) else super.createNavigation(level)
     }
 
-    override fun getMoveControl(): MoveControl<Mob> {
+    override fun getMoveControl(): MoveControl {
         return if (isFlying) flyControl else super.getMoveControl()
     }
 

@@ -3,7 +3,6 @@ package duskdn.plantz_ex.init
 import com.mojang.datafixers.util.Pair
 import duskdn.plantz_ex.PazMain
 import duskdn.plantz_ex.util.pazResource
-import net.minecraft.core.HolderGetter
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
@@ -23,6 +22,7 @@ object PazWorldGen: TerraBlenderApi {
 
     override fun onTerraBlenderInitialized() {
         Regions.register(OverworldRegion("graveyard"))
+        SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, PazMain.MODID, SurfaceRuleData.makeRules())
     }
 
     @JvmField val GRAVEYARD = registerBiome("graveyard")
@@ -41,9 +41,6 @@ class OverworldRegion(
         registry: Registry<Biome>,
         mapper: Consumer<Pair<ParameterPoint, ResourceKey<Biome>>>
     ) {
-
-        SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, PazMain.MODID, SurfaceRuleData)
-
         val builder = VanillaParameterOverlayBuilder()
 
         ParameterPointListBuilder()
@@ -59,16 +56,12 @@ class OverworldRegion(
     }
 }
 
-object SurfaceRuleData: SurfaceRuleManager.RuleBuilder {
+object SurfaceRuleData {
     private val DIRT = makeStateRule(Blocks.DIRT)
     private val MYCELIUM_BLOCK = makeStateRule(Blocks.MYCELIUM)
     private val STONE = makeStateRule(Blocks.STONE)
 
-    private fun makeStateRule(block: Block): RuleSource {
-        return SurfaceRules.state(block.defaultBlockState())
-    }
-
-    override fun apply(t: HolderGetter<Biome>?): RuleSource {
+    internal fun makeRules(): RuleSource {
         val isAtOrAboveWaterLevel = SurfaceRules.waterBlockCheck(-1, 0)
 
         val myceliumSurface = SurfaceRules.sequence(
@@ -93,17 +86,16 @@ object SurfaceRuleData: SurfaceRuleManager.RuleBuilder {
 
         return SurfaceRules.sequence(
             SurfaceRules.ifTrue(
-                t?.let {
-                    SurfaceRules.isBiome(
-                        it,
-                        PazWorldGen.GRAVEYARD
-                    )
-                } as SurfaceRules.ConditionSource,
+                SurfaceRules.isBiome(PazWorldGen.GRAVEYARD),
                 SurfaceRules.sequence(
                     myceliumSurface,
                     undergroundStone
                 )
             )
         )
+    }
+
+    private fun makeStateRule(block: Block): RuleSource {
+        return SurfaceRules.state(block.defaultBlockState())
     }
 }

@@ -140,11 +140,11 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
         get() = this.entityData.get(ZOMBIE_STATE)
         set(value) { this.entityData.set(ZOMBIE_STATE, value) }
 
-    private val noMoveControl = object : MoveControl<Mob>(this) {
+    private val noMoveControl = object : MoveControl(this) {
         override fun getSpeedModifier(): Double = 0.0
     }
 
-    val flyControl = object : FlyingMoveControl<Mob>(this, 20, true) {
+    val flyControl = object : FlyingMoveControl(this, 20, true) {
         override fun getSpeedModifier(): Double = 1.0
     }
 
@@ -161,7 +161,7 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
         }
     }
 
-    override fun getMoveControl(): MoveControl<Mob> {
+    override fun getMoveControl(): MoveControl {
         if (state == ZombieState.EMERGING) return noMoveControl
         if (state == ZombieState.FLOATING) return flyControl
         return super.getMoveControl()
