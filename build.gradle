@@ -44,22 +44,24 @@ loom {
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	
-	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	mappings loom.officialMojangMappings()
+
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-	implementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
-	implementation "com.github.glitchfiend:TerraBlender-fabric:${project.terrablender_version}"
+	modImplementation "com.github.glitchfiend:TerraBlender-fabric:${project.terrablender_version}"
 
-	implementation "dev.lambdaurora.lambdynamiclights:lambdynamiclights-api:${project.lambdynamiclights_version}"
+	modImplementation "dev.lambdaurora.lambdynamiclights:lambdynamiclights-api:${project.lambdynamiclights_version}"
 
-	implementation "dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime:${project.lambdynamiclights_version}"
+	modImplementation "dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime:${project.lambdynamiclights_version}"
 
-	implementation "dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime:${project.lambdynamiclights_version}"
+	modImplementation "dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime:${project.lambdynamiclights_version}"
 
-	implementation "maven.modrinth:lithostitched:${project.lithostitched_version}"
+	modImplementation "maven.modrinth:lithostitched:${project.lithostitched_version}"
 }
 
 processResources {
@@ -70,13 +72,19 @@ processResources {
 	}
 }
 
+fabricApi {
+	configureDataGeneration {
+		client = true
+	}
+}
+
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 25
+	it.options.release = 21
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 	kotlinOptions {
-		jvmTarget = 25
+		jvmTarget = 21
 	}
 }
 
@@ -86,8 +94,8 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_25
-	targetCompatibility = JavaVersion.VERSION_25
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
