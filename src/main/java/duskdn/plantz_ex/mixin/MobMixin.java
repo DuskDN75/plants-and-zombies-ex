@@ -47,7 +47,7 @@ public class MobMixin {
             int x = Mth.floor(entity.getX());
             int z = Mth.floor(entity.getZ());
             EntityType<? extends Mob> type = (EntityType<? extends Mob>) entity.getType();
-            Mob reinforcement = type.create(level, EntitySpawnReason.REINFORCEMENT);
+            Mob reinforcement = type.create(level, MobSpawnType.REINFORCEMENT);
             if (reinforcement == null) {
                 return;
             }
@@ -58,7 +58,7 @@ public class MobMixin {
                 int yt = (level.canSeeSky(entity.blockPosition())) ? level.getHeight(Heightmap.Types.WORLD_SURFACE, xt, zt) : level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, xt, zt);
                 BlockPos spawnPos = new BlockPos(xt, yt, zt);
 
-                boolean spawnRulesAllow = SpawnPlacements.checkSpawnRules(type, level, EntitySpawnReason.REINFORCEMENT, spawnPos, level.getRandom());
+                boolean spawnRulesAllow = SpawnPlacements.checkSpawnRules(type, level, MobSpawnType.REINFORCEMENT, spawnPos, level.getRandom());
 
                 debugPrint("SPAWN RULES ALLOW?: "+spawnRulesAllow+" SPAWN POS IS: "+spawnPos);
 
@@ -71,7 +71,7 @@ public class MobMixin {
 
                 if (extraChecks) {
                     reinforcement.setTarget(target);
-                    reinforcement.finalizeSpawn(level, level.getCurrentDifficultyAt(reinforcement.blockPosition()), EntitySpawnReason.REINFORCEMENT, null);
+                    reinforcement.finalizeSpawn(level, level.getCurrentDifficultyAt(reinforcement.blockPosition()), MobSpawnType.REINFORCEMENT, null);
                     level.addFreshEntityWithPassengers(reinforcement);
 
                     var item = entity.getItemBySlot(EquipmentSlot.LEGS);
@@ -101,7 +101,7 @@ public class MobMixin {
 //
 //                    if (extraChecks) {
 //                        reinforcement.setTarget(target);
-//                        reinforcement.finalizeSpawn(level, level.getCurrentDifficultyAt(reinforcement.blockPosition()), EntitySpawnReason.REINFORCEMENT, null);
+//                        reinforcement.finalizeSpawn(level, level.getCurrentDifficultyAt(reinforcement.blockPosition()), MobSpawnType.REINFORCEMENT, null);
 //                        level.addFreshEntityWithPassengers(reinforcement);
 //                        break;
 //                    }
@@ -212,9 +212,9 @@ public class MobMixin {
     }
 
     @Inject(method = "finalizeSpawn", at = @At("TAIL"))
-    public void plantzex$addArmor(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnReason, SpawnGroupData groupData, CallbackInfoReturnable<SpawnGroupData> cir) {
+    public void plantzex$addArmor(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnReason, SpawnGroupData groupData, CallbackInfoReturnable<SpawnGroupData> cir) {
 
-        if (spawnReason == EntitySpawnReason.COMMAND || spawnReason == EntitySpawnReason.SPAWN_ITEM_USE || spawnReason == EntitySpawnReason.MOB_SUMMONED) return;
+        if (spawnReason == MobSpawnType.COMMAND || spawnReason == MobSpawnType.SPAWN_ITEM_USE || spawnReason == MobSpawnType.MOB_SUMMONED) return;
 
         Mob self = (Mob) (Object)this;
 

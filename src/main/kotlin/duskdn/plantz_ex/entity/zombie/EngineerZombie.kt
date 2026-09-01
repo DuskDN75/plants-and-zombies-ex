@@ -39,7 +39,7 @@ class EngineerZombie(type: EntityType<out EngineerZombie>, level: Level) : PazZo
     override fun finalizeSpawn(
         level: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: EntitySpawnReason,
+        spawnReason: MobSpawnType,
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
         val data = super.finalizeSpawn(level, difficulty, spawnReason, ZombieGroupData(false, false))

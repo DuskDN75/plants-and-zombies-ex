@@ -4,6 +4,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.ai.targeting.TargetingConditions
+import java.util.function.Predicate
 
 class PlantTargetGoal<T : LivingEntity>(
     mob: Mob,
@@ -11,7 +12,7 @@ class PlantTargetGoal<T : LivingEntity>(
     randomInterval: Int,
     mustSee: Boolean,
     mustReach: Boolean,
-    selector: TargetingConditions.Selector
+    selector: Predicate<LivingEntity>
 ) : NearestAttackableTargetGoal<T>(mob, targetType, randomInterval, mustSee, mustReach, selector) {
 
     override fun canContinueToUse(): Boolean {

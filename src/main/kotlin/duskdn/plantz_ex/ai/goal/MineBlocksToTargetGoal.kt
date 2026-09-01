@@ -13,7 +13,7 @@ import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.LevelEvent
-import net.minecraft.world.level.gamerules.GameRules
+import net.minecraft.world.level.GameRules
 import net.minecraft.world.phys.Vec3
 import kotlin.math.abs
 import kotlin.math.min
@@ -55,7 +55,7 @@ class MineBlocksToTargetGoal(
         if (breakTime > 0) return true
         if (--breakCooldownTime > 0) return false
         if (miner.isDeadOrDying || !miner.isAggressive) return false
-        if (level.gameRules.get(GameRules.MOB_GRIEFING)==false) return false
+        if (!level.gameRules.getBoolean(GameRules.RULE_MOBGRIEFING)) return false
         val targetPos = miner.target?.blockPosition()?: miner.navigation.path.getEndPos() ?:  return false
 
         breakTargetPos?.let {
@@ -158,7 +158,7 @@ class MineBlocksToTargetGoal(
 
     private fun BlockPos?.equalPos(pos: BlockPos?): Boolean {
         if (this == null || pos == null) return false
-        return this.toMutable() == pos.toMutable()
+        return this.mutable() == pos.mutable()
     }
 
     private fun getBlockBreakTime(pos: BlockPos?): Int {

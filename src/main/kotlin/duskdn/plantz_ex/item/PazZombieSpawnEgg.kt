@@ -9,7 +9,7 @@ import net.minecraft.stats.Stats
 import net.minecraft.world.Difficulty
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
@@ -47,7 +47,7 @@ class PazSpawnEgg(
                 itemStack,
                 user,
                 spawnPos,
-                EntitySpawnReason.SPAWN_ITEM_USE,
+                MobSpawnType.SPAWN_ITEM_USE,
                 tryMoveDown,
                 movedUp
             )

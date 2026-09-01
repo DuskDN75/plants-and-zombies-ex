@@ -18,10 +18,10 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
-import net.minecraft.world.entity.animal.chicken.Chicken
-import net.minecraft.world.entity.animal.fish.AbstractFish
+import net.minecraft.world.entity.animal.AbstractFish
+import net.minecraft.world.entity.animal.Chicken
 import net.minecraft.world.entity.monster.Enemy
-import net.minecraft.world.entity.monster.zombie.Zombie
+import net.minecraft.world.entity.monster.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 
@@ -50,7 +50,7 @@ class Chomper(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntiti
     override fun registerGoals() {
         super.registerGoals()
         this.goalSelector.addGoal(1, ChompAttackGoal(this))
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
+        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target ->
             target !is PazPlant
                     && (target is Zombie
                     || target is AbstractFish
@@ -69,7 +69,7 @@ class Chomper(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntiti
             if (tickCount % 24 == 0) playSound(SoundEvents.CAMEL_EAT, 0.15f, 0.9f) // TODO Custom Sound
             if (random.nextInt(12) == 0) {
                 val eyeHeight = eyeHeight.toDouble()
-                val direction = this.headLookAngle.scale(1.5)
+                val direction = this.lookAngle.scale(1.5)
                 val speed = 0.01
 
                 val vx = direction.x * speed
@@ -112,7 +112,7 @@ class Chomper(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntiti
 
         override fun doAction() : Boolean {
             val target = usingEntity.target?: return false
-            if(!target.`is`(CANNOT_CHOMP)) {
+            if(!target.type.`is`(CANNOT_CHOMP)) {
                 //Add modifier to increase damage for insta kills
                 usingEntity.getAttribute(Attributes.ATTACK_DAMAGE)?.addOrUpdateTransientModifier(CHOMP_ATTACK_MODIFIER)
             }

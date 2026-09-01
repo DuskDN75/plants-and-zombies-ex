@@ -2,6 +2,7 @@ package duskdn.plantz_ex.entity.plant.init
 
 import duskdn.plantz_ex.entity.Balloon
 import duskdn.plantz_ex.init.PazTags
+import duskdn.plantz_ex.util.getRootOwner
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
@@ -36,17 +37,17 @@ abstract class AttackingPlant(type: EntityType<out AttackingPlant>, level: Level
         return false
     }
 
-    override fun considersEntityAsAlly(other: Entity): Boolean {
-
-        if (other is PazPlant) return true
-
-        if (isTame) {
-            val owner = rootOwner
-            if (other === owner) return true
-        }
-
-        return false
-    }
+//    override fun considersEntityAsAlly(other: Entity): Boolean {
+//
+//        if (other is PazPlant) return true
+//
+//        if (isTame) {
+//            val owner = getRootOwner()
+//            if (other === owner) return true
+//        }
+//
+//        return false
+//    }
 
     override fun canAttack(target: LivingEntity): Boolean {
         return target.isAlive && target !is PazPlant
@@ -68,22 +69,22 @@ abstract class AttackingPlant(type: EntityType<out AttackingPlant>, level: Level
                 )
     }
 
-    override fun asValidTarget(target: LivingEntity?): LivingEntity? {
-        if (target is Player) {
-            if (target.isCreative || target.isSpectator) {
-                return null
-            }
-        }
-
-        return target
-    }
+//    override fun asValidTarget(target: LivingEntity?): LivingEntity? {
+//        if (target is Player) {
+//            if (target.isCreative || target.isSpectator) {
+//                return null
+//            }
+//        }
+//
+//        return target
+//    }
 
     open fun registerAttackGoal() {
 
 //        debugPrint("follow range = ${this.getAttributeValue(Attributes.FOLLOW_RANGE)}")
 
         this.targetSelector.addGoal(4,
-            NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, mustSeeTarget(), false) { target, level ->
+            NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, mustSeeTarget(), false) { target ->
                 enemyCheck(target) || target is Balloon
             })
     }

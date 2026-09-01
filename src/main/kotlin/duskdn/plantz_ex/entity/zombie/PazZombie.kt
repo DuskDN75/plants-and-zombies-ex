@@ -8,6 +8,7 @@ import duskdn.plantz_ex.init.PazDataSerializers.DATA_ZOMBIE_STATE
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
@@ -24,17 +25,16 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.FlyingMoveControl
 import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.entity.ai.goal.MoveThroughVillageGoal
-import net.minecraft.world.entity.ai.goal.SpearUseGoal
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation
 import net.minecraft.world.entity.ai.navigation.PathNavigation
-import net.minecraft.world.entity.animal.golem.IronGolem
-import net.minecraft.world.entity.animal.turtle.Turtle
-import net.minecraft.world.entity.monster.zombie.Zombie
-import net.minecraft.world.entity.monster.zombie.ZombifiedPiglin
-import net.minecraft.world.entity.npc.villager.AbstractVillager
+import net.minecraft.world.entity.animal.IronGolem
+import net.minecraft.world.entity.animal.Turtle
+import net.minecraft.world.entity.monster.Zombie
+import net.minecraft.world.entity.monster.ZombifiedPiglin
+import net.minecraft.world.entity.npc.AbstractVillager
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
@@ -43,8 +43,6 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.material.Fluids
-import net.minecraft.world.level.storage.ValueInput
-import net.minecraft.world.level.storage.ValueOutput
 
 abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie(type, level) {
 
@@ -62,7 +60,7 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
         fun checkPazZombieSpawnRules(
             type: EntityType<out Mob>,
             level: ServerLevelAccessor,
-            spawnReason: EntitySpawnReason,
+            spawnReason: MobSpawnType,
             pos: BlockPos,
             random: RandomSource
         ): Boolean {
@@ -73,14 +71,14 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
             val inWater = level.getFluidState(pos).`is`(FluidTags.WATER)
 
             // light / day requirements
-            val canSpawn = (inWater && isRaining) || EntitySpawnReason.ignoresLightRequirements(spawnReason) || biome.`is`(PazTags.Biomes.DAY_SPAWNS) || isDarkEnoughToSpawn(level, pos, random)
+            val canSpawn = (inWater && isRaining) || MobSpawnType.ignoresLightRequirements(spawnReason) || biome.`is`(PazTags.Biomes.DAY_SPAWNS) || isDarkEnoughToSpawn(level, pos, random)
             if (!canSpawn) return false
 
             // water spawning
             if (inWater) {
                 val rainBonus = if (isRaining) 2.75f else 1.25f
                 val spawnChance = if (biome.`is`(PazTags.Biomes.WATER_SPAWNS)) 0.085f else 0.015f
-                return EntitySpawnReason.isSpawner(spawnReason) ||
+                return MobSpawnType.isSpawner(spawnReason) ||
                         (random.nextFloat() < (spawnChance * rainBonus) && pos.y > level.seaLevel - 3)
             }
 
@@ -175,7 +173,6 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
     }
 
     fun addBehaviourGoalsNoMelee() {
-        this.goalSelector.addGoal(2, SpearUseGoal<Zombie>(this, 1.0, 1.0, 10.0f, 2.0f))
         this.goalSelector.addGoal(6, MoveThroughVillageGoal(this, 1.0, true, 4) { this.canBreakDoors() })
         this.goalSelector.addGoal(7, WaterAvoidingRandomStrollGoal(this, 1.0))
         this.targetSelector.addGoal(1, HurtByTargetGoal(this).setAlertOthers(ZombifiedPiglin::class.java))
@@ -239,10 +236,10 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
     open fun spawnBalloons(count: Int = balloonCount) {
         val level = level() as? ServerLevel ?: return
         for (i in 0 until count) {
-            val balloon = PazEntities.BALLOON.create(level, EntitySpawnReason.TRIGGERED) ?: return
+            val balloon = PazEntities.BALLOON.create(level) ?: return
             val randomX = (random.nextDouble() - 0.5) * 2 + x
             val randomZ = (random.nextDouble() - 0.5) * 2 + z
-            balloon.snapTo(randomX, eyeY + 1.0, randomZ)
+            balloon.moveTo(randomX, eyeY + 1.0, randomZ)
             balloon.dyeColor = DyeColor.RED
             level.addFreshEntity(balloon)
             balloon.setLeashedTo(this, true)
@@ -259,16 +256,16 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
         entityData.define(ZOMBIE_STATE, ZombieState.IDLE)
     }
 
-    override fun readAdditionalSaveData(input: ValueInput) {
-        super.readAdditionalSaveData(input)
+    override fun readAdditionalSaveData(compoundTag: CompoundTag) {
+        super.readAdditionalSaveData(compoundTag)
 
-        this.waveStarted = input.getBooleanOr("waveStarted", true)
+        this.waveStarted = if (compoundTag.contains("waveStarted")) compoundTag.getBoolean("waveStarted") else true
     }
 
-    override fun addAdditionalSaveData(output: ValueOutput) {
-        super.addAdditionalSaveData(output)
+    override fun addAdditionalSaveData(compoundTag: CompoundTag) {
+        super.addAdditionalSaveData(compoundTag)
 
-        output.putBoolean("waveStarted", waveStarted)
+        compoundTag.putBoolean("waveStarted", waveStarted)
     }
 
     var waveStarted: Boolean = false
@@ -277,20 +274,18 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
         super.setTarget(target)
     }
 
-    override fun hurtServer(level: ServerLevel, source: DamageSource, damage: Float): Boolean {
-        return if (source.`is`(PazDamageTypes.ZOMBIE_SMASH)) false else super.hurtServer(level, source, damage)
-    }
-    override fun hurtClient(source: DamageSource): Boolean {
-        return if (source.`is`(PazDamageTypes.ZOMBIE_SMASH)) false else super.hurtClient(source)
-    }
-    override fun actuallyHurt(level: ServerLevel, source: DamageSource, damage: Float) {
-        if (source.`is`(PazDamageTypes.ZOMBIE_SMASH)) return
-        super.actuallyHurt(level, source, damage)
+    override fun hurt(damageSource: DamageSource, f: Float): Boolean {
+        return if (damageSource.`is`(PazDamageTypes.ZOMBIE_SMASH)) false else super.hurt(damageSource, f)
     }
 
-    override fun wantsToPickUp(level: ServerLevel, itemStack: ItemStack): Boolean {
+    override fun actuallyHurt(source: DamageSource, damage: Float) {
+        if (source.`is`(PazDamageTypes.ZOMBIE_SMASH)) return
+        super.actuallyHurt(source, damage)
+    }
+
+    override fun wantsToPickUp(itemStack: ItemStack): Boolean {
         if (itemStack.`is`(PazBlocks.PLANTZ_FLAG.asItem())) return false
-        return super.wantsToPickUp(level, itemStack)
+        return super.wantsToPickUp(itemStack)
     }
 
     open fun emergingTime(): Int = 40
@@ -299,7 +294,7 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
     override fun maxUpStep(): Float = if (isInWater) 0.5f else super.maxUpStep()
     override fun isSunSensitive(): Boolean = false
     override fun convertsInWater(): Boolean = false
-    override fun canSpawnInLiquids(): Boolean = canEquipDuckyInWater()
+    fun canSpawnInLiquids(): Boolean = canEquipDuckyInWater()
     override fun checkSpawnObstruction(level: LevelReader): Boolean {
         return if (canSpawnInLiquids()) level.isUnobstructed(this)
         else super.checkSpawnObstruction(level)
@@ -314,11 +309,11 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
     override fun finalizeSpawn(
         level: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: EntitySpawnReason,
+        mobSpawnType: MobSpawnType,
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
-        val data = super.finalizeSpawn(level, difficulty, spawnReason, groupData)
-        if (spawnReason == EntitySpawnReason.REINFORCEMENT) state = ZombieState.EMERGING
+        val data = super.finalizeSpawn(level, difficulty, mobSpawnType, groupData)
+        if (mobSpawnType == MobSpawnType.REINFORCEMENT) state = ZombieState.EMERGING
 
         val fluidType = level.getBlockState(blockPosition()).fluidState.type
 
@@ -326,7 +321,7 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
 
         if (canEquipDuckyInWater() && inFluid) {
             setItemSlot(EquipmentSlot.LEGS, PazItems.DUCKY_TUBE.defaultInstance)
-            if (spawnReason != EntitySpawnReason.NATURAL) setDropChance(EquipmentSlot.LEGS, 0.0f)
+            if (mobSpawnType != MobSpawnType.NATURAL) setDropChance(EquipmentSlot.LEGS, 0.0f)
             else setDropChance(EquipmentSlot.LEGS, 0.15f)
         }
 

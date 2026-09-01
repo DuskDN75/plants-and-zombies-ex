@@ -1,5 +1,5 @@
 plugins {
-	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
 	id 'maven-publish'
 	id "org.jetbrains.kotlin.jvm" version "2.4.10"
 }
@@ -53,7 +53,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
-	modImplementation "com.github.glitchfiend:TerraBlender-fabric:${project.terrablender_version}"
+	modImplementation "com.github.glitchfiend:TerraBlender-fabric:${project.minecraft_version}-${project.terrablender_version}"
 
 	modImplementation "dev.lambdaurora.lambdynamiclights:lambdynamiclights-api:${project.lambdynamiclights_version}"
 

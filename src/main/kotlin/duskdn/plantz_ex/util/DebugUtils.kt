@@ -5,21 +5,21 @@ import net.fabricmc.loader.impl.lib.sat4j.core.Vec
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.DustParticleOptions
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.util.ARGB
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
+import org.joml.Vector3f
 import java.lang.reflect.Field
 import java.util.WeakHashMap
 
-val defaultDustParticle = DustParticleOptions(ARGB.color(Vec3(1.0,1.0,1.0)), 2.0f)
+val defaultDustParticle = DustParticleOptions(Vector3f(1.0f,1.0f,1.0f), 2.0f)
 
-val blueDustParticle = DustParticleOptions(ARGB.color(Vec3(0.2,0.5,1.0)), 2.0f)
+val blueDustParticle = DustParticleOptions(Vector3f(0.2f,0.5f,1.0f), 2.0f)
 
-val redDustParticle = DustParticleOptions(ARGB.color(Vec3(1.0,0.1,0.2)), 2.0f)
+val redDustParticle = DustParticleOptions(Vector3f(1.0f,0.1f,0.2f), 2.0f)
 
-val yellowDustParticle = DustParticleOptions(ARGB.color(Vec3(1.0,0.8,0.2)), 2.0f)
+val yellowDustParticle = DustParticleOptions(Vector3f(1.0f,0.8f,0.2f), 2.0f)
 
-val orangeDustParticle = DustParticleOptions(ARGB.color(Vec3(0.8,0.5,0.2)), 2.0f)
+val orangeDustParticle = DustParticleOptions(Vector3f(0.8f,0.5f,0.2f), 2.0f)
 
 fun trackVector(level: Level, dustParticle: DustParticleOptions = defaultDustParticle, targetPos: Vec3, offsetPos: Vec3 = Vec3.ZERO) {
 
@@ -37,13 +37,11 @@ fun trackVector(level: Level, dustParticle: DustParticleOptions = defaultDustPar
 class DebugTracker(
     val parent: Any,
     val variable: String,
-    colorVec: Vec3 = Vec3(1.0, 1.0, 1.0),
+    colorVec: Vector3f = Vector3f(1.0f, 1.0f, 1.0f),
     val field: Field = parent.javaClass.getDeclaredField(variable)
 ) {
 
-    val color = ARGB.color(colorVec)
-
-    val dustParticle = DustParticleOptions(color, 2.0f)
+    val dustParticle = DustParticleOptions(colorVec, 2.0f)
 
     init {
         field.isAccessible = true
@@ -97,7 +95,7 @@ fun Any.updateTrackers(level: Level) {
 
 }
 
-fun Any.trackVariable(variable: String, color: Vec3 = Vec3(1.0, 1.0, 1.0), thing: Any = this) {
+fun Any.trackVariable(variable: String, color: Vector3f = Vector3f(1.0f, 1.0f, 1.0f), thing: Any = this) {
 
     if (!PazConfig.SHOW_DEBUG_TRACKERS) return
 

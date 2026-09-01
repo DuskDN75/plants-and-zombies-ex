@@ -1,9 +1,14 @@
 package duskdn.plantz_ex.item
 
 import duskdn.plantz_ex.entity.zombie.AllStar.Companion.CHARGE_BOOST_ID
+import duskdn.plantz_ex.item.interfaces.IBlocksProjectileDamage
+import net.minecraft.core.Holder
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.Entity
@@ -11,13 +16,16 @@ import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.item.Equipable
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.level.Level
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import kotlin.math.sqrt
 
-class FootballHelmetItem(properties: Properties) : Item(properties) {
+class FootballHelmetItem(properties: Properties) : Item(properties), Equipable, IBlocksProjectileDamage {
     companion object {
         private const val DAMAGE_INTERVAL = 35
         private const val KNOCKBACK_STRENGTH = 0.8
@@ -33,8 +41,24 @@ class FootballHelmetItem(properties: Properties) : Item(properties) {
         entity.getAttribute(Attributes.STEP_HEIGHT)?.removeModifier(CHARGE_BOOST_ID)
     }
 
-    override fun inventoryTick(itemStack: ItemStack, level: ServerLevel, owner: Entity, slot: EquipmentSlot?) {
-        super.inventoryTick(itemStack, level, owner, slot)
+    override fun appendHoverText(
+        itemStack: ItemStack,
+        tooltipContext: TooltipContext,
+        list: MutableList<Component?>,
+        tooltipFlag: TooltipFlag
+    ) {
+        super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag)
+
+        addBlocksProjectileText(this, itemStack, tooltipContext, list, tooltipFlag)
+    }
+
+    override fun inventoryTick(itemStack: ItemStack, level: Level, owner: Entity, i: Int, bl: Boolean) {
+        super.inventoryTick(itemStack, level, owner, i, bl)
+
+        if (owner !is LivingEntity) return
+
+        if (level !is ServerLevel) return
+
         if (level.isClientSide || owner !is LivingEntity) return
         if (!isWearingFootballHelmet(owner)) {
             removeModifiers(owner)
@@ -53,8 +77,8 @@ class FootballHelmetItem(properties: Properties) : Item(properties) {
                 AttributeModifier(CHARGE_BOOST_ID, 0.5, AttributeModifier.Operation.ADD_VALUE)
             )
         }
-        if (!level.isClientSide && owner.tickCount % DAMAGE_INTERVAL == 0 && owner.getRandom().nextFloat() > 0.5f) {
-            if (slot != null) itemStack.hurtAndBreak(1, owner, slot)
+        if (owner.tickCount % DAMAGE_INTERVAL == 0 && owner.getRandom().nextFloat() > 0.5f) {
+            itemStack.hurtAndBreak(1, owner, EquipmentSlot.HEAD)
         }
 
         level.sendParticles(
@@ -92,5 +116,13 @@ class FootballHelmetItem(properties: Properties) : Item(properties) {
                 -awayZ / length
             )
         }
+    }
+
+    override fun getEquipmentSlot(): EquipmentSlot {
+        return EquipmentSlot.HEAD
+    }
+
+    override fun getEquipSound(): Holder<SoundEvent?>? {
+        return SoundEvents.ARMOR_EQUIP_IRON
     }
 }

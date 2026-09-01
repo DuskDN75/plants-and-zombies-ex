@@ -2,6 +2,7 @@ package duskdn.plantz_ex.entity.plant.all.mushrooms
 
 import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.entity.plant.utils.mushroomSurvivalCheck
+import duskdn.plantz_ex.entity.zombie.DiscoZombie
 import duskdn.plantz_ex.init.PazCriteria
 import duskdn.plantz_ex.init.PazEffects
 import duskdn.plantz_ex.init.PazEntities
@@ -16,7 +17,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.monster.Enemy
-import net.minecraft.world.entity.monster.zombie.Zombie
+import net.minecraft.world.entity.monster.Zombie
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
@@ -24,7 +25,7 @@ class HypnoShroom(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEn
     override fun registerGoals() {
         super.registerGoals()
 
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
+        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target ->
             target !is PazPlant
                     && (target is Zombie
                     || (target is Enemy && isTame))
@@ -45,7 +46,7 @@ class HypnoShroom(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEn
             )
             attacker.addEffect(MobEffectInstance(PazEffects.HYPNOTIZE, 800, 0))
             val owner = owner
-            if (owner is ServerPlayer) PazCriteria.DISCO_HYPNO.trigger(owner, attacker.`is`(PazEntities.DISCO_ZOMBIE))
+            if (owner is ServerPlayer) PazCriteria.DISCO_HYPNO.trigger(owner, attacker is DiscoZombie)
             playSound(PazSounds.HYPNOTIZED)
         }
     }
@@ -61,7 +62,7 @@ class HypnoShroom(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEn
         cloud.radiusOnUse = -0.5f
         cloud.waitTime = 10
         cloud.duration = 300
-        cloud.setPotionDurationScale(0.25f)
+//        cloud.setPotionDurationScale(0.25f)
         cloud.radiusPerTick = -cloud.radius / cloud.duration.toFloat()
         cloud.addEffect(MobEffectInstance(PazEffects.HYPNOTIZE, 1000, 0))
         level().addFreshEntity(cloud)

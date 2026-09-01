@@ -56,7 +56,7 @@ object PazMain : ModInitializer {
 			LOGGER.info("Sent server config to ${player.name.string}")
 		}
 
-		ServerTickEvents.END_LEVEL_TICK.register {
+		ServerTickEvents.END_WORLD_TICK.register {
 			it.getZombieRaids().tick(it)
 		}
 
@@ -64,7 +64,7 @@ object PazMain : ModInitializer {
 		ServerBlockEntityEvents.BLOCK_ENTITY_LOAD.register { blockEntity, level ->
 			(blockEntity as? MailboxBlockEntity)?.let {
 				MailboxManager.registerMailbox(level, it)
-				level.getMailboxMailQueue().deliverTo(it)
+//				level.getMailboxMailQueue().deliverTo(it)
 			}
 		}
 		ServerBlockEntityEvents.BLOCK_ENTITY_UNLOAD.register { blockEntity, level ->

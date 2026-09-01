@@ -17,7 +17,7 @@ open class FurthestAttackableTargetGoal<T : LivingEntity>(
     randomInterval: Int,
     mustSee: Boolean,
     mustReach: Boolean,
-    selector: TargetingConditions.Selector?
+    selector: Predicate<LivingEntity>?
 ) : TargetGoal(usingEntity, mustSee, mustReach) {
     protected val randomInterval: Int = reducedTickDelay(randomInterval)
     protected var target: LivingEntity? = null
@@ -42,7 +42,7 @@ open class FurthestAttackableTargetGoal<T : LivingEntity>(
     }
 
     protected fun findTarget() {
-        val level = getServerLevel(this.mob)
+        val level = this.mob.level()
         if (this.targetType != Player::class.java && this.targetType != ServerPlayer::class.java) {
             this.target = level.getFurthestEntities(
                 this.mob.level().getEntitiesOfClass<T>(

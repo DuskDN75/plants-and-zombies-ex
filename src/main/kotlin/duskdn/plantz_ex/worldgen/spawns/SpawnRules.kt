@@ -8,7 +8,7 @@ import duskdn.plantz_ex.util.debugPrint
 import duskdn.plantz_ex.worldgen.spawns.init.SpawnRule
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.tags.FluidTags
-import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LightLayer
 import net.minecraft.world.level.block.Blocks
@@ -24,7 +24,7 @@ object SpawnRules {
 
         val blockAtPos = level.getBlockState(pos)
 
-        if (EntitySpawnReason.isSpawner(spawnReason)) return@SpawnRule true
+        if (MobSpawnType.isSpawner(spawnReason)) return@SpawnRule true
 
         val hasNearby = (level.getEntitiesOfClass(
             PazPlant::class.java,
@@ -44,7 +44,7 @@ object SpawnRules {
 
         val blockAtPos = level.getBlockState(pos)
 
-        if (EntitySpawnReason.isSpawner(spawnReason)) return@SpawnRule true
+        if (MobSpawnType.isSpawner(spawnReason)) return@SpawnRule true
 
         val hasNearby = (level.getEntitiesOfClass(
             PazPlant::class.java,
@@ -64,7 +64,7 @@ object SpawnRules {
 
         val blockAtPos = level.getBlockState(pos)
 
-        if (EntitySpawnReason.isSpawner(spawnReason)) return@SpawnRule true
+        if (MobSpawnType.isSpawner(spawnReason)) return@SpawnRule true
 
         val hasNearby = (level.getEntitiesOfClass(
             PazPlant::class.java,
@@ -84,7 +84,7 @@ object SpawnRules {
 
         val blockAtPos = level.getBlockState(pos)
 
-        if (EntitySpawnReason.isSpawner(spawnReason)) return@SpawnRule true
+        if (MobSpawnType.isSpawner(spawnReason)) return@SpawnRule true
 
         val hasNearby = (level.getEntitiesOfClass(
             PazPlant::class.java,
@@ -105,7 +105,7 @@ object SpawnRules {
             PazPlant::class.java,
             AABB(pos).inflate(0.0, 1.0, 0.0)
         ) {
-            it.tickCount > 1 && it.`is`(PazTags.EntityTypes.CARRIER)
+            it.tickCount > 1 && it.type.`is`(PazTags.EntityTypes.CARRIER)
         })
 
         return@SpawnRule carriers.isNotEmpty() && PlantSpawnUtils.vehicleTypeTest(context.type, carriers.first().type)
@@ -180,7 +180,7 @@ object SpawnRules {
 
         val blockLight = context.level.getBrightness(LightLayer.BLOCK, context.pos)
 
-        val darkOutside = context.level.level.isDarkOutside
+        val darkOutside = !context.level.level.isDay
 
         val rawLight = context.level.level.getRawBrightness(context.pos, 0)
 
@@ -195,7 +195,7 @@ object SpawnRules {
         return@SpawnRule context.level.getBrightness(
             LightLayer.SKY,
             context.pos
-        ) > 0 && context.level.level.isBrightOutside
+        ) > 0 && context.level.level.isDay
     }
 
     val IS_THUNDERING = SpawnRule { context ->

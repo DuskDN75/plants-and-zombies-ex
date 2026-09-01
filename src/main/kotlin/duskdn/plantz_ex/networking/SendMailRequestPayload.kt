@@ -46,11 +46,11 @@ data class SendMailRequestPayload(val targetPos: BlockPos) : CustomPacketPayload
             val success = if (targetBE != null) {
                 MailboxMailQueue.tryInsertIntoMailbox(targetBE, stack)
             } else if (level.isLoaded(targetPos)) {
-                level.getMailboxMailQueue().discardFor(targetPos)
+//                level.getMailboxMailQueue().discardFor(targetPos)
                 MailboxManager.unregisterMailbox(level, targetPos)
                 false
             } else {
-                level.getMailboxMailQueue().queue(targetPos, stack)
+//                level.getMailboxMailQueue().queue(targetPos, stack)
                 true
             }
 

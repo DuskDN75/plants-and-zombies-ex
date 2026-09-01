@@ -28,7 +28,7 @@ import net.minecraft.util.RandomSource
 import net.minecraft.util.random.WeightedList
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.effect.MobEffects
-import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.Mob
@@ -144,7 +144,7 @@ object MobFlagWeights {
 object ArmorUtil {
 
     @JvmStatic
-    fun getArmor(random: RandomSource, spawnReason: EntitySpawnReason = EntitySpawnReason.MOB_SUMMONED): MutableList<Pair<EquipmentSlot, ItemStack>> {
+    fun getArmor(random: RandomSource, spawnReason: MobSpawnType = MobSpawnType.MOB_SUMMONED): MutableList<Pair<EquipmentSlot, ItemStack>> {
 
         val equipment: MutableList<Pair<EquipmentSlot, ItemStack>> = mutableListOf()
 
@@ -156,7 +156,7 @@ object ArmorUtil {
 
         var randomCull: Float = 1.0f
 
-        if (mobFlag.item != null && mobFlag.equipmentSlot != null && random.nextFloat() < randomCull && spawnReason != EntitySpawnReason.REINFORCEMENT) {
+        if (mobFlag.item != null && mobFlag.equipmentSlot != null && random.nextFloat() < randomCull && spawnReason != MobSpawnType.REINFORCEMENT) {
 
             equipment.add(
                 mobFlag.equipmentSlot to mobFlag.item.defaultInstance
@@ -189,7 +189,7 @@ object ArmorUtil {
     }
 
     @JvmStatic
-    fun addArmor(mob: Mob, spawnReason: EntitySpawnReason = EntitySpawnReason.MOB_SUMMONED) {
+    fun addArmor(mob: Mob, spawnReason: MobSpawnType = MobSpawnType.MOB_SUMMONED) {
 
         val equipment: MutableList<Pair<EquipmentSlot, ItemStack>> = getArmor(mob.random, spawnReason)
 

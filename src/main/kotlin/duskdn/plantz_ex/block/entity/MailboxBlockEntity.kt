@@ -74,7 +74,7 @@ class MailboxBlockEntity(
             }
 
             if (blockEntity.tickCount % 100 == 0) {
-                (level as? ServerLevel)?.getMailboxMailQueue()?.deliverTo(blockEntity)
+//                (level as? ServerLevel)?.getMailboxMailQueue()?.deliverTo(blockEntity)
             }
         }
     }

@@ -27,13 +27,13 @@ class ZombieYeti(type: EntityType<out ZombieYeti>, level: Level) : PazZombie(typ
         fun checkZombieYetiSpawnRules(
             type: EntityType<out Mob>,
             level: ServerLevelAccessor,
-            spawnReason: EntitySpawnReason,
+            spawnReason: MobSpawnType,
             pos: BlockPos,
             random: RandomSource
         ): Boolean {
             val below = pos.below()
             return level.difficulty != Difficulty.PEACEFUL
-                    && (EntitySpawnReason.ignoresLightRequirements(spawnReason) || isDarkEnoughToSpawn(level, pos, random))
+                    && (MobSpawnType.ignoresLightRequirements(spawnReason) || isDarkEnoughToSpawn(level, pos, random))
                     && checkMobSpawnRules(type, level, spawnReason, pos, random) || level.getBlockState(below).`is`(PazTags.BlockTags.YETI_SPAWNABLE_ON)
                     && pos.y > level.seaLevel
         }
@@ -108,22 +108,22 @@ class ZombieYeti(type: EntityType<out ZombieYeti>, level: Level) : PazZombie(typ
     override fun finalizeSpawn(
         level: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: EntitySpawnReason,
+        spawnReason: MobSpawnType,
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
         val data = super.finalizeSpawn(level, difficulty, spawnReason, ZombieGroupData(false, false))
         val random = level.random
-        if (spawnReason != EntitySpawnReason.CONVERSION) {
+        if (spawnReason != MobSpawnType.CONVERSION) {
 
             if (random.nextFloat() < 0.06 && getItemBySlot(EquipmentSlot.HEAD).isEmpty) {
                 setItemSlot(EquipmentSlot.HEAD, Items.BUCKET.defaultInstance)
             }
 
             if (random.nextFloat() < 0.001) {
-                val polarBear = EntityType.POLAR_BEAR.create(level(), EntitySpawnReason.JOCKEY)
+                val polarBear = EntityType.POLAR_BEAR.create(level(), MobSpawnType.JOCKEY)
                 if (polarBear != null) {
                     polarBear.snapTo(x, y, z, yRot, 0.0f)
-                    polarBear.finalizeSpawn(level, difficulty, EntitySpawnReason.JOCKEY, null)
+                    polarBear.finalizeSpawn(level, difficulty, MobSpawnType.JOCKEY, null)
                     startRiding(polarBear, false, false)
                     level.addFreshEntity(polarBear)
                 }

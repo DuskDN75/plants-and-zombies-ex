@@ -46,11 +46,11 @@ class Gnome(type: EntityType<out Gnome>, level: Level) :Monster(type, level) {
         fun checkGnomeSpawnRules(
             type: EntityType<out Mob>,
             level: ServerLevelAccessor,
-            spawnReason: EntitySpawnReason,
+            spawnReason: MobSpawnType,
             pos: BlockPos,
             random: RandomSource
         ): Boolean {
-            return (EntitySpawnReason.ignoresLightRequirements(spawnReason))
+            return (MobSpawnType.ignoresLightRequirements(spawnReason))
                     && checkMobSpawnRules(type, level, spawnReason, pos, random)
         }
 
@@ -95,14 +95,13 @@ class Gnome(type: EntityType<out Gnome>, level: Level) :Monster(type, level) {
     }
 
     override fun registerGoals() {
-        this.goalSelector.addGoal(1, SpearUseGoal(this, 1.0, 1.0, 10.0f, 2.0f))
         this.goalSelector.addGoal(2, RandomLookAroundGoal(this))
         this.goalSelector.addGoal(2, LookAtPlayerGoal(this, Player::class.java, 8.0f))
         this.goalSelector.addGoal(3, WaterAvoidingRandomStrollGoal(this, 0.6))
         this.goalSelector.addGoal(4, FindAndRideAnimalGoal(this))
         //this.goalSelector.addGoal(7, FollowMobGoal(this, 1.0, 3.0f, 7.0f))
         this.targetSelector.addGoal(1, HurtByTargetGoal(this, Gnome::class.java).setAlertOthers())
-        this.targetSelector.addGoal(2, NearestAttackableTargetGoal(this, LivingEntity::class.java, true) { target, level ->
+        this.targetSelector.addGoal(2, NearestAttackableTargetGoal(this, LivingEntity::class.java, true) { target ->
             target !is Gnome
                     && target is PazPlant
                     || target is Zombie
@@ -154,7 +153,7 @@ class Gnome(type: EntityType<out Gnome>, level: Level) :Monster(type, level) {
     override fun finalizeSpawn(
         level: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: EntitySpawnReason,
+        spawnReason: MobSpawnType,
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
         setCanPickUpLoot(true)

@@ -16,7 +16,11 @@ class SunItem(properties: Properties) : Item(properties) {
         val sunStack = context.itemInHand
         if (BoneMealItem.growCrop(sunStack, level, pos)) {
             if (!level.isClientSide && context.player!=null) {
-                sunStack.causeUseVibration(context.player!!, GameEvent.ITEM_INTERACT_FINISH)
+                level.gameEvent(
+                    GameEvent.ITEM_INTERACT_FINISH,
+                    pos,
+                    GameEvent.Context.of(context.player)
+                )
                 level.levelEvent(1505, pos, 15)
             }
 
@@ -32,7 +36,11 @@ class SunItem(properties: Properties) : Item(properties) {
                 )
             ) {
                 if (!level.isClientSide && context.player!=null) {
-                    sunStack.causeUseVibration(context.player!!, GameEvent.ITEM_INTERACT_FINISH)
+                    level.gameEvent(
+                        GameEvent.ITEM_INTERACT_FINISH,
+                        pos,
+                        GameEvent.Context.of(context.player)
+                    )
                     level.levelEvent(1505, relative, 15)
                 }
 

@@ -7,8 +7,8 @@ import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.Item
@@ -39,7 +39,7 @@ class BalloonItem(
             level,
             EntityType.createDefaultStackConfig(level, itemStack, player),
             spawnPos,
-            EntitySpawnReason.SPAWN_ITEM_USE,
+            MobSpawnType.SPAWN_EGG,
             true,
             face == Direction.UP
         )?: return InteractionResult.FAIL
@@ -56,7 +56,7 @@ class BalloonItem(
             return LeadItem.bindPlayerMobs(player, level, pos)
         }
 
-        return InteractionResult.SUCCESS_SERVER
+        return InteractionResult.SUCCESS
     }
 
 

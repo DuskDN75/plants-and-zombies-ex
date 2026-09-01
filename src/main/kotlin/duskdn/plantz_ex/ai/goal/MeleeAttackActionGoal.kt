@@ -3,6 +3,7 @@ package duskdn.plantz_ex.ai.goal
 import duskdn.plantz_ex.init.PazConfig
 import duskdn.plantz_ex.init.PazDamageTypes
 import duskdn.plantz_ex.entity.plant.init.PazPlant
+import duskdn.plantz_ex.util.getRootOwner
 import net.minecraft.resources.ResourceKey
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.damagesource.DamageType
@@ -47,10 +48,10 @@ open class MeleeAttackActionGoal(
         val damage : Float = usingEntity.attributes.getValue(Attributes.ATTACK_DAMAGE).toFloat() * damageMultiplier
         val knockback : Double = usingEntity.attributes.getValue(Attributes.ATTACK_KNOCKBACK)
         val source = usingEntity.damageSources().source(damageType, usingEntity,
-            if (PazConfig.PLAYER_CREDIT_FOR_PLANT_KILLS && usingEntity is OwnableEntity) (usingEntity as OwnableEntity).rootOwner else usingEntity)
+            if (PazConfig.PLAYER_CREDIT_FOR_PLANT_KILLS && usingEntity is OwnableEntity) usingEntity.getRootOwner() else usingEntity)
 
         beforeHitEntityEffect(target)
-        if (target.hurtServer(usingEntity.level() as ServerLevel, source, damage)) {
+        if (target.hurt(source, damage)) {
             target.knockback(
                 knockback,
                 usingEntity.x - target.x,

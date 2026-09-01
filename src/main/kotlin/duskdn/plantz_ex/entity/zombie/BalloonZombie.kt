@@ -35,7 +35,7 @@ open class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLO
         fun checkBalloonZombieSpawnRules(
             type: EntityType<out Mob>,
             level: ServerLevelAccessor,
-            spawnReason: EntitySpawnReason,
+            spawnReason: MobSpawnType,
             pos: BlockPos,
             random: RandomSource
         ): Boolean {
@@ -46,14 +46,14 @@ open class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLO
             val inWater = level.getFluidState(pos).`is`(FluidTags.WATER)
 
             // light / day requirements
-            val canSpawn = (inWater && isRaining) || EntitySpawnReason.ignoresLightRequirements(spawnReason) || biome.`is`(PazTags.Biomes.DAY_SPAWNS) || isDarkEnoughToSpawn(level, pos, random)
+            val canSpawn = (inWater && isRaining) || MobSpawnType.ignoresLightRequirements(spawnReason) || biome.`is`(PazTags.Biomes.DAY_SPAWNS) || isDarkEnoughToSpawn(level, pos, random)
             if (!canSpawn) return false
 
             // water spawning
             if (inWater) {
                 val rainBonus = if (isRaining) 2.75f else 1.25f
                 val spawnChance = if (biome.`is`(PazTags.Biomes.WATER_SPAWNS)) 0.085f else 0.015f
-                return EntitySpawnReason.isSpawner(spawnReason) ||
+                return MobSpawnType.isSpawner(spawnReason) ||
                         (random.nextFloat() < (spawnChance * rainBonus) && pos.y > level.seaLevel - 3)
             }
 
@@ -235,7 +235,7 @@ open class BalloonZombie(type: EntityType<out BalloonZombie> = PazEntities.BALLO
     override fun finalizeSpawn(
         level: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: EntitySpawnReason,
+        spawnReason: MobSpawnType,
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
         val data = super.finalizeSpawn(level, difficulty, spawnReason, groupData)

@@ -3,15 +3,15 @@ package duskdn.plantz_ex.worldgen.spawns.init
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
-import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.level.ServerLevelAccessor
 
 data class SpawnContext(
     val type: EntityType<out LivingEntity>,
     val level: ServerLevel,
-    val spawnReason: EntitySpawnReason,
+    val spawnReason: MobSpawnType,
     val pos: BlockPos,
     val randomSource: RandomSource
 ) {

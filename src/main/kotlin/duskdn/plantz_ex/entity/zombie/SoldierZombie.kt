@@ -74,7 +74,7 @@ class SoldierZombie(type: EntityType<out SoldierZombie>, level: Level) : PazZomb
     override fun finalizeSpawn(
         level: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: EntitySpawnReason,
+        spawnReason: MobSpawnType,
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
         val data = super.finalizeSpawn(level, difficulty, spawnReason, ZombieGroupData(false, false))
@@ -82,7 +82,7 @@ class SoldierZombie(type: EntityType<out SoldierZombie>, level: Level) : PazZomb
         setItemSlot(EquipmentSlot.MAINHAND, PazItems.DYE_BLASTER.defaultInstance)
         dyeColor = DyeColor.VALUES.filter { it != DyeColor.WHITE && it != DyeColor.BLACK }.random()
         setDropChance(EquipmentSlot.MAINHAND, 0.0f)
-        if (spawnReason != EntitySpawnReason.CONVERSION) {
+        if (spawnReason != MobSpawnType.CONVERSION) {
             setCanBreakDoors(true)
         }
 

@@ -129,7 +129,7 @@ open class FloatingPathfindGoal<T> (
 
     open fun getAvoidGroundDirection(): Pair<Vec3, Double> {
 
-        val groundHeight = entity.level().getHeight(Heightmap.Types.WORLD_SURFACE, entity.blockPosition())
+        val groundHeight = entity.level().getHeight(Heightmap.Types.WORLD_SURFACE, entity.blockPosition().x, entity.blockPosition().z)
 
         val groundDistance = entity.y - groundHeight.toDouble()
 

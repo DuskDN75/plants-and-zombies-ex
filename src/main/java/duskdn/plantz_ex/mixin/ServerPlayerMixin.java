@@ -5,7 +5,7 @@ import duskdn.plantz_ex.entity.plant.init.PazPlant;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.level.storage.ValueInput;
@@ -34,7 +34,7 @@ public abstract class ServerPlayerMixin {
             if (rootTag.isPresent()) {
                 ServerLevel serverLevel = this.level();
                 Entity entity = EntityType.loadEntityRecursive(
-                        rootTag.get(), serverLevel, EntitySpawnReason.LOAD, e -> !serverLevel.addWithUUID(e) ? null : e
+                        rootTag.get(), serverLevel, MobSpawnType.LOAD, e -> !serverLevel.addWithUUID(e) ? null : e
                 );
                 if (entity instanceof PazPlant plantAttachment) {
                     plantAttachment.attachToEntity((ServerPlayer) (Object) this);

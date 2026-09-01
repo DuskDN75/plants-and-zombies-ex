@@ -42,7 +42,7 @@ import net.minecraft.util.StringRepresentable
 import net.minecraft.world.BossEvent
 import net.minecraft.world.Difficulty
 import net.minecraft.core.registries.Registries
-import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.SpawnGroupData
@@ -293,7 +293,7 @@ class ZombieRaid(
 
         for (spawnEntry in waveEntries) {
             for (i in 0..<spawnEntry.count) {
-                val zombie = spawnEntry.type.entityType.create(level, EntitySpawnReason.EVENT) ?: break
+                val zombie = spawnEntry.type.entityType.create(level, MobSpawnType.EVENT) ?: break
                 if (!leaderSet) {
                     setLeader(wavesSpawned + 1, zombie)
                     leaderSet = true
@@ -324,7 +324,7 @@ class ZombieRaid(
                 zombie.finalizeSpawn(
                     level,
                     level.getCurrentDifficultyAt(pos),
-                    EntitySpawnReason.EVENT,
+                    MobSpawnType.EVENT,
                     null as SpawnGroupData?
                 )
                 zombie.setOnGround(true)

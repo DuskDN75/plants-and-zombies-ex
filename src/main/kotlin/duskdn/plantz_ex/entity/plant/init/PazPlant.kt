@@ -150,7 +150,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
         }
     }
 
-    override fun checkSpawnRules(level: LevelAccessor, spawnReason: EntitySpawnReason): Boolean {
+    override fun checkSpawnRules(level: LevelAccessor, spawnReason: MobSpawnType): Boolean {
         return true
     }
 
@@ -728,18 +728,18 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
     override fun finalizeSpawn(
         level: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: EntitySpawnReason,
+        spawnReason: MobSpawnType,
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
         state = PlantState.INIT
-        if (spawnReason == EntitySpawnReason.NATURAL) {
+        if (spawnReason == MobSpawnType.NATURAL) {
             val yaw = Direction.getRandom(random).toYRot()
             yHeadRot = yaw
             yBodyRot = yaw
             yRot = yaw
         }
 
-        if (spawnReason != EntitySpawnReason.SPAWN_ITEM_USE) rideNearestCarrier()
+        if (spawnReason != MobSpawnType.SPAWN_ITEM_USE) rideNearestCarrier()
 
         return groupData
     }
@@ -909,11 +909,11 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
             val stack = SeedPacketItem.stackFor(this.type)
             if (customName!=null) stack.set(DataComponents.CUSTOM_NAME, customName)
 
-            if (PazConfig.PLANT_COOLDOWN_ENABLED && owner is Player) {
-
-                (stack.item as SeedPacketItem).setCooldownGroup(stack)
-
-            }
+//            if (PazConfig.PLANT_COOLDOWN_ENABLED && owner is Player) {
+//
+//                (stack.item as SeedPacketItem).setCooldownGroup(stack)
+//
+//            }
 
             val itemEntity = ItemEntity(level, x, y + 0.5, z, stack)
             if(level.addFreshEntity(itemEntity)){

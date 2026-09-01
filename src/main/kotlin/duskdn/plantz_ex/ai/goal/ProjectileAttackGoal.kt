@@ -153,17 +153,17 @@ open class ProjectileAttackGoal(
 
         val horizUnitX = targetPos.x / horizDist
         val horizUnitZ = targetPos.z / horizDist
-        val horizComp = Mth.cos(finalAngle)
+        val horizComp = Mth.cos(finalAngle.toFloat())
 
         val shootX = (horizUnitX * horizComp)
-        val shootY = Mth.sin(finalAngle).toDouble()
+        val shootY = Mth.sin(finalAngle.toFloat()).toDouble()
         val shootZ = (horizUnitZ * horizComp)
 
+        level.addFreshEntity(projectile)
+
         if (projectile is Projectile) {
-            Projectile.spawnProjectile(projectile, level, ItemStack.EMPTY)
             projectile.shoot(shootX, shootY, shootZ, finalVel.toFloat(), inaccuracy)
         } else {
-            level.addFreshEntity(projectile)
             projectile.applyImpulse(shootX, shootY, shootZ, finalVel.toFloat(), inaccuracy)
         }
 
@@ -238,7 +238,7 @@ open class ProjectileAttackGoal(
                 arcs.first
             } else arcs.second
 
-            val horizontalSpeed = v * Mth.cos(angle)
+            val horizontalSpeed = v * Mth.cos(angle.toFloat())
 
             val horizontalDistance = predicted.horizontalDistance()
             val flightTime = horizontalDistance / horizontalSpeed

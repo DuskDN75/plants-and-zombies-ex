@@ -8,7 +8,7 @@ import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.ConversionParams
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.SpawnGroupData
@@ -35,7 +35,7 @@ class PirateCaptain(type: EntityType<out PirateCaptain>, level: Level) : PazZomb
         return SoundEvents.EMPTY
     }
 
-    override fun handleAttributes(difficultyModifier: Float, spawnReason: EntitySpawnReason) {}
+    override fun handleAttributes(difficultyModifier: Float, spawnReason: MobSpawnType) {}
 
     override fun doHurtTarget(level: ServerLevel, target: Entity): Boolean {
         val result = super.doHurtTarget(level, target)
@@ -63,7 +63,7 @@ class PirateCaptain(type: EntityType<out PirateCaptain>, level: Level) : PazZomb
     override fun finalizeSpawn(
         level: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: EntitySpawnReason,
+        spawnReason: MobSpawnType,
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
         val data = super.finalizeSpawn(level, difficulty, spawnReason, ZombieGroupData(false, false))

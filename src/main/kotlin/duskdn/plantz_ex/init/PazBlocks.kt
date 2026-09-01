@@ -16,11 +16,12 @@ import duskdn.plantz_ex.block.entity.MailboxBlockEntity
 import duskdn.plantz_ex.block.entity.SunBatteryBlockEntity
 import duskdn.plantz_ex.block.entity.TimeMachineBlockEntity
 import duskdn.plantz_ex.entity.plant.init.PazPlant
+import duskdn.plantz_ex.item.ConeItem
 import duskdn.plantz_ex.item.ScreenDoorItem
 import duskdn.plantz_ex.item.component.BlocksProjectileDamage
 import duskdn.plantz_ex.util.pazResource
 import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
-import net.fabricmc.fabric.api.`object`.builder.v1.world.poi.PoiHelper
+import net.fabricmc.fabric.api.`object`.builder.v1.world.poi.PointOfInterestHelper
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
 import net.minecraft.core.component.DataComponents
@@ -37,7 +38,6 @@ import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.item.component.ItemAttributeModifiers
-import net.minecraft.world.item.equipment.Equippable
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.LightBlock
 import net.minecraft.world.level.block.SlabBlock
@@ -116,7 +116,7 @@ object PazBlocks {
         ::SunBatteryBlockEntity,
         SUN_BATTERY_BLOCK
     )
-    @JvmField val SUN_BATTERY_POI = PoiHelper.register(pazResource("sun_battery"), 8, 16, SUN_BATTERY_BLOCK)
+    @JvmField val SUN_BATTERY_POI = PointOfInterestHelper.register(pazResource("sun_battery"), 8, 16, SUN_BATTERY_BLOCK)
     @JvmField val TIME_MACHINE: Block = registerBlock(
         "time_machine",
         BlockBehaviour.Properties.of()
@@ -159,42 +159,6 @@ object PazBlocks {
         ::MailboxBlockEntity,
         *MAILBOXES.values.toTypedArray(),
         folder = "mailbox"
-    )
-
-    @JvmField val CONE: Block = registerBlock(
-        "cone",
-        BlockBehaviour.Properties.of()
-            .sound(SoundType.CANDLE)
-            .instabreak()
-            .noOcclusion()
-            .pushReaction(PushReaction.DESTROY),
-        ::ConeBlock,
-        Item.Properties()
-            .component(DataComponents.MAX_DAMAGE, (PazPlant.PEA_DAMAGE*15).toInt())
-            .component(DataComponents.MAX_STACK_SIZE, 1)
-            .component(DataComponents.DAMAGE, 0)
-            .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage())
-            .component(
-                DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.HEAD)
-                    .setEquipSound(SoundEvents.ARMOR_EQUIP_LEATHER)
-                    .build()
-            ).component(
-                DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.builder()
-                    .add(
-                        Attributes.ARMOR,
-                        AttributeModifier(pazResource("cone_armor"), 0.5, AttributeModifier.Operation.ADD_VALUE),
-                        EquipmentSlotGroup.HEAD
-                    ).add(
-                        Attributes.KNOCKBACK_RESISTANCE,
-                        AttributeModifier(
-                            pazResource("cone_knockback_resistance"),
-                            0.1,
-                            AttributeModifier.Operation.ADD_VALUE
-                        ),
-                        EquipmentSlotGroup.HEAD
-                    ).build()
-            ),
-        folder = "armor"
     )
 
     @JvmField val BRAINZ_ALLOY_BLOCK: Block = registerBlock(
@@ -241,13 +205,12 @@ object PazBlocks {
         BlockBehaviour.Properties.of()
             .sound(SoundType.WOOD)
             .instabreak()
-            .noCollision()
+            .noCollission()
             .pushReaction(PushReaction.DESTROY),
         ::FlagBlock,
         Item.Properties()
             .stacksTo(16)
             .rarity(Rarity.RARE)
-            .equippableUnswappable(EquipmentSlot.OFFHAND)
             .component(
                 DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.builder()
                     .add(
@@ -273,13 +236,12 @@ object PazBlocks {
         BlockBehaviour.Properties.of()
             .sound(SoundType.WOOD)
             .instabreak()
-            .noCollision()
+            .noCollission()
             .pushReaction(PushReaction.DESTROY),
         ::FlagBlock,
         Item.Properties()
             .stacksTo(16)
             .rarity(Rarity.RARE)
-            .equippableUnswappable(EquipmentSlot.OFFHAND)
             .component(
                 DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.builder()
                     .add(
@@ -308,7 +270,7 @@ object PazBlocks {
         PLANTZ_FLAG, BRAINZ_FLAG,
         folder = "flags"
     )
-    @JvmField val PLANTZ_FLAG_POI = PoiHelper.register(pazResource("plantz_flag"), 8, 32, PLANTZ_FLAG)
+    @JvmField val PLANTZ_FLAG_POI = PointOfInterestHelper.register(pazResource("plantz_flag"), 8, 32, PLANTZ_FLAG)
 
     @JvmField val GRAVESTONE: Block = registerBlock(
         "gravestone",
@@ -323,6 +285,39 @@ object PazBlocks {
         "gravestone",
         ::GravestoneBlockEntity,
         GRAVESTONE
+    )
+
+    @JvmField val CONE: Block = registerBlock(
+        "cone",
+        BlockBehaviour.Properties.of()
+            .sound(SoundType.CANDLE)
+            .instabreak()
+            .noOcclusion()
+            .pushReaction(PushReaction.DESTROY),
+        ::ConeBlock,
+        Item.Properties()
+            .component(DataComponents.MAX_DAMAGE, (PazPlant.PEA_DAMAGE*15).toInt())
+            .component(DataComponents.MAX_STACK_SIZE, 1)
+            .component(DataComponents.DAMAGE, 0)
+            .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage())
+            .component(
+                DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.builder()
+                    .add(
+                        Attributes.ARMOR,
+                        AttributeModifier(pazResource("cone_armor"), 0.5, AttributeModifier.Operation.ADD_VALUE),
+                        EquipmentSlotGroup.HEAD
+                    ).add(
+                        Attributes.KNOCKBACK_RESISTANCE,
+                        AttributeModifier(
+                            pazResource("cone_knockback_resistance"),
+                            0.1,
+                            AttributeModifier.Operation.ADD_VALUE
+                        ),
+                        EquipmentSlotGroup.HEAD
+                    ).build()
+            ),
+        ::ConeItem,
+        folder = "armor"
     )
 
     @JvmField val SCREEN_DOOR: Block = registerBlock(
@@ -343,15 +338,6 @@ object PazBlocks {
                 tanksDamage = false,
                 mustBeUsing = true
             ))
-            .component(DataComponents.BREAK_SOUND, SoundEvents.SHIELD_BREAK)
-            .component(
-                DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.MAINHAND)
-                    .setEquipSound(SoundEvents.SHIELD_BLOCK)
-                    .build())
-            .component(
-                DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.OFFHAND)
-                    .setEquipSound(SoundEvents.SHIELD_BLOCK)
-                    .build())
             .component(
                 DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.builder()
                     .add(
@@ -391,12 +377,12 @@ object PazBlocks {
         val itemPath = if (itemFolder != null) "$itemFolder/$name" else blockPath
 
         val key = ResourceKey.create(Registries.BLOCK, pazResource(blockPath))
-        val block = blockFactory(properties.setId(key))
+        val block = blockFactory(properties)
         Registry.register(BuiltInRegistries.BLOCK, key, block)
 
         if (itemFactory!=null && itemProperties!=null) {
             val itemKey = ResourceKey.create(Registries.ITEM, pazResource(itemPath))
-            val blockItem = itemFactory(block, itemProperties.setId(itemKey))
+            val blockItem = itemFactory(block, itemProperties)
             Registry.register(BuiltInRegistries.ITEM, itemKey, blockItem)
         }
 

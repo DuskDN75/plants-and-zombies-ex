@@ -4,9 +4,9 @@ import duskdn.plantz_ex.util.debugPrint
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
-import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.level.ServerLevelAccessor
 
 abstract class BaseSpawnRules {
@@ -29,11 +29,11 @@ abstract class BaseSpawnRules {
     open fun spawnCheck(
         type: EntityType<out LivingEntity>,
         level: ServerLevelAccessor,
-        spawnReason: EntitySpawnReason,
+        spawnReason: MobSpawnType,
         pos: BlockPos,
         random: RandomSource
     ): Boolean {
-        if (EntitySpawnReason.isSpawner(spawnReason)) return true
+        if (MobSpawnType.isSpawner(spawnReason)) return true
 
         if (level !is ServerLevel) {
             return false

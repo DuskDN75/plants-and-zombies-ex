@@ -9,7 +9,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -51,14 +51,14 @@ public class ZombieMixin {
     }
 
     @Inject( method = "finalizeSpawn", at = @At("RETURN"))
-    public void checkForLeader(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnReason, SpawnGroupData groupData, CallbackInfoReturnable<SpawnGroupData> cir) {
+    public void checkForLeader(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnReason, SpawnGroupData groupData, CallbackInfoReturnable<SpawnGroupData> cir) {
         Zombie entity = (Zombie) (Object) this;
         var isLeader = Objects.requireNonNull(entity.getAttribute(Attributes.MAX_HEALTH)).hasModifier(Identifier.withDefaultNamespace(LEADER_MODIFIER_ID));
 
         boolean shouldAddEasyModeFlag = difficulty.getEffectiveDifficulty() < 1.2 && level.getRandom().nextFloat()<0.0125;
 
-        if((isLeader || shouldAddEasyModeFlag) && !(spawnReason.equals(EntitySpawnReason.REINFORCEMENT))) {
-            var dropChance = spawnReason.equals(EntitySpawnReason.EVENT) ? 0.0F : 1.0F;
+        if((isLeader || shouldAddEasyModeFlag) && !(spawnReason.equals(MobSpawnType.REINFORCEMENT))) {
+            var dropChance = spawnReason.equals(MobSpawnType.EVENT) ? 0.0F : 1.0F;
             if (entity instanceof Gargantuar) {}
             else if (entity instanceof ZombieYeti) {
                 entity.setItemSlot(EquipmentSlot.HEAD, PazBlocks.BRAINZ_FLAG.asItem().getDefaultInstance());

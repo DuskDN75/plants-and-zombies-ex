@@ -187,7 +187,7 @@ class Gargantuar(type: EntityType<out Gargantuar>, level: Level) : PazZombie(typ
     override fun finalizeSpawn(
         level: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: EntitySpawnReason,
+        spawnReason: MobSpawnType,
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
         state = ZombieState.EMERGING
@@ -303,7 +303,7 @@ class Gargantuar(type: EntityType<out Gargantuar>, level: Level) : PazZombie(typ
                 spawnDirection.y + gargantuar.y+2.5f,
                 spawnDirection.z + gargantuar.z
             )
-           PazEntities.IMP.create(level, EntitySpawnReason.MOB_SUMMONED)?.let { imp ->
+           PazEntities.IMP.create(level, MobSpawnType.MOB_SUMMONED)?.let { imp ->
                 val lookDirection = gargantuar.calculateViewVector(0f, gargantuar.yRot)
                 imp.snapTo(spawnPos, gargantuar.yRot, 0.0f)
                 imp.applyImpulse(lookDirection.x, lookDirection.y, lookDirection.z, 1.0f, 0f)

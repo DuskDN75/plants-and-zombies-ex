@@ -1,10 +1,11 @@
 package duskdn.plantz_ex.ai.goal
 
 import net.minecraft.core.component.DataComponents
+import net.minecraft.tags.ItemTags
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.ai.goal.Goal
-import net.minecraft.world.item.component.BlocksAttacks
+import net.minecraft.world.item.Items
 import java.util.*
 
 
@@ -22,17 +23,12 @@ class UseShieldGoal<T : Mob>(
     }
 
     private fun ableToBlock(): Boolean {
-        return this.mob.target != null && mob.mainHandItem.has(DataComponents.BLOCKS_ATTACKS)
+        return this.mob.target != null && (mob.mainHandItem.`is`(Items.SHIELD))
     }
 
     private val blockDelay: Float
         get() {
-            val duration = Optional.ofNullable<BlocksAttacks>(
-                mob.mainHandItem.get<BlocksAttacks>(DataComponents.BLOCKS_ATTACKS)
-            )
-                .map { obj: BlocksAttacks -> obj.blockDelaySeconds() }
-                .orElse(0f)
-            return duration
+            return if (ableToBlock()) 0.25f else 0.0f
         }
 
     override fun canContinueToUse(): Boolean {

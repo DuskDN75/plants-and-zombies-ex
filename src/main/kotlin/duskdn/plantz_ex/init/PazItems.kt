@@ -10,13 +10,10 @@ import duskdn.plantz_ex.item.component.StoredWater
 import duskdn.plantz_ex.item.component.SunCost
 import duskdn.plantz_ex.util.pazResource
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents
-import net.fabricmc.fabric.api.registry.FuelValueEvents
-import net.fabricmc.fabric.impl.item.ItemComponentTooltipProviderRegistryImpl
 import net.minecraft.core.Registry
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.dispenser.BlockSource
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior
-import net.minecraft.core.dispenser.MinecartDispenseItemBehavior
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
@@ -30,11 +27,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.item.*
 import net.minecraft.world.item.Items.GLASS_BOTTLE
 import net.minecraft.world.item.component.ItemAttributeModifiers
-import net.minecraft.world.item.component.UseCooldown
-import net.minecraft.world.item.equipment.ArmorMaterials
-import net.minecraft.world.item.equipment.ArmorType
-import net.minecraft.world.item.equipment.EquipmentAssets
-import net.minecraft.world.item.equipment.Equippable
 import net.minecraft.world.level.block.ComposterBlock
 import net.minecraft.world.level.block.DispenserBlock
 import java.util.function.Function
@@ -83,18 +75,19 @@ object PazItems {
         properties = Item.Properties()
             .durability(8*PazPlant.PEA_ARMOR_DAMAGE)
             .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage(
-                slot = EquipmentSlotGroup.HAND,
-                reflectsDamage = true,
-                tanksDamage = false,
-                mustBeUsing = true
-            )
-            ).component(DataComponents.BREAK_SOUND, SoundEvents.SHIELD_BREAK),
+                    slot = EquipmentSlotGroup.HAND,
+                    reflectsDamage = true,
+                    tanksDamage = false,
+                    mustBeUsing = true
+                )
+            ),
         folder = "armor"
     )
     const val DUCKY_TUBE_DAMAGE_INTERVAL = 45
-    val DUCKY_EQUIP_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, pazResource("armor/ducky_tube"))
 
-    val OBSIDIAN_DUCKY_EQUIP_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, pazResource("armor/obsidian_ducky_tube"))
+//    val DUCKY_EQUIP_ASSET = ResourceKey.create(EquipmentAssetKey.ROOT_ID, pazResource("armor/ducky_tube"))
+
+//    val OBSIDIAN_DUCKY_EQUIP_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, pazResource("armor/obsidian_ducky_tube"))
 
     @JvmField
     val DUCKY_TUBE: Item = registerItem(
@@ -107,11 +100,7 @@ object PazItems {
                         Attributes.WATER_MOVEMENT_EFFICIENCY,
                         AttributeModifier(pazResource("ducky_tube"), 1.5, AttributeModifier.Operation.ADD_VALUE),
                         EquipmentSlotGroup.LEGS
-                    ).build())
-            .component(DataComponents.EQUIPPABLE,
-                Equippable.builder(EquipmentSlot.LEGS)
-                .setAsset(DUCKY_EQUIP_ASSET)
-                .build()),
+                    ).build()),
         folder = "armor"
     )
 
@@ -126,11 +115,7 @@ object PazItems {
                         Attributes.WATER_MOVEMENT_EFFICIENCY,
                         AttributeModifier(pazResource("obsidian_ducky_tube"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
                         EquipmentSlotGroup.LEGS
-                    ).build())
-            .component(DataComponents.EQUIPPABLE,
-                Equippable.builder(EquipmentSlot.LEGS)
-                    .setAsset(OBSIDIAN_DUCKY_EQUIP_ASSET)
-                    .build()),
+                    ).build()),
         folder = "armor"
     )
 
@@ -148,7 +133,6 @@ object PazItems {
         "dye_blaster", ::DyeBlasterItem,
         properties = Item.Properties()
             .durability(435)
-            .repairable(BRAINZ_ALLOY)
             .stacksTo(1)
     )
     @JvmField
@@ -156,13 +140,7 @@ object PazItems {
         "football_helmet", ::FootballHelmetItem,
         properties = Item.Properties()
             .durability((PazPlant.PEA_DAMAGE*70).toInt())
-            .humanoidArmor(ArmorMaterials.CHAINMAIL, ArmorType.HELMET)
             .component(PazComponents.BLOCKS_PROJECTILE_DAMAGE, BlocksProjectileDamage()
-            )
-            .component(
-                DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.HEAD)
-                    .setEquipSound(SoundEvents.ARMOR_EQUIP_IRON)
-                    .build()
             )
             .component(
                 DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.builder()
@@ -183,7 +161,6 @@ object PazItems {
         "seed_packet", ::SeedPacketItem,
         properties = Item.Properties()
             .component(PazComponents.SUN_COST, SunCost())
-            .component(DataComponents.USE_COOLDOWN, UseCooldown(0f))
             .stacksTo(16)
     )
     @JvmField

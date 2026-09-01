@@ -3,14 +3,15 @@ package duskdn.plantz_ex.block
 import com.mojang.serialization.MapCodec
 import duskdn.plantz_ex.init.PazBlocks
 import duskdn.plantz_ex.block.entity.FlagBlockEntity
+import duskdn.plantz_ex.util.column
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.util.RandomSource
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
-import net.minecraft.world.level.ScheduledTickAccess
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
@@ -68,19 +69,17 @@ class FlagBlock(properties: Properties) : BaseEntityBlock(properties) {
     }
 
     override fun updateShape(
-        state: BlockState,
-        level: LevelReader,
-        ticks: ScheduledTickAccess,
-        pos: BlockPos,
-        directionToNeighbour: Direction,
-        neighbourPos: BlockPos,
         neighbourState: BlockState,
-        random: RandomSource
+        directionToNeighbour: Direction,
+        blockState2: BlockState,
+        levelAccessor: LevelAccessor,
+        neighbourPos: BlockPos,
+        blockPos2: BlockPos
     ): BlockState {
-        return if (directionToNeighbour == Direction.DOWN && !state.canSurvive(level, pos))
+        return if (directionToNeighbour == Direction.DOWN && !blockState2.canSurvive(levelAccessor, blockPos2))
             Blocks.AIR.defaultBlockState()
         else
-            super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random)
+            super.updateShape(neighbourState, directionToNeighbour, blockState2, levelAccessor, neighbourPos, blockPos2)
     }
 
     override fun canSurvive(state: BlockState, level: LevelReader, pos: BlockPos): Boolean {

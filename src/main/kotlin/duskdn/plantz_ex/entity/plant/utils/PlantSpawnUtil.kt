@@ -24,7 +24,7 @@ import net.minecraft.tags.EntityTypeTags
 import net.minecraft.tags.FluidTags
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.TamableAnimal
 import net.minecraft.world.entity.player.Player
@@ -52,8 +52,7 @@ object PlantSpawnUtils {
 
         if (level.isClientSide || level !is ServerLevel || player == null) return InteractionResult.PASS
 
-        val component = itemStack.get(DataComponents.ENTITY_DATA)
-        val entityType = component?.type()
+        val entityType = SeedPacketItem.typeFromStack(itemStack)
 
         val spawnPos = if (level.getBlockState(pos).getCollisionShape(level, pos).isEmpty) pos
         else if (face != null) pos.relative(face) else pos
@@ -61,8 +60,8 @@ object PlantSpawnUtils {
         val availableSun = player.getTotalSun()
         val sunCost = itemStack.get(PazComponents.SUN_COST)?.getSunCost(entityType) ?: 0
         if (sunCost > availableSun && !player.hasInfiniteMaterials()) {
-            player.sendOverlayMessage(
-                Component.translatable("message.plantz_ex.not_enough_sun", availableSun, sunCost).withStyle(ChatFormatting.RED)
+            player.displayClientMessage(
+                Component.translatable("message.plantz_ex.not_enough_sun", availableSun, sunCost).withStyle(ChatFormatting.RED), true
             )
             return InteractionResult.FAIL
         }
@@ -71,7 +70,7 @@ object PlantSpawnUtils {
             level,
             EntityType.createDefaultStackConfig(level, itemStack, player),
             spawnPos,
-            EntitySpawnReason.SPAWN_ITEM_USE,
+            MobSpawnType.SPAWN_EGG,
             !checkFluid,
             face == Direction.UP
         )?: return InteractionResult.FAIL
@@ -94,9 +93,9 @@ object PlantSpawnUtils {
                     else -> {"message.plantz_ex.cannot_survive"}
                 }
 
-                player.sendOverlayMessage(
+                player.displayClientMessage(
                     Component.translatable(messageKey, entity.name.copy().withStyle(
-                        ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED)
+                        ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED), true
                 )
                 return InteractionResult.FAIL
             }
@@ -113,8 +112,8 @@ object PlantSpawnUtils {
         entity.let {
             val existingPlants = level.getEntitiesOfClass(PazPlant::class.java, AABB(it.blockPosition()))
             if (existingPlants.isNotEmpty() && (carrier == null || (carrier::class.java == entity::class.java || carrier.passengers.isNotEmpty()) )) {
-                player.sendOverlayMessage(
-                    Component.translatable("message.plantz_ex.already_planted").withStyle(ChatFormatting.RED)
+                player.displayClientMessage(
+                    Component.translatable("message.plantz_ex.already_planted").withStyle(ChatFormatting.RED), true
                 )
                 return InteractionResult.FAIL
             }

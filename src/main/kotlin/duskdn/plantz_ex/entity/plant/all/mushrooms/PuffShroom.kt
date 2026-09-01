@@ -7,10 +7,6 @@ import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.entity.plant.utils.mushroomSurvivalCheck
 import duskdn.plantz_ex.entity.projectile.Spore
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
-import net.minecraft.world.entity.monster.Enemy
-import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 

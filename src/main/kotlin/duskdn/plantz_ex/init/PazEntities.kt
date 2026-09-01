@@ -58,8 +58,8 @@ import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttribute
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
-import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.*
 import net.minecraft.world.entity.Mob.createMobAttributes
 import net.minecraft.world.entity.ai.attributes.AttributeInstance
@@ -67,14 +67,14 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
-import net.minecraft.world.entity.monster.zombie.Zombie
+import net.minecraft.world.entity.monster.Zombie
 import net.minecraft.world.entity.projectile.Projectile
 
 object PazEntities {
 
     val followMultiplier = 1.0
 
-    val followModifierID: Identifier = Identifier.fromNamespaceAndPath("plantz_ex","night_follow_multiplier")
+    val followModifierID: ResourceLocation = ResourceLocation.fromNamespaceAndPath("plantz_ex","night_follow_multiplier")
 
     var isNight = false
 
@@ -105,29 +105,29 @@ object PazEntities {
 
             if (entity is Zombie) (entity as MobAccessor).targetSelector.addGoal(4, NearestAttackableTargetGoal(entity, Gnome::class.java, 5, true, false, null))
 
-            if (entity is Mob && entity.`is`(PazTags.EntityTypes.ATTACKS_PLANTS)) {
-                (entity as MobAccessor).targetSelector.addGoal(0, NearestAttackableTargetGoal(entity, WallNut::class.java, 2, false, true) { target, level -> ((target as? WallNut
+            if (entity is Mob && entity.type.`is`(PazTags.EntityTypes.ATTACKS_PLANTS)) {
+                (entity as MobAccessor).targetSelector.addGoal(0, NearestAttackableTargetGoal(entity, WallNut::class.java, 2, false, true) { target -> ((target as? WallNut
                     ?: target as? ExplodeONut)?.let { it.distanceToSqr(entity) < 16 } ?: false)})
-                (entity as MobAccessor).targetSelector.addGoal(1, NearestAttackableTargetGoal(entity, PazPlant::class.java, 6, false, true) { target, level ->
-                    target.passengers.isEmpty() && !target.`is`(PazTags.EntityTypes.IGNORED_BY_PLANT_ATTACKERS)
+                (entity as MobAccessor).targetSelector.addGoal(1, NearestAttackableTargetGoal(entity, PazPlant::class.java, 6, false, true) { target ->
+                    target.passengers.isEmpty() && !target.type.`is`(PazTags.EntityTypes.IGNORED_BY_PLANT_ATTACKERS)
                 })
             }
 
-            if (entity is PathfinderMob && entity.`is`(PazTags.EntityTypes.ZOMBIE_RAIDERS)) {
+            if (entity is PathfinderMob && entity.type.`is`(PazTags.EntityTypes.ZOMBIE_RAIDERS)) {
                 (entity as MobAccessor).goalSelector.addGoal(3, DestroyFlagGoal(entity))
                 (entity as MobAccessor).goalSelector.addGoal(2, PathfindToFlagGoal(entity))
             }
         }
 
-        ServerTickEvents.END_LEVEL_TICK.register { server ->
+        ServerTickEvents.END_WORLD_TICK.register { server ->
             val level = server.level
 
-            if (level.isDarkOutside != isNight) {
+            if (!level.isDay != isNight) {
 
-                isNight = level.isDarkOutside
+                isNight = !level.isDay
 
                 for (entity in level.allEntities) {
-                    if (entity is PathfinderMob && entity.`is`(PazTags.EntityTypes.ATTACKS_PLANTS)) {
+                    if (entity is PathfinderMob && entity.type.`is`(PazTags.EntityTypes.ATTACKS_PLANTS)) {
 
                         val attribute = entity.getAttribute(Attributes.FOLLOW_RANGE) ?: continue
 

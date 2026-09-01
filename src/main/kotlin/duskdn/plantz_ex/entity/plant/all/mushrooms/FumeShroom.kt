@@ -14,10 +14,6 @@ import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
-import net.minecraft.world.entity.monster.Enemy
-import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
@@ -59,7 +55,7 @@ class FumeShroom(type: EntityType<out PazPlant>, level: Level) : AttackingPlant(
         if (sprayTime in 7..19 && this.isAlive ) {
             val eyeHeight = eyeHeight.toDouble()
 
-            val direction = this.headLookAngle.scale(2.0)
+            val direction = this.lookAngle.scale(2.0)
             val speed = 0.4
 
             val vx = direction.x * speed

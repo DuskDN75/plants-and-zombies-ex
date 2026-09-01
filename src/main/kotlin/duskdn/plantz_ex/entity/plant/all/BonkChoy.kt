@@ -9,8 +9,8 @@ import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.DifficultyInstance
-import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.SpawnGroupData
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
@@ -73,7 +73,7 @@ class BonkChoy(type: EntityType<out AttackingPlant>, level: Level) : AttackingPl
     override fun finalizeSpawn(
         level: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: EntitySpawnReason,
+        spawnReason: MobSpawnType,
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
         reassessAttack()

@@ -1,6 +1,7 @@
 package duskdn.plantz_ex.item
 
 import duskdn.plantz_ex.entity.projectile.PaintBall
+import duskdn.plantz_ex.init.PazItems
 import net.minecraft.core.component.DataComponents
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
@@ -8,13 +9,16 @@ import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.entity.projectile.Projectile
 import net.minecraft.world.item.DyeColor
+import net.minecraft.world.item.DyeItem
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.ItemUseAnimation
 import net.minecraft.world.item.ProjectileWeaponItem
+import net.minecraft.world.item.UseAnim
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec2
@@ -23,7 +27,7 @@ import java.util.function.Predicate
 class DyeBlasterItem(properties: Properties) : ProjectileWeaponItem(properties) {
 
     companion object {
-        val DYES: Predicate<ItemStack> = Predicate { itemStack: ItemStack -> itemStack.`is`(ItemTags.DYES) }
+        val DYES: Predicate<ItemStack> = Predicate { itemStack: ItemStack -> itemStack.item is DyeItem }
     }
 
     override fun onUseTick(level: Level, livingEntity: LivingEntity, itemStack: ItemStack, ticksRemaining: Int) {
@@ -41,27 +45,34 @@ class DyeBlasterItem(properties: Properties) : ProjectileWeaponItem(properties) 
             1.0f,
             1.0f / (level.getRandom().nextFloat() * 0.4f + 1.2f) + 4.5f
         )
-        itemStack.hurtAndBreak(1, livingEntity, livingEntity.usedItemHand)
+
+        val hand = if (livingEntity.usedItemHand == InteractionHand.MAIN_HAND) EquipmentSlot.MAINHAND else EquipmentSlot.OFFHAND
+
+        itemStack.hurtAndBreak(1, livingEntity, hand)
         if (level.random.nextFloat() < 0.4f) draw(itemStack, ammo, livingEntity)
         if (level is ServerLevel) shoot(level, livingEntity, livingEntity.usedItemHand, itemStack, listOf(ammo), 1.2f, 8.0f, false, null)
     }
 
-    override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResult {
+    override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack?>? {
         val itemStack: ItemStack = player.getItemInHand(hand)
         val foundProjectile = !player.getProjectile(itemStack).isEmpty
-        if (!player.hasInfiniteMaterials() && !foundProjectile) return InteractionResult.FAIL
+        if (!player.hasInfiniteMaterials() && !foundProjectile) return InteractionResultHolder(InteractionResult.FAIL, player.getItemInHand(hand))
         else {
             player.startUsingItem(hand)
-            return InteractionResult.CONSUME
+            return InteractionResultHolder(InteractionResult.CONSUME, player.getItemInHand(hand))
         }
+    }
+
+    override fun isValidRepairItem(itemStack: ItemStack, itemStack2: ItemStack): Boolean {
+        return itemStack.`is`(PazItems.BRAINZ_ALLOY)
     }
 
     override fun getUseDuration(itemStack: ItemStack, user: LivingEntity): Int {
         return 72000
     }
 
-    override fun getUseAnimation(itemStack: ItemStack): ItemUseAnimation {
-        return ItemUseAnimation.CROSSBOW
+    override fun getUseAnimation(itemStack: ItemStack): UseAnim {
+        return UseAnim.CROSSBOW
     }
 
     override fun useOn(context: UseOnContext): InteractionResult {
@@ -75,7 +86,7 @@ class DyeBlasterItem(properties: Properties) : ProjectileWeaponItem(properties) 
     override fun createProjectile(
         level: Level, shooter: LivingEntity, heldItem: ItemStack, projectile: ItemStack, isCrit: Boolean
     ): Projectile {
-        val color = projectile.get(DataComponents.DYE) ?: DyeColor.entries.toTypedArray().filter { it != DyeColor.BLACK }.random()
+        val color: DyeColor = if (projectile.item is DyeItem) (projectile.item as DyeItem).dyeColor else DyeColor.entries.toTypedArray().filter { it != DyeColor.BLACK }.random()
         return PaintBall(
             level,
             shooter,

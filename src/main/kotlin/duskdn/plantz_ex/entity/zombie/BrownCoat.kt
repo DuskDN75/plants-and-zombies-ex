@@ -18,8 +18,6 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
-import net.minecraft.world.level.storage.ValueInput
-import net.minecraft.world.level.storage.ValueOutput
 import kotlin.jvm.optionals.getOrDefault
 
 class BrownCoat(type: EntityType<out BrownCoat>, level: Level) : PazZombie(type, level) {
@@ -77,7 +75,7 @@ class BrownCoat(type: EntityType<out BrownCoat>, level: Level) : PazZombie(type,
     override fun finalizeSpawn(
         level: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: EntitySpawnReason,
+        spawnReason: MobSpawnType,
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
         val data = super.finalizeSpawn(level, difficulty, spawnReason, groupData)
@@ -95,7 +93,7 @@ class BrownCoat(type: EntityType<out BrownCoat>, level: Level) : PazZombie(type,
             random
         )
 
-        if (spawnReason != EntitySpawnReason.COMMAND && spawnReason != EntitySpawnReason.SPAWN_ITEM_USE){
+        if (spawnReason != MobSpawnType.COMMAND && spawnReason != MobSpawnType.SPAWN_ITEM_USE){
 
             val headSlot = getItemBySlot(EquipmentSlot.HEAD)
 

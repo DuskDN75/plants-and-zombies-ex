@@ -6,7 +6,7 @@ import duskdn.plantz_ex.util.debugPrint
 import net.fabricmc.api.EnvType
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.resources.Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.EntityType
 import java.nio.file.Files
 import java.nio.file.Path
@@ -285,7 +285,7 @@ object PazConfig {
         return getCooldownTime(id)
     }
 
-    fun getCooldownTime(entityId: Identifier?): Double {
+    fun getCooldownTime(entityId: ResourceLocation?): Double {
         if (entityId == null) return 0.0
         val key = entityId.toString()
         val value = (server.plantData[key]?.cooldownTime ?:// config
@@ -306,7 +306,7 @@ object PazConfig {
         return getTrueSunCost(id)
     }
 
-    fun getTrueSunCost(entityId: Identifier?): Int {
+    fun getTrueSunCost(entityId: ResourceLocation?): Int {
         if (entityId == null) return 0
         val key = entityId.toString()
         debugPrint(key)
@@ -328,7 +328,7 @@ object PazConfig {
         return chance
     }
 
-    fun putDefaults(entityId: Identifier, sunCost: Int = 0, cooldown: Double = 0.0) {
+    fun putDefaults(entityId: ResourceLocation, sunCost: Int = 0, cooldown: Double = 0.0) {
         server.plantData.putIfAbsent(entityId.toString(), PlantDataConfig(sunCost, cooldown))
         saveConfig(serverConfigPath, server)
     }

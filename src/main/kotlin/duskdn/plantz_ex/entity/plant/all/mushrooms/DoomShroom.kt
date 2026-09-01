@@ -60,7 +60,7 @@ class DoomShroom(type: EntityType<out PazPlant>, level: Level) : ExplosivePlant(
     ) {
         super.explode(radius, sound, damageType, destroyBlocks, causeFire)
         if (vehicle != null) {
-            vehicle?.kill(level() as ServerLevel)
+            vehicle?.kill()
         }
     }
 

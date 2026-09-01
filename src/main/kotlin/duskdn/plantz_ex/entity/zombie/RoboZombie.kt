@@ -92,12 +92,12 @@ class RoboZombie(type: EntityType<out RoboZombie>, level: Level) : PazZombie(typ
     override fun finalizeSpawn(
         level: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: EntitySpawnReason,
+        spawnReason: MobSpawnType,
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
         val data = super.finalizeSpawn(level, difficulty, spawnReason, ZombieGroupData(false, false))
 
-        if (spawnReason != EntitySpawnReason.CONVERSION) {
+        if (spawnReason != MobSpawnType.CONVERSION) {
             setCanBreakDoors(true)
         }
 

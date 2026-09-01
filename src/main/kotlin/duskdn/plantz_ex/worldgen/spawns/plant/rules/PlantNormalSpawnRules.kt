@@ -6,7 +6,7 @@ import duskdn.plantz_ex.worldgen.spawns.init.SpawnContext
 import duskdn.plantz_ex.worldgen.spawns.plant.init.PlantSpawnRules
 import net.minecraft.core.BlockPos
 import net.minecraft.util.RandomSource
-import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.level.ServerLevelAccessor
@@ -61,7 +61,7 @@ open class PlantNormalSpawnRules(): PlantSpawnRules() {
     override fun spawnCheck(
         type: EntityType<out LivingEntity>,
         level: ServerLevelAccessor,
-        spawnReason: EntitySpawnReason,
+        spawnReason: MobSpawnType,
         pos: BlockPos,
         random: RandomSource
     ): Boolean {

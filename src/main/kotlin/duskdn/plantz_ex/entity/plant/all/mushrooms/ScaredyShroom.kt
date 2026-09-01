@@ -14,14 +14,13 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.control.LookControl
 import net.minecraft.world.entity.ai.goal.Goal
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.ai.targeting.TargetingConditions
 import net.minecraft.world.entity.monster.Enemy
-import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.AABB
+import java.util.function.Predicate
 
 class ScaredyShroom(type: EntityType<out PazPlant>, level: Level) : AttackingPlant(PazEntities.SCAREDY_SHROOM, level) {
 
@@ -60,7 +59,7 @@ class ScaredyShroom(type: EntityType<out PazPlant>, level: Level) : AttackingPla
             actionPredicate = {
                 !isHiding
             }))
-        this.goalSelector.addGoal(3, HideGoal(this, LivingEntity::class.java) { target, _ ->
+        this.goalSelector.addGoal(3, HideGoal(this, LivingEntity::class.java) { target ->
             (!isTame && target is Player)
                 || target is Enemy
         })
@@ -70,7 +69,7 @@ class ScaredyShroom(type: EntityType<out PazPlant>, level: Level) : AttackingPla
     class HideGoal <T: LivingEntity> (
         val shroom: ScaredyShroom,
         val targetType: Class<T>,
-        val selector: TargetingConditions.Selector? = null,
+        val selector: Predicate<LivingEntity>? = null,
     ) : Goal() {
         companion object {
             const val HIDE_DISTANCE: Double = 3.5
@@ -93,9 +92,9 @@ class ScaredyShroom(type: EntityType<out PazPlant>, level: Level) : AttackingPla
         }
 
         fun findTarget() {
-            val level = getServerLevel(shroom)
+            val level = shroom.level()
             target = level.getNearestEntity<T>(
-                shroom.level().getEntitiesOfClass<T>(targetType, getTargetSearchArea(HIDE_DISTANCE)) { true },
+                level.getEntitiesOfClass<T>(targetType, getTargetSearchArea(HIDE_DISTANCE)) { true },
                 targetConditions,
                 shroom, shroom.x, shroom.eyeY, shroom.z
             )

@@ -5,7 +5,6 @@ import duskdn.plantz_ex.renderer.getTextureLocation
 import duskdn.plantz_ex.renderer.isMagicName
 import net.minecraft.client.renderer.entity.MobRenderer
 import net.minecraft.client.renderer.entity.layers.EyesLayer
-import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 
 import com.mojang.blaze3d.vertex.PoseStack
 import duskdn.plantz_ex.PazRenderPipelines
@@ -19,18 +18,10 @@ import duskdn.plantz_ex.entity.plant.interfaces.IExplosivePlant
 import duskdn.plantz_ex.init.PazConfig
 import duskdn.plantz_ex.renderer.getAdditiveTextureLocation
 import net.minecraft.client.model.EntityModel
-import net.minecraft.client.renderer.RenderPipelines
-import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.RenderLayerParent
-import net.minecraft.client.renderer.rendertype.OutputTarget
-import net.minecraft.client.renderer.rendertype.RenderSetup
-import net.minecraft.client.renderer.rendertype.RenderType
-import net.minecraft.client.renderer.rendertype.RenderTypes
-import net.minecraft.client.renderer.state.level.CameraRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.Identifier
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.AnimationState
 import net.minecraft.world.phys.Vec3

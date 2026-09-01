@@ -7,14 +7,16 @@ import duskdn.plantz_ex.init.PazConfig
 import duskdn.plantz_ex.init.PazItems
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Vec3i
+import net.minecraft.core.component.DataComponents
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.resources.Identifier
-import net.minecraft.server.level.ServerEntityGetter
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.Mth
+import net.minecraft.world.Container
 import net.minecraft.world.entity.*
 import net.minecraft.world.entity.Entity.MoveFunction
 import net.minecraft.world.entity.ai.control.LookControl
@@ -22,14 +24,18 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation
 import net.minecraft.world.entity.ai.targeting.TargetingConditions
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.entity.projectile.Projectile
+import net.minecraft.world.inventory.AbstractContainerMenu
+import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Block.box
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.SnowLayerBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.pathfinder.Path
+import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import net.minecraft.world.phys.shapes.VoxelShape
 import java.lang.reflect.Field
 
 object Utils {
@@ -65,9 +71,15 @@ object Utils {
         }
 
     }
+
+    fun getEntityType(entity: Entity): EntityType<*>? {
+
+        return BuiltInRegistries.ENTITY_TYPE.getResourceKey(entity.type)
+
+    }
 }
 
-fun pazResource(path: String): Identifier = Identifier.fromNamespaceAndPath(MODID, path)
+fun pazResource(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MODID, path)
 
 interface PlantHeadAttachment {
     fun `plantzex$hasPlantOnHead`(): Boolean
@@ -120,6 +132,35 @@ fun Entity.positionPlant(plant: PazPlant) {
     plant.yBodyRot = this.yHeadRot
 }
 
+fun column(sizeXZ: Double, minY: Double, maxY: Double): VoxelShape {
+  return column(sizeXZ, sizeXZ, minY, maxY);
+}
+
+fun column(sizeX: Double, sizeZ: Double, minY: Double, maxY: Double): VoxelShape {
+    val halfX = sizeX / 2.0;
+    val halfZ = sizeZ / 2.0;
+    return box(8.0 - halfX, minY, 8.0 - halfZ, 8.0 + halfX, maxY, 8.0 + halfZ);
+}
+
+fun Player.isWithinEntityInteractionRange(entity: Entity, buffer: Double): Boolean {
+    return if (entity.isRemoved) false else isWithinEntityInteractionRange(entity.boundingBox, buffer)
+}
+
+fun Player.isWithinEntityInteractionRange(aabb: AABB, buffer: Double): Boolean {
+    var maxRange = this.entityInteractionRange() + buffer
+    var distanceToSq = aabb.distanceToSqr(this.eyePosition)
+    return distanceToSq < maxRange * maxRange
+}
+
+fun Player.isWithinAttackRange(weaponItem: ItemStack, aabb: AABB, buffer: Double): Boolean {
+    return aabb.distanceToSqr(this.position()) <= (3.0+buffer)*(3.0+buffer)
+}
+
+fun Player.isWithinBlockInteractionRange(pos: BlockPos, buffer: Double): Boolean {
+    var maxRange = this.blockInteractionRange() + buffer
+    return AABB(pos).distanceToSqr(this.eyePosition) < maxRange * maxRange
+}
+
 fun Player.hasSpaceForSun(item: ItemStack): Boolean {
     val inv = this.inventory
     val hasFreeSlot = inv.freeSlot != -1
@@ -168,7 +209,7 @@ fun Player.removeSunFromStorageAndInventory(amount:Int = 1): Boolean {
 fun Player.getTotalSun(): Int {
     var count: Int = 0
     count += inventory.countItem(PazItems.SUN)
-    inventory.forEach { itemStack ->
+    inventory.items.forEach { itemStack ->
         count += itemStack.get(PazComponents.STORED_SUN)?.storedSun ?: 0
     }
     return count
@@ -194,14 +235,34 @@ fun Entity.hasSameRootOwner(target: Entity?): Boolean {
     return owner.`is`(targetOwner)
 }
 
+fun Entity.getRootOwner(): Entity {
+    var current: Entity = this
+
+    while (true) {
+        val nextOwner = when (current) {
+            is Projectile -> current.owner
+            is OwnableEntity -> current.owner
+            else -> null
+        }
+
+        if (nextOwner != null && nextOwner != current) {
+            current = nextOwner
+        } else {
+            break
+        }
+    }
+
+    return current
+}
+
 private fun extractRootOwner(entity: Entity): Entity? = when (entity) {
-    is OwnableEntity -> entity.rootOwner
-    is Projectile -> (entity.owner as? OwnableEntity)?.rootOwner ?: entity.owner
+    is OwnableEntity -> entity.getRootOwner()
+    is Projectile -> entity.getRootOwner()
     else -> null
 }
 
 fun Entity.applyImpulse(xd: Double = 0.0, yd: Double = 1.0, zd: Double = 0.0, pow: Float = 1f, uncertainty: Float = 0f) {
-    this.needsSync = true
+    this.hasImpulse = true
     val impulse = Vec3(xd, yd, zd)
         .add(
             this.random.triangle(0.0, 0.0172275 * uncertainty),
@@ -214,7 +275,7 @@ fun Entity.applyImpulse(xd: Double = 0.0, yd: Double = 1.0, zd: Double = 0.0, po
 
 
 // AI/PATHFINDING
-fun <T : LivingEntity?> ServerEntityGetter.getFurthestEntities(
+fun <T : LivingEntity?> Level.getFurthestEntities(
     entities: MutableList<out T>,
     targetConditions: TargetingConditions,
     source: LivingEntity?,
@@ -226,7 +287,7 @@ fun <T : LivingEntity?> ServerEntityGetter.getFurthestEntities(
     var result: T? = null
 
     for (entity in entities) {
-        if (targetConditions.test(this.level, source, entity!!)) {
+        if (targetConditions.test(source, entity!!)) {
             val dist = entity.distanceToSqr(x, y, z)
             if (best == -1.0 || dist > best) {
                 best = dist

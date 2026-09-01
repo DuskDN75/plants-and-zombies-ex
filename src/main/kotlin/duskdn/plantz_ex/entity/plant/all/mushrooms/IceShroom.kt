@@ -8,6 +8,7 @@ import duskdn.plantz_ex.entity.plant.utils.mushroomSurvivalCheck
 import duskdn.plantz_ex.entity.plant.utils.stoneSurvivalCheck
 import duskdn.plantz_ex.init.PazConfig
 import duskdn.plantz_ex.init.PazEffects
+import duskdn.plantz_ex.util.getRootOwner
 import net.minecraft.core.Holder
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.resources.ResourceKey
@@ -65,7 +66,7 @@ class IceShroom(type: EntityType<out PazPlant>, level: Level) : ExplosivePlant(P
     ) {
         val level = entity.level()
         val source = entity.damageSources().source(damageType, entity,
-            if (PazConfig.PLAYER_CREDIT_FOR_PLANT_KILLS) entity.rootOwner else entity)
+            if (PazConfig.PLAYER_CREDIT_FOR_PLANT_KILLS) entity.getRootOwner() else entity)
 
 //        val targets = explodeGoal?.getTargets()
 

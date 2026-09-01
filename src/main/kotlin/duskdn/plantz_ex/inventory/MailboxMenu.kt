@@ -4,6 +4,8 @@ import duskdn.plantz_ex.init.MailboxData
 import duskdn.plantz_ex.init.PazMenus
 import duskdn.plantz_ex.init.PazTags
 import duskdn.plantz_ex.block.entity.MailboxManager
+import duskdn.plantz_ex.inventory.init.PazMenu
+import duskdn.plantz_ex.util.isWithinBlockInteractionRange
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.world.Container
@@ -23,7 +25,7 @@ class MailboxMenu(
     val inventory: Inventory,
     val data: MailboxData,
     private val access: ContainerLevelAccess = ContainerLevelAccess.NULL
-) : AbstractContainerMenu(PazMenus.MAILBOX_MENU, containerId) {
+) : PazMenu(PazMenus.MAILBOX_MENU, containerId) {
 
     var slotUpdateListener = Runnable {}
     var mailboxListUpdateListener = Runnable {}

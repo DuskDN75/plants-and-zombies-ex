@@ -109,12 +109,12 @@ class Imp(type: EntityType<out Imp> = PazEntities.IMP, level: Level) : PazZombie
     override fun finalizeSpawn(
         level: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: EntitySpawnReason,
+        spawnReason: MobSpawnType,
         groupData: SpawnGroupData?
     ): SpawnGroupData? {
         val data = super.finalizeSpawn(level, difficulty, spawnReason, ZombieGroupData(false, false))
         val random = level.random
-        if (spawnReason != EntitySpawnReason.CONVERSION) {
+        if (spawnReason != MobSpawnType.CONVERSION) {
             setCanPickUpLoot(false)
             setCanBreakDoors(true)
 

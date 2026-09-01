@@ -1,6 +1,7 @@
 package duskdn.plantz_ex.inventory
 
 import duskdn.plantz_ex.init.PazMenus
+import duskdn.plantz_ex.inventory.init.PazMenu
 import net.minecraft.core.BlockPos
 import net.minecraft.world.Container
 import net.minecraft.world.SimpleContainer
@@ -15,7 +16,7 @@ class TimeMachineMenu(
     val inventory: Inventory,
     val blockPos: BlockPos,
     private val timeMachine: Container = SimpleContainer(1),
-) : AbstractContainerMenu(PazMenus.TIME_MACHINE_MENU, containerId) {
+) : PazMenu(PazMenus.TIME_MACHINE_MENU, containerId) {
 
     val batterySlot: Slot = addSlot(Slot(timeMachine, 0, 80, 39))
 

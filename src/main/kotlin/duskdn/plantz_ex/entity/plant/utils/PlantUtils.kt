@@ -19,7 +19,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.Enemy
-import net.minecraft.world.entity.monster.zombie.Zombie
+import net.minecraft.world.entity.monster.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ItemUtils
@@ -62,7 +62,7 @@ fun PazPlant.processSunItem(player: Player, item: ItemStack, hand: InteractionHa
     }
     else if (growNeeds == PlantGrowNeeds.SUN && verifyOwner(player)) {// grow seeds
         playSound(
-            SoundEvents.BUBBLE_POP, 1.0f,
+            SoundEvents.BUBBLE_COLUMN_BUBBLE_POP, 1.0f,
             receivedSun.toFloat()/sunRequiredForSeeds() + 0.9f
         )
         if (receivedSun++ >= sunRequiredForSeeds()) awardSeedPacket(player)
