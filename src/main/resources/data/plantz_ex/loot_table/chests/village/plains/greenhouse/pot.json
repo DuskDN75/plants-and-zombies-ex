@@ -123,6 +123,14 @@
             {
               "type": "minecraft:item",
               "name": "farmersdelight:rich_soil",
+              "conditions": [
+                {
+                  "condition": "fabric:all_mods_loaded",
+                  "values": [
+                    "farmersdelight"
+                  ]
+                }
+              ],
               "weight": 5000,
               "functions": [
                 {
