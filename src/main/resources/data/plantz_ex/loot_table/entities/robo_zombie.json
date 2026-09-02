@@ -27,5 +27,5 @@
       "rolls": 1
     }
   ],
-  "random_sequence": "minecraft:entities/robo_zombie"
+  "random_sequence": "plantz_ex:robo_zombie"
 }

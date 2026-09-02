@@ -120,5 +120,5 @@
       "rolls": 1
     }
   ],
-  "random_sequence": "minecraft:entities/digger_zombie"
+  "random_sequence": "plantz_ex:digger_zombie"
 }

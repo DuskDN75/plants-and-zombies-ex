@@ -100,5 +100,5 @@
       ]
     }
   ],
-  "random_sequence": "minecraft:entities/zombie_yeti"
+  "random_sequence": "plantz_ex:zombie_yeti"
 }
