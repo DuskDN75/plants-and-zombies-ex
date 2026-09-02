@@ -50,5 +50,5 @@
       ]
     }
   ],
-  "random_sequence": "minecraft:entities/disco_zombie"
+  "random_sequence": "plantz_ex:disco_zombie"
 }

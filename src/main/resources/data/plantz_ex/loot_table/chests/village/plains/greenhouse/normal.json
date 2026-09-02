@@ -162,6 +162,14 @@
               "type": "minecraft:item",
               "name": "farmersdelight:rich_soil",
               "weight": 3000,
+              "conditions": [
+                {
+                  "condition": "fabric:all_mods_loaded",
+                  "values": [
+                    "farmersdelight"
+                  ]
+                }
+              ],
               "functions": [
                 {
                   "function": "minecraft:set_count",
