@@ -39,6 +39,8 @@ loom {
 		}
 	}
 
+	accessWidenerPath = file("src/main/resources/plantz_ex.classtweaker")
+
 }
 
 dependencies {
