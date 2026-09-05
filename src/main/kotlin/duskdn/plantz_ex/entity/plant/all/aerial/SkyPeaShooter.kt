@@ -51,7 +51,7 @@ class SkyPeaShooter(type: EntityType<out SkyPeaShooter>, level: Level) : Attacki
         this.goalSelector.addGoal(3, chaseGoal as Goal)
     }
 
-    override fun registerAttackGoal() {
+    override fun registerTargetGoal() {
 
         this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, mustSeeTarget(), false) { target, level ->
 

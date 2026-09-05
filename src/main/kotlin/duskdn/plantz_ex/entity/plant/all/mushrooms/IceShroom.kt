@@ -46,7 +46,8 @@ class IceShroom(type: EntityType<out PazPlant>, level: Level) : ExplosivePlant(P
                 level.sendParticles(ParticleTypes.SNOWFLAKE,
                     x, y+2.5, z, 17, 0.0, 1.0, 0.0, 0.0
                 )
-            }
+            },
+            targetPredicate = { it !is PazPlant }
         )
 
         this.goalSelector.addGoal(1, explodeGoal as ExplodeGoal)
@@ -67,7 +68,7 @@ class IceShroom(type: EntityType<out PazPlant>, level: Level) : ExplosivePlant(P
         val source = entity.damageSources().source(damageType, entity,
             if (PazConfig.PLAYER_CREDIT_FOR_PLANT_KILLS) entity.rootOwner else entity)
 
-//        val targets = explodeGoal?.getTargets()
+        val targets = explodeGoal?.getTargets()
 
         val cloud = AreaEffectCloud(level(), x, y, z)
         cloud.radius = radius
@@ -79,13 +80,13 @@ class IceShroom(type: EntityType<out PazPlant>, level: Level) : ExplosivePlant(P
         cloud.addEffect(MobEffectInstance(PazEffects.CHILLED, 165, 1))
         level().addFreshEntity(cloud)
 
-//        if (targets != null) {
-//            for (target in targets) {
-//                target.addEffect(
-//                    MobEffectInstance(PazEffects.CHILLED, 100, 0, false, false)
-//                )
-//            }
-//        }
+        if (targets != null) {
+            for (target in targets) {
+                target.addEffect(
+                    MobEffectInstance(PazEffects.CHILLED, 100, 0, false, false)
+                )
+            }
+        }
 
     }
 

@@ -69,6 +69,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.projectile.Projectile
+import net.minecraft.world.item.ProjectileWeaponItem
 
 object PazEntities {
 
@@ -109,7 +110,7 @@ object PazEntities {
                 (entity as MobAccessor).targetSelector.addGoal(0, NearestAttackableTargetGoal(entity, WallNut::class.java, 2, false, true) { target, level -> ((target as? WallNut
                     ?: target as? ExplodeONut)?.let { it.distanceToSqr(entity) < 16 } ?: false)})
                 (entity as MobAccessor).targetSelector.addGoal(1, NearestAttackableTargetGoal(entity, PazPlant::class.java, 6, false, true) { target, level ->
-                    target.passengers.isEmpty() && !target.`is`(PazTags.EntityTypes.IGNORED_BY_PLANT_ATTACKERS)
+                    return@NearestAttackableTargetGoal target.passengers.isEmpty() && !target.`is`(PazTags.EntityTypes.IGNORED_BY_PLANT_ATTACKERS)
                 })
             }
 
@@ -447,6 +448,15 @@ object PazEntities {
         eyeHeight = 0.125f,
         attributes = PazPlant.Companion.PlantAttributes(
             maxHealth = 12.0,
+        )
+    )
+    @JvmField val CRIMSON_SHROOM: EntityType<IceShroom> = registerPlant(
+        "crimson_shroom", EntityType.Builder.of(::IceShroom, MobCategory.CREATURE),
+        eyeHeight = 0.43f,
+        height = 0.7f,
+        attributes = PazPlant.Companion.PlantAttributes(
+            maxHealth = 28.0,
+            followRange = 5.0
         )
     )
     @JvmField val SKY_PEA_SHOOTER: EntityType<SkyPeaShooter> = registerPlant(

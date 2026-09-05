@@ -29,6 +29,7 @@ abstract class InstantUseGoal<T>(
     val requireTarget: Boolean = !usingEntity.isTame,
     val activateRange: Double = (attackRadius/2.0),
     override var maxActionTime: Int = usingEntity.getMaxActiveTime(),
+    val targetPredicate: Predicate<LivingEntity> = Predicate { true },
 ) : ActionGoal(usingEntity, cooldownTime, actionDelay, actionStartEffect, actionSuccessEffect, actionEndEffect, actionPredicate) where T: PazPlant, T: IInstantPlant {
 
     init {
@@ -39,7 +40,7 @@ abstract class InstantUseGoal<T>(
         return usingEntity.level().getEntitiesOfClass(
             LivingEntity::class.java,
             usingEntity.boundingBox.inflate(attackRadius.toDouble())
-        ).filter { it != usingEntity }.toMutableList()
+        ).filter { it != usingEntity && targetPredicate.test(it) }.toMutableList()
     }
 
     override fun getData(): ActionData? {
@@ -50,12 +51,13 @@ abstract class InstantUseGoal<T>(
 
         if (requireTarget) {
             target = usingEntity.target
+
+            if (target == null) return false
+
             target?.let {
                 return (!it.isDeadOrDying && usingEntity.distanceToSqr(it) < activateRange * activateRange) || actionTimer < maxActionTime
             }
         }
-
-        if (!usingEntity.isTame && target == null) return false
 
         if (!actionPredicate.test(usingEntity)) return false
         if ((usingEntity.isAsleep || usingEntity.isGrowingSeeds)) return false

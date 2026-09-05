@@ -9,6 +9,7 @@ import net.minecraft.core.Holder
 import net.minecraft.resources.ResourceKey
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.damagesource.DamageType
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.level.ExplosionDamageCalculator
@@ -30,6 +31,7 @@ class ExplodeGoal<T>(
     requireTarget: Boolean = false,
     activateRange: Double = 3.0,
     active: Boolean = true,
+    targetPredicate: Predicate<LivingEntity> = Predicate { true },
     val destroyBlocks: Boolean = false,
     val causeFire: Boolean = false,
 ) : InstantUseGoal<T>(

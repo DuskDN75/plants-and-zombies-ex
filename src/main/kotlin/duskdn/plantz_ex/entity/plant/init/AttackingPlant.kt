@@ -29,7 +29,7 @@ abstract class AttackingPlant(type: EntityType<out AttackingPlant>, level: Level
     override fun registerGoals() {
         super.registerGoals()
 
-        registerAttackGoal();
+        registerTargetGoal();
     }
 
     open fun attacksPlayers(): Boolean {
@@ -78,7 +78,7 @@ abstract class AttackingPlant(type: EntityType<out AttackingPlant>, level: Level
         return target
     }
 
-    open fun registerAttackGoal() {
+    open fun registerTargetGoal() {
 
 //        debugPrint("follow range = ${this.getAttributeValue(Attributes.FOLLOW_RANGE)}")
 

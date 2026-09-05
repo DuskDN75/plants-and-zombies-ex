@@ -17,7 +17,7 @@ class Cactus(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlan
 
     lateinit var attackGoal: CactusAttackGoal
 
-    override fun registerAttackGoal() {
+    override fun registerTargetGoal() {
 
         this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, mustSeeTarget(), false) { target, level ->
 

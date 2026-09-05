@@ -24,6 +24,7 @@ class DoomShroom(type: EntityType<out PazPlant>, level: Level) : ExplosivePlant(
 
     override fun registerGoals() {
         super.registerGoals()
+
         this.goalSelector.addGoal(1, ExplodeGoal(
             usingEntity = this,
             attackRadius = 7f,
