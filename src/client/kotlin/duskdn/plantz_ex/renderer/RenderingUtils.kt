@@ -1,6 +1,8 @@
 package duskdn.plantz_ex.renderer
 
 import duskdn.plantz_ex.init.PazEntities.MAGIC_NAMES
+import duskdn.plantz_ex.renderer.entity.PlantRenderState
+import duskdn.plantz_ex.renderer.getAdditiveTextureLocation
 import duskdn.plantz_ex.util.pazResource
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
@@ -59,4 +61,34 @@ fun LivingEntityRenderState.getAdditiveTextureLocation(basePath: String, suffixe
     val rm = Minecraft.getInstance().resourceManager
 
     return resolveTextureLocation(base, rm, suffixes.apply { add("additive") })
+}
+
+fun PlantRenderState.getEyesTextureLocation(basePath: String, suffixes: MutableList<String> = mutableListOf(), closed: Boolean): Identifier? {
+
+    suffixes.remove("sleep")
+
+    val entityName = entityType.toShortString().lowercase()
+    val base = "${basePath}/${entityName}/${entityName}"
+    val rm = Minecraft.getInstance().resourceManager
+    
+    suffixes.add("eyes")
+
+    if (closed) suffixes.add("closed")
+
+    return resolveTextureLocation(base, rm, suffixes)
+}
+
+fun PlantRenderState.getEmissiveEyesTextureLocation(basePath: String, suffixes: MutableList<String> = mutableListOf(), closed: Boolean): Identifier? {
+
+    suffixes.remove("sleep")
+
+    val entityName = entityType.toShortString().lowercase()
+    val base = "${basePath}/${entityName}/${entityName}"
+    val rm = Minecraft.getInstance().resourceManager
+
+    suffixes.add("eyes")
+
+    if (closed) suffixes.add("closed")
+
+    return getEmissiveTextureLocation(base, suffixes)
 }

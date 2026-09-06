@@ -18,11 +18,14 @@ import duskdn.plantz_ex.entity.plant.all.WallNut
 import duskdn.plantz_ex.entity.plant.interfaces.IExplosivePlant
 import duskdn.plantz_ex.init.PazConfig
 import duskdn.plantz_ex.renderer.getAdditiveTextureLocation
+import duskdn.plantz_ex.renderer.getEmissiveEyesTextureLocation
+import duskdn.plantz_ex.renderer.getEyesTextureLocation
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.RenderLayerParent
+import net.minecraft.client.renderer.entity.layers.RenderLayer
 import net.minecraft.client.renderer.rendertype.OutputTarget
 import net.minecraft.client.renderer.rendertype.RenderSetup
 import net.minecraft.client.renderer.rendertype.RenderType
@@ -49,6 +52,8 @@ class PlantRenderer(
     init {
         addLayer(EmissivePlantLayer(this))
         addLayer(AdditivePlantLayer(this))
+        addLayer(PlantEyesLayer(this))
+        addLayer(EmissivePlantEyesLayer(this))
     }
 
     override fun submit(
@@ -106,6 +111,7 @@ class PlantRenderer(
         state.plantState = entity.state
         if (entity is IExplosivePlant) state.swelling = entity.getSwelling(partialTick)
         state.cooldown = entity.cooldown
+        state.blinkTimer = entity.blinkTimer
         state.isAsleep = entity.isAsleep
         state.damagedAmount = entity.damagedPercent
         state.initAnimationState.copyFrom(entity.initAnimationState)
@@ -219,6 +225,49 @@ class AdditivePlantLayer<M : EntityModel<PlantRenderState>>(
     override fun renderType(): RenderType = RenderTypes.lines()
 }
 
+class PlantEyesLayer<M : EntityModel<PlantRenderState>>(
+    renderer: RenderLayerParent<PlantRenderState, M>,
+) : RenderLayer<PlantRenderState, M>(renderer) {
+
+    override fun submit(
+        poseStack: PoseStack,
+        submitNodeCollector: SubmitNodeCollector,
+        lightCoords: Int,
+        state: PlantRenderState,
+        yRot: Float,
+        xRot: Float
+    ) {
+        val textureLocation = state.getEyesTextureLocation(PlantRenderState.TEXTURE_PATH, state.getSuffixes(), state.isAsleep || state.blinkTimer == 0) ?: return
+        val renderType = RenderTypes.entityTranslucent(textureLocation)
+
+        submitNodeCollector.order(1).submitModel(this.parentModel, state, poseStack, renderType, lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
+    }
+}
+
+
+
+class EmissivePlantEyesLayer<M : EntityModel<PlantRenderState>>(
+    renderer: RenderLayerParent<PlantRenderState, M>,
+) : EyesLayer<PlantRenderState, M>(renderer) {
+
+    override fun submit(
+        poseStack: PoseStack,
+        submitNodeCollector: SubmitNodeCollector,
+        lightCoords: Int,
+        state: PlantRenderState,
+        yRot: Float,
+        xRot: Float
+    ) {
+        val textureLocation = state.getEmissiveEyesTextureLocation(PlantRenderState.TEXTURE_PATH, state.getSuffixes(), state.isAsleep || state.blinkTimer == 0) ?: return
+        val renderType = RenderTypes.entityTranslucent(textureLocation)
+
+        submitNodeCollector.order(1).submitModel(this.parentModel, state, poseStack, renderType, lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
+    }
+
+    override fun renderType(): RenderType = RenderTypes.lines()
+}
+
+
 
 class PlantRenderState : LivingEntityRenderState() {
     companion object {
@@ -229,6 +278,7 @@ class PlantRenderState : LivingEntityRenderState() {
     var partialTick: Float = 0f
     var cooldown: Int = 0
     var damagedAmount: Float = 0.0f
+    var blinking: Boolean = false
     var isAsleep: Boolean = false
     var isInAir: Boolean = false
     var customName: String = ""
