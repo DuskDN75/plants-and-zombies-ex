@@ -30,7 +30,7 @@ object PazPlantsTab : PazCreativeTab() {
 
                 .displayItems { parameters, output ->
 
-                    fun addPlant(type: EntityType<*>, customName: String = "placeholder") {
+                    fun addPlant(type: EntityType<*>, customName: String = "empty") {
 
                         val stack = SeedPacketItem.stackFor(type)
 
@@ -106,7 +106,7 @@ object PazPlantsTab : PazCreativeTab() {
                     addPlant(PazEntities.DOOM_SHROOM)
                     addPlant(PazEntities.PLACEHOLDER, "magnetshroom") // MAGNET SHROOM
                     addPlant(PazEntities.PLACEHOLDER, "fireshroom") // Fire Shroom
-                    addPlant(PazEntities.PLACEHOLDER, "crimsonshroom") // Crimson Shroom
+                    addPlant(PazEntities.CRIMSON_SHROOM) // Crimson Shroom
                     addPlant(PazEntities.PLACEHOLDER, "warpedshroom") // Warped Shroom
                     addPlant(PazEntities.PLACEHOLDER, "gloomshroom") // Gloom Shroom
                     // endregion

@@ -3,6 +3,7 @@ package duskdn.plantz_ex
 import duskdn.plantz_ex.block.entity.FlagBlockEntity
 import duskdn.plantz_ex.block.entity.SunBatteryBlockEntity
 import duskdn.plantz_ex.block.entity.TimeMachineBlockEntity
+import duskdn.plantz_ex.entity.plant.all.mushrooms.CrimsonShroom
 import duskdn.plantz_ex.init.PazBlocks
 import duskdn.plantz_ex.init.PazEntities
 import duskdn.plantz_ex.model.BalloonModel
@@ -130,6 +131,7 @@ object PazModels {
         ModelLayerRegistry.registerModelLayer(FlowerPotModel.LAYER_LOCATION) { FlowerPotModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(WaterPotModel.LAYER_LOCATION) { WaterPotModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(LavaLilyModel.LAYER_LOCATION) { LavaLilyModel.createBodyLayer() }
+        ModelLayerRegistry.registerModelLayer(CrimsonShroomModel.LAYER_LOCATION) { CrimsonShroomModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(SkyPeaShooterModel.LAYER_LOCATION) { SkyPeaShooterModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(GraveBusterModel.LAYER_LOCATION) { GraveBusterModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(PlanternModel.LAYER_LOCATION) { PlanternModel.createBodyLayer() }
@@ -142,6 +144,7 @@ object PazModels {
         ModelLayerRegistry.registerModelLayer(MelonModel.LAYER_LOCATION) { MelonModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(SmallProjectileModel.LAYER_LOCATION) { SmallProjectileModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(MissileModel.LAYER_LOCATION) { MissileModel.createBodyLayer() }
+        ModelLayerRegistry.registerModelLayer(ShroomLightModel.LAYER_LOCATION) { ShroomLightModel.createBodyLayer() }
 
         ModelLayerRegistry.registerModelLayer(PazZombieModel.LAYER_LOCATION) { PazZombieModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(DiggerZombieModel.LAYER_LOCATION) { DiggerZombieModel.createBodyLayer() }
@@ -211,6 +214,7 @@ object PazModels {
         EntityRenderers.register(PazEntities.FLOWER_POT) { PlantRenderer(FlowerPotModel(it.bakeLayer(FlowerPotModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.WATER_POT) { PlantRenderer(WaterPotModel(it.bakeLayer(WaterPotModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.LAVALILY) { PlantRenderer(LavaLilyModel(it.bakeLayer(LavaLilyModel.LAYER_LOCATION)), it) }
+        EntityRenderers.register(PazEntities.CRIMSON_SHROOM) { PlantRenderer(CrimsonShroomModel(it.bakeLayer(CrimsonShroomModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.SKY_PEA_SHOOTER) { PlantRenderer(SkyPeaShooterModel(it.bakeLayer(SkyPeaShooterModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.GRAVE_BUSTER) { PlantRenderer(GraveBusterModel(it.bakeLayer(GraveBusterModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.PLANTERN) { PlantRenderer(PlanternModel(it.bakeLayer(PlanternModel.LAYER_LOCATION)), it) }
@@ -220,8 +224,8 @@ object PazModels {
 
         EntityRenderers.register(PazEntities.PEA) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.PEA_ICE) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it) }
-        EntityRenderers.register(PazEntities.PEA_FIRE) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it, emissive = true) }
-        EntityRenderers.register(PazEntities.PEA_ELECTRIC) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it, emissive = true) }
+        EntityRenderers.register(PazEntities.PEA_FIRE) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it,) }
+        EntityRenderers.register(PazEntities.PEA_ELECTRIC) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.PEA_WATER) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.SPORE) { ProjectileRenderer(SmallProjectileModel(it.bakeLayer(SmallProjectileModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.WATER_SPORE) { ProjectileRenderer(SmallProjectileModel(it.bakeLayer(SmallProjectileModel.LAYER_LOCATION)), it) }
@@ -232,6 +236,10 @@ object PazModels {
         EntityRenderers.register(PazEntities.MELON) { ProjectileRenderer(MelonModel(it.bakeLayer(MelonModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.PAINT_BALL) { ProjectileRenderer(SmallProjectileModel(it.bakeLayer(SmallProjectileModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.MISSILE) { ProjectileRenderer(MissileModel(it.bakeLayer(MissileModel.LAYER_LOCATION)), it) }
+
+        EntityRenderers.register(PazEntities.SHROOMLIGHT) { ProjectileRenderer(ShroomLightModel(it.bakeLayer(ShroomLightModel.LAYER_LOCATION)), it) }
+        EntityRenderers.register(PazEntities.CRIMSON_SHROOMLIGHT) { ProjectileRenderer(ShroomLightModel(it.bakeLayer(ShroomLightModel.LAYER_LOCATION)), it) }
+        EntityRenderers.register(PazEntities.WARPED_SHROOMLIGHT) { ProjectileRenderer(ShroomLightModel(it.bakeLayer(ShroomLightModel.LAYER_LOCATION)), it) }
 
         EntityRenderers.register(PazEntities.BROWN_COAT) { PazZombieRenderer(it) }
         EntityRenderers.register(PazEntities.NEWSPAPER_ZOMBIE) { PazZombieRenderer(it) }

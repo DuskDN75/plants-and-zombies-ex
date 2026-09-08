@@ -10,6 +10,9 @@
     "plantz_ex:cabbage",
     "plantz_ex:kernel",
     "plantz_ex:butter",
-    "plantz_ex:needle"
+    "plantz_ex:needle",
+    "plantz_ex:shroomlight",
+    "plantz_ex:crimson_shroomlight",
+    "plantz_ex:warped_shroomlight"
   ]
 }

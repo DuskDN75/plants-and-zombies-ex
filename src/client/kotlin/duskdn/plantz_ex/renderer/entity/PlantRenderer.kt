@@ -43,9 +43,6 @@ class PlantRenderer(
     defaultModel,
     0.5f
 ) {
-
-    var model: EntityModel<PlantRenderState>? = null
-
     init {
         addLayer(EmissivePlantLayer(this))
         addLayer(AdditivePlantLayer(this))

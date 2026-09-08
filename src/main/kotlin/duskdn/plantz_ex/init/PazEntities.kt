@@ -49,6 +49,9 @@ import duskdn.plantz_ex.entity.projectile.peas.PeaElectric
 import duskdn.plantz_ex.entity.projectile.peas.PeaFire
 import duskdn.plantz_ex.entity.projectile.peas.PeaIce
 import duskdn.plantz_ex.entity.projectile.peas.PeaWater
+import duskdn.plantz_ex.entity.projectile.shroomlights.CrimsonShroomLight
+import duskdn.plantz_ex.entity.projectile.shroomlights.ShroomLight
+import duskdn.plantz_ex.entity.projectile.shroomlights.WarpedShroomLight
 import duskdn.plantz_ex.entity.turret.Turret
 import duskdn.plantz_ex.entity.zombie.*
 import duskdn.plantz_ex.mixin.MobAccessor
@@ -70,7 +73,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.projectile.Projectile
-import net.minecraft.world.item.ProjectileWeaponItem
 
 object PazEntities {
 
@@ -754,6 +756,10 @@ object PazEntities {
     @JvmField val MELON: EntityType<Melon> = registerProjectile("melon", EntityType.Builder.of({_,l->Melon(l)}, MobCategory.MISC).sized(2.0f, 2.0f), width = 1.0f, height = 0.8f)
     @JvmField val PAINT_BALL: EntityType<PaintBall> = registerProjectile("paint_ball", EntityType.Builder.of({ _, l->PaintBall(l)}, MobCategory.MISC), width = 0.42f, height = 0.42f)
     @JvmField val MISSILE: EntityType<Missile> = registerProjectile("missile", EntityType.Builder.of({ _, l->Missile(l)}, MobCategory.MISC), width = 0.42f, height = 0.42f)
+
+    @JvmField val SHROOMLIGHT: EntityType<ShroomLight> = registerProjectile("shroomlight", EntityType.Builder.of({ _, l-> ShroomLight(l)}, MobCategory.MISC).sized(3.0f, 3.0f), width = 1.0f, height = 1.0f)
+    @JvmField val CRIMSON_SHROOMLIGHT: EntityType<CrimsonShroomLight> = registerProjectile("crimson_shroomlight", EntityType.Builder.of({ _, l-> CrimsonShroomLight(l)}, MobCategory.MISC).sized(3.0f, 3.0f), width = 1.0f, height = 1.0f)
+    @JvmField val WARPED_SHROOMLIGHT: EntityType<WarpedShroomLight> = registerProjectile("warped_shroomlight", EntityType.Builder.of({ _, l-> WarpedShroomLight(l)}, MobCategory.MISC).sized(3.0f, 3.0f), width = 1.0f, height = 1.0f)
     // endregion
 
     //region Other

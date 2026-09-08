@@ -25,7 +25,7 @@ import net.minecraft.world.entity.projectile.Projectile
 import net.minecraft.world.item.DyeColor
 
 class ProjectileRenderer(
-    val model: EntityModel<ProjectileRenderState>,
+    val defaultModel: EntityModel<ProjectileRenderState>,
     context: EntityRendererProvider.Context,
 ) : EntityRenderer<Projectile, ProjectileRenderState>(
     context
@@ -120,7 +120,7 @@ class ProjectileRenderer(
     }
 
     override fun getModel(): EntityModel<ProjectileRenderState> {
-        return this.model
+        return this.defaultModel
     }
 }
 
