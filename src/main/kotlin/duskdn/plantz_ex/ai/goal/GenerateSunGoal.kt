@@ -24,11 +24,8 @@ class GenerateSunGoal(
             && !(usingEntity is PazPlant && (usingEntity.isAsleep || usingEntity.isGrowingSeeds))
     )
 
-    override var actionTimer: Int = 140
-
     override fun stop() {
         isDoingAction = false
-        actionTimer = 140
     }
 
     override fun canDoAction(): Boolean = (generatesAtNight || (usingEntity as? PazPlant)?.sunIsVisible() == true)

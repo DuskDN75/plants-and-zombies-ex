@@ -40,6 +40,7 @@ import duskdn.plantz_ex.entity.plant.all.WallNut
 import duskdn.plantz_ex.entity.plant.all.aquatic.WaterPeaShooter
 import duskdn.plantz_ex.entity.plant.all.WaterPot
 import duskdn.plantz_ex.entity.plant.all.aerial.SkyPeaShooter
+import duskdn.plantz_ex.entity.plant.all.mushrooms.CrimsonShroom
 import duskdn.plantz_ex.entity.plant.all.mushrooms.IceShroom
 import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.entity.projectile.*
@@ -450,15 +451,22 @@ object PazEntities {
             maxHealth = 12.0,
         )
     )
-    @JvmField val CRIMSON_SHROOM: EntityType<IceShroom> = registerPlant(
-        "crimson_shroom", EntityType.Builder.of(::IceShroom, MobCategory.CREATURE),
-        eyeHeight = 0.43f,
-        height = 0.7f,
+    @JvmField val CRIMSON_SHROOM: EntityType<CrimsonShroom> = registerPlant(
+        "crimsonshroom", EntityType.Builder.of(::CrimsonShroom, MobCategory.CREATURE),
+        eyeHeight = 0.625f,
+        height = 0.9375f,
         attributes = PazPlant.Companion.PlantAttributes(
-            maxHealth = 28.0,
-            followRange = 5.0
         )
     )
+//    @JvmField val WARPED_SHROOM: EntityType<CrimsonShroom> = registerPlant(
+//        "crimson_shroom", EntityType.Builder.of(::CrimsonShroom, MobCategory.CREATURE),
+//        eyeHeight = 0.43f,
+//        height = 0.7f,
+//        attributes = PazPlant.Companion.PlantAttributes(
+//            maxHealth = 28.0,
+//            followRange = 5.0
+//        )
+//    )
     @JvmField val SKY_PEA_SHOOTER: EntityType<SkyPeaShooter> = registerPlant(
         "sky_peashooter", EntityType.Builder.of(::SkyPeaShooter, MobCategory.CREATURE),
         attributes = PazPlant.Companion.PlantAttributes(

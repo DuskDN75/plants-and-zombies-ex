@@ -32,13 +32,18 @@ open class ProjectileAttackGoal(
     actionSuccessEffect: (ActionData?) -> Unit = {},
     actionEndEffect: (ActionData?) -> Unit = {},
     actionPredicate: Predicate<PathfinderMob> = Predicate { true },
+    cooldownVariationRange: IntRange = 0..0,
+    actionAnimationRange: IntRange = 0..actionDelay,
+    actionAnimationEffect: () -> Unit = {
+        if (usingEntity is PazPlant) usingEntity.blinkRemainingTicks = 2
+    },
     var projectileFactory: () -> Entity,
     var inaccuracy: Float = 0.0f,
     var attackRadius: Float = usingEntity.attributes.getValue(Attributes.FOLLOW_RANGE).toFloat(),
     var velocity : Double = 1.2,
     var useHighArc: Boolean = false,
     val soundEvent: SoundEvent? = PazSounds.PROJECTILE_FIRE,
-) : ActionGoal(usingEntity, cooldownTime, actionDelay, actionStartEffect, actionSuccessEffect, actionEndEffect, actionPredicate) {
+) : ActionGoal(usingEntity, cooldownTime, actionDelay, actionStartEffect, actionSuccessEffect, actionEndEffect, actionPredicate, cooldownVariationRange, actionAnimationEffect, actionAnimationRange) {
     var distanceSqr: Double = 0.0
 
     var targetMoveVelocity: Vec3 = Vec3(0.0, 0.0, 0.0)

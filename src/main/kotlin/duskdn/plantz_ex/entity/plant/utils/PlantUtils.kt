@@ -124,7 +124,7 @@ fun PazPlant.snowCheck(): Boolean {
 
     val cannotChill = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(type).`is`(PazTags.EntityTypes.CANNOT_CHILL)
 
-    println("CANNOT CHILL: $cannotChill")
+//    println("CANNOT CHILL: $cannotChill")
 
     if (cannotChill) return false
 
@@ -132,7 +132,7 @@ fun PazPlant.snowCheck(): Boolean {
 
     if (blockIn.`is`(Blocks.SNOW)) {
 
-        println("IS IN SNOW: ${this.type}")
+//        println("IS IN SNOW: ${this.type}")
 
         if (!hasEffect(PazEffects.CHILLED)) addEffect(MobEffectInstance(PazEffects.CHILLED, 20))
 

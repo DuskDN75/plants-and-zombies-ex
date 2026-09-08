@@ -3,6 +3,7 @@ package duskdn.plantz_ex.entity.plant.all
 import duskdn.plantz_ex.init.PazEntities
 import duskdn.plantz_ex.init.PazServerParticles
 import duskdn.plantz_ex.ai.goal.ProjectileAttackGoal
+import duskdn.plantz_ex.entity.plant.init.AttackingPlant
 import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.entity.plant.interfaces.IWarmingPlant
 import duskdn.plantz_ex.entity.plant.utils.fireSurvivalCheck
@@ -16,22 +17,18 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class FirePeaShooter(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntities.FIRE_PEA_SHOOTER, level), IWarmingPlant {
+class FirePeaShooter(type: EntityType<out PazPlant>, level: Level) : AttackingPlant(PazEntities.FIRE_PEA_SHOOTER, level), IWarmingPlant {
     override fun registerGoals() {
         super.registerGoals()
 
-        this.goalSelector.addGoal(2, ProjectileAttackGoal(
-            usingEntity = this,
-            projectileFactory = { PeaFire(level(), this) },
-            cooldownTime = 20,
-            actionDelay = 3))
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
-            target !is PazPlant
-                    
-                    && (target is Zombie
-                    || (target is Enemy && isTame)
-                    || (target is Player && !isTame))
-        })
+        this.goalSelector.addGoal(
+            2, ProjectileAttackGoal(
+                usingEntity = this,
+                projectileFactory = { PeaFire(level(), this) },
+                cooldownTime = 20,
+                actionDelay = 3
+            )
+        )
     }
 
     override fun getLightLevel(): Int {

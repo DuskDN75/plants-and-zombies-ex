@@ -5,6 +5,7 @@ import duskdn.plantz_ex.renderer.entity.PlantRenderState
 import duskdn.plantz_ex.renderer.getAdditiveTextureLocation
 import duskdn.plantz_ex.util.pazResource
 import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.entity.state.EntityRenderState
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.resources.Identifier
 import net.minecraft.server.packs.resources.ResourceManager
@@ -30,7 +31,7 @@ fun resolveTextureLocation(base: String, rm: ResourceManager, suffixes: List<Str
     return null
 }
 
-fun LivingEntityRenderState.isMagicName(name: String): String {
+fun EntityRenderState.isMagicName(name: String): String {
     val type = this.entityType
     MAGIC_NAMES.forEach { (entityType, magicName) ->
         if (entityType == type && magicName == name.lowercase()) return magicName
@@ -38,7 +39,7 @@ fun LivingEntityRenderState.isMagicName(name: String): String {
     return ""
 }
 
-fun LivingEntityRenderState.getTextureLocation(basePath: String, suffixes: MutableList<String> = mutableListOf()): Identifier {
+fun EntityRenderState.getTextureLocation(basePath: String, suffixes: MutableList<String> = mutableListOf()): Identifier {
     val entityName = entityType.toShortString().lowercase()
     val base = "${basePath}/${entityName}/${entityName}"
     val rm = Minecraft.getInstance().resourceManager
@@ -47,7 +48,7 @@ fun LivingEntityRenderState.getTextureLocation(basePath: String, suffixes: Mutab
     return textureLocation?: pazResource("${base}.png")
 }
 
-fun LivingEntityRenderState.getEmissiveTextureLocation(basePath: String, suffixes: MutableList<String> = mutableListOf()): Identifier? {
+fun EntityRenderState.getEmissiveTextureLocation(basePath: String, suffixes: MutableList<String> = mutableListOf()): Identifier? {
     val entityName = entityType.toShortString().lowercase()
     val base = "${basePath}/${entityName}/${entityName}"
     val rm = Minecraft.getInstance().resourceManager
@@ -55,7 +56,7 @@ fun LivingEntityRenderState.getEmissiveTextureLocation(basePath: String, suffixe
     return resolveTextureLocation(base, rm, suffixes.apply { add("emissive") })
 }
 
-fun LivingEntityRenderState.getAdditiveTextureLocation(basePath: String, suffixes: MutableList<String> = mutableListOf()): Identifier? {
+fun EntityRenderState.getAdditiveTextureLocation(basePath: String, suffixes: MutableList<String> = mutableListOf()): Identifier? {
     val entityName = entityType.toShortString().lowercase()
     val base = "${basePath}/${entityName}/${entityName}"
     val rm = Minecraft.getInstance().resourceManager
@@ -65,7 +66,7 @@ fun LivingEntityRenderState.getAdditiveTextureLocation(basePath: String, suffixe
 
 fun PlantRenderState.getEyesTextureLocation(basePath: String, suffixes: MutableList<String> = mutableListOf(), closed: Boolean): Identifier? {
 
-    suffixes.remove("sleep")
+//    suffixes.remove("sleep")
 
     val entityName = entityType.toShortString().lowercase()
     val base = "${basePath}/${entityName}/${entityName}"
@@ -75,20 +76,16 @@ fun PlantRenderState.getEyesTextureLocation(basePath: String, suffixes: MutableL
 
     if (closed) suffixes.add("closed")
 
+//    println("SUFFIXES ARE: $suffixes")
+
     return resolveTextureLocation(base, rm, suffixes)
 }
 
 fun PlantRenderState.getEmissiveEyesTextureLocation(basePath: String, suffixes: MutableList<String> = mutableListOf(), closed: Boolean): Identifier? {
 
-    suffixes.remove("sleep")
-
-    val entityName = entityType.toShortString().lowercase()
-    val base = "${basePath}/${entityName}/${entityName}"
-    val rm = Minecraft.getInstance().resourceManager
-
     suffixes.add("eyes")
 
     if (closed) suffixes.add("closed")
 
-    return getEmissiveTextureLocation(base, suffixes)
+    return getEmissiveTextureLocation(basePath, suffixes)
 }

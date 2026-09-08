@@ -4,6 +4,7 @@ import duskdn.plantz_ex.ai.goal.MeleeAttackActionGoal
 import duskdn.plantz_ex.init.ElectricArcParticleOptions
 import duskdn.plantz_ex.entity.plant.init.AttackingPlant
 import duskdn.plantz_ex.entity.plant.init.PazPlant
+import duskdn.plantz_ex.entity.plant.interfaces.IAquaticPlant
 import duskdn.plantz_ex.entity.plant.utils.waterSurvivalCheck
 import duskdn.plantz_ex.init.PazDamageTypes
 import duskdn.plantz_ex.init.PazEffects
@@ -32,7 +33,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 import kotlin.math.sqrt
 
-class TangleKelp(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlant(PazEntities.TANGLE_KELP, level) {
+class TangleKelp(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlant(PazEntities.TANGLE_KELP, level), IAquaticPlant {
 
     companion object {
 //        private val TANGLE_ATTACK_MODIFIER = AttributeModifier(
@@ -40,6 +41,8 @@ class TangleKelp(type: EntityType<out AttackingPlant>, level: Level) : Attacking
 //        )
         val TANGLE_TIME_ID: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(TangleKelp::class.java, EntityDataSerializers.INT)
     }
+
+    override var buoyancyHeight = 0.9
 
     var tangleTime: Int
         get() = this.entityData.get(TangleKelp.TANGLE_TIME_ID)
@@ -51,6 +54,8 @@ class TangleKelp(type: EntityType<out AttackingPlant>, level: Level) : Attacking
         super.tick()
 
         if (level() !is ServerLevel) return
+
+        applyBuoyancy()
 
         if (tangleTime > 0) tangleTime--
 

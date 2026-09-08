@@ -18,7 +18,9 @@ class PeaShooter(type: EntityType<out AttackingPlant>, level: Level) : Attacking
             usingEntity = this,
             projectileFactory = { Pea(level(), this)},
             cooldownTime = 20,
-            actionDelay = 3))
+            actionDelay = 3,
+            )
+        )
     }
 
     override fun getZenGrownSeedType(): EntityType<*> = if (random.nextFloat() < 0.1f) PazEntities.REPEATER else super.getZenGrownSeedType()

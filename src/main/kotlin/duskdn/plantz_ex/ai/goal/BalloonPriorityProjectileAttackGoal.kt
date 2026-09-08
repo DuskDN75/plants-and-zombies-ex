@@ -36,7 +36,7 @@ open class BalloonPriorityProjectileAttackGoal(
     actionPredicate = actionPredicate,
     actionStartEffect = actionStartEffect,
     actionSuccessEffect = actionSuccessEffect,
-    actionEndEffect = actionEndEffect,
+    actionEndEffect = actionEndEffect
 ) {
     fun tryTargetBalloon(target: BalloonZombie) {
 

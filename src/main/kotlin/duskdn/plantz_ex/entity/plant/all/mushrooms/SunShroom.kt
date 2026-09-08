@@ -17,6 +17,9 @@ class SunShroom(
 
     override fun registerGoals() {
         super.registerGoals()
+
+        cooldown = 140
+
         this.goalSelector.addGoal(1, GenerateSunGoal(
             usingEntity = this,
             actionDelay = 10,

@@ -93,9 +93,6 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
         val COOLDOWN: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(PazPlant::class.java,
             PazDataSerializers.DATA_COOLDOWN
         )
-        val BLINK_TIMER: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(PazPlant::class.java,
-            PazDataSerializers.DATA_BLINKTIMER
-        )
         val COFFEE_BUFF: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(PazPlant::class.java,
             PazDataSerializers.DATA_COFFEE_BUFF
         )
@@ -218,9 +215,9 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
         get() = this.entityData.get(COOLDOWN)
         set(value) = this.entityData.set(COOLDOWN, value.coerceAtLeast(-1))
 
-    var blinkTimer: Int
-        get() = this.entityData.get(BLINK_TIMER)
-        set(value) = this.entityData.set(BLINK_TIMER, value.coerceAtLeast(-1))
+    var blinkRemainingTicks: Int = 8
+
+    var nextBlinkTicks: Int = 0
 
     var receivedSun: Int
         get() = this.entityData.get(RECEIVED_SUN)
@@ -266,7 +263,6 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
 
     var idleAnimationStartTick: Int = 0
     var cooldownO: Int = 0
-    var blinkTimerNext: Int = 0
     val initAnimationState = AnimationState()
     val idleAnimationState = AnimationState()
     val actionAnimationState = AnimationState()
@@ -277,7 +273,6 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
 
     init {
         cooldown = -1
-        blinkTimer = -1
         this.lookControl = object : LookControl(this) {
             override fun clampHeadRotationToBody() {}
             override fun tick() { if (!isAsleep) super.tick() }
@@ -298,7 +293,6 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
         super.defineSynchedData(entityData)
         entityData.define(PLANT_STATE, PlantState.IDLE)
         entityData.define(COOLDOWN, 0)
-        entityData.define(BLINK_TIMER, 0)
         entityData.define(RECEIVED_SUN, 0)
         entityData.define(RECEIVED_WATER, 0)
         entityData.define(SEED_GROW_COOLDOWN, 0)
@@ -522,8 +516,26 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
 
         if (level().isClientSide) {
 
-            if (blinkTimer <= 0) {
-                blinkTimer
+            println("blinkRemainingTicks: $blinkRemainingTicks, nextBlinkTicks: $nextBlinkTicks, for $type")
+
+            if (blinkRemainingTicks > 0) {
+
+                blinkRemainingTicks--
+
+            } else {
+
+                if (nextBlinkTicks > 0) {
+
+                    nextBlinkTicks--
+
+                } else {
+
+                    blinkRemainingTicks = 4
+
+                    nextBlinkTicks = random.nextInt(60) + 40
+
+                }
+
             }
 
             if (coffeeBuff > 0) {

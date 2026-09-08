@@ -1,31 +1,25 @@
 package duskdn.plantz_ex.renderer.entity
 
-import duskdn.plantz_ex.renderer.getEmissiveTextureLocation
-import duskdn.plantz_ex.renderer.getTextureLocation
-import duskdn.plantz_ex.renderer.isMagicName
-import net.minecraft.client.renderer.entity.MobRenderer
-import net.minecraft.client.renderer.entity.layers.EyesLayer
-import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
-
 import com.mojang.blaze3d.vertex.PoseStack
 import duskdn.plantz_ex.PazRenderPipelines
 import duskdn.plantz_ex.ai.PlantState
 import duskdn.plantz_ex.entity.plant.all.BonkChoy
 import duskdn.plantz_ex.entity.plant.all.ExplodeONut
 import duskdn.plantz_ex.entity.plant.all.KernelPult
-import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.entity.plant.all.WallNut
+import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.entity.plant.interfaces.IExplosivePlant
 import duskdn.plantz_ex.init.PazConfig
-import duskdn.plantz_ex.renderer.getAdditiveTextureLocation
-import duskdn.plantz_ex.renderer.getEmissiveEyesTextureLocation
-import duskdn.plantz_ex.renderer.getEyesTextureLocation
+import duskdn.plantz_ex.renderer.*
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.entity.EntityRendererProvider
+import net.minecraft.client.renderer.entity.MobRenderer
 import net.minecraft.client.renderer.entity.RenderLayerParent
+import net.minecraft.client.renderer.entity.layers.EyesLayer
 import net.minecraft.client.renderer.entity.layers.RenderLayer
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.client.renderer.rendertype.OutputTarget
 import net.minecraft.client.renderer.rendertype.RenderSetup
 import net.minecraft.client.renderer.rendertype.RenderType
@@ -49,6 +43,9 @@ class PlantRenderer(
     defaultModel,
     0.5f
 ) {
+
+    var model: EntityModel<PlantRenderState>? = null
+
     init {
         addLayer(EmissivePlantLayer(this))
         addLayer(AdditivePlantLayer(this))
@@ -76,6 +73,16 @@ class PlantRenderer(
 
     override fun getShadowRadius(state: PlantRenderState): Float {
         return if (state.rotations == Quaternionf()) super.getShadowRadius(state) * (0.9f) else 0f
+    }
+
+    override fun getRenderType(
+        state: PlantRenderState,
+        isBodyVisible: Boolean,
+        forceTransparent: Boolean,
+        appearGlowing: Boolean
+    ): RenderType? {
+        return super.getRenderType(state, isBodyVisible, true, appearGlowing)
+
     }
 
     override fun scale(state: PlantRenderState, poseStack: PoseStack) {
@@ -111,7 +118,7 @@ class PlantRenderer(
         state.plantState = entity.state
         if (entity is IExplosivePlant) state.swelling = entity.getSwelling(partialTick)
         state.cooldown = entity.cooldown
-        state.blinkTimer = entity.blinkTimer
+        state.blinking = entity.blinkRemainingTicks > 0
         state.isAsleep = entity.isAsleep
         state.damagedAmount = entity.damagedPercent
         state.initAnimationState.copyFrom(entity.initAnimationState)
@@ -237,7 +244,9 @@ class PlantEyesLayer<M : EntityModel<PlantRenderState>>(
         yRot: Float,
         xRot: Float
     ) {
-        val textureLocation = state.getEyesTextureLocation(PlantRenderState.TEXTURE_PATH, state.getSuffixes(), state.isAsleep || state.blinkTimer == 0) ?: return
+        val textureLocation = state.getEyesTextureLocation(PlantRenderState.TEXTURE_PATH, state.getSuffixes(), state.isAsleep || state.blinking)
+//        println("textureLocation: $textureLocation")
+        if (textureLocation == null) return
         val renderType = RenderTypes.entityTranslucent(textureLocation)
 
         submitNodeCollector.order(1).submitModel(this.parentModel, state, poseStack, renderType, lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
@@ -258,7 +267,7 @@ class EmissivePlantEyesLayer<M : EntityModel<PlantRenderState>>(
         yRot: Float,
         xRot: Float
     ) {
-        val textureLocation = state.getEmissiveEyesTextureLocation(PlantRenderState.TEXTURE_PATH, state.getSuffixes(), state.isAsleep || state.blinkTimer == 0) ?: return
+        val textureLocation = state.getEmissiveEyesTextureLocation(PlantRenderState.TEXTURE_PATH, state.getSuffixes(), state.isAsleep || state.blinking) ?: return
         val renderType = RenderTypes.entityTranslucent(textureLocation)
 
         submitNodeCollector.order(1).submitModel(this.parentModel, state, poseStack, renderType, lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);

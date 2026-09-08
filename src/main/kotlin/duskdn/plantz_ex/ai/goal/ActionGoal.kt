@@ -26,7 +26,9 @@ abstract class ActionGoal(
     open val actionSuccessEffect: (ActionData?) -> Unit = {},
     open val actionEndEffect: (ActionData?) -> Unit = {},
     open val actionPredicate: Predicate<PathfinderMob> = Predicate { true },
-    open val cooldownVariationRange: IntRange = 0..0
+    open val cooldownVariationRange: IntRange = 0..0,
+    open val actionAnimationEffect: () -> Unit = {},
+    open val actionAnimationRange: IntRange = 0..0,
 ): Goal() {
     open var isDoingAction = false
     open var oldActionTime = -1
@@ -52,6 +54,8 @@ abstract class ActionGoal(
 
 //        debugPrint("ACTION TIMER IS: $actionTimer")
 
+        actionAnimationEffect()
+
         if (
             canDoAction()
             && !(usingEntity is PazPlant && (usingEntity as PazPlant).cooldown > -1)
@@ -71,11 +75,12 @@ abstract class ActionGoal(
 
                 if (plant.chilled) cooldownMult *= 0.8
 
+                plant.cooldown = Mth.floor(
+                    (cooldownTime+cooldownVariationRange.random()) * cooldownMult
+                ).coerceAtLeast(actionDelay)
+
             }
 
-            (usingEntity as? PazPlant)?.cooldown = Mth.floor(
-                (cooldownTime+cooldownVariationRange.random()) * cooldownMult
-            ).coerceAtLeast(actionDelay)
             startAction()
             actionTimer = actionDelay.coerceAtLeast(0)
             actionStartEffect(getData())
@@ -84,6 +89,12 @@ abstract class ActionGoal(
 
         if (actionTimer > 0) {
             calculateActionTime()
+
+            if (usingEntity is PazPlant && (usingEntity as PazPlant).cooldown in actionAnimationRange) {
+
+                actionAnimationEffect()
+
+            }
         }
         if (actionTimer == 0) {// do action
             runAction()

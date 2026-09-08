@@ -45,7 +45,7 @@ object PazRenderPipelines {
             .withColorTargetState(ColorTargetState(BlendFunction.ADDITIVE))
             .withCull(false)
             .withVertexFormat(DefaultVertexFormat.ENTITY, VertexFormat.Mode.QUADS)
-            .withDepthStencilState(DepthStencilState(CompareOp.GREATER_THAN_OR_EQUAL, false))
+            .withDepthStencilState(DepthStencilState.DEFAULT)
             .build()
     )
 
