@@ -31,7 +31,7 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.Vec2
 
-class CrimsonShroom(type: EntityType<out PazPlant>, level: Level) : PultPlant(PazEntities.CRIMSON_SHROOM, level), IWarmingPlant, IIgneousPlant {
+class CrimsonShroom(level: Level) : PultPlant(PazEntities.CRIMSON_SHROOM, level), IWarmingPlant, IIgneousPlant {
 
     override fun getLightLevel(): Int {
         return if (isAsleep) 8 else 15

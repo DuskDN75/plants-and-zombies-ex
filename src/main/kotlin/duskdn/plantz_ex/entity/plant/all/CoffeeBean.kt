@@ -8,7 +8,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class CoffeeBean(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntities.COFFEE_BEAN, level) {
+class CoffeeBean(level: Level) : PazPlant(PazEntities.COFFEE_BEAN, level) {
 
     override fun registerGoals() {
         super.registerGoals()

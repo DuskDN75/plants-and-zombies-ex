@@ -14,7 +14,7 @@ import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.level.Level
 
-class Repeater(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntities.REPEATER, level) {
+class Repeater( level: Level) : PazPlant(PazEntities.REPEATER, level) {
 
     companion object {
         val ACTION_COUNT: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Repeater::class.java, EntityDataSerializers.INT)

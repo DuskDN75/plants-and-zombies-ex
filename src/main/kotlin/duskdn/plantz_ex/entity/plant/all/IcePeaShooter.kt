@@ -9,7 +9,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class IcePeaShooter(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlant(PazEntities.ICE_PEA_SHOOTER, level) {
+class IcePeaShooter(level: Level) : AttackingPlant(PazEntities.ICE_PEA_SHOOTER, level) {
 
     override fun registerGoals() {
         super.registerGoals()

@@ -13,7 +13,6 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
 class Plantern(
-    type: EntityType<out PazPlant>,
     level: Level,
 ) : PazPlant(PazEntities.PLANTERN, level), IWarmingPlant {
     override fun attackGoals() {}
@@ -27,9 +26,10 @@ class Plantern(
 
         val effectApplyGoal = EffectApplyGoal(
             usingEntity = this,
+            cooldownTime = 60,
             effectFactory = { target ->
                 if (enemyCheck(target) || target is PazPlant) {
-                    target.addEffect(MobEffectInstance(PazEffects.ENLIGHTENED, 25, 0))
+                    target.addEffect(MobEffectInstance(PazEffects.ENLIGHTENED, 60, 0))
                 }
             }
         )

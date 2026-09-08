@@ -9,7 +9,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class LavaLily(type: EntityType<out CarrierPlant>, level: Level) : CarrierPlant(PazEntities.LAVALILY, level), IIgneousPlant {
+class LavaLily(level: Level) : CarrierPlant(PazEntities.LAVALILY, level), IIgneousPlant {
 
     override fun attackGoals() {}
 
@@ -36,8 +36,6 @@ class LavaLily(type: EntityType<out CarrierPlant>, level: Level) : CarrierPlant(
 
         super.aiStep()
     }
-
-    override fun canBreatheUnderwater(): Boolean = true
 
     override fun canSurviveOn(block: BlockState): Boolean {
         return lavaSurvivalCheck(block)

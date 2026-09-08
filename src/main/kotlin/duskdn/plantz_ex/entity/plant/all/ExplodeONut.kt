@@ -15,7 +15,7 @@ import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 
-class ExplodeONut(type: EntityType<out AbstractWallNut>, level: Level) : AbstractWallNut(PazEntities.EXPLODE_O_NUT, level), IExplosivePlant {
+class ExplodeONut(level: Level) : AbstractWallNut(PazEntities.EXPLODE_O_NUT, level), IExplosivePlant {
 
     var explodeGoal: ExplodeGoal<ExplodeONut>? = null
 

@@ -20,6 +20,7 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.syncher.EntityDataAccessor
@@ -30,6 +31,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.tags.FluidTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.util.Mth
 import net.minecraft.util.ProblemReporter
@@ -38,6 +40,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
+import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.*
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
@@ -115,6 +118,9 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
         val ENLIGHTENED: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(PazPlant::class.java,
             PazDataSerializers.DATA_ENLIGHTENED
         )
+        val RECEIVING_AIR: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(PazPlant::class.java,
+            PazDataSerializers.DATA_POWERED_UP
+        )
 
         val ACTIVE: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(PazPlant::class.java, DATA_ACTIVE)
 
@@ -134,6 +140,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
             val followRange: Double = 20.0,
             val armor: Double = 0.0,
             val scale: Double = 1.0,
+            val oxygenBonus: Double = -20.0,
         ) {
             fun apply(builder: AttributeSupplier.Builder): AttributeSupplier.Builder {
                 return builder
@@ -146,6 +153,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
                     .add(Attributes.FLYING_SPEED, flyingSpeed)
                     .add(Attributes.ARMOR, armor)
                     .add(Attributes.SCALE, scale)
+                    .add(Attributes.OXYGEN_BONUS, -20.0)
             }
         }
     }
@@ -192,6 +200,9 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
     var poweredUp: Boolean
         get() = this.entityData.get(POWERED_UP)
         set(value) = this.entityData.set(POWERED_UP, value)
+
+    val receivingAir: Boolean
+        get() = this.hasEffect(MobEffects.WATER_BREATHING)
 
     val enlightened: Boolean
         get() = this.hasEffect(PazEffects.ENLIGHTENED)
@@ -299,6 +310,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
         entityData.define(COFFEE_BUFF, 0)
         entityData.define(SLEEPING, false)
         entityData.define(POWERED_UP, false)
+        entityData.define(RECEIVING_AIR, false)
         entityData.define(ENLIGHTENED, false)
         entityData.define(SWELL, 0)
         entityData.define(SWELL_OLD, 0)
@@ -321,6 +333,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
         output.putInt("plantz_ex:CoffeeBuff", coffeeBuff)
         output.putInt("plantz_ex:Cooldown", cooldown)
         output.putBoolean("plantz_ex:IsPoweredUp", poweredUp)
+        output.putBoolean("plantz_ex:ReceivingAir", receivingAir)
         attachedPlayerReference.let { EntityReference.store(it, output, "plantz_ex:AttachedPlayer") }
     }
 
@@ -380,9 +393,13 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
         partner: AgeableMob
     ): AgeableMob? { return this }
     override fun checkSpawnObstruction(level: LevelReader): Boolean {
-        return if (canBreatheUnderwater()) level.isUnobstructed(this)
+        return if (canBreatheUnderwater() || plantableInWater()) level.isUnobstructed(this)
         else super.checkSpawnObstruction(level)
     }
+
+    override fun canBreatheUnderwater(): Boolean = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(type).`is`(PazTags.EntityTypes.BREATHES_UNDERWATER)
+
+    fun plantableInWater(): Boolean = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(type).`is`(PazTags.EntityTypes.PLANTABLE_ON_WATER)
 
     override fun canRide(vehicle: Entity): Boolean = false
     override fun isFood(itemStack: ItemStack): Boolean = false
@@ -469,7 +486,53 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
     override fun doPush(entity: Entity) {}
     override fun isAffectedByBlocks(): Boolean = if (isAttached()) !isRemoved else super.isAffectedByBlocks()
 
+    fun willSuffocate(): Boolean {
+
+        if (!isAlive) return false
+
+        val inSuffocateArea = level().dimension() == Level.END || isEyeInFluid(FluidTags.WATER)
+
+        return !receivingAir && inSuffocateArea
+
+    }
+
+    fun trySuffocating() {
+
+        val level = this.level()
+
+        val willSuffocate = willSuffocate()
+
+        println("WILL SUFFOCATE: $willSuffocate")
+
+        if (willSuffocate && level is ServerLevel) {
+
+            airSupply -= 20
+
+            val direction = calculateViewVector(xRot, yHeadRot).scale(boundingBox.xsize)
+
+            level.sendParticles(
+                ParticleTypes.BUBBLE,
+                direction.x + getRandomX(0.2),
+                direction.y.toFloat() + y + eyeHeight.toDouble() - 0.1,
+                direction.z + getRandomZ(0.2),
+                5,
+                0.0, 0.0, 0.0,
+                0.0
+            )
+
+        }
+    }
+
     override fun tick() {
+
+        val level = this.level()
+
+        if (!level.isClientSide && level is ServerLevel) {
+            if (getLightLevel() > 0) updateLightBlock()
+
+            trySuffocating()
+        }
+
         super.tick()
 
         cooldownO = cooldown
@@ -477,7 +540,6 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
         if (attachedEntity?.canWearPlant() == false) {
             if(dropAsSeedPacketItem(force = true)) playSound(SoundEvents.ROOTED_DIRT_BREAK)
         }
-        val level = this.level()
 
         if (level is ServerLevel) {
             if (getLightLevel() > 0) updateLightBlock()
@@ -489,7 +551,7 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
                 cooldown--
             }
 
-            if (!onValidGround() || snowCheck()) {
+            if (!onValidGround() || snowCheck() || airSupply < 0) {
                 if (--nutrientSupply <= 0) {
                     if (tickCount % 20 == 0) hurtServer(level, damageSources().dryOut(), 2.0f)
                 }
@@ -570,6 +632,10 @@ abstract class PazPlant(type: EntityType<out PazPlant>, level: Level) : TamableA
                 else -> null
             }?.let { level.addParticle(it, x, y+eyeHeight+0.55, z, 0.0, 0.0, 0.0) }
         }
+    }
+
+    override fun decreaseAirSupply(currentSupply: Int): Int {
+        return super.decreaseAirSupply(currentSupply)
     }
 
 

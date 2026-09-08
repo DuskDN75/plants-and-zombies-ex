@@ -21,7 +21,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class IceShroom(type: EntityType<out PazPlant>, level: Level) : ExplosivePlant(PazEntities.ICE_SHROOM, level) {
+class IceShroom(level: Level) : ExplosivePlant(PazEntities.ICE_SHROOM, level) {
 
     var explodeGoal: ExplodeGoal<IceShroom>? = null
 
@@ -80,11 +80,14 @@ class IceShroom(type: EntityType<out PazPlant>, level: Level) : ExplosivePlant(P
         cloud.addEffect(MobEffectInstance(PazEffects.CHILLED, 165, 1))
         level().addFreshEntity(cloud)
 
+        if (level !is ServerLevel) return
+
         if (targets != null) {
             for (target in targets) {
                 target.addEffect(
                     MobEffectInstance(PazEffects.CHILLED, 100, 0, false, false)
                 )
+                target.hurtServer(level, source, PEA_DAMAGE.toFloat())
             }
         }
 

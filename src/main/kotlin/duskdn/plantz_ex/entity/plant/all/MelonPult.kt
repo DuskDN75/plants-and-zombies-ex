@@ -8,7 +8,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec2
 
-class MelonPult(type: EntityType<out PultPlant>, level: Level) : PultPlant(PazEntities.MELON_PULT, level) {
+class MelonPult(level: Level) : PultPlant(PazEntities.MELON_PULT, level) {
 
     override fun registerGoals() {
         super.registerGoals()

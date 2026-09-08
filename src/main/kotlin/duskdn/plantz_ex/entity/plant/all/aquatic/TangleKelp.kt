@@ -33,7 +33,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 import kotlin.math.sqrt
 
-class TangleKelp(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlant(PazEntities.TANGLE_KELP, level), IAquaticPlant {
+class TangleKelp(level: Level) : AttackingPlant(PazEntities.TANGLE_KELP, level), IAquaticPlant {
 
     companion object {
 //        private val TANGLE_ATTACK_MODIFIER = AttributeModifier(
@@ -90,8 +90,6 @@ class TangleKelp(type: EntityType<out AttackingPlant>, level: Level) : Attacking
         super.defineSynchedData(entityData)
         entityData.define(TangleKelp.TANGLE_TIME_ID, 0)
     }
-
-    override fun canBreatheUnderwater(): Boolean = true
 
     override fun canSurviveOn(block: BlockState): Boolean {
         return waterSurvivalCheck(block)

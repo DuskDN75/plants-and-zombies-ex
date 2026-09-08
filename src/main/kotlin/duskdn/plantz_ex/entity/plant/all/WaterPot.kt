@@ -7,7 +7,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class WaterPot(type: EntityType<out CarrierPlant>, level: Level) : CarrierPlant(PazEntities.WATER_POT, level) {
+class WaterPot(level: Level) : CarrierPlant(PazEntities.WATER_POT, level) {
 
     companion object {
     }

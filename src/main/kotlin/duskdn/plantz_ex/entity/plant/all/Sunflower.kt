@@ -7,7 +7,6 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.Level
 
 class Sunflower(
-    type: EntityType<out PazPlant>,
     level: Level,
 ) : PazPlant(PazEntities.SUNFLOWER, level) {
     override fun attackGoals() {}

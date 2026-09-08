@@ -22,7 +22,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.block.state.BlockState
 
-class PotatoMine(type: EntityType<out ExplosivePlant>, level: Level) : ExplosivePlant(PazEntities.POTATO_MINE, level) {
+class PotatoMine(level: Level) : ExplosivePlant(PazEntities.POTATO_MINE, level) {
 
     var explodeGoal: ExplodeGoal<PotatoMine>? = null
 

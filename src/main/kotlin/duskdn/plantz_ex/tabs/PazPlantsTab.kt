@@ -71,6 +71,7 @@ object PazPlantsTab : PazCreativeTab() {
                     addPlant(PazEntities.PLACEHOLDER, "threepeater") // THREEPEATER
                     addPlant(PazEntities.PLACEHOLDER, "split_pea") // SPLIT PEA
                     addPlant(PazEntities.PLACEHOLDER, "starfruit") // Starfruit
+                    addPlant(PazEntities.BONK_CHOY)
                     // endregion
 
                     // region ICE PLANTS
@@ -118,6 +119,7 @@ object PazPlantsTab : PazCreativeTab() {
                     addPlant(PazEntities.WATER_PEA_SHOOTER)
                     addPlant(PazEntities.WATER_POT)
                     addPlant(PazEntities.PLACEHOLDER, "cattail") // CATTAIL
+                    addPlant(PazEntities.OXYGEN_ALGAE)
                     // endregion
 
                     // region FIRE PLANTS

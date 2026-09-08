@@ -14,7 +14,7 @@ import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class PuffShroom(type: EntityType<out PazPlant>, level: Level) : AttackingPlant(PazEntities.PUFF_SHROOM, level) {
+class PuffShroom( level: Level) : AttackingPlant(PazEntities.PUFF_SHROOM, level) {
     override fun registerGoals() {
         super.registerGoals()
 

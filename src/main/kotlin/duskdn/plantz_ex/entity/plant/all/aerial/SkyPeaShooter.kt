@@ -32,7 +32,7 @@ import net.minecraft.world.phys.Vec3
 import java.util.EnumSet
 import kotlin.math.absoluteValue
 
-class SkyPeaShooter(type: EntityType<out SkyPeaShooter>, level: Level) : AttackingPlant(PazEntities.SKY_PEA_SHOOTER, level),
+class SkyPeaShooter(level: Level) : AttackingPlant(PazEntities.SKY_PEA_SHOOTER, level),
     IFloatingMob {
 
     var chaseGoal: SkyPeaChaseGoal? = null

@@ -9,6 +9,7 @@ import duskdn.plantz_ex.init.PazComponents
 import duskdn.plantz_ex.init.PazTags
 import duskdn.plantz_ex.item.SeedPacketItem
 import duskdn.plantz_ex.util.debugPrint
+import duskdn.plantz_ex.util.findClosest
 import duskdn.plantz_ex.util.getTotalSun
 import duskdn.plantz_ex.util.removeSunFromStorageAndInventory
 import net.minecraft.ChatFormatting
@@ -253,7 +254,21 @@ object PlantSpawnUtils {
     }
 
     fun canSurviveWater(type: EntityType<out Entity>, level: Level, block: BlockState, pos: BlockPos): Boolean {
+
+        val typeHolder = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(type)
+//
+        val waterAllowed = typeHolder.`is`(PazTags.EntityTypes.PLANTABLE_ON_WATER)
+
+        if (!waterAllowed) return false
+
+        val breathesUnderwater = typeHolder.`is`(PazTags.EntityTypes.BREATHES_UNDERWATER)
+
         if (block.`is`(PazBlocks.ZEN_POT)) {
+
+            if (block.hasProperty(BlockStateProperties.WATERLOGGED)) {
+                return breathesUnderwater == block.getValue(BlockStateProperties.WATERLOGGED)
+            }
+
             return true
         }
 
@@ -261,11 +276,9 @@ object PlantSpawnUtils {
             return block.getValue(BlockStateProperties.LEVEL_CAULDRON) > 0
         }
 
-        val waterAllowed = BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(type).`is`(PazTags.EntityTypes.PLANTABLE_ON_WATER)
-
         val fluidState = level.getFluidState(pos)
 
-        return fluidState.`is`(FluidTags.WATER) && waterAllowed
+        return fluidState.`is`(FluidTags.WATER)
     }
 
     fun canSurviveLava(type: EntityType<out Entity>, level: Level, block: BlockState, pos: BlockPos): Boolean {
@@ -301,6 +314,20 @@ data class InvalidGroundReasons (
 
 // PLANT SPAWN CHECKING
 
+fun PazPlant.checkForExceptions(level: Level, block: BlockState, blockPos: BlockPos): Boolean {
+    val fluidState = level.getFluidState(blockPos)
+
+    if (fluidState.`is`(FluidTags.WATER)) {
+
+        findClosest({
+            it.`is`(PazTags.EntityTypes.ALLOWS_WATER_IMMUNITY)
+        }, 10.0)
+
+    }
+
+    return false
+}
+
 fun PazPlant.checkValidGround(x: Double = this.x, y: Double = this.y, z: Double = this.z, carrier: PazPlant? = vehicle as PazPlant?) : InvalidGroundReasons {
 
     val belowBlock = getBlockBelow(x, y, z)
@@ -324,9 +351,15 @@ fun PazPlant.validPlace(x: Double = this.x, y: Double = this.y, z: Double = this
 
     val belowBlock = getBlockBelow(x,y,z)
 
+    println("VALID GROUND: $validGround, REASONS: $reasons, BLOCK BELOW IS: $belowBlock")
+
     if (carrier != null && carrier is CarrierPlant && !carrier.checkRider(this, true)) reasons.invalidCarrier = true
 
-    if (!this.canPlaceOn(belowBlock, carrier)) reasons.invalidSpace = true
+    if (!this.canPlaceOn(belowBlock, carrier)) {
+        reasons.invalidSpace = true
+    }
+
+//    if (checkForExceptions(level(), belowBlock, blockPosition())
 
     return (validGround to reasons)
 

@@ -17,7 +17,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class FirePeaShooter(type: EntityType<out PazPlant>, level: Level) : AttackingPlant(PazEntities.FIRE_PEA_SHOOTER, level), IWarmingPlant {
+class FirePeaShooter(level: Level) : AttackingPlant(PazEntities.FIRE_PEA_SHOOTER, level), IWarmingPlant {
     override fun registerGoals() {
         super.registerGoals()
 

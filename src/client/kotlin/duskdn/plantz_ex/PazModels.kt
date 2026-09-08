@@ -4,6 +4,7 @@ import duskdn.plantz_ex.block.entity.FlagBlockEntity
 import duskdn.plantz_ex.block.entity.SunBatteryBlockEntity
 import duskdn.plantz_ex.block.entity.TimeMachineBlockEntity
 import duskdn.plantz_ex.entity.plant.all.mushrooms.CrimsonShroom
+import duskdn.plantz_ex.entity.plant.all.Sunflower
 import duskdn.plantz_ex.init.PazBlocks
 import duskdn.plantz_ex.init.PazEntities
 import duskdn.plantz_ex.model.BalloonModel
@@ -135,6 +136,7 @@ object PazModels {
         ModelLayerRegistry.registerModelLayer(SkyPeaShooterModel.LAYER_LOCATION) { SkyPeaShooterModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(GraveBusterModel.LAYER_LOCATION) { GraveBusterModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(PlanternModel.LAYER_LOCATION) { PlanternModel.createBodyLayer() }
+        ModelLayerRegistry.registerModelLayer(OxygenAlgaeModel.LAYER_LOCATION) { OxygenAlgaeModel.createBodyLayer() } // PLACEHOLDER
 
         ModelLayerRegistry.registerModelLayer(PeaModel.LAYER_LOCATION) { PeaModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(NeedleModel.LAYER_LOCATION) { NeedleModel.createBodyLayer() }
@@ -218,6 +220,7 @@ object PazModels {
         EntityRenderers.register(PazEntities.SKY_PEA_SHOOTER) { PlantRenderer(SkyPeaShooterModel(it.bakeLayer(SkyPeaShooterModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.GRAVE_BUSTER) { PlantRenderer(GraveBusterModel(it.bakeLayer(GraveBusterModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.PLANTERN) { PlantRenderer(PlanternModel(it.bakeLayer(PlanternModel.LAYER_LOCATION)), it) }
+        EntityRenderers.register(PazEntities.OXYGEN_ALGAE) { PlantRenderer(OxygenAlgaeModel(it.bakeLayer(OxygenAlgaeModel.LAYER_LOCATION)), it) } // PLACEHOLDER
 
         EntityRenderers.register(PazEntities.SUN_SHROOM) { PlantRenderer(SunShroomModel(it.bakeLayer(SunShroomModel.LAYER_LOCATION)), it, SunShroomBabyModel(it.bakeLayer(SunShroomBabyModel.LAYER_LOCATION))) }
 

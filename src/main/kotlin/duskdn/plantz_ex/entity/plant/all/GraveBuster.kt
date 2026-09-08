@@ -20,7 +20,7 @@ import net.minecraft.world.level.storage.loot.LootTable
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams
 
-class GraveBuster(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntities.GRAVE_BUSTER, level) {
+class GraveBuster(level: Level) : PazPlant(PazEntities.GRAVE_BUSTER, level) {
 
     override fun registerGoals() {
         super.registerGoals()

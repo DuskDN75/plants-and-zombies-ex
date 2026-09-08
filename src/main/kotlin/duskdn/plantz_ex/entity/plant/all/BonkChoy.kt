@@ -15,7 +15,7 @@ import net.minecraft.world.entity.SpawnGroupData
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
 
-class BonkChoy(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlant(PazEntities.BONK_CHOY, level) {
+class BonkChoy(level: Level) : AttackingPlant(PazEntities.BONK_CHOY, level) {
 
     companion object {
         val USE_UPPERCUT: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(BonkChoy::class.java, EntityDataSerializers.BOOLEAN)

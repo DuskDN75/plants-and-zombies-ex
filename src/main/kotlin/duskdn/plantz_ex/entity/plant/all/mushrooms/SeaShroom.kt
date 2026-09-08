@@ -15,7 +15,7 @@ import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class SeaShroom(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntities.SEA_SHROOM, level), IAquaticPlant {
+class SeaShroom(level: Level) : PazPlant(PazEntities.SEA_SHROOM, level), IAquaticPlant {
 
     override fun isPushedByFluid(): Boolean {
         return false
@@ -40,8 +40,6 @@ class SeaShroom(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEnti
 
         super.aiStep()
     }
-
-    override fun canBreatheUnderwater(): Boolean = true
 
     override fun canSurviveOn(block: BlockState): Boolean {
         return super.canSurviveOn(block) || mushroomSurvivalCheck(block) || waterSurvivalCheck(block)

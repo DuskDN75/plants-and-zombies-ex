@@ -430,8 +430,6 @@ abstract class PazProjectile(
             return false
         }
 
-        println("OWNER IS: $owner, ENTITY IS: $entity")
-
         if (owner is PazPlant && owner.owner == entity) return false
 //        debugPrint("CAN HIT ENTITY!")
         return super.canHitEntity(entity)

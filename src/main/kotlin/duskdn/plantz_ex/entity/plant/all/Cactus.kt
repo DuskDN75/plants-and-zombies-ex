@@ -13,7 +13,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class Cactus(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlant(PazEntities.CACTUS, level) {
+class Cactus(level: Level) : AttackingPlant(PazEntities.CACTUS, level) {
 
     lateinit var attackGoal: CactusAttackGoal
 

@@ -15,7 +15,7 @@ import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class WaterPeaShooter(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlant(PazEntities.WATER_PEA_SHOOTER, level), IAquaticPlant {
+class WaterPeaShooter(level: Level) : AttackingPlant(PazEntities.WATER_PEA_SHOOTER, level), IAquaticPlant {
 
     override fun isPushedByFluid(): Boolean {
         return false
@@ -52,8 +52,6 @@ class WaterPeaShooter(type: EntityType<out AttackingPlant>, level: Level) : Atta
             this.setDeltaMovement(this.deltaMovement.x, 0.0, this.deltaMovement.z)
         }
     }
-
-    override fun canBreatheUnderwater(): Boolean = true
 
     var projectileAttackGoal: ProjectileAttackGoal? = null
 

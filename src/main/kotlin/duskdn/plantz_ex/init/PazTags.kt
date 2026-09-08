@@ -31,28 +31,41 @@ object PazTags {
     }
 
     object EntityTypes {
-        @JvmField val PLANT = tag("plant")
-        @JvmField val MUSHROOM = tag("mushroom")
-        @JvmField val CARRIER = tag("carrier")
-        @JvmField val AMPHIBIOUS = tag("amphibious")
-        @JvmField val PLANTABLE_ON_WATER = tag("plantable_on_water")
-        @JvmField val PLANTABLE_ON_LAVA = tag("plantable_on_lava")
-        @JvmField val PLANTABLE_ON_AIR = tag("plantable_on_air")
-        @JvmField val CARRIER_ALLOW_WATER = tag("carrier_allow_water")
-        @JvmField val PLANT_PROJECTILE = tag("plant_projectile")
-        @JvmField val IMMUNE_TO_ELECTRICITY = tag("immune_to_electricity")
-        @JvmField val CANNOT_CHOMP = tag("cannot_be_chomped")
-        @JvmField val CANNOT_CHILL = tag("cannot_be_chilled")
-        @JvmField val CANNOT_DRENCH = tag("cannot_be_drenched")
-        @JvmField val CANNOT_HYPNOTIZE = tag("cannot_be_hypnotized")
-        @JvmField val ZOMBIE_RAIDERS = tag("zombie_raider")
-        @JvmField val GETS_DUCKY_TUBE = tag("gets_ducky_tube")
-        @JvmField val GETS_ARMOR = tag("gets_armor")
-        @JvmField val ATTACKS_PLANTS = tag("attacks_plants")
-        @JvmField val IGNORED_BY_PLANT_ATTACKERS = tag("ignored_by_plant_attackers")
-        @JvmField val FLYING_ENEMY = tag("flying_enemy")
+        @JvmField val PLANT = tag("type/plant/plant")
+        @JvmField val MUSHROOM = tag("type/plant/mushroom")
+        @JvmField val CARRIER = tag("type/plant/carrier")
+        @JvmField val AMPHIBIOUS = tag("type/plant/amphibious")
+
+        @JvmField val PLANT_PROJECTILE = tag("type/projectile/plant_projectile")
+
+        @JvmField val ZOMBIE_RAIDERS = tag("type/enemy/zombie_raider")
+        @JvmField val FLYING_ENEMY = tag("type/enemy/flying_enemy")
+
+        @JvmField val PLANTABLE_ON_WATER = tag("spawn/plant/plantable_on_water")
+        @JvmField val PLANTABLE_ON_LAVA = tag("spawn/plant/plantable_on_lava")
+        @JvmField val PLANTABLE_ON_AIR = tag("spawn/plant/plantable_on_air")
+
+        @JvmField val CARRIER_ALLOW_WATER = tag("access/plant/carrier_allow_water")
+        @JvmField val ALLOWS_WATER_IMMUNITY = tag("access/plant/allows_water_immunity")
+        @JvmField val ALLOWS_LAVA_IMMUNITY = tag("access/plant/allows_lava_immunity")
+        @JvmField val IGNORED_BY_PLANT_ATTACKERS = tag("access/plant/ignored_by_plant_attackers")
+
+        @JvmField val GETS_DUCKY_TUBE = tag("access/enemy/gets_ducky_tube")
+        @JvmField val GETS_ARMOR = tag("access/enemy/gets_armor")
+        @JvmField val ATTACKS_PLANTS = tag("type/enemy/attacks_plants")
+
+        @JvmField val WALLNUT_DEFLECTABLE = tag("access/projectile/wallnut_deflectable")
+
+        @JvmField val IMMUNE_TO_ELECTRICITY = tag("immunity/immune_to_electricity")
+        @JvmField val CANNOT_CHOMP = tag("immunity/cannot_be_chomped")
+        @JvmField val CANNOT_CHILL = tag("immunity/cannot_be_chilled")
+        @JvmField val CANNOT_DRENCH = tag("immunity/cannot_be_drenched")
+        @JvmField val CANNOT_HYPNOTIZE = tag("immunity/cannot_be_hypnotized")
+
+        @JvmField val BREATHES_UNDERWATER = tag("immunity/breathes_underwater")
+
         @JvmField val GNOME_RIDEABLE = tag("gnome_rideable")
-        @JvmField val WALLNUT_DEFLECTABLE = tag("wallnut_deflectable")
+
         private fun tag(name: String): TagKey<EntityType<*>> = TagKey.create(Registries.ENTITY_TYPE, pazResource(name))
     }
 

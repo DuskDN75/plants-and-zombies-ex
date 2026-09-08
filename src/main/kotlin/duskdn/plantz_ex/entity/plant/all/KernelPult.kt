@@ -12,7 +12,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec2
 
-class KernelPult(type: EntityType<out PultPlant>, level: Level) : PultPlant(PazEntities.KERNEL_PULT, level) {
+class KernelPult(level: Level) : PultPlant(PazEntities.KERNEL_PULT, level) {
 
     companion object {
         val HAS_BUTTER: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(KernelPult::class.java, EntityDataSerializers.BOOLEAN)

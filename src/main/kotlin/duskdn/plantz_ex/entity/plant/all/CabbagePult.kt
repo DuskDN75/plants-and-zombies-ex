@@ -8,7 +8,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec2
 
-class CabbagePult(type: EntityType<out PultPlant>, level: Level) : PultPlant(PazEntities.CABBAGE_PULT, level) {
+class CabbagePult(level: Level) : PultPlant(PazEntities.CABBAGE_PULT, level) {
 
     override fun registerGoals() {
         super.registerGoals()

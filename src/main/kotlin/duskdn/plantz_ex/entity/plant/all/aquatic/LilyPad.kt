@@ -8,7 +8,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class LilyPad(type: EntityType<out CarrierPlant>, level: Level) : CarrierPlant(PazEntities.LILYPAD, level), IAquaticPlant {
+class LilyPad(level: Level) : CarrierPlant(PazEntities.LILYPAD, level), IAquaticPlant {
 
     override fun attackGoals() {}
 
@@ -42,8 +42,6 @@ class LilyPad(type: EntityType<out CarrierPlant>, level: Level) : CarrierPlant(P
 
         super.aiStep()
     }
-
-    override fun canBreatheUnderwater(): Boolean = false
 
     override fun canSurviveOn(block: BlockState): Boolean {
         return waterSurvivalCheck(block)

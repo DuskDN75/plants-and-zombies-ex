@@ -13,7 +13,7 @@ import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 
-class ElectricPeaShooter(type: EntityType<out PazPlant>, level: Level) : PazPlant(PazEntities.ELECTRIC_PEA_SHOOTER, level) {
+class ElectricPeaShooter( level: Level) : PazPlant(PazEntities.ELECTRIC_PEA_SHOOTER, level) {
     override fun registerGoals() {
         super.registerGoals()
 

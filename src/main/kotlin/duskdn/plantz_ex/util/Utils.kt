@@ -31,6 +31,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.pathfinder.Path
 import net.minecraft.world.phys.Vec3
 import java.lang.reflect.Field
+import java.util.function.Predicate
 
 object Utils {
 
@@ -128,6 +129,34 @@ fun Player.hasSpaceForSun(item: ItemStack): Boolean {
     val hasSunStorageItemWithSpace = inv.hasAnyMatching { it.get(PazComponents.STORED_SUN)?.hasRoomForSun(1) == true }
 
     return ((hasFreeSlot || hasSlotWithSpace) && !this.hasInfiniteMaterials()) || hasSunStorageItemWithSpace
+}
+
+fun <T: Entity> Entity.findClosest(entityClass: Class<T>, radius: Double): T? {
+
+    val searchBox = this.boundingBox.inflate(radius)
+
+    val entities = level().getEntitiesOfClass(entityClass, searchBox) {
+        it != this && it.isAlive
+    }
+
+    return entities.minByOrNull {
+        this.distanceToSqr(it)
+    }
+
+}
+
+fun Entity.findClosest(predicate: Predicate<in Entity>, radius: Double): Entity? {
+
+    val searchBox = this.boundingBox.inflate(radius)
+
+    val entities = level().getEntities(this, searchBox) {
+        it != this && it.isAlive && predicate.test(it)
+    }
+
+    return entities.minByOrNull {
+        this.distanceToSqr(it)
+    }
+
 }
 
 fun Player.tryAddSunToStorage(amount:Int = 1): Boolean {

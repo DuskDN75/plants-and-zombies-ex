@@ -41,6 +41,7 @@ import duskdn.plantz_ex.entity.plant.all.aquatic.WaterPeaShooter
 import duskdn.plantz_ex.entity.plant.all.WaterPot
 import duskdn.plantz_ex.entity.plant.all.aerial.SkyPeaShooter
 import duskdn.plantz_ex.entity.plant.all.mushrooms.CrimsonShroom
+import duskdn.plantz_ex.entity.plant.all.aquatic.OxygenAlgae
 import duskdn.plantz_ex.entity.plant.all.mushrooms.IceShroom
 import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.entity.projectile.*
@@ -152,21 +153,21 @@ object PazEntities {
     // region Plants
     @JvmField val PLACEHOLDER: EntityType<Sunflower> = registerPlant(
         "placeholder",
-        EntityType.Builder.of(::Sunflower, MobCategory.CREATURE),
+        EntityType.Builder.of({ _, level -> Sunflower(level) }, MobCategory.CREATURE),
         height = 1.1f,
     )
     @JvmField val SUNFLOWER: EntityType<Sunflower> = registerPlant(
         "sunflower",
-        EntityType.Builder.of(::Sunflower, MobCategory.CREATURE),
+        EntityType.Builder.of({ _, level -> Sunflower(level) }, MobCategory.CREATURE),
         height = 1.1f,
     )
     @JvmField val PEA_SHOOTER: EntityType<PeaShooter> = registerPlant(
         "peashooter",
-        EntityType.Builder.of(::PeaShooter, MobCategory.CREATURE)
+        EntityType.Builder.of({ _, level -> PeaShooter(level) }, MobCategory.CREATURE)
     )
     @JvmField val WALL_NUT: EntityType<WallNut> = registerPlant(
         "wallnut",
-        EntityType.Builder.of(::WallNut, MobCategory.CREATURE),
+        EntityType.Builder.of({ _, level -> WallNut(level) }, MobCategory.CREATURE),
         width = 1.0f,
         height = 1.15f,
         attributes = PazPlant.Companion.PlantAttributes(
@@ -175,7 +176,7 @@ object PazEntities {
     )
     @JvmField val EXPLODE_O_NUT: EntityType<ExplodeONut> = registerPlant(
         "explode_o_nut",
-        EntityType.Builder.of(::ExplodeONut, MobCategory.CREATURE),
+        EntityType.Builder.of({ _, level -> ExplodeONut(level) }, MobCategory.CREATURE),
         width = 1.0f,
         height = 1.15f,
         attributes = PazPlant.Companion.PlantAttributes(
@@ -184,7 +185,7 @@ object PazEntities {
     )
     @JvmField val CHOMPER: EntityType<Chomper> = registerPlant(
         "chomper",
-        EntityType.Builder.of(::Chomper, MobCategory.CREATURE),
+        EntityType.Builder.of({ _, level -> Chomper(level) }, MobCategory.CREATURE),
         height = 1.5f,
         attributes = PazPlant.Companion.PlantAttributes(
             maxHealth = 25.0,
@@ -196,7 +197,7 @@ object PazEntities {
     )
     @JvmField val CHERRY_BOMB: EntityType<CherryBomb> = registerPlant(
         "cherrybomb",
-        EntityType.Builder.of(::CherryBomb, MobCategory.CREATURE),
+        EntityType.Builder.of({ _, level -> CherryBomb(level) }, MobCategory.CREATURE),
         width = 0.625f,
         height = 0.75f,
         attributes = PazPlant.Companion.PlantAttributes(
@@ -205,7 +206,7 @@ object PazEntities {
     )
     @JvmField val POTATO_MINE: EntityType<PotatoMine> = registerPlant(
         "potatomine",
-        EntityType.Builder.of(::PotatoMine, MobCategory.CREATURE),
+        EntityType.Builder.of({ _, level -> PotatoMine(level) }, MobCategory.CREATURE),
         width = 0.65f,
         height = 0.35f,
         attributes = PazPlant.Companion.PlantAttributes(
@@ -214,29 +215,29 @@ object PazEntities {
     )
     @JvmField val REPEATER: EntityType<Repeater> = registerPlant(
         "repeater",
-        EntityType.Builder.of(::Repeater, MobCategory.CREATURE)
+        EntityType.Builder.of({ _, level -> Repeater(level) }, MobCategory.CREATURE)
     )
     @JvmField val ICE_PEA_SHOOTER: EntityType<IcePeaShooter> = registerPlant(
         "ice_peashooter",
-        EntityType.Builder.of(::IcePeaShooter, MobCategory.CREATURE)
+        EntityType.Builder.of({ _, level -> IcePeaShooter(level) }, MobCategory.CREATURE)
     )
     @JvmField val FIRE_PEA_SHOOTER: EntityType<FirePeaShooter> = registerPlant(
         "fire_peashooter",
-        EntityType.Builder.of(::FirePeaShooter, MobCategory.CREATURE).fireImmune(),
+        EntityType.Builder.of({ _, level -> FirePeaShooter(level) }, MobCategory.CREATURE).fireImmune(),
         attributes = PazPlant.Companion.PlantAttributes(
             attackDamage = PazPlant.PEA_DAMAGE*2,
         )
     )
     @JvmField val ELECTRIC_PEA_SHOOTER: EntityType<ElectricPeaShooter> = registerPlant(
         "electric_peashooter",
-        EntityType.Builder.of(::ElectricPeaShooter, MobCategory.CREATURE),
+        EntityType.Builder.of({ _, level -> ElectricPeaShooter(level) }, MobCategory.CREATURE),
         attributes = PazPlant.Companion.PlantAttributes(
             attackDamage = PazPlant.PEA_DAMAGE*2,
         )
     )
     @JvmField val CACTUS: EntityType<Cactus> = registerPlant(
         "cactus",
-        EntityType.Builder.of(::Cactus, MobCategory.CREATURE),
+        EntityType.Builder.of({ _, level -> Cactus(level) }, MobCategory.CREATURE),
         width = 0.8f,
         height = 1.25f,
         eyeHeight = 0.85f,
@@ -247,7 +248,7 @@ object PazEntities {
     )
     @JvmField val LIGHTNING_REED: EntityType<LightningReed> = registerPlant(
         "lightning_reed",
-        EntityType.Builder.of(::LightningReed, MobCategory.CREATURE),
+        EntityType.Builder.of({ _, level -> LightningReed(level) }, MobCategory.CREATURE),
         width = 0.4f,
         height = 1.0f,
         eyeHeight = 0.7f,
@@ -259,7 +260,7 @@ object PazEntities {
     )
     @JvmField val CABBAGE_PULT: EntityType<CabbagePult> = registerPlant(
         "cabbagepult",
-        EntityType.Builder.of(::CabbagePult, MobCategory.CREATURE),
+        EntityType.Builder.of({ _, level -> CabbagePult(level) }, MobCategory.CREATURE),
         width = 0.9f,
         height = 0.8f,
         attributes = PazPlant.Companion.PlantAttributes(
@@ -270,7 +271,7 @@ object PazEntities {
     )
     @JvmField val KERNEL_PULT: EntityType<KernelPult> = registerPlant(
         "kernelpult",
-        EntityType.Builder.of(::KernelPult, MobCategory.CREATURE),
+        EntityType.Builder.of({ _, level -> KernelPult(level) }, MobCategory.CREATURE),
         width = 0.9f,
         height = 0.8f,
         attributes = PazPlant.Companion.PlantAttributes(
@@ -281,7 +282,7 @@ object PazEntities {
     )
     @JvmField val MELON_PULT: EntityType<MelonPult> = registerPlant(
         "melonpult",
-        EntityType.Builder.of(::MelonPult, MobCategory.CREATURE),
+        EntityType.Builder.of({ _, level -> MelonPult(level) }, MobCategory.CREATURE),
         width = 0.9f,
         height = 0.8f,
         attributes = PazPlant.Companion.PlantAttributes(
@@ -292,7 +293,7 @@ object PazEntities {
     )
     @JvmField val BONK_CHOY: EntityType<BonkChoy> = registerPlant(
         "bonkchoy",
-        EntityType.Builder.of(::BonkChoy, MobCategory.CREATURE),
+        EntityType.Builder.of({ _, level -> BonkChoy(level) }, MobCategory.CREATURE),
         height = 0.8f,
         eyeHeight = 0.5f,
         attributes = PazPlant.Companion.PlantAttributes(
@@ -303,7 +304,7 @@ object PazEntities {
         )
     )
     @JvmField val TANGLE_KELP: EntityType<TangleKelp> = registerPlant(
-        "tanglekelp", EntityType.Builder.of(::TangleKelp, MobCategory.CREATURE),
+        "tanglekelp", EntityType.Builder.of({ _, level -> TangleKelp(level) }, MobCategory.CREATURE),
         width = 1.0f,
         height = 0.4f,
         eyeHeight = 0.5f,
@@ -315,7 +316,7 @@ object PazEntities {
         )
     )
     @JvmField val PUFF_SHROOM: EntityType<PuffShroom> = registerPlant(
-        "puffshroom", EntityType.Builder.of(::PuffShroom, MobCategory.CREATURE),
+        "puffshroom", EntityType.Builder.of({ _, level -> PuffShroom(level) }, MobCategory.CREATURE),
         width = 0.5f,
         height = 0.65f,
         eyeHeight = 0.3f,
@@ -326,7 +327,7 @@ object PazEntities {
         )
     )
     @JvmField val SCAREDY_SHROOM: EntityType<ScaredyShroom> = registerPlant(
-        "scaredyshroom", EntityType.Builder.of(::ScaredyShroom, MobCategory.CREATURE),
+        "scaredyshroom", EntityType.Builder.of({ _, level -> ScaredyShroom(level) }, MobCategory.CREATURE),
         width = 0.5f,
         height = 0.9f,
         eyeHeight = 0.5f,
@@ -338,7 +339,7 @@ object PazEntities {
     )
     @JvmField val FUME_SHROOM: EntityType<FumeShroom> = registerPlant(
         "fumeshroom",
-        EntityType.Builder.of(::FumeShroom, MobCategory.CREATURE),
+        EntityType.Builder.of({ _, level -> FumeShroom(level) }, MobCategory.CREATURE),
         width = 0.8f,
         height = 0.8f,
         attributes = PazPlant.Companion.PlantAttributes(
@@ -348,11 +349,11 @@ object PazEntities {
     )
     @JvmField val SUN_SHROOM: EntityType<SunShroom> = registerPlant(
         "sunshroom",
-        EntityType.Builder.of(::SunShroom, MobCategory.CREATURE),
+        EntityType.Builder.of({ _, level -> SunShroom(level) }, MobCategory.CREATURE),
         height = 0.85f
     )
     @JvmField val HYPNOSHROOM: EntityType<HypnoShroom> = registerPlant(
-        "hypnoshroom", EntityType.Builder.of(::HypnoShroom, MobCategory.CREATURE),
+        "hypnoshroom", EntityType.Builder.of({ _, level -> HypnoShroom(level) }, MobCategory.CREATURE),
         width = 0.6f,
         height = 1.3f,
         eyeHeight = 0.6f,
@@ -362,7 +363,7 @@ object PazEntities {
         )
     )
     @JvmField val DOOM_SHROOM: EntityType<DoomShroom> = registerPlant(
-        "doomshroom", EntityType.Builder.of(::DoomShroom, MobCategory.CREATURE),
+        "doomshroom", EntityType.Builder.of({ _, level -> DoomShroom(level) }, MobCategory.CREATURE),
         eyeHeight = 0.6f,
         height = 0.8f,
         attributes = PazPlant.Companion.PlantAttributes(
@@ -371,7 +372,7 @@ object PazEntities {
         )
     )
     @JvmField val ICE_SHROOM: EntityType<IceShroom> = registerPlant(
-        "iceshroom", EntityType.Builder.of(::IceShroom, MobCategory.CREATURE),
+        "iceshroom", EntityType.Builder.of({ _, level -> IceShroom(level) }, MobCategory.CREATURE),
         eyeHeight = 0.43f,
         height = 0.7f,
         attributes = PazPlant.Companion.PlantAttributes(
@@ -380,7 +381,7 @@ object PazEntities {
         )
     )
     @JvmField val LILYPAD: EntityType<LilyPad> = registerPlant(
-        "lilypad", EntityType.Builder.of(::LilyPad, MobCategory.CREATURE),
+        "lilypad", EntityType.Builder.of({ _, level -> LilyPad(level) }, MobCategory.CREATURE),
         width = 0.875f,
         height = 0.125f,
         eyeHeight = 0.125f,
@@ -389,7 +390,7 @@ object PazEntities {
         )
     )
     @JvmField val SEA_SHROOM: EntityType<SeaShroom> = registerPlant(
-        "seashroom", EntityType.Builder.of(::SeaShroom, MobCategory.CREATURE),
+        "seashroom", EntityType.Builder.of({ _, level -> SeaShroom(level) }, MobCategory.CREATURE),
         width = 0.5f,
         height = 0.5f,
         attributes = PazPlant.Companion.PlantAttributes(
@@ -400,13 +401,23 @@ object PazEntities {
     )
     @JvmField val WATER_PEA_SHOOTER: EntityType<WaterPeaShooter> = registerPlant(
         "water_peashooter",
-        EntityType.Builder.of(::WaterPeaShooter, MobCategory.CREATURE),
+        EntityType.Builder.of({ _, level -> WaterPeaShooter(level) }, MobCategory.CREATURE),
         attributes = PazPlant.Companion.PlantAttributes(
             attackDamage = PazPlant.PEA_DAMAGE,
         )
     )
+    @JvmField val OXYGEN_ALGAE: EntityType<OxygenAlgae> = registerPlant(
+        "oxygen_algae", EntityType.Builder.of({ _, level -> OxygenAlgae(level) }, MobCategory.CREATURE),
+        width = 0.625f,
+        height = 1.3125f,
+        eyeHeight = 0.75f,
+        attributes = PazPlant.Companion.PlantAttributes(
+            maxHealth = 12.0,
+            followRange = 10.0,
+        )
+    )
     @JvmField val COFFEE_BEAN: EntityType<CoffeeBean> = registerPlant(
-        "coffeebean", EntityType.Builder.of(::CoffeeBean, MobCategory.CREATURE),
+        "coffeebean", EntityType.Builder.of({ _, level -> CoffeeBean(level) }, MobCategory.CREATURE),
         width = 0.4f,
         height = 0.5f,
         attributes = PazPlant.Companion.PlantAttributes(
@@ -415,7 +426,7 @@ object PazEntities {
         )
     )
     @JvmField val FLOWER_POT: EntityType<FlowerPot> = registerPlant(
-        "flower_pot", EntityType.Builder.of(::FlowerPot, MobCategory.CREATURE),
+        "flower_pot", EntityType.Builder.of({ _, level -> FlowerPot(level) }, MobCategory.CREATURE),
         width = 0.8f,
         height = 0.4f,
         eyeHeight = 0.2f,
@@ -425,7 +436,7 @@ object PazEntities {
         )
     )
     @JvmField val GRAVE_BUSTER: EntityType<GraveBuster> = registerPlant(
-        "grave_buster", EntityType.Builder.of(::GraveBuster, MobCategory.CREATURE),
+        "grave_buster", EntityType.Builder.of({ _, level -> GraveBuster(level) }, MobCategory.CREATURE),
         width = 1.0f,
         height = 1.0f,
         eyeHeight = 0.6f,
@@ -435,7 +446,7 @@ object PazEntities {
         )
     )
     @JvmField val WATER_POT: EntityType<WaterPot> = registerPlant(
-        "water_pot", EntityType.Builder.of(::WaterPot, MobCategory.CREATURE),
+        "water_pot", EntityType.Builder.of({ _, level -> WaterPot(level) }, MobCategory.CREATURE),
         width = 1.0f,
         height = 0.6f,
         eyeHeight = 0.2f,
@@ -445,7 +456,7 @@ object PazEntities {
         )
     )
     @JvmField val LAVALILY: EntityType<LavaLily> = registerPlant(
-        "lavalily", EntityType.Builder.of(::LavaLily, MobCategory.CREATURE).fireImmune(),
+        "lavalily", EntityType.Builder.of({ _, level -> LavaLily(level) }, MobCategory.CREATURE).fireImmune(),
         width = 0.875f,
         height = 0.125f,
         eyeHeight = 0.125f,
@@ -454,7 +465,7 @@ object PazEntities {
         )
     )
     @JvmField val CRIMSON_SHROOM: EntityType<CrimsonShroom> = registerPlant(
-        "crimsonshroom", EntityType.Builder.of(::CrimsonShroom, MobCategory.CREATURE),
+        "crimsonshroom", EntityType.Builder.of({ _, level -> CrimsonShroom(level) }, MobCategory.CREATURE),
         eyeHeight = 0.625f,
         height = 0.9375f,
         attributes = PazPlant.Companion.PlantAttributes(
@@ -470,13 +481,13 @@ object PazEntities {
 //        )
 //    )
     @JvmField val SKY_PEA_SHOOTER: EntityType<SkyPeaShooter> = registerPlant(
-        "sky_peashooter", EntityType.Builder.of(::SkyPeaShooter, MobCategory.CREATURE),
+        "sky_peashooter", EntityType.Builder.of({ _, level -> SkyPeaShooter(level) }, MobCategory.CREATURE),
         attributes = PazPlant.Companion.PlantAttributes(
             flyingSpeed = 0.2
         )
     )
     @JvmField val PLANTERN: EntityType<Plantern> = registerPlant(
-        "plantern", EntityType.Builder.of(::Plantern, MobCategory.CREATURE),
+        "plantern", EntityType.Builder.of({ _, level -> Plantern(level) }, MobCategory.CREATURE),
         width = 0.625f,
         height = 1.3125f,
         eyeHeight = 0.75f,

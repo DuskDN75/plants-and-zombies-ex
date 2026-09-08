@@ -23,7 +23,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.AABB
 
-class ScaredyShroom(type: EntityType<out PazPlant>, level: Level) : AttackingPlant(PazEntities.SCAREDY_SHROOM, level) {
+class ScaredyShroom( level: Level) : AttackingPlant(PazEntities.SCAREDY_SHROOM, level) {
 
     companion object {
         val HIDING_FLAG: EntityDataAccessor<Boolean> = SynchedEntityData.defineId<Boolean>(ScaredyShroom::class.java, EntityDataSerializers.BOOLEAN)

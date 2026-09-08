@@ -10,7 +10,7 @@ import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.Level
 
-class PeaShooter(type: EntityType<out AttackingPlant>, level: Level) : AttackingPlant(PazEntities.PEA_SHOOTER, level) {
+class PeaShooter(level: Level) : AttackingPlant(PazEntities.PEA_SHOOTER, level) {
     override fun registerGoals() {
         super.registerGoals()
 
