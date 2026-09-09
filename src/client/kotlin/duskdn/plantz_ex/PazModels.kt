@@ -133,6 +133,7 @@ object PazModels {
         ModelLayerRegistry.registerModelLayer(WaterPotModel.LAYER_LOCATION) { WaterPotModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(LavaLilyModel.LAYER_LOCATION) { LavaLilyModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(CrimsonShroomModel.LAYER_LOCATION) { CrimsonShroomModel.createBodyLayer() }
+        ModelLayerRegistry.registerModelLayer(WarpedShroomModel.LAYER_LOCATION) { WarpedShroomModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(SkyPeaShooterModel.LAYER_LOCATION) { SkyPeaShooterModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(GraveBusterModel.LAYER_LOCATION) { GraveBusterModel.createBodyLayer() }
         ModelLayerRegistry.registerModelLayer(PlanternModel.LAYER_LOCATION) { PlanternModel.createBodyLayer() }
@@ -217,6 +218,7 @@ object PazModels {
         EntityRenderers.register(PazEntities.WATER_POT) { PlantRenderer(WaterPotModel(it.bakeLayer(WaterPotModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.LAVALILY) { PlantRenderer(LavaLilyModel(it.bakeLayer(LavaLilyModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.CRIMSON_SHROOM) { PlantRenderer(CrimsonShroomModel(it.bakeLayer(CrimsonShroomModel.LAYER_LOCATION)), it) }
+        EntityRenderers.register(PazEntities.WARPED_SHROOM) { PlantRenderer(WarpedShroomModel(it.bakeLayer(WarpedShroomModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.SKY_PEA_SHOOTER) { PlantRenderer(SkyPeaShooterModel(it.bakeLayer(SkyPeaShooterModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.GRAVE_BUSTER) { PlantRenderer(GraveBusterModel(it.bakeLayer(GraveBusterModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.PLANTERN) { PlantRenderer(PlanternModel(it.bakeLayer(PlanternModel.LAYER_LOCATION)), it) }
@@ -227,8 +229,8 @@ object PazModels {
 
         EntityRenderers.register(PazEntities.PEA) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.PEA_ICE) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it) }
-        EntityRenderers.register(PazEntities.PEA_FIRE) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it,) }
-        EntityRenderers.register(PazEntities.PEA_ELECTRIC) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it) }
+        EntityRenderers.register(PazEntities.PEA_FIRE) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it, true) }
+        EntityRenderers.register(PazEntities.PEA_ELECTRIC) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it, true) }
         EntityRenderers.register(PazEntities.PEA_WATER) { ProjectileRenderer(PeaModel(it.bakeLayer(PeaModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.SPORE) { ProjectileRenderer(SmallProjectileModel(it.bakeLayer(SmallProjectileModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.WATER_SPORE) { ProjectileRenderer(SmallProjectileModel(it.bakeLayer(SmallProjectileModel.LAYER_LOCATION)), it) }
@@ -240,9 +242,9 @@ object PazModels {
         EntityRenderers.register(PazEntities.PAINT_BALL) { ProjectileRenderer(SmallProjectileModel(it.bakeLayer(SmallProjectileModel.LAYER_LOCATION)), it) }
         EntityRenderers.register(PazEntities.MISSILE) { ProjectileRenderer(MissileModel(it.bakeLayer(MissileModel.LAYER_LOCATION)), it) }
 
-        EntityRenderers.register(PazEntities.SHROOMLIGHT) { ProjectileRenderer(ShroomLightModel(it.bakeLayer(ShroomLightModel.LAYER_LOCATION)), it) }
-        EntityRenderers.register(PazEntities.CRIMSON_SHROOMLIGHT) { ProjectileRenderer(ShroomLightModel(it.bakeLayer(ShroomLightModel.LAYER_LOCATION)), it) }
-        EntityRenderers.register(PazEntities.WARPED_SHROOMLIGHT) { ProjectileRenderer(ShroomLightModel(it.bakeLayer(ShroomLightModel.LAYER_LOCATION)), it) }
+        EntityRenderers.register(PazEntities.SHROOMLIGHT) { ProjectileRenderer(ShroomLightModel(it.bakeLayer(ShroomLightModel.LAYER_LOCATION)), it, true) }
+        EntityRenderers.register(PazEntities.CRIMSON_SHROOMLIGHT) { ProjectileRenderer(ShroomLightModel(it.bakeLayer(ShroomLightModel.LAYER_LOCATION)), it, true) }
+        EntityRenderers.register(PazEntities.WARPED_SHROOMLIGHT) { ProjectileRenderer(ShroomLightModel(it.bakeLayer(ShroomLightModel.LAYER_LOCATION)), it, true) }
 
         EntityRenderers.register(PazEntities.BROWN_COAT) { PazZombieRenderer(it) }
         EntityRenderers.register(PazEntities.NEWSPAPER_ZOMBIE) { PazZombieRenderer(it) }

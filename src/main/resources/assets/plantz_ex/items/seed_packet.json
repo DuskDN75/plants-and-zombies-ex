@@ -243,6 +243,13 @@
         }
       },
       {
+        "when": { "id": "plantz_ex:warpedshroom" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "plantz_ex:item/seed_packet/placeholder"
+        }
+      },
+      {
         "when": { "id": "plantz_ex:sky_peashooter" },
         "model": {
           "type": "minecraft:model",

@@ -108,7 +108,7 @@ object PazPlantsTab : PazCreativeTab() {
                     addPlant(PazEntities.PLACEHOLDER, "magnetshroom") // MAGNET SHROOM
                     addPlant(PazEntities.PLACEHOLDER, "fireshroom") // Fire Shroom
                     addPlant(PazEntities.CRIMSON_SHROOM) // Crimson Shroom
-                    addPlant(PazEntities.PLACEHOLDER, "warpedshroom") // Warped Shroom
+                    addPlant(PazEntities.WARPED_SHROOM) // Warped Shroom
                     addPlant(PazEntities.PLACEHOLDER, "gloomshroom") // Gloom Shroom
                     // endregion
 

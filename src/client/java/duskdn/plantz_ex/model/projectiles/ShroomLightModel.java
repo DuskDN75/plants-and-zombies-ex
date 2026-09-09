@@ -24,7 +24,7 @@ public class ShroomLightModel extends EntityModel<@NotNull ProjectileRenderState
         PartDefinition partdefinition = meshdefinition.getRoot();
 
         PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(16, 16).addBox(2.0F, 2.0F, 2.0F, -4.0F, -4.0F, -4.0F, new CubeDeformation(-0.2F)), PartPose.offset(0.0F, 24.0F, 0.0F));
+                .texOffs(0, 0).addBox(2.0F, 2.0F, 2.0F, -4.0F, -4.0F, -4.0F, new CubeDeformation(-0.2F)), PartPose.offset(0.0F, 24.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 16, 16);
     }

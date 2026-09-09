@@ -9,10 +9,12 @@ import duskdn.plantz_ex.entity.plant.init.PultPlant
 import duskdn.plantz_ex.entity.plant.interfaces.IExplosivePlant
 import duskdn.plantz_ex.entity.plant.interfaces.IIgneousPlant
 import duskdn.plantz_ex.entity.plant.interfaces.IWarmingPlant
+import duskdn.plantz_ex.entity.plant.utils.fireSurvivalCheck
 import duskdn.plantz_ex.entity.plant.utils.lavaSurvivalCheck
 import duskdn.plantz_ex.entity.plant.utils.mushroomSurvivalCheck
 import duskdn.plantz_ex.entity.plant.utils.stoneSurvivalCheck
 import duskdn.plantz_ex.entity.projectile.Cabbage
+import duskdn.plantz_ex.entity.projectile.shroomlights.CrimsonShroomLight
 import duskdn.plantz_ex.init.PazConfig
 import duskdn.plantz_ex.init.PazEffects
 import net.minecraft.core.Holder
@@ -56,7 +58,7 @@ class CrimsonShroom(level: Level) : PultPlant(PazEntities.CRIMSON_SHROOM, level)
     override fun canBreatheUnderwater(): Boolean = true
 
     override fun canSurviveOn(block: BlockState): Boolean {
-        return lavaSurvivalCheck(block)
+        return lavaSurvivalCheck(block) || super.canSurviveOn(block) || fireSurvivalCheck(block)
     }
 
     override fun getMeltRadius(): Double = 3.0
@@ -66,13 +68,16 @@ class CrimsonShroom(level: Level) : PultPlant(PazEntities.CRIMSON_SHROOM, level)
     override fun registerGoals() {
         super.registerGoals()
 
-        this.goalSelector.addGoal(2, ProjectileAttackGoal(
-            usingEntity = this,
-            projectileFactory = { Cabbage(level(), this, spawnOffset = Vec2(-1f, 1f)) },
-            useHighArc = true,
-            velocity = 1.0,
-            cooldownTime = 45,
-            actionDelay = 9))
+        this.goalSelector.addGoal(
+            2, ProjectileAttackGoal(
+                usingEntity = this,
+                projectileFactory = { CrimsonShroomLight(level(), this, spawnOffset = Vec2(0f, 0f)) },
+                useHighArc = true,
+                velocity = 1.0,
+                cooldownTime = 20,
+                actionDelay = 8
+            )
+        )
     }
 
 }

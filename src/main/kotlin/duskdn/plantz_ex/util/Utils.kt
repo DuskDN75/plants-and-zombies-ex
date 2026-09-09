@@ -24,7 +24,6 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.entity.projectile.Projectile
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.SnowLayerBlock
 import net.minecraft.world.level.block.state.BlockState
@@ -87,6 +86,66 @@ interface PazEntityData {
     fun `plantzex$getEnlightenedId`(): Boolean
     fun `plantzex$getPaintedColors`(): Map<Integer, Integer>
 }
+
+//fun LivingEntity.teleportAwayFromDirection(diameter: Float, direction: Vec3) {
+//
+//    val level = level()
+//
+//    val xx: Double = x + (getRandom().nextDouble() - 0.5) * diameter.toDouble()
+//    val yy = Mth.clamp(
+//        y + (getRandom().nextDouble() - 0.5) *diameter.toDouble(),
+//        level.minY.toDouble(),
+//        (level.minY + (level as ServerLevel).logicalHeight - 1).toDouble()
+//    )
+//    val zz: Double = z + (getRandom().nextDouble() - 0.5) * diameter.toDouble()
+//    if (isPassenger) {
+//        stopRiding()
+//    }
+//
+//    val xo = this.getX()
+//    val yo = this.getY()
+//    val zo = this.getZ()
+//    val y: Double = yy
+//    val ok = false
+//    val pos = BlockPos.containing(xx, yy, zz)
+//    if (level.hasChunkAt(pos)) {
+//        var landed = false
+//
+//        while (!landed && pos.getY() > level.getMinY()) {
+//            val below = pos.below()
+//            val state = level.getBlockState(below)
+//            if (state.blocksMotion()) {
+//                landed = true
+//            } else {
+//                --y
+//                pos = below
+//            }
+//        }
+//
+//        if (landed) {
+//            this.teleportTo(xx, y, zz)
+//            if (level.noCollision(this) && !level.containsAnyLiquid(this.getBoundingBox())) {
+//                ok = true
+//            }
+//        }
+//    }
+//
+//    if (!ok) {
+//        this.teleportTo(xo, yo, zo)
+//        return false
+//    } else {
+//        if (showParticles) {
+//            level.broadcastEntityEvent(this, 46.toByte())
+//        }
+//
+//        if (this is PathfinderMob) {
+//            val pathfinderMob = this
+//            pathfinderMob.getNavigation().stop()
+//        }
+//
+//        return true
+//    }
+//}
 
 fun Entity.canWearPlant(): Boolean {
     return this is LivingEntity && this.getItemBySlot(EquipmentSlot.HEAD).`is`(PazItems.PLANT_POT_HELMET)

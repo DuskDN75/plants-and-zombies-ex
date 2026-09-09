@@ -219,9 +219,10 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
     }
 
     companion object {
-        fun stackFor(type: EntityType<*>): ItemStack {
+        fun stackFor(type: EntityType<*>?): ItemStack {
             val stack = ItemStack(PazItems.SEED_PACKET)
-            stack.set(DataComponents.ENTITY_DATA, TypedEntityData.of(type, CompoundTag()))
+
+            if (type != null) stack.set(DataComponents.ENTITY_DATA, TypedEntityData.of(type, CompoundTag()))
 
             return stack
         }

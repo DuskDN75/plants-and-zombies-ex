@@ -1,4 +1,4 @@
-package duskdn.plantz_ex.animation.plants.init;// Save this class in your mod and generate all required imports
+package duskdn.plantz_ex.animation.plants;// Save this class in your mod and generate all required imports
 
 import net.minecraft.client.animation.AnimationDefinition;
 

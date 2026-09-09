@@ -1,0 +1,10 @@
+{
+  "textures": [
+    "plantz_ex:projectile/shroomlight/basic/move/1",
+    "plantz_ex:projectile/shroomlight/basic/move/2",
+    "plantz_ex:projectile/shroomlight/basic/move/3",
+    "plantz_ex:projectile/shroomlight/basic/move/4",
+    "plantz_ex:projectile/shroomlight/basic/move/5",
+    "plantz_ex:projectile/shroomlight/basic/move/6"
+  ]
+}

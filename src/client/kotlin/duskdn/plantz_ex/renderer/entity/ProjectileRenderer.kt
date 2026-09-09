@@ -27,6 +27,7 @@ import net.minecraft.world.item.DyeColor
 class ProjectileRenderer(
     val defaultModel: EntityModel<ProjectileRenderState>,
     context: EntityRendererProvider.Context,
+    val emissive: Boolean = false,
 ) : EntityRenderer<Projectile, ProjectileRenderState>(
     context
 ), RenderLayerParent<ProjectileRenderState, EntityModel<ProjectileRenderState>> {
@@ -92,7 +93,7 @@ class ProjectileRenderer(
     }
 
     fun getTextureLocation(state: ProjectileRenderState): Identifier {
-        val texture = state.getTextureLocation(PlantRenderState.TEXTURE_PATH, state.getSuffixes())
+        val texture = state.getTextureLocation(ProjectileRenderState.TEXTURE_PATH, state.getSuffixes())
         return texture
     }
 
@@ -106,7 +107,7 @@ class ProjectileRenderer(
         if (forceTransparent) {
             return RenderType.create(
                 "plant_projectile",
-                RenderSetup.builder(RenderPipelines.ENTITY_CUTOUT)
+                RenderSetup.builder(if (emissive) RenderPipelines.EYES else RenderPipelines.ENTITY_CUTOUT)
                     .withTexture("Sampler0", getTextureLocation(state))
                     .useLightmap()
                     .sortOnUpload()
@@ -138,14 +139,7 @@ class EmissiveProjectileLayer<M : EntityModel<ProjectileRenderState>>(
     ) {
         val textureLocation = state.getEmissiveTextureLocation(ProjectileRenderState.TEXTURE_PATH, state.getSuffixes()) ?: return
 
-        val renderType = RenderType.create(
-            "plant_projectile_emissive",
-            RenderSetup.builder(RenderPipelines.ENERGY_SWIRL)
-                .withTexture("Sampler0", textureLocation)
-                .useLightmap()
-                .sortOnUpload()
-                .createRenderSetup()
-        )
+        val renderType = RenderTypes.eyes(textureLocation)
 
         submitNodeCollector.order(1).submitModel(this.parentModel, state, poseStack, renderType, lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
     }

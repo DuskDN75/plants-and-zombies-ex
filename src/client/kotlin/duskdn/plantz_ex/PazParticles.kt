@@ -62,6 +62,25 @@ object PazParticles {
             spriteSet -> CritParticle.Provider(spriteSet)
         }
 
+        it.register(PazServerParticles.SHROOMLIGHT) { spriteSet ->
+            SporeParticle.Provider(spriteSet)
+        }
+        it.register(PazServerParticles.CRIMSON_SHROOMLIGHT) { spriteSet ->
+            SporeParticle.Provider(spriteSet)
+        }
+        it.register(PazServerParticles.WARPED_SHROOMLIGHT) { spriteSet ->
+            SporeParticle.Provider(spriteSet)
+        }
+        it.register(PazServerParticles.SHROOMLIGHT_HIT) {
+                spriteSet -> CritParticle.Provider(spriteSet)
+        }
+        it.register(PazServerParticles.CRIMSON_SHROOMLIGHT_HIT) {
+                spriteSet -> CritParticle.Provider(spriteSet)
+        }
+        it.register(PazServerParticles.WARPED_SHROOMLIGHT_HIT) {
+                spriteSet -> CritParticle.Provider(spriteSet)
+        }
+
         it.register(PazServerParticles.FUME_BUBBLE) { spriteSet ->
             FumeBubbleParticle.Provider(spriteSet)
         }

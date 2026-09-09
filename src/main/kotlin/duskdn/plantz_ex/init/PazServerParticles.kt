@@ -32,6 +32,14 @@ object PazServerParticles {
     @JvmField val HYPNO_SPORE: SimpleParticleType = registerSimple("hypno_spore")
     @JvmField val SPORE: SimpleParticleType = registerSimple("spore")
     @JvmField val SPORE_HIT: SimpleParticleType = registerSimple("spore_hit")
+
+    @JvmField val SHROOMLIGHT: SimpleParticleType = registerSimple("shroomlight")
+    @JvmField val SHROOMLIGHT_HIT: SimpleParticleType = registerSimple("shroomlight_hit")
+    @JvmField val CRIMSON_SHROOMLIGHT: SimpleParticleType = registerSimple("crimson_shroomlight")
+    @JvmField val CRIMSON_SHROOMLIGHT_HIT: SimpleParticleType = registerSimple("crimson_shroomlight_hit")
+    @JvmField val WARPED_SHROOMLIGHT: SimpleParticleType = registerSimple("warped_shroomlight")
+    @JvmField val WARPED_SHROOMLIGHT_HIT: SimpleParticleType = registerSimple("warped_shroomlight_hit")
+
     @JvmField val FUME_BUBBLE: SimpleParticleType = registerSimple("fume_bubble")
     @JvmField val EMBER: SimpleParticleType = registerSimple("ember")
     @JvmField val ELECTRIFIED: SimpleParticleType = registerSimple("electrified")

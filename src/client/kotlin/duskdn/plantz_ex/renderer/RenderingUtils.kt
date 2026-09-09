@@ -23,9 +23,13 @@ fun List<String>.permutationsDescending(): List<String> = buildList {
 }
 
 fun resolveTextureLocation(base: String, rm: ResourceManager, suffixes: List<String> = listOf()): Identifier? {
-    for (suffix in suffixes.permutationsDescending()) {
+
+    val permutations = suffixes.permutationsDescending()
+
+    for (suffix in permutations) {
         if (suffix.isEmpty()) break
         val candidate = pazResource("${base}_${suffix}.png")
+
         if (rm.getResource(candidate).isPresent) return candidate
     }
     return null
@@ -53,7 +57,9 @@ fun EntityRenderState.getEmissiveTextureLocation(basePath: String, suffixes: Mut
     val base = "${basePath}/${entityName}/${entityName}"
     val rm = Minecraft.getInstance().resourceManager
 
-    return resolveTextureLocation(base, rm, suffixes.apply { add("emissive") })
+    suffixes.add("emissive")
+
+    return resolveTextureLocation(base, rm, suffixes) ?: resolveTextureLocation(base, rm, suffixes.apply { remove("sleep") })
 }
 
 fun EntityRenderState.getAdditiveTextureLocation(basePath: String, suffixes: MutableList<String> = mutableListOf()): Identifier? {
@@ -61,7 +67,9 @@ fun EntityRenderState.getAdditiveTextureLocation(basePath: String, suffixes: Mut
     val base = "${basePath}/${entityName}/${entityName}"
     val rm = Minecraft.getInstance().resourceManager
 
-    return resolveTextureLocation(base, rm, suffixes.apply { add("additive") })
+    suffixes.add("additive")
+
+    return resolveTextureLocation(base, rm, suffixes) ?: resolveTextureLocation(base, rm, suffixes.apply { remove("sleep") })
 }
 
 fun PlantRenderState.getEyesTextureLocation(basePath: String, suffixes: MutableList<String> = mutableListOf(), closed: Boolean): Identifier? {
@@ -72,20 +80,18 @@ fun PlantRenderState.getEyesTextureLocation(basePath: String, suffixes: MutableL
     val base = "${basePath}/${entityName}/${entityName}"
     val rm = Minecraft.getInstance().resourceManager
     
-    suffixes.add("eyes")
 
-    if (closed) suffixes.add("closed")
+
+    if (closed) suffixes.add("eyes_closed") else suffixes.add("eyes")
 
 //    println("SUFFIXES ARE: $suffixes")
 
-    return resolveTextureLocation(base, rm, suffixes)
+    return resolveTextureLocation(base, rm, suffixes) ?: resolveTextureLocation(base, rm, suffixes.apply { remove("sleep") })
 }
 
 fun PlantRenderState.getEmissiveEyesTextureLocation(basePath: String, suffixes: MutableList<String> = mutableListOf(), closed: Boolean): Identifier? {
 
-    suffixes.add("eyes")
-
-    if (closed) suffixes.add("closed")
+    if (closed) suffixes.add("eyes_closed") else suffixes.add("eyes")
 
     return getEmissiveTextureLocation(basePath, suffixes)
 }

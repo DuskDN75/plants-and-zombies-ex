@@ -43,7 +43,9 @@ import duskdn.plantz_ex.entity.plant.all.aerial.SkyPeaShooter
 import duskdn.plantz_ex.entity.plant.all.mushrooms.CrimsonShroom
 import duskdn.plantz_ex.entity.plant.all.aquatic.OxygenAlgae
 import duskdn.plantz_ex.entity.plant.all.mushrooms.IceShroom
+import duskdn.plantz_ex.entity.plant.all.mushrooms.WarpedShroom
 import duskdn.plantz_ex.entity.plant.init.PazPlant
+import duskdn.plantz_ex.entity.plant.interfaces.AbstractWallNut
 import duskdn.plantz_ex.entity.projectile.*
 import duskdn.plantz_ex.entity.projectile.peas.Pea
 import duskdn.plantz_ex.entity.projectile.peas.PeaElectric
@@ -111,8 +113,11 @@ object PazEntities {
             if (entity is Zombie) (entity as MobAccessor).targetSelector.addGoal(4, NearestAttackableTargetGoal(entity, Gnome::class.java, 5, true, false, null))
 
             if (entity is Mob && entity.`is`(PazTags.EntityTypes.ATTACKS_PLANTS)) {
-                (entity as MobAccessor).targetSelector.addGoal(0, NearestAttackableTargetGoal(entity, WallNut::class.java, 2, false, true) { target, level -> ((target as? WallNut
-                    ?: target as? ExplodeONut)?.let { it.distanceToSqr(entity) < 16 } ?: false)})
+
+                (entity as MobAccessor).targetSelector.addGoal(0, NearestAttackableTargetGoal(entity, AbstractWallNut::class.java, 2, false, true) { target, level ->
+                    target.distanceToSqr(entity) < 16
+                })
+
                 (entity as MobAccessor).targetSelector.addGoal(1, NearestAttackableTargetGoal(entity, PazPlant::class.java, 6, false, true) { target, level ->
                     return@NearestAttackableTargetGoal target.passengers.isEmpty() && !target.`is`(PazTags.EntityTypes.IGNORED_BY_PLANT_ATTACKERS)
                 })
@@ -465,21 +470,25 @@ object PazEntities {
         )
     )
     @JvmField val CRIMSON_SHROOM: EntityType<CrimsonShroom> = registerPlant(
-        "crimsonshroom", EntityType.Builder.of({ _, level -> CrimsonShroom(level) }, MobCategory.CREATURE),
+        "crimsonshroom", EntityType.Builder.of({ _, level -> CrimsonShroom(level) }, MobCategory.CREATURE).fireImmune(),
         eyeHeight = 0.625f,
         height = 0.9375f,
         attributes = PazPlant.Companion.PlantAttributes(
+            attackDamage = PazPlant.PEA_DAMAGE*2,
+            attackKnockback = 0.5,
+            followRange = 35.0,
         )
     )
-//    @JvmField val WARPED_SHROOM: EntityType<CrimsonShroom> = registerPlant(
-//        "crimson_shroom", EntityType.Builder.of(::CrimsonShroom, MobCategory.CREATURE),
-//        eyeHeight = 0.43f,
-//        height = 0.7f,
-//        attributes = PazPlant.Companion.PlantAttributes(
-//            maxHealth = 28.0,
-//            followRange = 5.0
-//        )
-//    )
+    @JvmField val WARPED_SHROOM: EntityType<WarpedShroom> = registerPlant(
+        "warpedshroom", EntityType.Builder.of({ _, level -> WarpedShroom(level) }, MobCategory.CREATURE),
+        eyeHeight = 0.6875f,
+        height = 0.75f,
+        attributes = PazPlant.Companion.PlantAttributes(
+            attackDamage = PazPlant.PEA_DAMAGE*2,
+            attackKnockback = 0.5,
+            followRange = 35.0,
+        )
+    )
     @JvmField val SKY_PEA_SHOOTER: EntityType<SkyPeaShooter> = registerPlant(
         "sky_peashooter", EntityType.Builder.of({ _, level -> SkyPeaShooter(level) }, MobCategory.CREATURE),
         attributes = PazPlant.Companion.PlantAttributes(
@@ -747,7 +756,7 @@ object PazEntities {
         PeaFire(
             l
         )
-    }, MobCategory.MISC).sized(2.0f, 2.0f))
+    }, MobCategory.MISC).sized(2.0f, 2.0f).fireImmune())
     @JvmField val PEA_WATER: EntityType<PeaWater> = registerProjectile("pea_water", EntityType.Builder.of({ _, l->
         PeaWater(
             l
@@ -761,16 +770,16 @@ object PazEntities {
     @JvmField val NEEDLE: EntityType<Needle> = registerProjectile("needle", EntityType.Builder.of({_,l->Needle(l)}, MobCategory.MISC).sized(2.0f, 2.0f), width = 0.42f, height = 0.42f)
     @JvmField val SPORE: EntityType<Spore> = registerProjectile("spore", EntityType.Builder.of({_,l->Spore(l)}, MobCategory.MISC).sized(2.0f, 2.0f))
     @JvmField val WATER_SPORE: EntityType<WaterSpore> = registerProjectile("water_spore", EntityType.Builder.of({_,l-> WaterSpore(l)}, MobCategory.MISC).sized(2.0f, 2.0f))
-    @JvmField val CABBAGE: EntityType<Cabbage> = registerProjectile("cabbage", EntityType.Builder.of({_,l->Cabbage(l)}, MobCategory.MISC).sized(3.0f, 3.0f), width = 1.0f, height = 1.0f)
-    @JvmField val KERNEL: EntityType<Kernel> = registerProjectile("kernel", EntityType.Builder.of({_,l->Kernel(l)}, MobCategory.MISC).sized(3.0f, 3.0f), width = 1.0f, height = 1.0f)
-    @JvmField val BUTTER: EntityType<Butter> = registerProjectile("butter", EntityType.Builder.of({_,l->Butter(l)}, MobCategory.MISC).sized(3.0f, 3.0f), width = 1.5f, height = 1.0f)
-    @JvmField val MELON: EntityType<Melon> = registerProjectile("melon", EntityType.Builder.of({_,l->Melon(l)}, MobCategory.MISC).sized(2.0f, 2.0f), width = 1.0f, height = 0.8f)
+    @JvmField val CABBAGE: EntityType<Cabbage> = registerProjectile("cabbage", EntityType.Builder.of({_,l->Cabbage(l)}, MobCategory.MISC).sized(3.0f, 3.0f), width = 1.5f, height = 1.5f)
+    @JvmField val KERNEL: EntityType<Kernel> = registerProjectile("kernel", EntityType.Builder.of({_,l->Kernel(l)}, MobCategory.MISC).sized(3.0f, 3.0f), width = 1.5f, height = 1.5f)
+    @JvmField val BUTTER: EntityType<Butter> = registerProjectile("butter", EntityType.Builder.of({_,l->Butter(l)}, MobCategory.MISC).sized(3.0f, 3.0f), width = 1.5f, height = 1.5f)
+    @JvmField val MELON: EntityType<Melon> = registerProjectile("melon", EntityType.Builder.of({_,l->Melon(l)}, MobCategory.MISC).sized(2.0f, 2.0f), width = 1.5f, height = 1.5f)
     @JvmField val PAINT_BALL: EntityType<PaintBall> = registerProjectile("paint_ball", EntityType.Builder.of({ _, l->PaintBall(l)}, MobCategory.MISC), width = 0.42f, height = 0.42f)
     @JvmField val MISSILE: EntityType<Missile> = registerProjectile("missile", EntityType.Builder.of({ _, l->Missile(l)}, MobCategory.MISC), width = 0.42f, height = 0.42f)
 
-    @JvmField val SHROOMLIGHT: EntityType<ShroomLight> = registerProjectile("shroomlight", EntityType.Builder.of({ _, l-> ShroomLight(l)}, MobCategory.MISC).sized(3.0f, 3.0f), width = 1.0f, height = 1.0f)
-    @JvmField val CRIMSON_SHROOMLIGHT: EntityType<CrimsonShroomLight> = registerProjectile("crimson_shroomlight", EntityType.Builder.of({ _, l-> CrimsonShroomLight(l)}, MobCategory.MISC).sized(3.0f, 3.0f), width = 1.0f, height = 1.0f)
-    @JvmField val WARPED_SHROOMLIGHT: EntityType<WarpedShroomLight> = registerProjectile("warped_shroomlight", EntityType.Builder.of({ _, l-> WarpedShroomLight(l)}, MobCategory.MISC).sized(3.0f, 3.0f), width = 1.0f, height = 1.0f)
+    @JvmField val SHROOMLIGHT: EntityType<ShroomLight> = registerProjectile("shroomlight", EntityType.Builder.of({ _, l-> ShroomLight(l)}, MobCategory.MISC).sized(3.0f, 3.0f), width = 1.5f, height = 1.5f)
+    @JvmField val CRIMSON_SHROOMLIGHT: EntityType<CrimsonShroomLight> = registerProjectile("crimson_shroomlight", EntityType.Builder.of({ _, l-> CrimsonShroomLight(l)}, MobCategory.MISC).fireImmune().sized(3.0f, 3.0f), width = 1.5f, height = 1.5f)
+    @JvmField val WARPED_SHROOMLIGHT: EntityType<WarpedShroomLight> = registerProjectile("warped_shroomlight", EntityType.Builder.of({ _, l-> WarpedShroomLight(l)}, MobCategory.MISC).sized(3.0f, 3.0f), width = 1.5f, height = 1.5f)
     // endregion
 
     //region Other
@@ -853,8 +862,8 @@ object PazEntities {
     private fun <T : Projectile> registerProjectile(
         name : String,
         builder: EntityType.Builder<T> = EntityType.Builder.createNothing(MobCategory.MISC),
-        width: Float = 0.3125f,
-        height: Float = 0.3125f
+        width: Float = 0.5f,
+        height: Float = 0.5f
     ): EntityType<T> {
         builder.sized(width, height).eyeHeight(0.0f)
         return register(name, builder)
