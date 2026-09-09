@@ -55,6 +55,8 @@ object PazModels {
     @JvmField
     val IS_DRENCHED_KEY: RenderStateDataKey<Boolean> = RenderStateDataKey.create { "plantz_ex:drenched" }
     @JvmField
+    val IS_BUTTERED_KEY: RenderStateDataKey<Boolean> = RenderStateDataKey.create { "plantz_ex:buttered" }
+    @JvmField
     val IS_ENLIGHTENED_KEY: RenderStateDataKey<Boolean> = RenderStateDataKey.create { "plantz_ex:enlightened" }
     @JvmField
     val PAINT_COLORS_KEY: RenderStateDataKey<Map<Int, Int>> = RenderStateDataKey.create { "plantz_ex:painted" }

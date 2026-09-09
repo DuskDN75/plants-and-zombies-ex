@@ -2,10 +2,7 @@ package duskdn.plantz_ex.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.blaze3d.vertex.PoseStack;
-import duskdn.plantz_ex.renderer.DuckyTubeRenderLayer;
-import duskdn.plantz_ex.renderer.DyeVatRenderLayer;
-import duskdn.plantz_ex.renderer.ObsidianDuckyTubeRenderLayer;
-import duskdn.plantz_ex.renderer.PaintLayer;
+import duskdn.plantz_ex.renderer.*;
 import duskdn.plantz_ex.util.PazEntityData;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -38,11 +35,11 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     protected abstract boolean addLayer(RenderLayer<S, M> layer);
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void plantzex$addDuckyTubeLayer(EntityRendererProvider.Context context, M model, float shadow, CallbackInfo ci) {
+    private void plantzex$addLayers(EntityRendererProvider.Context context, M model, float shadow, CallbackInfo ci) {
         this.addLayer(new DuckyTubeRenderLayer<>(this));
         this.addLayer(new ObsidianDuckyTubeRenderLayer<>(this));
         this.addLayer(new DyeVatRenderLayer<>(this));
-        this.addLayer(new PaintLayer<>(this));
+        this.addLayer(new SpecialEffectsLayer<>(this));
     }
 
     @Inject(method = "isShaking", at = @At("RETURN"), cancellable = true)
@@ -67,6 +64,9 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
         boolean hasFrozen = ((PazEntityData) entity).plantzex$getFrozenId();
         state.setData(IS_FROZEN_KEY, hasFrozen);
 
+        boolean hasButtered = ((PazEntityData) entity).plantzex$getButteredId();
+        state.setData(IS_BUTTERED_KEY, hasButtered);
+
         boolean hasEnlightened = ((PazEntityData) entity).plantzex$getEnlightenedId();
         state.setData(IS_ENLIGHTENED_KEY, hasEnlightened);
 
@@ -85,6 +85,9 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 
     @Unique
     private static final int PLANTZ_DRENCHED_TINT = 0xFF3F76E4;
+
+    @Unique
+    private static final int PLANTZ_BUTTERED_TINT = 0xFFDBDC8C;
 
     @Unique
     private static final int PLANTZ_ENLIGHTENED_TINT = 0xFFFFFDD2;
@@ -109,6 +112,10 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 
         if (state.getDataOrDefault(IS_FROZEN_KEY, false)) {
             tintedColor = ARGB.multiply(tintedColor, PLANTZ_FROZEN_TINT);
+        }
+
+        if (state.getDataOrDefault(IS_BUTTERED_KEY, false)) {
+            tintedColor = ARGB.multiply(tintedColor, PLANTZ_BUTTERED_TINT);
         }
 
         if (state.getDataOrDefault(IS_ENLIGHTENED_KEY, false)) {

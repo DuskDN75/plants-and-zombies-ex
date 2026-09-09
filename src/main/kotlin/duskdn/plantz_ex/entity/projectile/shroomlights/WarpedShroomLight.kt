@@ -1,5 +1,6 @@
 package duskdn.plantz_ex.entity.projectile.shroomlights
 
+import duskdn.plantz_ex.common.PazTeleportRandomlyAwayEffect
 import duskdn.plantz_ex.entity.projectile.init.BaseShroomLight
 import duskdn.plantz_ex.entity.projectile.init.PazProjectile
 import duskdn.plantz_ex.init.PazDamageTypes
@@ -27,7 +28,7 @@ class WarpedShroomLight(
 ) {
 
     companion object {
-        val randomTeleportEffect = TeleportRandomlyConsumeEffect(8f)
+        val randomTeleportEffect = PazTeleportRandomlyAwayEffect(8f, 60f, )
     }
 
     override fun getMovingParticle(): SimpleParticleType = PazServerParticles.WARPED_SHROOMLIGHT
@@ -36,20 +37,7 @@ class WarpedShroomLight(
 
     override fun afterHitEntityEffect(target: LivingEntity) {
         super.afterHitEntityEffect(target)
-        randomTeleportEffect.apply(level(), ItemStack.EMPTY, target)
-    }
-
-    override fun onHit(hitResult: HitResult) {
-        super.onHit(hitResult)
-        spawnParticle(
-            BlockParticleOption(
-                ParticleTypes.BLOCK,
-                Blocks.WARPED_WART_BLOCK.defaultBlockState()
-            ),
-            amount = 4,
-            speed = 0.1,
-            spread = Vec3(0.1, 0.1, 0.1)
-        )
+        randomTeleportEffect.apply(level(), target, this.deltaMovement)
     }
 
 }

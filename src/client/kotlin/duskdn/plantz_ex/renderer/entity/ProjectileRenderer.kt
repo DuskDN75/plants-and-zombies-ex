@@ -32,6 +32,13 @@ class ProjectileRenderer(
     context
 ), RenderLayerParent<ProjectileRenderState, EntityModel<ProjectileRenderState>> {
 
+    companion object {
+        fun getTextureLocation(state: ProjectileRenderState): Identifier {
+            val texture = state.getTextureLocation(ProjectileRenderState.TEXTURE_PATH, state.getSuffixes())
+            return texture
+        }
+    }
+
     val layers: MutableList<RenderLayer<ProjectileRenderState, EntityModel<ProjectileRenderState>>?> = Lists.newArrayList()
 
     fun addLayer(layer: RenderLayer<ProjectileRenderState, EntityModel<ProjectileRenderState>>?): Boolean {
@@ -92,18 +99,13 @@ class ProjectileRenderer(
         state.yRot = entity.getYRot(partialTick)
     }
 
-    fun getTextureLocation(state: ProjectileRenderState): Identifier {
-        val texture = state.getTextureLocation(ProjectileRenderState.TEXTURE_PATH, state.getSuffixes())
-        return texture
-    }
-
     fun getRenderType(
         state: ProjectileRenderState,
         isBodyVisible: Boolean,
         forceTransparent: Boolean,
         appearGlowing: Boolean
     ): RenderType? {
-        val texture = this.getTextureLocation(state)
+        val texture = getTextureLocation(state)
         if (forceTransparent) {
             return RenderType.create(
                 "plant_projectile",

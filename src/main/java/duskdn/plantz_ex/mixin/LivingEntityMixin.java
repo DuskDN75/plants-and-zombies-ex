@@ -55,14 +55,22 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
 
     @Unique
     private static final EntityDataAccessor<Boolean> DATA_HYPNO_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
+
     @Unique
     private static final EntityDataAccessor<Boolean> DATA_CHILLED_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
+
     @Unique
     private static final EntityDataAccessor<Boolean> DATA_DRENCHED_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
+
     @Unique
     private static final EntityDataAccessor<Boolean> DATA_FROZEN_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
+
+    @Unique
+    private static final EntityDataAccessor<Boolean> DATA_BUTTERED_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
+
     @Unique
     private static final EntityDataAccessor<Boolean> DATA_ENLIGHTENED_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
+
     @Unique
     private static final EntityDataAccessor<Map<Integer, Integer>> DATA_PAINTED_COLORS = SynchedEntityData.defineId(LivingEntity.class, DATA_PAINT_COLORS);
 
@@ -125,6 +133,10 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
     @Unique
     public boolean plantzex$getDrenchedId() {
         return ((Entity) (Object) this).getEntityData().get(DATA_DRENCHED_ID);
+    }
+    @Unique
+    public boolean plantzex$getButteredId() {
+        return ((Entity) (Object) this).getEntityData().get(DATA_BUTTERED_ID);
     }
     @Unique
     public boolean plantzex$getEnlightenedId() {
@@ -248,6 +260,7 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
         entityData.define(DATA_DRENCHED_ID, false);
         entityData.define(DATA_CHILLED_ID, false);
         entityData.define(DATA_FROZEN_ID, false);
+        entityData.define(DATA_BUTTERED_ID, false);
         entityData.define(DATA_ENLIGHTENED_ID, false);
         entityData.define(DATA_PAINTED_COLORS, new HashMap<>());
     }
@@ -258,6 +271,7 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
         output.putBoolean("plantz_ex:IsChilled", self.getEntityData().get(DATA_CHILLED_ID));
         output.putBoolean("plantz_ex:IsDrenched", self.getEntityData().get(DATA_DRENCHED_ID));
         output.putBoolean("plantz_ex:IsFrozen", self.getEntityData().get(DATA_FROZEN_ID));
+        output.putBoolean("plantz_ex:IsButtered", self.getEntityData().get(DATA_BUTTERED_ID));
         output.putBoolean("plantz_ex:IsEnlightened", self.getEntityData().get(DATA_ENLIGHTENED_ID));
         output.store("plantz_ex:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT), self.getEntityData().get(DATA_PAINTED_COLORS));
         if (!this.plantzex$getPlantData().isEmpty()) {
@@ -271,6 +285,7 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
         self.getEntityData().set(DATA_CHILLED_ID, input.getBooleanOr("plantz_ex:IsChilled", false));
         self.getEntityData().set(DATA_DRENCHED_ID, input.getBooleanOr("plantz_ex:IsDrenched", false));
         self.getEntityData().set(DATA_FROZEN_ID, input.getBooleanOr("plantz_ex:IsFrozen", false));
+        self.getEntityData().set(DATA_BUTTERED_ID, input.getBooleanOr("plantz_ex:IsButtered", false));
         self.getEntityData().set(DATA_ENLIGHTENED_ID, input.getBooleanOr("plantz_ex:IsEnlightened", false));
         self.getEntityData().set(DATA_PAINTED_COLORS, input.read("plantz_ex:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT)).orElseGet(HashMap::new));
         plantzex$setPlantData(input.read("plantz_ex:AttachedPlant", CompoundTag.CODEC).orElseGet(CompoundTag::new));
@@ -298,6 +313,7 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, PazEntit
         self.getEntityData().set(DATA_HYPNO_ID, this.hasEffect(PazEffects.HYPNOTIZE));
         self.getEntityData().set(DATA_CHILLED_ID, this.hasEffect(PazEffects.CHILLED));
         self.getEntityData().set(DATA_DRENCHED_ID, this.hasEffect(PazEffects.DRENCHED));
+        self.getEntityData().set(DATA_BUTTERED_ID, this.hasEffect(PazEffects.BUTTERED));
         self.getEntityData().set(DATA_ENLIGHTENED_ID, this.hasEffect(PazEffects.ENLIGHTENED));
         self.getEntityData().set(DATA_PAINTED_COLORS, PaintedMobEffect.getPaintColors(self));
     }

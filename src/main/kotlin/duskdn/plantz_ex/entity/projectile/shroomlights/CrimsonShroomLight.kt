@@ -37,17 +37,4 @@ class CrimsonShroomLight(
         target.igniteForSeconds(3.5f);
     }
 
-    override fun onHit(hitResult: HitResult) {
-        super.onHit(hitResult)
-        spawnParticle(
-            BlockParticleOption(
-                ParticleTypes.BLOCK,
-                Blocks.NETHER_WART_BLOCK.defaultBlockState()
-            ),
-            amount = 4,
-            speed = 0.1,
-            spread = Vec3(0.1, 0.1, 0.1)
-        )
-    }
-
 }

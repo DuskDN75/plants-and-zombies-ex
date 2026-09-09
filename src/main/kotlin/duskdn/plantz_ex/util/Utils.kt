@@ -1,5 +1,7 @@
 package duskdn.plantz_ex.util
 
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import duskdn.plantz_ex.PazMain.MODID
 import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.init.PazComponents
@@ -10,26 +12,39 @@ import net.minecraft.core.Vec3i
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerEntityGetter
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundSource
+import net.minecraft.util.ExtraCodecs
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.*
 import net.minecraft.world.entity.Entity.MoveFunction
 import net.minecraft.world.entity.ai.control.LookControl
 import net.minecraft.world.entity.ai.navigation.PathNavigation
 import net.minecraft.world.entity.ai.targeting.TargetingConditions
+import net.minecraft.world.entity.animal.fox.Fox
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.entity.projectile.Projectile
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.consume_effects.ConsumeEffect
+import net.minecraft.world.item.consume_effects.TeleportRandomlyConsumeEffect
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.SnowLayerBlock
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.gameevent.GameEvent
+import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.pathfinder.Path
 import net.minecraft.world.phys.Vec3
 import java.lang.reflect.Field
+import java.util.function.Function
 import java.util.function.Predicate
 
 object Utils {
@@ -83,69 +98,67 @@ interface PazEntityData {
     fun `plantzex$getDrenchedId`(): Boolean
     fun `plantzex$getFrozenId`(): Boolean
     fun `plantzex$setFrozenId`(isFrozen: Boolean)
+    fun `plantzex$getButteredId`(): Boolean
     fun `plantzex$getEnlightenedId`(): Boolean
     fun `plantzex$getPaintedColors`(): Map<Integer, Integer>
 }
 
-//fun LivingEntity.teleportAwayFromDirection(diameter: Float, direction: Vec3) {
-//
-//    val level = level()
-//
-//    val xx: Double = x + (getRandom().nextDouble() - 0.5) * diameter.toDouble()
-//    val yy = Mth.clamp(
-//        y + (getRandom().nextDouble() - 0.5) *diameter.toDouble(),
-//        level.minY.toDouble(),
-//        (level.minY + (level as ServerLevel).logicalHeight - 1).toDouble()
-//    )
-//    val zz: Double = z + (getRandom().nextDouble() - 0.5) * diameter.toDouble()
-//    if (isPassenger) {
-//        stopRiding()
-//    }
-//
-//    val xo = this.getX()
-//    val yo = this.getY()
-//    val zo = this.getZ()
-//    val y: Double = yy
-//    val ok = false
-//    val pos = BlockPos.containing(xx, yy, zz)
-//    if (level.hasChunkAt(pos)) {
-//        var landed = false
-//
-//        while (!landed && pos.getY() > level.getMinY()) {
-//            val below = pos.below()
-//            val state = level.getBlockState(below)
-//            if (state.blocksMotion()) {
-//                landed = true
-//            } else {
-//                --y
-//                pos = below
-//            }
-//        }
-//
-//        if (landed) {
-//            this.teleportTo(xx, y, zz)
-//            if (level.noCollision(this) && !level.containsAnyLiquid(this.getBoundingBox())) {
-//                ok = true
-//            }
-//        }
-//    }
-//
-//    if (!ok) {
-//        this.teleportTo(xo, yo, zo)
-//        return false
-//    } else {
-//        if (showParticles) {
-//            level.broadcastEntityEvent(this, 46.toByte())
-//        }
-//
-//        if (this is PathfinderMob) {
-//            val pathfinderMob = this
-//            pathfinderMob.getNavigation().stop()
-//        }
-//
-//        return true
-//    }
-//}
+fun LivingEntity.teleportAwayFromDirection(diameter: Float, angle: Float, direction: Vec3, showParticles: Boolean): Boolean {
+
+    val level = level()
+
+    val xChange: Float = (getRandom().nextFloat() - 0.5f) * angle
+    val yChange: Float = (getRandom().nextFloat() - 0.5f) * angle
+    val diameterChange: Double = (getRandom().nextDouble() + 0.5f) * (diameter.toDouble()/2)
+
+    val newVector = direction.normalize().xRot(xChange).yRot(yChange).scale(diameterChange)
+
+    val newPosition = this.position().add(newVector)
+
+    val xo = this.x
+    val yo = this.y
+    val zo = this.z
+    var pos = BlockPos.containing(newPosition)
+    var y: Double = level.getHeight(Heightmap.Types.MOTION_BLOCKING, pos).toDouble()
+    var ok = false
+
+    if (level.hasChunkAt(pos)) {
+        var landed = false
+
+        while (!landed && pos.y > level.minY) {
+            val below = pos.below()
+            val state = level.getBlockState(below)
+            if (state.blocksMotion()) {
+                landed = true
+            } else {
+                --y
+                pos = below
+            }
+        }
+
+        if (landed) {
+            this.teleportTo(newPosition.x, y, newPosition.z)
+            if (level.noCollision(this) && !level.containsAnyLiquid(this.boundingBox)) {
+                ok = true
+            }
+        }
+    }
+
+    if (!ok) {
+        this.teleportTo(xo, yo, zo)
+        return false
+    } else {
+        if (showParticles) {
+            level.broadcastEntityEvent(this, 46.toByte())
+        }
+
+        if (this is PathfinderMob) {
+            val pathfinderMob = this
+            pathfinderMob.getNavigation().stop()
+        }
+        return true
+    }
+}
 
 fun Entity.canWearPlant(): Boolean {
     return this is LivingEntity && this.getItemBySlot(EquipmentSlot.HEAD).`is`(PazItems.PLANT_POT_HELMET)
