@@ -167,15 +167,23 @@ data class ServerConfig(
             75,
             CooldownTime.SHORT
         ),
+        "plantz_ex:crimsonshroom"          to PlantDataConfig(
+            175,
+            CooldownTime.MEDIUM
+        ),
+        "plantz_ex:warpedshroom"           to PlantDataConfig(
+            175,
+            CooldownTime.MEDIUM
+        ),
         "plantz_ex:plantern"               to PlantDataConfig(
             75,
             CooldownTime.MLONG
         ),
-        "plantz_ex:sky_peashooter"               to PlantDataConfig(
+        "plantz_ex:sky_peashooter"         to PlantDataConfig(
             75,
             CooldownTime.MEDIUM
         ),
-        "plantz_ex:grave_buster"               to PlantDataConfig(
+        "plantz_ex:grave_buster"           to PlantDataConfig(
             75,
             CooldownTime.MLONG
         ),

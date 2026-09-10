@@ -28,7 +28,7 @@ class WarpedShroomLight(
 ) {
 
     companion object {
-        val randomTeleportEffect = PazTeleportRandomlyAwayEffect(8f, 60f, )
+        val randomTeleportEffect = PazTeleportRandomlyAwayEffect(8f, 60f)
     }
 
     override fun getMovingParticle(): SimpleParticleType = PazServerParticles.WARPED_SHROOMLIGHT

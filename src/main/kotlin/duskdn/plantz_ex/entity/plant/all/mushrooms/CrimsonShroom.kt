@@ -3,6 +3,7 @@ package duskdn.plantz_ex.entity.plant.all.mushrooms
 import duskdn.plantz_ex.init.PazEntities
 import duskdn.plantz_ex.ai.goal.ExplodeGoal
 import duskdn.plantz_ex.ai.goal.ProjectileAttackGoal
+import duskdn.plantz_ex.entity.plant.all.Repeater
 import duskdn.plantz_ex.entity.plant.init.ExplosivePlant
 import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.entity.plant.init.PultPlant
@@ -19,6 +20,9 @@ import duskdn.plantz_ex.init.PazConfig
 import duskdn.plantz_ex.init.PazEffects
 import net.minecraft.core.Holder
 import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.network.syncher.EntityDataSerializers
+import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.resources.ResourceKey
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
@@ -34,6 +38,19 @@ import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.Vec2
 
 class CrimsonShroom(level: Level) : PultPlant(PazEntities.CRIMSON_SHROOM, level), IWarmingPlant, IIgneousPlant {
+
+    companion object {
+        val ACTION_COUNT: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Repeater::class.java, EntityDataSerializers.INT)
+    }
+
+    var actionCount: Int
+        get() = this.entityData.get(ACTION_COUNT)
+        set(value) = this.entityData.set(ACTION_COUNT, value)
+
+    override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
+        super.defineSynchedData(entityData)
+        entityData.define(Repeater.ACTION_COUNT, 0)
+    }
 
     override fun getLightLevel(): Int {
         return if (isAsleep) 8 else 15
@@ -74,7 +91,18 @@ class CrimsonShroom(level: Level) : PultPlant(PazEntities.CRIMSON_SHROOM, level)
                 projectileFactory = { CrimsonShroomLight(level(), this, spawnOffset = Vec2(0f, 0f)) },
                 useHighArc = true,
                 velocity = 1.0,
-                cooldownTime = 20,
+                cooldownTime = 45,
+                actionDelay = 8
+            )
+        )
+
+        this.goalSelector.addGoal(
+            2, ProjectileAttackGoal(
+                usingEntity = this,
+                projectileFactory = { CrimsonShroomLight(level(), this, spawnOffset = Vec2(0f, 0f)) },
+                useHighArc = true,
+                velocity = 1.5,
+                cooldownTime = 45,
                 actionDelay = 8
             )
         )

@@ -1,7 +1,5 @@
 package duskdn.plantz_ex.util
 
-import com.mojang.serialization.MapCodec
-import com.mojang.serialization.codecs.RecordCodecBuilder
 import duskdn.plantz_ex.PazMain.MODID
 import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.init.PazComponents
@@ -12,39 +10,27 @@ import net.minecraft.core.Vec3i
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.network.codec.ByteBufCodecs
-import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerEntityGetter
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.sounds.SoundEvent
-import net.minecraft.sounds.SoundEvents
-import net.minecraft.sounds.SoundSource
-import net.minecraft.util.ExtraCodecs
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.*
 import net.minecraft.world.entity.Entity.MoveFunction
 import net.minecraft.world.entity.ai.control.LookControl
 import net.minecraft.world.entity.ai.navigation.PathNavigation
 import net.minecraft.world.entity.ai.targeting.TargetingConditions
-import net.minecraft.world.entity.animal.fox.Fox
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.entity.projectile.Projectile
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.consume_effects.ConsumeEffect
-import net.minecraft.world.item.consume_effects.TeleportRandomlyConsumeEffect
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.SnowLayerBlock
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.pathfinder.Path
 import net.minecraft.world.phys.Vec3
 import java.lang.reflect.Field
-import java.util.function.Function
 import java.util.function.Predicate
 
 object Utils {
@@ -119,7 +105,11 @@ fun LivingEntity.teleportAwayFromDirection(diameter: Float, angle: Float, direct
     val yo = this.y
     val zo = this.z
     var pos = BlockPos.containing(newPosition)
-    var y: Double = level.getHeight(Heightmap.Types.MOTION_BLOCKING, pos).toDouble()
+    var y: Double = Mth.clamp(
+        yo + (getRandom().nextDouble() * diameter),
+        level.minY.toDouble(),
+        level.minY.toDouble() + (level as ServerLevel).logicalHeight - 1
+    )
     var ok = false
 
     if (level.hasChunkAt(pos)) {

@@ -136,13 +136,11 @@ open class ProjectileAttackGoal(
 //        debugPrint("velocity = $velocity, distance = $targetDistance, velocityRequired = $velocityRequired")
 
         val finalVel = if(useHighArc) {
-            velocityRequired*velocity*1.2
+            (velocityRequired*velocity*1.2).coerceAtLeast(velocity)
         } else velocity
 
         val targetPos = calculateMovingTargetPosition(targetPosNow,target, projectile, finalVel)
         val arcs = calculateProjectileArcs(targetPos, projectile.gravity, finalVel)
-
-        debugPrint(arcs)
 
         if (arcs==null) {// lose target if unreachable
             projectile.discard()
@@ -190,27 +188,31 @@ open class ProjectileAttackGoal(
 
         if (!target.isAlive) return
 
-        val targetVel = Vec3(
-            target.x - target.xo,
-            target.y - target.yo,
-            target.z - target.zo
-        )
+//        val targetVel = Vec3(
+//            target.x - target.xo,
+//            target.y - target.yo,
+//            target.z - target.zo
+//        )
+//
+//        val entityVel = Vec3(
+//            usingEntity.x - usingEntity.xo,
+//            usingEntity.y - usingEntity.yo,
+//            usingEntity.z - usingEntity.zo
+//        )
 
-        val entityVel = Vec3(
-            usingEntity.x - usingEntity.xo,
-            usingEntity.y - usingEntity.yo,
-            usingEntity.z - usingEntity.zo
-        )
+        val targetVel = target.deltaMovement
+
+        val entityVel = usingEntity.deltaMovement
 
         val relativeVel = targetVel.subtract(entityVel)
 
         var alphaMult = 0.5
 
-        if (target != lastTarget || targetDistance < lastTargetDistance) {
-            alphaMult=3.0
-        } else {
-            alphaMult=0.2
-        }
+//        if (target != lastTarget || targetDistance < lastTargetDistance) {
+//            alphaMult=3.0
+//        } else {
+//            alphaMult=0.2
+//        }
 
         val distanceChange = abs((lastTargetDistance - targetDistance))
 

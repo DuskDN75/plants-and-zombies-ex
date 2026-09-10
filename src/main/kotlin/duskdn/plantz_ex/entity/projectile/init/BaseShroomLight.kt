@@ -54,12 +54,13 @@ open class BaseShroomLight(
 
     open fun getHitParticle(): SimpleParticleType = PazServerParticles.SHROOMLIGHT_HIT
 
-    override fun getHitSound(): SoundEvent = SoundEvents.BIG_DRIPLEAF_BREAK
+    override fun getHitSound(): SoundEvent = SoundEvents.SHROOMLIGHT_BREAK
 
     override fun getKnockback(): Float = 0.15f
 
     override fun onHit(hitResult: HitResult) {
         super.onHit(hitResult)
+        knockbackNearby(0.25f)
         spawnParticle(
             getHitParticle(),
             amount = 18,

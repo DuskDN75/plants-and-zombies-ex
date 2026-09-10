@@ -26,7 +26,7 @@ abstract class InstantUseGoal<T>(
     var attackRadius: Float = usingEntity.attributes.getValue(Attributes.FOLLOW_RANGE).toFloat(),
     val soundEvent: Holder.Reference<SoundEvent> = PazSounds.PLANT_EXPLODE,
     val damageType: ResourceKey<DamageType> = PazDamageTypes.PLANT_AOE,
-    val requireTarget: Boolean = !usingEntity.isTame,
+    val requireTarget: Boolean = false,
     val activateRange: Double = (attackRadius/2.0),
     override var maxActionTime: Int = usingEntity.getMaxActiveTime(),
     val targetPredicate: Predicate<LivingEntity> = Predicate { true },
@@ -49,10 +49,8 @@ abstract class InstantUseGoal<T>(
 
     override fun canUse(): Boolean {
 
-        if (requireTarget) {
-            target = usingEntity.target
-
-            if (target == null) return false
+        if (requireTarget || !usingEntity.isTame) {
+            target = usingEntity.target ?: return false
 
             target?.let {
                 return (!it.isDeadOrDying && usingEntity.distanceToSqr(it) < activateRange * activateRange) || actionTimer < maxActionTime

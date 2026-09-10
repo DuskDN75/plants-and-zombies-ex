@@ -77,13 +77,6 @@ class TangleKelp(level: Level) : AttackingPlant(PazEntities.TANGLE_KELP, level),
     override fun registerGoals() {
         super.registerGoals()
         this.goalSelector.addGoal(1, TangleKelpAttackGoal(this))
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
-            target !is PazPlant
-                    && (target is Zombie
-                    || target is AbstractFish
-                    || (target is Enemy && isTame)
-                    || (target is Player && !isTame))
-        })
     }
 
     override fun defineSynchedData(entityData: SynchedEntityData.Builder) {

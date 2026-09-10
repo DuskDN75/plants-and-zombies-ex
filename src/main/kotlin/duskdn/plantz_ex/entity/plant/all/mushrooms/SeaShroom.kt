@@ -2,6 +2,7 @@ package duskdn.plantz_ex.entity.plant.all.mushrooms
 
 import duskdn.plantz_ex.init.PazEntities
 import duskdn.plantz_ex.ai.goal.ProjectileAttackGoal
+import duskdn.plantz_ex.entity.plant.init.AttackingPlant
 import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.entity.plant.interfaces.IAquaticPlant
 import duskdn.plantz_ex.entity.plant.utils.mushroomSurvivalCheck
@@ -15,7 +16,7 @@ import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class SeaShroom(level: Level) : PazPlant(PazEntities.SEA_SHROOM, level), IAquaticPlant {
+class SeaShroom(level: Level) : AttackingPlant(PazEntities.SEA_SHROOM, level), IAquaticPlant {
 
     override fun isPushedByFluid(): Boolean {
         return false
@@ -24,15 +25,13 @@ class SeaShroom(level: Level) : PazPlant(PazEntities.SEA_SHROOM, level), IAquati
     override fun registerGoals() {
         super.registerGoals()
 
-        this.goalSelector.addGoal(2, ProjectileAttackGoal(
-            usingEntity = this,
-            projectileFactory = { WaterSpore(level(), this) },
-            cooldownTime = 20))
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
-            target !is PazPlant
-                    && (target is Zombie
-                    || (target is Enemy && isTame))
-        })
+        this.goalSelector.addGoal(
+            2, ProjectileAttackGoal(
+                usingEntity = this,
+                projectileFactory = { WaterSpore(level(), this) },
+                cooldownTime = 20
+            )
+        )
     }
 
     override fun aiStep() {

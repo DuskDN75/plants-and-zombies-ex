@@ -2,6 +2,7 @@ package duskdn.plantz_ex.entity.plant.all
 
 import duskdn.plantz_ex.init.PazEntities
 import duskdn.plantz_ex.ai.goal.ProjectileAttackGoal
+import duskdn.plantz_ex.entity.plant.init.AttackingPlant
 import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.entity.projectile.peas.Pea
 import net.minecraft.network.syncher.EntityDataAccessor
@@ -14,7 +15,7 @@ import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.level.Level
 
-class Repeater( level: Level) : PazPlant(PazEntities.REPEATER, level) {
+class Repeater( level: Level) : AttackingPlant(PazEntities.REPEATER, level) {
 
     companion object {
         val ACTION_COUNT: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(Repeater::class.java, EntityDataSerializers.INT)
@@ -44,12 +45,6 @@ class Repeater( level: Level) : PazPlant(PazEntities.REPEATER, level) {
                     cooldown = 10
                 }
             }))
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
-            target !is PazPlant
-                    
-                    && (target is Zombie
-                    || (target is Enemy && isTame))
-        })
     }
 
 }

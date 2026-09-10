@@ -115,7 +115,7 @@ object PazSpawnPlacements {
         registerSpawnPlacement(PazEntities.WALL_NUT, PLANT_NORMAL_SPAWN_RULES::spawnCheck)
 
         addBiomeSpawn(PazTags.Biomes.HAS_COFFEE_BEAN, PazEntities.COFFEE_BEAN,
-            weight = 5, minGroupSize = 2, maxGroupSize = 5)
+            weight = 1, minGroupSize = 1, maxGroupSize = 3)
         registerSpawnPlacement(PazEntities.COFFEE_BEAN, PLANT_FREE_SPAWN_RULES::spawnCheck, Heightmap.Types.MOTION_BLOCKING)
 
         addBiomeSpawn(PazTags.Biomes.HAS_SKY_PEASHOOTER, PazEntities.SKY_PEA_SHOOTER,

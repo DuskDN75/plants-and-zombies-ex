@@ -1,5 +1,6 @@
 package duskdn.plantz_ex.entity.plant.all.mushrooms
 
+import duskdn.plantz_ex.entity.plant.init.AttackingPlant
 import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.entity.plant.utils.mushroomSurvivalCheck
 import duskdn.plantz_ex.init.PazCriteria
@@ -20,16 +21,7 @@ import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class HypnoShroom( level: Level) : PazPlant(PazEntities.HYPNOSHROOM, level) {
-    override fun registerGoals() {
-        super.registerGoals()
-
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
-            target !is PazPlant
-                    && (target is Zombie
-                    || (target is Enemy && isTame))
-        })
-    }
+class HypnoShroom( level: Level) : AttackingPlant(PazEntities.HYPNOSHROOM, level) {
 
     override fun actuallyHurt(level: ServerLevel, source: DamageSource, damage: Float) {
         super.actuallyHurt(level, source, damage)

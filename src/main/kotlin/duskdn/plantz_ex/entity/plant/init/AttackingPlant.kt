@@ -1,12 +1,12 @@
 package duskdn.plantz_ex.entity.plant.init
 
+import duskdn.plantz_ex.ai.goal.PlantTargetGoal
 import duskdn.plantz_ex.entity.Balloon
 import duskdn.plantz_ex.init.PazTags
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
@@ -83,7 +83,7 @@ abstract class AttackingPlant(type: EntityType<out AttackingPlant>, level: Level
 //        debugPrint("follow range = ${this.getAttributeValue(Attributes.FOLLOW_RANGE)}")
 
         this.targetSelector.addGoal(4,
-            NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, mustSeeTarget(), false) { target, level ->
+            PlantTargetGoal(this, LivingEntity::class.java, 0, mustSeeTarget(), false) { target, _ ->
                 enemyCheck(target) || target is Balloon
             })
     }

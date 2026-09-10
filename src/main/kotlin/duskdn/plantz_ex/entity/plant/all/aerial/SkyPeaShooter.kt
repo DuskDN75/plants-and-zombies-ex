@@ -2,6 +2,7 @@ package duskdn.plantz_ex.entity.plant.all.aerial
 
 import duskdn.plantz_ex.ai.goal.BalloonPriorityProjectileAttackGoal
 import duskdn.plantz_ex.ai.goal.FloatingPathfindGoal
+import duskdn.plantz_ex.ai.goal.PlantTargetGoal
 import duskdn.plantz_ex.entity.interfaces.IFloatingMob
 import duskdn.plantz_ex.entity.plant.init.AttackingPlant
 import duskdn.plantz_ex.entity.plant.utils.airSurvivalCheck
@@ -53,7 +54,8 @@ class SkyPeaShooter(level: Level) : AttackingPlant(PazEntities.SKY_PEA_SHOOTER, 
 
     override fun registerTargetGoal() {
 
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, mustSeeTarget(), false) { target, level ->
+        this.targetSelector.addGoal(4,
+            PlantTargetGoal(this, LivingEntity::class.java, 5, mustSeeTarget(), false) { target, level ->
 
             (enemyCheck(target) && !(target is BalloonZombie && target.balloons.isNotEmpty()))
 

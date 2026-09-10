@@ -3,6 +3,7 @@ package duskdn.plantz_ex.entity.plant.all
 import duskdn.plantz_ex.init.PazEntities
 import duskdn.plantz_ex.init.PazServerParticles
 import duskdn.plantz_ex.ai.goal.ProjectileAttackGoal
+import duskdn.plantz_ex.entity.plant.init.AttackingPlant
 import duskdn.plantz_ex.entity.plant.init.PazPlant
 import duskdn.plantz_ex.entity.projectile.peas.PeaElectric
 import net.minecraft.world.entity.EntityType
@@ -13,7 +14,7 @@ import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 
-class ElectricPeaShooter( level: Level) : PazPlant(PazEntities.ELECTRIC_PEA_SHOOTER, level) {
+class ElectricPeaShooter( level: Level) : AttackingPlant(PazEntities.ELECTRIC_PEA_SHOOTER, level) {
     override fun registerGoals() {
         super.registerGoals()
 
@@ -22,13 +23,6 @@ class ElectricPeaShooter( level: Level) : PazPlant(PazEntities.ELECTRIC_PEA_SHOO
             projectileFactory = { PeaElectric(level(), this) },
             cooldownTime = 20,
             actionDelay = 3))
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
-            target !is PazPlant
-                    
-                    && (target is Zombie
-                    || (target is Enemy && isTame)
-                    || (target is Player && !isTame))
-        })
     }
 
     override fun tick() {

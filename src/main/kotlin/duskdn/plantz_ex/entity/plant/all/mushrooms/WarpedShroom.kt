@@ -66,7 +66,7 @@ class WarpedShroom(level: Level) : PultPlant(PazEntities.WARPED_SHROOM, level), 
             projectileFactory = { WarpedShroomLight(level(), this, spawnOffset = Vec2(0f, 0f)) },
             useHighArc = true,
             velocity = 1.0,
-            cooldownTime = 20,
+            cooldownTime = 45,
             actionDelay = 8))
     }
 

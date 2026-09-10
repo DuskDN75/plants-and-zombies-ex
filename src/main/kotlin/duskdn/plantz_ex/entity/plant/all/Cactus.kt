@@ -1,6 +1,7 @@
 package duskdn.plantz_ex.entity.plant.all
 
 import duskdn.plantz_ex.ai.goal.BalloonPriorityProjectileAttackGoal
+import duskdn.plantz_ex.ai.goal.PlantTargetGoal
 import duskdn.plantz_ex.entity.plant.init.AttackingPlant
 import duskdn.plantz_ex.entity.plant.utils.sandSurvivalCheck
 import duskdn.plantz_ex.entity.projectile.Needle
@@ -19,7 +20,7 @@ class Cactus(level: Level) : AttackingPlant(PazEntities.CACTUS, level) {
 
     override fun registerTargetGoal() {
 
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, mustSeeTarget(), false) { target, level ->
+        this.targetSelector.addGoal(4, PlantTargetGoal(this, LivingEntity::class.java, 5, mustSeeTarget(), false) { target, level ->
 
             (enemyCheck(target) && !(target is BalloonZombie && target.balloons.isNotEmpty()))
 

@@ -6,6 +6,7 @@ import duskdn.plantz_ex.init.PazEffects
 import duskdn.plantz_ex.init.PazEntities
 import duskdn.plantz_ex.init.PazServerParticles
 import duskdn.plantz_ex.ai.goal.MeleeAttackActionGoal
+import duskdn.plantz_ex.entity.plant.init.AttackingPlant
 import duskdn.plantz_ex.entity.plant.init.PazPlant
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.effect.MobEffectInstance
@@ -18,7 +19,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 
-class LightningReed( level: Level) : PazPlant(PazEntities.LIGHTNING_REED, level) {
+class LightningReed( level: Level) : AttackingPlant(PazEntities.LIGHTNING_REED, level) {
 
     override fun registerGoals() {
         super.registerGoals()
@@ -43,13 +44,6 @@ class LightningReed( level: Level) : PazPlant(PazEntities.LIGHTNING_REED, level)
                 )
             }
         ))
-        this.targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, true, false) { target, level ->
-            target !is PazPlant
-                    
-                    && (target is Zombie
-                    || (target is Enemy && isTame)
-                    || (target is Player && !isTame))
-        })
     }
 
     override fun tick() {
