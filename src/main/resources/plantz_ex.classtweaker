@@ -1,0 +1,3 @@
+classTweaker  v1  official
+
+accessible method net/minecraft/client/gui/Hud extractTextureOverlay (Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/resources/Identifier;F)V
